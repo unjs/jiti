@@ -1,7 +1,7 @@
 {
   "name": "jiti",
   "version": "0.1.2",
-  "description": "",
+  "description": "On-the-fly commonJS compiler for typescript and esm files",
   "license": "MIT",
   "main": "dist/jiti.js",
   "types": "dist/jiti.d.ts",

@@ -1,12 +1,16 @@
 # jiti
 
-Just-in-time compiler for typescript and esm files for CommonJS environments.
+> On-the-fly commonJS compiler for typescript and esm files
+
+[![version][npm-v-src]][npm-v-href]
+[![downloads][npm-d-src]][npm-d-href]
+[![size][size-src]][size-href]
 
 ## Features
 
-- Stable typescript and esm syntax support (currently using babel)
-- Provide sync interface to replace `require()` and `esm()`
-- Super slim and zero dependency (~1M install size)
+- Stable typescript and esm syntax support
+- Provide sync interface to replace require
+- Super slim and zero dependency
 - Syntax detect to avoid extra transform
 - CommonJS cache integration
 
@@ -17,6 +21,41 @@ const jiti = require('jiti')(__filename)
 
 jiti('./path/to/file.ts')
 ```
+
+## vs
+
+### [`standard-things/esm`](https://github.com/standard-things/esm)
+
+- + Much more stable thanks to babel
+- + Less low level dependency
+- + Typescript support
+- - Slower
+- - No source-map support at the moment
+
+### [`babel-register`](https://babeljs.io/docs/en/babel-register)
+
+- + Smaller install size (~1M vs ~11M with same plugins)
+- + Configured out of the box
+- + Smart syntax detect to avoid unnecessary trnaspilation
+- + Does not ignores `node_modules`. ESM everywhere yay!
+
+### [`esbuild`](https://github.com/evanw/esbuild)
+
+- + No native dependency
+- + More stable thanks to babel
+- - Slower
+
+### `ts-node`
+
+- + Support both esm and typescript
+- / No typechecking support / Faster
+- + Smart syntax detect to avoid unnecessary trnaspilation
+
+### Bundlers (`rollup`, `webpack`, `snowpack`, etc)
+
+Meanwhile it would be much better making an optimized bundle to deploy to production or as npm package, using bundler setup and watching is frustrating during project development that's where `jiti` (or similar tools like `ts-node`) would be more convenient.
+
+**Note:** However currently only babel transform is supported, configurable transform support is in the roadmap so using `esbuild` or other solutions would be possible.
 
 ## Development
 
@@ -38,4 +77,17 @@ jiti('./path/to/file.ts')
 
 ## License
 
-MIT
+MIT. Made with 💖
+
+<!-- Refs -->
+[npm-v-src]: https://img.shields.io/npm/v/jiti?style=flat-square
+[npm-v-href]: https://npmjs.com/package/jiti
+
+[npm-d-src]: https://img.shields.io/npm/dm/jiti?style=flat-square
+[npm-d-href]: https://npmjs.com/package/jiti
+
+[github-actions-src]: https://img.shields.io/github/workflow/status/nuxt-contrib/jiti/ci/master?style=flat-square
+[github-actions-href]: https://github.com/nuxt-contrib/jiti/actions?query=workflow%3Aci
+
+[size-src]: https://packagephobia.now.sh/badge?p=jiti
+[size-href]: https://packagephobia.now.sh/result?p=jiti
