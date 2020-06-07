@@ -1,15 +1,14 @@
 # jiti
 
-Require with just-in-time compiler for typescript and esm files
+Just-in-time compiler for typescript and esm files for CommonJS environments.
 
 ## Features
 
-- Stable support for typescript and esm syntax
-- Provide sync interface to use inplace of `esm` or `require`
-- Super slim and zero dependency (~1.8M install size)
-- Works with CJS cache
-- [ ] Filesystem caching
-- [ ] Syntax detect to avoid extra transforms
+- Stable typescript and esm syntax support (currently using babel)
+- Provide sync interface to replace `require()` and `esm()`
+- Super slim and zero dependency (~1M install size)
+- Syntax detect to avoid extra transform
+- CommonJS cache integration
 
 ## Usage
 
@@ -18,10 +17,6 @@ const jiti = require('jiti')(__filename)
 
 jiti('./path/to/file.ts')
 ```
-
-## How it works
-
-Transform is based on babel and babel-preset-env
 
 ## Development
 
@@ -34,11 +29,12 @@ Transform is based on babel and babel-preset-env
 ## Roadmap
 
 - [x] Basic working
-- [ ] File based caching
-- [ ] Syntax detect and fallback to CJS require
-- [ ] Configurable transform
-- [ ] Try sourcemap improvements
-- [ ] Simplify project build system
+- [x] Syntax detect and fallback to CJS require
+- [x] Improve project build system
+- [ ] Sourcemap support
+- [ ] File system cache
+- [ ] Add tests
+- [ ] Configurable transform (esbuild)
 
 ## License
 

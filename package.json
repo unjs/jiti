@@ -3,37 +3,36 @@
   "version": "0.1.1",
   "description": "",
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/jiti.js",
+  "types": "dist/jiti.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "yarn build:transform && yarn build:jit",
-    "dev": "yarn build:jit --watch",
-    "build:jit": "rollup -c",
-    "build:transform": "ncc build src/transform.ts -t -m -o dist/transform",
+    "build": "yarn clean && NODE_ENV=production yarn webpack",
+    "build:babel": "ncc build src/babel.ts -t -m -o dist/babel",
+    "clean": "rm -rf dist",
+    "dev": "yarn clean && yarn webpack --watch",
     "lint": "eslint --ext .ts,.js .",
+    "release": "yarn test && yarn build && yarn standard-version && git push --follow-tags && npm publish",
     "test": "yarn lint"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
     "@babel/plugin-transform-typescript": "^7.10.1",
-    "@babel/preset-env": "^7.10.2",
     "@babel/preset-typescript": "^7.10.1",
     "@nuxtjs/eslint-config-typescript": "^2.0.0",
-    "@rollup/plugin-commonjs": "^13.0.0",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^8.0.1",
     "@types/babel__core": "^7.1.8",
     "@types/node": "^14.0.11",
-    "@zeit/ncc": "^0.22.3",
     "create-require": "^1.0.1",
     "eslint": "^7.2.0",
+    "esm": "^3.2.25",
     "resolve": "^1.17.0",
-    "rollup": "^2.13.1",
-    "rollup-plugin-typescript2": "^0.27.1",
+    "standard-version": "^8.0.0",
+    "ts-loader": "^7.0.5",
     "tslib": "^2.0.0",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.5",
+    "webpack": "^5.0.0-beta.17",
+    "webpack-cli": "^3.3.11"
   }
 }
