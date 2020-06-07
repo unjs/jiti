@@ -53,6 +53,12 @@ jiti('./path/to/file.ts')
 - `/` No typechecking support / Faster
 - `+` Smart syntax detect to avoid unnecessary trnaspilation
 
+### Native ESM Support (MJS)
+
+- It is not (yet) landed as a stable feature
+- No typescript support
+- Limitted to `.mjs` files with different executation context (no `__filename`, `require`, etc)
+
 ### Bundlers (`rollup`, `webpack`, `snowpack`, etc)
 
 Meanwhile it would be much better making an optimized bundle to deploy to production or as npm package, using bundler setup and watching is frustrating during project development that's where `jiti` (or similar tools like `ts-node`) would be more convenient.
