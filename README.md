@@ -51,7 +51,7 @@ jiti('./path/to/file.ts')
 
 - `+` Support both esm and typescript
 - `/` No typechecking support / Faster
-- `+` Smart syntax detect to avoid unnecessary trnaspilation
+- `+` Smart syntax detect to avoid unnecessary transpilation
 
 ### Native ESM Support (MJS)
 
