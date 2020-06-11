@@ -4,14 +4,14 @@ import { dirname } from 'path'
 import createRequire from 'create-require'
 // @ts-ignore
 import resolve from 'resolve'
-import { debug } from './utils'
 import { TransformOptions } from './types'
 
 export type JITIOptions = {
-  transform: (opts: TransformOptions) => string
+  transform: (opts: TransformOptions) => string,
+  debug: boolean
 }
 
-export default function jiti (_filename: string = process.cwd(), opts: JITIOptions): NodeRequire {
+export default function createJITI (_filename: string = process.cwd(), opts: JITIOptions): NodeRequire {
   // https://www.npmjs.com/package/resolve
   const resolveOpts = {
     extensions: ['.js', '.mjs', '.ts'],
@@ -22,7 +22,14 @@ export default function jiti (_filename: string = process.cwd(), opts: JITIOptio
 
   const _require = createRequire(_filename)
 
-  function jrequire (id: string) {
+  function debug (...args: string[]) {
+    if (opts.debug) {
+      // eslint-disable-next-line no-console
+      console.log('[jiti]', ...args)
+    }
+  }
+
+  function jiti (id: string) {
     // Check for builtin node module like fs
     if (builtinModules.includes(id)) {
       return _require(id)
@@ -53,7 +60,7 @@ export default function jiti (_filename: string = process.cwd(), opts: JITIOptio
     const mod = new Module(filename)
     mod.filename = filename
     mod.parent = module
-    mod.require = jiti(filename, opts)
+    mod.require = createJITI(filename, opts)
 
     // @ts-ignore
     mod.path = dirname(filename)
@@ -74,10 +81,10 @@ export default function jiti (_filename: string = process.cwd(), opts: JITIOptio
     return mod.exports
   }
 
-  jrequire.resolve = _resolve
-  jrequire.cache = _require.cache
-  jrequire.extensions = _require.extensions
-  jrequire.main = _require.main
+  jiti.resolve = _resolve
+  jiti.cache = _require.cache
+  jiti.extensions = _require.extensions
+  jiti.main = _require.main
 
-  return jrequire
+  return jiti
 }
