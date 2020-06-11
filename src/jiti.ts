@@ -60,13 +60,10 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     }
 
     // Calculate source hash
-    const sourceHash = ` /* ${md5(source, 16)} */`
+    const sourceHash = ` /* v1-${md5(source, 16)} */`
 
     // Check cache file
-    let filebase = basename(filename)
-    if (filename.startsWith('index')) {
-      filebase = dirname(filename) + '.' + filebase
-    }
+    const filebase = basename(dirname(filename)) + '-' + basename(filename)
     const cacheFile = join(opts.cacheDir!, filebase + '.' + md5(filename) + '.js')
 
     if (existsSync(cacheFile)) {
