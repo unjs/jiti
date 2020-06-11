@@ -23,6 +23,43 @@ const jiti = require('jiti')(__filename)
 jiti('./path/to/file.ts')
 ```
 
+You can also pass options as second argument:
+
+```js
+const jiti = require('jiti')(__filename, { debug: true })
+```
+
+## Options
+
+### `debug`
+
+- Type: Boolean
+- Default: `false`
+
+Enable debug to see which files are transpiled
+
+### `cache`
+
+- Type: Boolean
+- Default: `true`
+
+Use transpile cache
+
+### `cacheDir`
+
+- Type: String
+- Default: `node_modules/.cache/jiti` or `{TMP_DIR}/node-jiti`
+
+
+Cache directroy (only effective if `cache` is `true`)
+
+### `transform`
+
+- Type: Function
+- Default: Babel (lazy loaded)
+
+Transform function. See [src/babel](./src/babel.ts) for more details
+
 ## Compared to Alternatives
 
 ### [`standard-things/esm`](https://github.com/standard-things/esm)
