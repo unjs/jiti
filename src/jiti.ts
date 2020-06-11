@@ -1,16 +1,17 @@
 import { readFileSync } from 'fs'
 import { Module, builtinModules } from 'module'
 import { dirname } from 'path'
-import { Script } from 'vm'
-import _createRequire from 'create-require'
+import createRequire from 'create-require'
 // @ts-ignore
 import resolve from 'resolve'
 import { debug } from './utils'
-import { transform } from './babel'
+import { TransformOptions } from './types'
 
-export default function jiti (_filename: string): NodeRequire {
-  const _require = _createRequire(_filename)
+export type JITIOptions = {
+  transform: (opts: TransformOptions) => string
+}
 
+export default function jiti (_filename: string = process.cwd(), opts: JITIOptions): NodeRequire {
   // https://www.npmjs.com/package/resolve
   const resolveOpts = {
     extensions: ['.js', '.mjs', '.ts'],
@@ -19,7 +20,9 @@ export default function jiti (_filename: string): NodeRequire {
   const _resolve = (id: string) => resolve.sync(id, resolveOpts)
   _resolve.paths = (_: string) => []
 
-  function requireJIT (id: string) {
+  const _require = createRequire(_filename)
+
+  function jrequire (id: string) {
     // Check for builtin node module like fs
     if (builtinModules.includes(id)) {
       return _require(id)
@@ -37,10 +40,10 @@ export default function jiti (_filename: string): NodeRequire {
     let source = readFileSync(filename, 'utf-8')
     if (filename.match(/\.ts$/)) {
       debug('[ts]', filename)
-      source = transform({ source, filename, ts: true })
+      source = opts.transform({ source, filename, ts: true })
     } else if (source.match(/^\s*import .* from/m) || source.match(/^\s*export /m)) {
       debug('[esm]', filename)
-      source = transform({ source, filename })
+      source = opts.transform({ source, filename })
     } else {
       debug('[bail]', filename)
       return _require(id)
@@ -50,7 +53,7 @@ export default function jiti (_filename: string): NodeRequire {
     const mod = new Module(filename)
     mod.filename = filename
     mod.parent = module
-    mod.require = jiti(filename)
+    mod.require = jiti(filename, opts)
 
     // @ts-ignore
     mod.path = dirname(filename)
@@ -58,12 +61,8 @@ export default function jiti (_filename: string): NodeRequire {
     // @ts-ignore
     mod.paths = Module._nodeModulePaths(mod.path)
 
-    const wrapped = Module.wrap(source)
-    const script = new Script(wrapped, { filename })
-    const compiled = script.runInThisContext({ filename })
-
     // @ts-ignore
-    compiled.call(mod, mod.exports, mod.require, mod, mod.filename, mod.path)
+    mod._compile(source, filename)
 
     // Set as loaded
     mod.loaded = true
@@ -75,10 +74,10 @@ export default function jiti (_filename: string): NodeRequire {
     return mod.exports
   }
 
-  requireJIT.resolve = _resolve
-  requireJIT.cache = _require.cache
-  requireJIT.extensions = _require.extensions
-  requireJIT.main = _require.main
+  jrequire.resolve = _resolve
+  jrequire.cache = _require.cache
+  jrequire.extensions = _require.extensions
+  jrequire.main = _require.main
 
-  return requireJIT
+  return jrequire
 }

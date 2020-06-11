@@ -1,18 +1,14 @@
 import { transformSync, TransformOptions as BabelTransformOptions } from '@babel/core'
+import { TransformOptions } from './types'
 
-type TransformOptions = {
-  source: string,
-  filename?: string,
-  ts?: Boolean
-}
-
-export function transform (opts: TransformOptions): string {
+export default function transform (opts: TransformOptions): string {
   const _opts: BabelTransformOptions = {
     babelrc: false,
     configFile: false,
     compact: false,
     retainLines: true,
-    filename: opts.filename,
+    filename: '',
+    cwd: '/',
     plugins: [
       [require('@babel/plugin-transform-modules-commonjs'), { allowTopLevelThis: true }]
     ]
@@ -22,7 +18,16 @@ export function transform (opts: TransformOptions): string {
     _opts.plugins!.push(require('@babel/plugin-transform-typescript'))
   }
 
-  const result = transformSync(opts.source, _opts)?.code || ''
+  try {
+    return transformSync(opts.source, _opts)?.code || ''
+  } catch (err) {
+    const code = err.code.replace('BABEL_', '').replace('PARSE_ERROR', 'ParseError')
+    const message = code + ': ' + err.message.replace('/: ', '').replace(/\(.+\)\s*$/, '')
+    const stack = `    at ${opts.filename}:${err.loc.line}:${err.loc.column}`
 
-  return result
+    return `throw Error(${JSON.stringify(message + '\n' + stack)})`
+    // const _err = new Error(message)
+    // _err.stack = message + '\n' + stack
+    // throw _err
+  }
 }

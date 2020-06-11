@@ -3,9 +3,10 @@
   "version": "0.1.4",
   "description": "Runtime typescript and ESM support for Node.js (CommonJS)",
   "license": "MIT",
-  "main": "dist/jiti.js",
+  "main": "./inde.js",
   "types": "dist/jiti.d.ts",
   "files": [
+    "index.js",
     "dist"
   ],
   "scripts": {
