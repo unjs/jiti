@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
+    "@babel/plugin-transform-modules-commonjs": "^7.10.1",
     "@babel/plugin-transform-typescript": "^7.10.1",
     "@babel/preset-typescript": "^7.10.1",
     "@nuxtjs/eslint-config-typescript": "^2.0.0",
