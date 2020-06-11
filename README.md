@@ -13,6 +13,7 @@
 - Super slim and zero dependency
 - Syntax detect to avoid extra transform
 - CommonJS cache integration
+- Filesystem transpile cache + V8 compile cache
 
 ## Usage
 
@@ -29,7 +30,7 @@ jiti('./path/to/file.ts')
 - `+` Much more stable thanks to babel
 - `+` Less low level operations
 - `+` Typescript support
-- `-` Slower
+- `-` Slower (without cache)
 
 ### [`babel-register`](https://babeljs.io/docs/en/babel-register)
 
@@ -77,7 +78,7 @@ Meanwhile it would be much better making an optimized bundle to deploy to produc
 - [x] Basic working
 - [x] Syntax detect and fallback to CJS require
 - [x] Improve project build system
-- [ ] File system cache
+- [x] File system cache
 - [ ] Add tests
 - [ ] Configurable transform (esbuild)
 

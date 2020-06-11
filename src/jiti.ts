@@ -1,17 +1,42 @@
-import { readFileSync } from 'fs'
+import 'v8-compile-cache'
+import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { Module, builtinModules } from 'module'
-import { dirname } from 'path'
+import { dirname, join, basename } from 'path'
+import { tmpdir } from 'os'
+import { createHash } from 'crypto'
+import mkdirp from 'mkdirp'
 import createRequire from 'create-require'
-// @ts-ignore
 import resolve from 'resolve'
 import { TransformOptions } from './types'
 
 export type JITIOptions = {
-  transform: (opts: TransformOptions) => string,
-  debug: boolean
+  transform?: (opts: TransformOptions) => string,
+  debug?: boolean,
+  cache?: boolean,
+  cacheDir?: string
+}
+
+const defaults = {
+  debug: false,
+  cache: true
+}
+
+function md5 (content: string, len = 8) {
+  return createHash('md5').update(content).digest('hex').substr(0, len)
 }
 
 export default function createJITI (_filename: string = process.cwd(), opts: JITIOptions): NodeRequire {
+  opts = { ...defaults, ...opts }
+
+  if (opts.cache && !opts.cacheDir) {
+    const nodeModulesDir = join(process.cwd(), 'node_modules')
+    if (existsSync(nodeModulesDir)) {
+      opts.cacheDir = join(nodeModulesDir, '.cache/jiti')
+    } else {
+      opts.cacheDir = join(tmpdir(), 'node-jiti')
+    }
+  }
+
   // https://www.npmjs.com/package/resolve
   const resolveOpts = {
     extensions: ['.js', '.mjs', '.ts'],
@@ -27,6 +52,36 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
       // eslint-disable-next-line no-console
       console.log('[jiti]', ...args)
     }
+  }
+
+  function getCache (filename: string, source: string, get: () => string): string {
+    if (!opts.cache) {
+      return get()
+    }
+
+    // Calculate source hash
+    const sourceHash = ` /* ${md5(source, 16)} */`
+
+    // Check cache file
+    let filebase = basename(filename)
+    if (filename.startsWith('index')) {
+      filebase = dirname(filename) + '.' + filebase
+    }
+    const cacheFile = join(opts.cacheDir!, filebase + '.' + md5(filename) + '.js')
+
+    if (existsSync(cacheFile)) {
+      const cacheSource = readFileSync(cacheFile, 'utf-8')
+      if (cacheSource.endsWith(sourceHash)) {
+        return cacheSource
+      }
+    }
+
+    const result = get()
+
+    mkdirp.sync(opts.cacheDir!)
+    writeFileSync(cacheFile, result + sourceHash, 'utf-8')
+
+    return result
   }
 
   function jiti (id: string) {
@@ -45,12 +100,14 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
 
     // Read source
     let source = readFileSync(filename, 'utf-8')
+
+    // Transpile if needed
     if (filename.match(/\.ts$/)) {
       debug('[ts]', filename)
-      source = opts.transform({ source, filename, ts: true })
+      source = getCache(filename, source, () => opts.transform!({ source, filename, ts: true }))
     } else if (source.match(/^\s*import .* from/m) || source.match(/^\s*export /m)) {
       debug('[esm]', filename)
-      source = opts.transform({ source, filename })
+      source = getCache(filename, source, () => opts.transform!({ source, filename }))
     } else {
       debug('[bail]', filename)
       return _require(id)
