@@ -30,7 +30,6 @@ jiti('./path/to/file.ts')
 - `+` Less low level operations
 - `+` Typescript support
 - `-` Slower
-- `-` No source-map support at the moment
 
 ### [`babel-register`](https://babeljs.io/docs/en/babel-register)
 
@@ -78,7 +77,6 @@ Meanwhile it would be much better making an optimized bundle to deploy to produc
 - [x] Basic working
 - [x] Syntax detect and fallback to CJS require
 - [x] Improve project build system
-- [ ] Sourcemap support
 - [ ] File system cache
 - [ ] Add tests
 - [ ] Configurable transform (esbuild)
