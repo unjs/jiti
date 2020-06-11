@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.6](https://github.com/nuxt-contrib/jiti/compare/v0.1.5...v0.1.6) (2020-06-11)
+
+
+### Features
+
+* cache support ([65c2de2](https://github.com/nuxt-contrib/jiti/commit/65c2de207147793d984d871f495af55e75b58768))
+
 ### [0.1.5](https://github.com/nuxt-contrib/jiti/compare/v0.1.4...v0.1.5) (2020-06-11)
 
 
