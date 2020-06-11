@@ -35,12 +35,12 @@ export default function jiti (_filename: string): NodeRequire {
     // Read source
     let source = readFileSync(filename, 'utf-8')
     if (filename.includes('.ts') ||
-      source.match(/^\s*import .* from/) ||
-      source.match(/^\s*export /)
+      source.match(/^\s*import .* from/m) ||
+      source.match(/^\s*export /m)
     ) {
       // Apply transform
       // console.log('>', filename)
-      source = transform(source)
+      source = transform(source, filename)
     } else {
       // Bail
       // console.log('!', filename)
