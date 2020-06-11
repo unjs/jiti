@@ -1,6 +1,6 @@
 {
   "name": "jiti",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Runtime typescript and ESM support for Node.js (CommonJS)",
   "license": "MIT",
   "main": "./inde.js",
