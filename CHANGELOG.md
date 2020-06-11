@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.7](https://github.com/nuxt-contrib/jiti/compare/v0.1.6...v0.1.7) (2020-06-11)
+
+
+### Bug Fixes
+
+* **pkg:** add repository field ([639c02f](https://github.com/nuxt-contrib/jiti/commit/639c02fb4e7f0a117b25e968e44e3b664c4eb7d9))
+
 ### [0.1.6](https://github.com/nuxt-contrib/jiti/compare/v0.1.5...v0.1.6) (2020-06-11)
 
 
