@@ -116,8 +116,9 @@ Meanwhile it would be much better making an optimized bundle to deploy to produc
 - [x] Syntax detect and fallback to CJS require
 - [x] Improve project build system
 - [x] File system cache
+- [x] Configurable transform
 - [ ] Add tests
-- [ ] Configurable transform (esbuild)
+- [ ] esbuild support
 
 ## License
 
