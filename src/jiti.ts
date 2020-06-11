@@ -5,6 +5,7 @@ import { Script } from 'vm'
 import _createRequire from 'create-require'
 // @ts-ignore
 import resolve from 'resolve'
+import { debug } from './utils'
 import { transform } from './babel'
 
 export default function jiti (_filename: string): NodeRequire {
@@ -34,16 +35,14 @@ export default function jiti (_filename: string): NodeRequire {
 
     // Read source
     let source = readFileSync(filename, 'utf-8')
-    if (filename.includes('.ts') ||
-      source.match(/^\s*import .* from/m) ||
-      source.match(/^\s*export /m)
-    ) {
-      // Apply transform
-      // console.log('>', filename)
-      source = transform(source, filename)
+    if (filename.match(/\.ts$/)) {
+      debug('[ts]', filename)
+      source = transform({ source, filename, ts: true })
+    } else if (source.match(/^\s*import .* from/m) || source.match(/^\s*export /m)) {
+      debug('[esm]', filename)
+      source = transform({ source, filename })
     } else {
-      // Bail
-      // console.log('!', filename)
+      debug('[bail]', filename)
       return _require(id)
     }
 

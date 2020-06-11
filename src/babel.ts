@@ -1,20 +1,28 @@
-import { transformSync } from '@babel/core'
-// @ts-ignore
-import commonjs from '@babel/plugin-transform-modules-commonjs'
-// @ts-ignore
-import typescript from '@babel/plugin-transform-typescript'
+import { transformSync, TransformOptions as BabelTransformOptions } from '@babel/core'
 
-export function transform (source: string, filename?: string): string {
-  const result = transformSync(source, {
+type TransformOptions = {
+  source: string,
+  filename?: string,
+  ts?: Boolean
+}
+
+export function transform (opts: TransformOptions): string {
+  const _opts: BabelTransformOptions = {
     babelrc: false,
+    configFile: false,
     compact: false,
     retainLines: true,
-    filename,
+    filename: opts.filename,
     plugins: [
-      [commonjs, { allowTopLevelThis: true }],
-      typescript
+      [require('@babel/plugin-transform-modules-commonjs'), { allowTopLevelThis: true }]
     ]
-  })?.code || ''
-  // console.log(result)
+  }
+
+  if (opts.ts) {
+    _opts.plugins!.push(require('@babel/plugin-transform-typescript'))
+  }
+
+  const result = transformSync(opts.source, _opts)?.code || ''
+
   return result
 }
