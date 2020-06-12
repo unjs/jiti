@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.8](https://github.com/nuxt-contrib/jiti/compare/v0.1.7...v0.1.8) (2020-06-12)
+
+
+### Bug Fixes
+
+* use fake file for default _filename ([05d721f](https://github.com/nuxt-contrib/jiti/commit/05d721faa6426cb0b2d0e1262059de4c9eb4015c))
+* **types:** allow passing undefined filename ([#2](https://github.com/nuxt-contrib/jiti/issues/2)) ([9136f15](https://github.com/nuxt-contrib/jiti/commit/9136f15dd3f9e56e192945e849a9db6c4df6bccd))
+
 ### [0.1.7](https://github.com/nuxt-contrib/jiti/compare/v0.1.6...v0.1.7) (2020-06-11)
 
 

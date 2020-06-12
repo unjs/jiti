@@ -1,6 +1,6 @@
 {
   "name": "jiti",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Runtime typescript and ESM support for Node.js (CommonJS)",
   "repository": "nuxt-contrib/jiti",
   "license": "MIT",
