@@ -1,4 +1,5 @@
 const jiti = require('../dist/jiti')(__filename, {
+  cache: false,
   debug: true
 })
 
