@@ -10,13 +10,33 @@ import resolve from 'resolve'
 import { TransformOptions } from './types'
 
 export type JITIOptions = {
-  transform?: (opts: TransformOptions) => string,
-  debug?: boolean,
-  cache?: boolean,
+  /**
+   * Custom code transformer.
+   */
+  transform?: (opts: TransformOptions) => string
+  /**
+   * Use one of the built-in code transformers.
+   * @default 'babel'
+   */
+  transformPreset?: 'babel' | 'esbuild-async' | 'esbuild-sync'
+  /**
+   * Enable debug logging.
+   * @default false
+   */
+  debug?: boolean
+  /**
+   * Enable internal cache
+   * @default true
+   */
+  cache?: boolean
+  /**
+   * Manually set cache directory
+   * @default 'node_modules/.cache/jiti' or '{TMP_DIR}/node-jiti'
+   */
   cacheDir?: string
 }
 
-const defaults = {
+const defaults: JITIOptions = {
   debug: false,
   cache: true
 }

@@ -5,7 +5,19 @@ module.exports = function (filename, opts) {
   opts = { ...opts }
 
   if (!opts.transform) {
-    opts.transform = require('./dist/babel')
+    switch (opts.transformPreset) {
+      case 'esbuild-async':
+        opts.transform = require('./dist/esbuild-async')
+        break
+
+      case 'esbuild-sync':
+        opts.transform = require('./dist/esbuild-sync')
+        break
+
+      case 'babel':
+      default:
+        opts.transform = require('./dist/babel')
+    }
   }
 
   return jiti(filename, opts)

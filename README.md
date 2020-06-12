@@ -60,6 +60,13 @@ Cache directroy (only effective if `cache` is `true`)
 
 Transform function. See [src/babel](./src/babel.ts) for more details
 
+### `transformPreset`
+
+- Type: String
+- Default: `babel`
+
+As an alternative to providing a transform function, you may use one of the built-in code transformers. Options are `babel`, `esbuild-async` or `esbuild-sync`.
+
 ## Compared to Alternatives
 
 ### [`standard-things/esm`](https://github.com/standard-things/esm)
