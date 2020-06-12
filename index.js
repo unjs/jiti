@@ -4,8 +4,8 @@ module.exports = function (filename, opts) {
 
   opts = { ...opts }
 
-  if (!opts.transform) {
-    switch (opts.transformPreset) {
+  if (!opts.transform || typeof opts.transform === 'string') {
+    switch (opts.transform) {
       case 'esbuild-async':
         opts.transform = require('./dist/esbuild-async')
         break
