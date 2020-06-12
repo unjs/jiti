@@ -12,14 +12,14 @@ let _service: Service
 
 export default function transform (opts: TransformOptions) {
   const esbildOptions: _TransformOptions = {
-    target: 'es2020',
+    target: 'es6',
     loader: opts.ts ? 'ts' : 'js'
   }
 
   if (opts.sync) {
     return transformSync(opts.source, esbildOptions)
   } else {
-    return transformAsync(opts.filename, esbildOptions)
+    return transformAsync(opts.source, esbildOptions)
   }
 }
 

@@ -24,6 +24,10 @@ module.exports = {
       '@babel/code-frame': require.resolve('./stubs/babel_codeframe')
     }
   },
+  externals: [
+    'esbuild',
+    'deasync'
+  ],
   stats: {
     // preset: 'detailed',
     warningsFilter: [/critical dependency:/i]

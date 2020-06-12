@@ -66,7 +66,8 @@ Supported built-ins:
 - `esbuild-async` ([source](./src/esbuild-async.ts))
 - `esbuild-sync` ([source](./src/esbuild-sync.ts))
 
-Example using `esbuild-async`:
+
+### Using [esbuild](https://github.com/evanw/esbuild)
 
 ```js
 // using esbuild
