@@ -69,7 +69,11 @@ Supported built-ins:
 Example using `esbuild-async`:
 
 ```js
-const jiti = require('jiti')(__filename, { transform: 'esbuild-sync' })
+// using esbuild
+const jiti = require('jiti')(__filename, { transform: 'esbuild' })
+
+// using esbuild sync version
+const jiti = require('jiti')(__filename, { transform: 'esbuild', sync: true })
 ```
 
 ## Compared to Alternatives

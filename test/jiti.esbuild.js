@@ -1,7 +1,7 @@
 const jiti = require('..')(__filename, {
   debug: true,
   cache: false,
-  transform: 'esbuild-async'
+  transform: 'esbuild'
 })
 
 console.log(jiti('./fixtures/esm').test())

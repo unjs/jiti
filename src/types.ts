@@ -1,5 +1,6 @@
 export type TransformOptions = {
   source: string,
-  filename?: string,
-  ts?: Boolean
+  filename: string,
+  ts?: Boolean,
+  [key: string]: any
 }
