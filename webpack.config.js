@@ -9,6 +9,7 @@ module.exports = {
     jiti: './src/jiti.ts',
     babel: './src/babel.ts',
     'esbuild-sync': './src/esbuild-sync.ts',
+    'esbuild-async': './src/esbuild-async.ts',
     v8cache: 'v8-compile-cache'
   },
   devtool: false,
