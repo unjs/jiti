@@ -1,10 +1,13 @@
 import { extname } from 'path'
 
-import { Loader, startService as _startService, Service } from 'esbuild'
+import {
+  Loader,
+  startService as _startService,
+  Service,
+  TransformFailure
+} from 'esbuild'
 
 import { TransformOptions } from './types'
-
-const loaders: Loader[] = ['js', 'ts', 'json']
 
 let service: Service
 
@@ -21,16 +24,13 @@ process.on('exit', () => {
   }
 })
 
-export default function transform (opts: TransformOptions): string | null {
+export default function transform (opts: TransformOptions): string {
   const loader = opts.filename
     ? (extname(opts.filename).slice(1) as Loader)
     : 'ts'
 
-  if (!loaders.includes(loader)) {
-    return null
-  }
-
   let js = ''
+  let done = false
 
   startService().then((service) => {
     service
@@ -41,9 +41,15 @@ export default function transform (opts: TransformOptions): string | null {
       .then((result) => {
         js = result.js
       })
+      .catch((err: TransformFailure) => {
+        return `throw Error(${JSON.stringify(err.message + '\n' + err.stack)})`
+      })
+      .finally(() => {
+        done = true
+      })
   })
 
-  require('deasync').loopWhile(() => !js)
+  require('deasync').loopWhile(() => !done)
 
-  return js
+  return js || "throw Error('Problem compiling source')"
 }
