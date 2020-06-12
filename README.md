@@ -55,10 +55,10 @@ Cache directroy (only effective if `cache` is `true`)
 
 ### `transform`
 
-- Type: Function
-- Default: Babel (lazy loaded)
+- Type: Function or String
+- Default: `babel`
 
-Transform function. See [src/babel](./src/babel.ts) for more details
+Transform function. As an alternative to providing a transform function, you may use one of the built-in code transformers, which are lazy loaded. Options are `babel`, `esbuild-async` or `esbuild-sync`. See [babel](./src/babel.ts), [esbuild-async](./src/esbuild-async.ts) and [esbuild-sync](./src/esbuild-sync.ts) for more details. 
 
 ## Compared to Alternatives
 

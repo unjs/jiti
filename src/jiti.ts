@@ -9,14 +9,32 @@ import createRequire from 'create-require'
 import resolve from 'resolve'
 import { TransformOptions } from './types'
 
+export type Transformer = (opts: TransformOptions) => string
+export type TransformerName = 'babel' | 'esbuild-async' | 'esbuild-sync'
+
 export type JITIOptions = {
-  transform?: (opts: TransformOptions) => string,
-  debug?: boolean,
-  cache?: boolean,
+  /**
+   * Custom code transformer.
+   */
+  transform?: TransformerName | Transformer
+  /**
+   * Enable debug logging.
+   * @default false
+   */
+  debug?: boolean
+  /**
+   * Enable internal cache
+   * @default true
+   */
+  cache?: boolean
+  /**
+   * Manually set cache directory
+   * @default 'node_modules/.cache/jiti' or '{TMP_DIR}/node-jiti'
+   */
   cacheDir?: string
 }
 
-const defaults = {
+const defaults: JITIOptions = {
   debug: false,
   cache: true
 }
@@ -101,10 +119,10 @@ export default function createJITI (_filename: string = process.cwd() + '/index.
     // Transpile if needed
     if (filename.match(/\.ts$/)) {
       debug('[ts]', filename)
-      source = getCache(filename, source, () => opts.transform!({ source, filename, ts: true }))
+      source = getCache(filename, source, () => (opts.transform as Transformer)({ source, filename, ts: true }))
     } else if (source.match(/^\s*import .* from/m) || source.match(/^\s*export /m)) {
       debug('[esm]', filename)
-      source = getCache(filename, source, () => opts.transform!({ source, filename }))
+      source = getCache(filename, source, () => (opts.transform as Transformer)({ source, filename }))
     } else {
       debug('[bail]', filename)
       return _require(id)

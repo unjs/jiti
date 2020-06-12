@@ -13,6 +13,7 @@
   "scripts": {
     "build": "yarn clean && NODE_ENV=production yarn webpack",
     "build:babel": "ncc build src/babel.ts -t -m -o dist/babel",
+    "build:esbuild": "ncc build src/esbuild-async.ts -t -m -o dist/esbuild-async",
     "clean": "rm -rf dist",
     "dev": "yarn clean && yarn webpack --watch",
     "lint": "eslint --ext .ts,.js .",
@@ -29,7 +30,10 @@
     "@types/mkdirp": "^1.0.1",
     "@types/node": "^14.0.13",
     "@types/resolve": "^1.17.1",
+    "benchmark": "^2.1.4",
     "create-require": "^1.0.2",
+    "deasync": "^0.1.20",
+    "esbuild": "^0.5.1",
     "eslint": "^7.2.0",
     "esm": "^3.2.25",
     "mkdirp": "^1.0.4",
@@ -41,5 +45,9 @@
     "v8-compile-cache": "^2.1.1",
     "webpack": "^5.0.0-beta.17",
     "webpack-cli": "^3.3.11"
+  },
+  "optionalDependencies": {
+    "deasync": "^0.1.20",
+    "esbuild": "^0.5.1"
   }
 }
