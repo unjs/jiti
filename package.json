@@ -12,8 +12,6 @@
   ],
   "scripts": {
     "build": "yarn clean && NODE_ENV=production yarn webpack",
-    "build:babel": "ncc build src/babel.ts -t -m -o dist/babel",
-    "build:esbuild": "ncc build src/esbuild-async.ts -t -m -o dist/esbuild-async",
     "clean": "rm -rf dist",
     "dev": "yarn clean && yarn webpack --watch",
     "lint": "eslint --ext .ts,.js .",
