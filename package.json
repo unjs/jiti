@@ -47,6 +47,7 @@
     "webpack-cli": "^3.3.11"
   },
   "optionalDependencies": {
-    "deasync": "^0.1.20"
+    "deasync": "^0.1.20",
+    "esbuild": "^0.5.1"
   }
 }
