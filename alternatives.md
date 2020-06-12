@@ -1,4 +1,4 @@
-## Compared to Alternatives
+## Compared to alternatives
 
 ### [`standard-things/esm`](https://github.com/standard-things/esm)
 

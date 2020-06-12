@@ -63,8 +63,7 @@ Transform function. As an alternative to providing a transform function, you may
 Supported built-ins:
 
 - `babel` ([source](./src/babel.ts))
-- `esbuild-async` ([source](./src/esbuild-async.ts))
-- `esbuild-sync` ([source](./src/esbuild-sync.ts))
+- `esbuild` ([source](./src/esbuild.ts))
 
 
 ### Using [esbuild](https://github.com/evanw/esbuild)
@@ -77,9 +76,9 @@ const jiti = require('jiti')(__filename, { transform: 'esbuild' })
 const jiti = require('jiti')(__filename, { transform: 'esbuild', sync: true })
 ```
 
-## Compared to Alternatives
+## Compared to alternatives
 
-See [Alternatives](./Alternatives.md)
+See [alternatives](./alternatives.md)
 
 ## Development
 
