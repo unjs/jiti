@@ -25,7 +25,7 @@ function md5 (content: string, len = 8) {
   return createHash('md5').update(content).digest('hex').substr(0, len)
 }
 
-export default function createJITI (_filename: string = process.cwd(), opts: JITIOptions = {}): NodeRequire {
+export default function createJITI (_filename: string = process.cwd() + '/index.js', opts: JITIOptions = {}): NodeRequire {
   opts = { ...defaults, ...opts }
 
   if (opts.cache && !opts.cacheDir) {
