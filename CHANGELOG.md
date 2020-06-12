@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.9](https://github.com/nuxt-contrib/jiti/compare/v0.1.8...v0.1.9) (2020-06-12)
+
+
+### Bug Fixes
+
+* typo in main field  ([#4](https://github.com/nuxt-contrib/jiti/issues/4)) ([c57ea02](https://github.com/nuxt-contrib/jiti/commit/c57ea023635825cc929b3581b5d60c58d35a6e7a))
+
 ### [0.1.8](https://github.com/nuxt-contrib/jiti/compare/v0.1.7...v0.1.8) (2020-06-12)
 
 
