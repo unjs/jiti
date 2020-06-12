@@ -43,8 +43,7 @@ export default function transform (opts: TransformOptions): string | null {
       })
   })
 
-  // eslint-disable-next-line
-  do {} while (!js)
+  require('deasync').loopWhile(() => !js)
 
   return js
 }
