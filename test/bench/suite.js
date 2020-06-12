@@ -9,6 +9,17 @@ const transformers = [
 
 const test = process.argv[2]
 
+if (test === 'fixture') {
+  suite.add('esm js', () => {
+    const esm = require('esm')(module)
+    for (let i = 0; i < 3; i++) {
+      esm('../fixtures/esm').test()
+    }
+  })
+} else {
+  suite.add('esm init', () => require('esm')(module))
+}
+
 transformers
   .sort(() => Math.random() - 0.5)
   .forEach(([name, fn]) => {
@@ -33,17 +44,6 @@ transformers
       )
     }
   })
-
-if (test === 'fixture') {
-  suite.add('esm js', () => {
-    const esm = require('esm')(module)
-    for (let i = 0; i < 3; i++) {
-      esm('../fixtures/esm').test()
-    }
-  })
-} else {
-  suite.add('esm init', () => require('esm')(module))
-}
 
 suite
   .on('cycle', (event) => {
