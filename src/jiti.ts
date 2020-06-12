@@ -10,13 +10,18 @@ import resolve from 'resolve'
 import { TransformOptions } from './types'
 
 export type Transformer = (opts: TransformOptions) => string
-export type TransformerName = 'babel' | 'esbuild-async' | 'esbuild-sync'
+export type TransformerName = 'babel' | 'esbuild'
 
 export type JITIOptions = {
   /**
    * Custom code transformer.
    */
   transform?: TransformerName | Transformer
+  /**
+   * Whether to transform using an async service when using `esbuild` transformer.
+   * @default false
+   */
+  sync?: boolean
   /**
    * Enable debug logging.
    * @default false

@@ -11,19 +11,19 @@ import { TransformOptions } from './types'
 let _service: Service
 
 export default function transform (opts: TransformOptions) {
-  const esbildOptions: _TransformOptions = {
-    target: 'es6',
+  const esbuildOptions: _TransformOptions = {
+    target: 'es2017',
     loader: opts.ts ? 'ts' : 'js'
   }
 
   if (opts.sync) {
-    return transformSync(opts.source, esbildOptions)
+    return transformSync(opts.source, esbuildOptions)
   } else {
-    return transformAsync(opts.source, esbildOptions)
+    return transformAsync(opts.source, esbuildOptions)
   }
 }
 
-async function getService () {
+export async function getService () {
   if (!_service) {
     _service = await startService()
     process.on('exit', () => {

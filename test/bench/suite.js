@@ -9,9 +9,9 @@ function requireUncached (module) {
 }
 
 const transformers = [
-  ['babel', () => requireUncached('../../dist/babel')],
-  ['esbuild-async', () => requireUncached('../../dist/esbuild-async')],
-  ['esbuild-sync', () => requireUncached('../../dist/esbuild-sync')]
+  { transform: 'babel' },
+  { transform: 'esbuild', sync: false },
+  { transform: 'esbuild-sync', sync: true }
 ]
 
 const test = process.argv[2]
@@ -29,17 +29,24 @@ if (test === 'fixture') {
 
 transformers
   .sort(() => Math.random() - 0.5)
-  .forEach(([name, fn]) => {
+  .forEach((opts) => {
+    const name = opts.transform
     if (test === 'fixture') {
       suite.add(`${name} js`, () => {
-        const jiti = requireUncached('../..')(__filename, { transform: fn(), cache: false })
+        const jiti = requireUncached('../..')(__filename, {
+          ...opts,
+          cache: false
+        })
 
         for (let i = 0; i < 3; i++) {
           jiti('../fixtures/esm').test()
         }
       })
       suite.add(`${name} ts`, () => {
-        const jiti = requireUncached('../..')(__filename, { transform: fn(), cache: false })
+        const jiti = requireUncached('../..')(__filename, {
+          ...opts,
+          cache: false
+        })
 
         for (let i = 0; i < 3; i++) {
           jiti('../fixtures/typescript').test()
@@ -47,7 +54,7 @@ transformers
       })
     } else {
       suite.add(`${name} init`, () =>
-        requireUncached('../..')(__filename, { transform: fn(), cache: false })
+        requireUncached('../..')(__filename, { ...opts, cache: false })
       )
     }
   })

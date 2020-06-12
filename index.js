@@ -11,6 +11,10 @@ module.exports = function (filename, opts) {
 
   if (!opts.transform || typeof opts.transform === 'string') {
     opts.transform = (transforms[opts.transform] || transforms.babel)()
+
+    if (opts.transform === 'esbuild' && !opts.sync) {
+      require('./dist/esbuild').getService()
+    }
   }
 
   return jiti(filename, opts)
