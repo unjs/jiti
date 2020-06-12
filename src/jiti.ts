@@ -119,10 +119,10 @@ export default function createJITI (_filename: string = process.cwd() + '/index.
     // Transpile if needed
     if (filename.match(/\.ts$/)) {
       debug('[ts]', filename)
-      source = getCache(filename, source, () => (opts.transform as Transformer)({ source, filename, ts: true }))
+      source = getCache(filename, source, () => (opts.transform as Transformer)({ source, filename, ts: true, ...opts }))
     } else if (source.match(/^\s*import .* from/m) || source.match(/^\s*export /m)) {
       debug('[esm]', filename)
-      source = getCache(filename, source, () => (opts.transform as Transformer)({ source, filename }))
+      source = getCache(filename, source, () => (opts.transform as Transformer)({ source, filename, ...opts }))
     } else {
       debug('[bail]', filename)
       return _require(id)
