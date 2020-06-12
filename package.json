@@ -4,7 +4,7 @@
   "description": "Runtime typescript and ESM support for Node.js (CommonJS)",
   "repository": "nuxt-contrib/jiti",
   "license": "MIT",
-  "main": "./inde.js",
+  "main": "./index.js",
   "types": "dist/jiti.d.ts",
   "files": [
     "index.js",
