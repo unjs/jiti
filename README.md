@@ -55,10 +55,22 @@ Cache directroy (only effective if `cache` is `true`)
 
 ### `transform`
 
-- Type: Function or String
+- Type: String| Function
 - Default: `babel`
 
-Transform function. As an alternative to providing a transform function, you may use one of the built-in code transformers, which are lazy loaded. Options are `babel`, `esbuild-async` or `esbuild-sync`. See [babel](./src/babel.ts), [esbuild-async](./src/esbuild-async.ts) and [esbuild-sync](./src/esbuild-sync.ts) for more details.
+Transform function. As an alternative to providing a transform function, you may use one of the built-in code transformers, which are lazy loaded.
+
+Supported built-ins:
+
+- `babel` ([source](./src/babel.ts))
+- `esbuild-async` ([source](./src/esbuild-async.ts))
+- `esbuild-sync` ([source](./src/esbuild-sync.ts))
+
+Example using `esbuild-async`:
+
+```js
+const jiti = require('jiti')(__filename, { transform: 'esbuild-sync' })
+```
 
 ## Compared to Alternatives
 
@@ -70,18 +82,7 @@ See [Alternatives](./Alternatives.md)
 - Run `yarn`
 - Run `yarn build`
 - Run `yarn dev`
-- Run `node ./test/jiti.js`
-
-## Roadmap
-
-- [x] Basic working
-- [x] Syntax detect and fallback to CJS require
-- [x] Improve project build system
-- [x] File system cache
-- [x] Configurable transform
-- [ ] Add tests
-- [ ] Support `node -r jiti`
-- [ ] esbuild support
+- Run `node ./test/jiti.babel.js` or `node ./test/jiti.esbuild.js`
 
 ## License
 
