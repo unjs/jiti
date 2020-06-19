@@ -7,6 +7,7 @@ import { createHash } from 'crypto'
 import mkdirp from 'mkdirp'
 import createRequire from 'create-require'
 import resolve from 'resolve'
+import { isDir } from './utils'
 import { TransformOptions } from './types'
 
 export type JITIOptions = {
@@ -25,8 +26,13 @@ function md5 (content: string, len = 8) {
   return createHash('md5').update(content).digest('hex').substr(0, len)
 }
 
-export default function createJITI (_filename: string = process.cwd() + '/index.js', opts: JITIOptions = {}): NodeRequire {
+export default function createJITI (_filename: string = process.cwd(), opts: JITIOptions = {}): NodeRequire {
   opts = { ...defaults, ...opts }
+
+  // If filename is dir, createRequire goes with parent directory, so we need fakepath
+  if (isDir(_filename)) {
+    _filename = join(_filename, 'index.js')
+  }
 
   if (opts.cache && !opts.cacheDir) {
     const nodeModulesDir = join(process.cwd(), 'node_modules')
