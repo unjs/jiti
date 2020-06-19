@@ -9,3 +9,7 @@ export function isDir (filename: string): boolean {
     return false
   }
 }
+
+export function interopDefault (ex: any): any {
+  return (ex && (typeof ex === 'object') && 'default' in ex) ? ex.default : ex
+}

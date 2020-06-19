@@ -7,7 +7,7 @@ import { createHash } from 'crypto'
 import mkdirp from 'mkdirp'
 import createRequire from 'create-require'
 import resolve from 'resolve'
-import { isDir } from './utils'
+import { isDir, interopDefault } from './utils'
 import { TransformOptions } from './types'
 
 export type JITIOptions = {
@@ -138,7 +138,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     _require.cache[filename] = mod
 
     // Return exports
-    return mod.exports
+    return interopDefault(mod.exports)
   }
 
   jiti.resolve = _resolve
