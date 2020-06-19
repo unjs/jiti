@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.10](https://github.com/nuxt-contrib/jiti/compare/v0.1.9...v0.1.10) (2020-06-19)
+
+
+### Bug Fixes
+
+* always ensure isDir for filename ([6b343a4](https://github.com/nuxt-contrib/jiti/commit/6b343a4fb9d7fe63628f53647d443d98b92217b6))
+
 ### [0.1.9](https://github.com/nuxt-contrib/jiti/compare/v0.1.8...v0.1.9) (2020-06-12)
 
 
