@@ -4,6 +4,8 @@ import { Module, builtinModules } from 'module'
 import { dirname, join, basename } from 'path'
 import { tmpdir } from 'os'
 import { createHash } from 'crypto'
+import vm from 'vm'
+import { exception } from 'console'
 import mkdirp from 'mkdirp'
 import createRequire from 'create-require'
 import resolve from 'resolve'
@@ -129,7 +131,13 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     mod.paths = Module._nodeModulePaths(mod.path)
 
     // @ts-ignore
-    mod._compile(source, filename)
+    // mod._compile wraps require and require.resolve to global function
+    const compiled = vm.runInThisContext(Module.wrap(source), {
+      filename,
+      lineOffset: 0,
+      displayErrors: true
+    })
+    compiled(mod.exports, mod.require, mod, mod.filename, dirname(mod.filename))
 
     // Set as loaded
     mod.loaded = true
