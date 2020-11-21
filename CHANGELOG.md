@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.13](https://github.com/nuxt-contrib/jiti/compare/v0.1.12...v0.1.13) (2020-11-21)
+
+
+### Features
+
+* basic cli ([b028046](https://github.com/nuxt-contrib/jiti/commit/b0280469e7002b28ea159fb6f1f3b744a198e141))
+
 ### [0.1.12](https://github.com/nuxt-contrib/jiti/compare/v0.1.11...v0.1.12) (2020-11-01)
 
 
