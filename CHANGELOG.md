@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.14](https://github.com/nuxt-contrib/jiti/compare/v0.1.13...v0.1.14) (2020-11-21)
+
+
+### Bug Fixes
+
+* **cli:** import main wrapper ([25bceb1](https://github.com/nuxt-contrib/jiti/commit/25bceb173a966beaf315df58400ee59a61441f84))
+
 ### [0.1.13](https://github.com/nuxt-contrib/jiti/compare/v0.1.12...v0.1.13) (2020-11-21)
 
 
