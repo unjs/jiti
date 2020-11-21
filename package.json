@@ -6,6 +6,7 @@
   "license": "MIT",
   "main": "./index.js",
   "types": "dist/jiti.d.ts",
+  "bin": "bin/jiti.js",
   "files": [
     "index.js",
     "dist"
