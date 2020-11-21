@@ -8,6 +8,6 @@ if (!script) {
   process.exit(1)
 }
 
-const jiti = require('../dist/jiti')(process.cwd())
+const jiti = require('..')(process.cwd())
 const resolved = process.argv[1] = jiti.resolve(script)
 jiti(resolved)
