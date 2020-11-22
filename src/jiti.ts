@@ -23,6 +23,8 @@ const defaults = {
   cache: true
 }
 
+const TRANSPILE_VERSION = 1.1
+
 function md5 (content: string, len = 8) {
   return createHash('md5').update(content).digest('hex').substr(0, len)
 }
@@ -67,7 +69,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     }
 
     // Calculate source hash
-    const sourceHash = ` /* v1-${md5(source, 16)} */`
+    const sourceHash = ` /* v${TRANSPILE_VERSION}-${md5(source, 16)} */`
 
     // Check cache file
     const filebase = basename(dirname(filename)) + '-' + basename(filename)
@@ -109,7 +111,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     if (filename.match(/\.ts$/)) {
       debug('[ts]', filename)
       source = getCache(filename, source, () => opts.transform!({ source, filename, ts: true }))
-    } else if (source.match(/^\s*import .* from/m) || source.match(/^\s*export /m)) {
+    } else if (source.match(/^\s*import .* from/m) || source.match(/import\s*\(/) || source.match(/^\s*export /m)) {
       debug('[esm]', filename)
       source = getCache(filename, source, () => opts.transform!({ source, filename }))
     } else {

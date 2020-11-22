@@ -10,7 +10,8 @@ export default function transform (opts: TransformOptions): string {
     filename: '',
     cwd: '/',
     plugins: [
-      [require('@babel/plugin-transform-modules-commonjs'), { allowTopLevelThis: true }]
+      [require('@babel/plugin-transform-modules-commonjs'), { allowTopLevelThis: true }],
+      [require('babel-plugin-dynamic-import-node')]
     ]
   }
 

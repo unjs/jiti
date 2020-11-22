@@ -30,6 +30,7 @@
     "@types/mkdirp": "latest",
     "@types/node": "latest",
     "@types/resolve": "latest",
+    "babel-plugin-dynamic-import-node": "latest",
     "create-require": "latest",
     "eslint": "latest",
     "esm": "latest",
