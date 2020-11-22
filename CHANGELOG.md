@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.15](https://github.com/nuxt-contrib/jiti/compare/v0.1.14...v0.1.15) (2020-11-22)
+
+
+### Features
+
+* basic support for dynamic imports ([9494452](https://github.com/nuxt-contrib/jiti/commit/94944520734b5d7f3bc2cf38c4a3454835201e2f))
+
 ### [0.1.14](https://github.com/nuxt-contrib/jiti/compare/v0.1.13...v0.1.14) (2020-11-21)
 
 
