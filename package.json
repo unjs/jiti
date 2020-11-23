@@ -16,7 +16,7 @@
     "build:babel": "ncc build src/babel.ts -t -m -o dist/babel",
     "clean": "rm -rf dist",
     "dev": "yarn clean && yarn webpack --watch",
-    "jiti": "JITI_DEBUG=1 JITI_CACHE=false ./bin/jiti.js",
+    "jiti": "JITI_DEBUG=1 ./bin/jiti.js",
     "lint": "eslint --ext .ts,.js .",
     "release": "yarn test && yarn build && yarn standard-version && git push --follow-tags && npm publish",
     "test": "yarn lint"
