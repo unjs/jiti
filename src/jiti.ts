@@ -16,6 +16,7 @@ export type JITIOptions = {
   transform?: (opts: TransformOptions) => string,
   debug?: boolean,
   cache?: boolean | string
+  dynamicImport?: (id: string) => Promise<any>
 }
 
 const _EnvDebug = destr(process.env.JITI_DEBUG)
@@ -71,7 +72,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
 
   // https://www.npmjs.com/package/resolve
   const resolveOpts = {
-    extensions: ['.js', '.mjs', '.ts'],
+    extensions: ['.ts', '.js', '.mjs'],
     basedir: dirname(_filename)
   }
   const _resolve = (id: string) => resolve.sync(id, resolveOpts)
@@ -113,6 +114,12 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
 
     // Resolve path
     const filename = _resolve(id)
+
+    // Giveup on mjs extension
+    if (filename.match(/\.mjs$/) && opts.dynamicImport) {
+      debug('[mjs bail]', filename)
+      return opts.dynamicImport(filename)
+    }
 
     // Check for CJS cache
     if (_require.cache[filename]) {
