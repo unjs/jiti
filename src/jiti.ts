@@ -9,7 +9,7 @@ import mkdirp from 'mkdirp'
 import destr from 'destr'
 import createRequire from 'create-require'
 import resolve from 'resolve'
-import { isDir, isWritable, interopDefault } from './utils'
+import { isDir, isWritable } from './utils'
 import { TransformOptions } from './types'
 
 export type JITIOptions = {
@@ -27,7 +27,7 @@ const defaults = {
   cache: _EnvCache !== undefined ? _EnvCache : true
 }
 
-const TRANSPILE_VERSION = 1.1
+const TRANSPILE_VERSION = 2
 
 function md5 (content: string, len = 8) {
   return createHash('md5').update(content).digest('hex').substr(0, len)
@@ -169,7 +169,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     _require.cache[filename] = mod
 
     // Return exports
-    return interopDefault(mod.exports)
+    return mod.exports
   }
 
   jiti.resolve = _resolve
