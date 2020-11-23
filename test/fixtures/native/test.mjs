@@ -1,6 +1,6 @@
-const foo = {}
+// const foo = {}
 
 export default {
-  native: 1,
-  optionalChaining: foo?.bar || 'works'
+  native: 1
+  // optionalChaining: foo?.bar || 'works'
 }
