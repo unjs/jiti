@@ -35,23 +35,19 @@ const jiti = require('jiti')(__filename, { debug: true })
 
 - Type: Boolean
 - Default: `false`
+- Environment Variable: `JITI_DEBUG`
 
 Enable debug to see which files are transpiled
 
 ### `cache`
 
-- Type: Boolean
+- Type: Boolean | String
 - Default: `true`
+- Environment Vriable: `JITI_CACHE`
 
 Use transpile cache
 
-### `cacheDir`
-
-- Type: String
-- Default: `node_modules/.cache/jiti` or `{TMP_DIR}/node-jiti`
-
-
-Cache directroy (only effective if `cache` is `true`)
+If set to `true` will use `node_modules/.cache/jiti` (if exists) or `{TMP_DIR}/node-jiti`
 
 ### `transform`
 

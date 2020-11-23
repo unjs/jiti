@@ -32,6 +32,7 @@
     "@types/resolve": "latest",
     "babel-plugin-dynamic-import-node": "latest",
     "create-require": "latest",
+    "destr": "latest",
     "eslint": "latest",
     "esm": "latest",
     "mkdirp": "latest",

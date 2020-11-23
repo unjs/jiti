@@ -6,6 +6,7 @@ import { tmpdir } from 'os'
 import { createHash } from 'crypto'
 import vm from 'vm'
 import mkdirp from 'mkdirp'
+import destr from 'destr'
 import createRequire from 'create-require'
 import resolve from 'resolve'
 import { isDir, interopDefault } from './utils'
@@ -14,13 +15,12 @@ import { TransformOptions } from './types'
 export type JITIOptions = {
   transform?: (opts: TransformOptions) => string,
   debug?: boolean,
-  cache?: boolean,
-  cacheDir?: string
+  cache?: boolean | string
 }
 
 const defaults = {
-  debug: false,
-  cache: true
+  debug: destr(process.env.JITI_DEBUG),
+  cache: destr(process.env.JITI_CACHE)
 }
 
 const TRANSPILE_VERSION = 1.1
@@ -37,12 +37,12 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     _filename = join(_filename, 'index.js')
   }
 
-  if (opts.cache && !opts.cacheDir) {
+  if (opts.cache === true) {
     const nodeModulesDir = join(process.cwd(), 'node_modules')
     if (existsSync(nodeModulesDir)) {
-      opts.cacheDir = join(nodeModulesDir, '.cache/jiti')
+      opts.cache = join(nodeModulesDir, '.cache/jiti')
     } else {
-      opts.cacheDir = join(tmpdir(), 'node-jiti')
+      opts.cache = join(tmpdir(), 'node-jiti')
     }
   }
 
@@ -73,7 +73,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
 
     // Check cache file
     const filebase = basename(dirname(filename)) + '-' + basename(filename)
-    const cacheFile = join(opts.cacheDir!, filebase + '.' + md5(filename) + '.js')
+    const cacheFile = join(opts.cache as string, filebase + '.' + md5(filename) + '.js')
 
     if (existsSync(cacheFile)) {
       const cacheSource = readFileSync(cacheFile, 'utf-8')
@@ -84,7 +84,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
 
     const result = get()
 
-    mkdirp.sync(opts.cacheDir!)
+    mkdirp.sync(opts.cache as string)
     writeFileSync(cacheFile, result + sourceHash, 'utf-8')
 
     return result
