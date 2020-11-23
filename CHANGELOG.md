@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.16](https://github.com/nuxt-contrib/jiti/compare/v0.1.15...v0.1.16) (2020-11-23)
+
+
+### Features
+
+* fallback to tmpdir and then disable if cache dir is not writable ([398fe08](https://github.com/nuxt-contrib/jiti/commit/398fe08ef06fa873a63ea280d8a408abca8ece04))
+* support JITI_DEBUG ands JITI_CACHE environment variables ([eed965d](https://github.com/nuxt-contrib/jiti/commit/eed965dd05c83adac83c7bb2d84eb91098381c52))
+
 ### [0.1.15](https://github.com/nuxt-contrib/jiti/compare/v0.1.14...v0.1.15) (2020-11-22)
 
 
