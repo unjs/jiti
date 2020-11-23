@@ -1,1 +1,3 @@
-export { default as test } from './test'
+import test from './test'
+
+console.log(test)
