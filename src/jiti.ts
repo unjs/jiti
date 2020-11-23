@@ -9,7 +9,7 @@ import mkdirp from 'mkdirp'
 import destr from 'destr'
 import createRequire from 'create-require'
 import resolve from 'resolve'
-import { isDir, interopDefault } from './utils'
+import { isDir, isWritable, interopDefault } from './utils'
 import { TransformOptions } from './types'
 
 export type JITIOptions = {
@@ -18,9 +18,12 @@ export type JITIOptions = {
   cache?: boolean | string
 }
 
+const _EnvDebug = destr(process.env.JITI_DEBUG)
+const _EnvCache = destr(process.env.JITI_CACHE)
+
 const defaults = {
-  debug: destr(process.env.JITI_DEBUG),
-  cache: destr(process.env.JITI_CACHE)
+  debug: _EnvDebug,
+  cache: _EnvCache !== undefined ? _EnvCache : true
 }
 
 const TRANSPILE_VERSION = 1.1
@@ -32,18 +35,38 @@ function md5 (content: string, len = 8) {
 export default function createJITI (_filename: string = process.cwd(), opts: JITIOptions = {}): typeof require {
   opts = { ...defaults, ...opts }
 
+  function debug (...args: string[]) {
+    if (opts.debug) {
+      // eslint-disable-next-line no-console
+      console.log('[jiti]', ...args)
+    }
+  }
+
   // If filename is dir, createRequire goes with parent directory, so we need fakepath
   if (isDir(_filename)) {
     _filename = join(_filename, 'index.js')
   }
 
   if (opts.cache === true) {
+    // Default to ./node_modules/.cache/jiti only if ./node_modules exists
     const nodeModulesDir = join(process.cwd(), 'node_modules')
-    if (existsSync(nodeModulesDir)) {
+    if (isDir(nodeModulesDir)) {
       opts.cache = join(nodeModulesDir, '.cache/jiti')
-    } else {
-      opts.cache = join(tmpdir(), 'node-jiti')
     }
+    // Check if is writable
+    if (opts.cache === true || !isWritable(opts.cache)) {
+      opts.cache = join(tmpdir(), 'node-jiti')
+    } else if (!isWritable(opts.cache)) {
+      opts.cache = false
+    }
+  }
+  if (opts.cache) {
+    if (!isDir(opts.cache)) {
+      mkdirp.sync(opts.cache as string)
+    }
+    debug('Cache dir:', opts.cache)
+  } else {
+    debug('Cache is disabled')
   }
 
   // https://www.npmjs.com/package/resolve
@@ -55,13 +78,6 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
   _resolve.paths = (_: string) => []
 
   const _require = createRequire(_filename)
-
-  function debug (...args: string[]) {
-    if (opts.debug) {
-      // eslint-disable-next-line no-console
-      console.log('[jiti]', ...args)
-    }
-  }
 
   function getCache (filename: string, source: string, get: () => string): string {
     if (!opts.cache) {
@@ -84,7 +100,6 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
 
     const result = get()
 
-    mkdirp.sync(opts.cache as string)
     writeFileSync(cacheFile, result + sourceHash, 'utf-8')
 
     return result

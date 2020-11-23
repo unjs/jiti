@@ -1,4 +1,4 @@
-import { lstatSync } from 'fs'
+import { lstatSync, accessSync, constants } from 'fs'
 
 export function isDir (filename: string): boolean {
   try {
@@ -6,6 +6,15 @@ export function isDir (filename: string): boolean {
     return stat.isDirectory()
   } catch (e) {
     // lstatSync throws an error if path doesn't exist
+    return false
+  }
+}
+
+export function isWritable (filename: string): boolean {
+  try {
+    accessSync(filename, constants.W_OK)
+    return true
+  } catch (e) {
     return false
   }
 }
