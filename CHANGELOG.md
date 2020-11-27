@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.17](https://github.com/nuxt-contrib/jiti/compare/v0.1.16...v0.1.17) (2020-11-27)
+
+
+### Features
+
+* use native import for mjs files ([#10](https://github.com/nuxt-contrib/jiti/issues/10)) ([da34753](https://github.com/nuxt-contrib/jiti/commit/da34753d54e4bc726bb354dcbd77b4f3d7f7e0a0))
+
+
+### Bug Fixes
+
+* **cli:** resolve relative to cwd ([52a4c12](https://github.com/nuxt-contrib/jiti/commit/52a4c124bc649b366d481cbe6463537b245ad4d1))
+
 ### [0.1.16](https://github.com/nuxt-contrib/jiti/compare/v0.1.15...v0.1.16) (2020-11-23)
 
 
