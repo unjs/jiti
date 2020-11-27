@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+const { resolve } = require('path')
+
 const script = process.argv.splice(2, 1)[0]
 
 if (!script) {
@@ -8,6 +10,7 @@ if (!script) {
   process.exit(1)
 }
 
-const jiti = require('..')(process.cwd())
-const resolved = process.argv[1] = jiti.resolve(script)
+const pwd = process.cwd()
+const jiti = require('..')(pwd)
+const resolved = process.argv[1] = jiti.resolve(resolve(pwd, script))
 jiti(resolved)
