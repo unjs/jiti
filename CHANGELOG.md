@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.18](https://github.com/nuxt-contrib/jiti/compare/v0.1.17...v0.1.18) (2020-12-22)
+
+
+### Features
+
+* use native require for resolving ([f7e1a56](https://github.com/nuxt-contrib/jiti/commit/f7e1a5685c14b979cb1a6dd5fbe724ee3a0b2c13))
+
+
+### Bug Fixes
+
+* support circular dependency (closes [#12](https://github.com/nuxt-contrib/jiti/issues/12)) ([06c687f](https://github.com/nuxt-contrib/jiti/commit/06c687f180b1fe43e4e58b15e06389a589b8a2bc))
+
 ### [0.1.17](https://github.com/nuxt-contrib/jiti/compare/v0.1.16...v0.1.17) (2020-11-27)
 
 
