@@ -8,7 +8,6 @@ import vm from 'vm'
 import mkdirp from 'mkdirp'
 import destr from 'destr'
 import createRequire from 'create-require'
-import resolve from 'resolve'
 import { isDir, isWritable } from './utils'
 import { TransformOptions } from './types'
 
@@ -76,7 +75,6 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     try { return nativeRequire.resolve(id, options) } catch (e) {}
   }
 
-  // https://www.npmjs.com/package/resolve
   const _resolve = (id: string, options?: { paths?: string[] }) => {
     return tryResolve(id + '.ts', options) || tryResolve(id + '.mjs', options) || nativeRequire.resolve(id, options)
   }
