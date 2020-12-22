@@ -70,15 +70,17 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     debug('Cache is disabled')
   }
 
-  // https://www.npmjs.com/package/resolve
-  const resolveOpts = {
-    extensions: ['.ts', '.js', '.mjs'],
-    basedir: dirname(_filename)
-  }
-  const _resolve = (id: string) => resolve.sync(id, resolveOpts)
-  _resolve.paths = (_: string) => []
+  const nativeRequire = createRequire(_filename)
 
-  const _require = createRequire(_filename)
+  const tryResolve = (id: string, options?: { paths?: string[] }) => {
+    try { return nativeRequire.resolve(id, options) } catch (e) {}
+  }
+
+  // https://www.npmjs.com/package/resolve
+  const _resolve = (id: string, options?: { paths?: string[] }) => {
+    return tryResolve(id + '.ts', options) || tryResolve(id + '.mjs', options) || nativeRequire.resolve(id, options)
+  }
+  _resolve.paths = nativeRequire.resolve.paths
 
   function getCache (filename: string, source: string, get: () => string): string {
     if (!opts.cache) {
@@ -109,7 +111,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
   function jiti (id: string) {
     // Check for builtin node module like fs
     if (builtinModules.includes(id)) {
-      return _require(id)
+      return nativeRequire(id)
     }
 
     // Resolve path
@@ -122,8 +124,8 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     }
 
     // Check for CJS cache
-    if (_require.cache[filename]) {
-      return _require.cache[filename]?.exports
+    if (nativeRequire.cache[filename]) {
+      return nativeRequire.cache[filename]?.exports
     }
 
     // Read source
@@ -138,7 +140,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
       source = getCache(filename, source, () => opts.transform!({ source, filename }))
     } else {
       debug('[bail]', filename)
-      return _require(id)
+      return nativeRequire(id)
     }
 
     // Compile module
@@ -154,7 +156,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     mod.paths = Module._nodeModulePaths(mod.path)
 
     // Set CJS cache before eval
-    _require.cache[filename] = mod
+    nativeRequire.cache[filename] = mod
 
     // @ts-ignore
     // mod._compile wraps require and require.resolve to global function
@@ -173,9 +175,9 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
   }
 
   jiti.resolve = _resolve
-  jiti.cache = _require.cache
-  jiti.extensions = _require.extensions
-  jiti.main = _require.main
+  jiti.cache = nativeRequire.cache
+  jiti.extensions = nativeRequire.extensions
+  jiti.main = nativeRequire.main
 
   return jiti
 }
