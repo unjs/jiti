@@ -153,6 +153,9 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     // @ts-ignore
     mod.paths = Module._nodeModulePaths(mod.path)
 
+    // Set CJS cache before eval
+    _require.cache[filename] = mod
+
     // @ts-ignore
     // mod._compile wraps require and require.resolve to global function
     const compiled = vm.runInThisContext(Module.wrap(source), {
@@ -164,9 +167,6 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
 
     // Set as loaded
     mod.loaded = true
-
-    // Set CJS cache
-    _require.cache[filename] = mod
 
     // Return exports
     return mod.exports
