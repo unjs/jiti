@@ -1,4 +1,3 @@
-import 'v8-compile-cache'
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { Module, builtinModules } from 'module'
 import { dirname, join, basename } from 'path'
