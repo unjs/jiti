@@ -15,6 +15,7 @@ export type JITIOptions = {
   debug?: boolean,
   cache?: boolean | string
   dynamicImport?: (id: string) => Promise<any>
+  onError?: (error: Error) => void
 }
 
 const _EnvDebug = destr(process.env.JITI_DEBUG)
@@ -25,7 +26,7 @@ const defaults = {
   cache: _EnvCache !== undefined ? _EnvCache : true
 }
 
-const TRANSPILE_VERSION = 2
+const TRANSPILE_VERSION = 3
 
 function md5 (content: string, len = 8) {
   return createHash('md5').update(content).digest('hex').substr(0, len)
@@ -155,14 +156,37 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     // Set CJS cache before eval
     nativeRequire.cache[filename] = mod
 
-    // @ts-ignore
-    // mod._compile wraps require and require.resolve to global function
-    const compiled = vm.runInThisContext(Module.wrap(source), {
-      filename,
-      lineOffset: 0,
-      displayErrors: true
-    })
-    compiled(mod.exports, mod.require, mod, mod.filename, dirname(mod.filename))
+    // Compile wrapped script
+    let compiled
+    try {
+      // @ts-ignore
+      // mod._compile wraps require and require.resolve to global function
+      compiled = vm.runInThisContext(Module.wrap(source), {
+        filename,
+        lineOffset: 0,
+        displayErrors: false
+      })
+    } catch (err) {
+      delete nativeRequire.cache[filename]
+      opts.onError!(err)
+    }
+
+    // Evaluate module
+    try {
+      compiled(mod.exports, mod.require, mod, mod.filename, dirname(mod.filename))
+    } catch (err) {
+      delete nativeRequire.cache[filename]
+      opts.onError!(err)
+    }
+
+    // Check for parse errors
+    if (mod.exports && mod.exports.__JITI_ERROR__) {
+      const { filename, line, column, code, message } = mod.exports.__JITI_ERROR__
+      const loc = `${filename}:${line}:${column}`
+      const err = new Error(`${code}: ${message} \n ${loc}`)
+      Error.captureStackTrace(err, jiti)
+      opts.onError!(err)
+    }
 
     // Set as loaded
     mod.loaded = true

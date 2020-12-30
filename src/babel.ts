@@ -22,13 +22,12 @@ export default function transform (opts: TransformOptions): string {
   try {
     return transformSync(opts.source, _opts)?.code || ''
   } catch (err) {
-    const code = err.code.replace('BABEL_', '').replace('PARSE_ERROR', 'ParseError')
-    const message = code + ': ' + err.message.replace('/: ', '').replace(/\(.+\)\s*$/, '')
-    const stack = `    at ${opts.filename}:${err.loc.line}:${err.loc.column}`
-
-    return `throw Error(${JSON.stringify(message + '\n' + stack)})`
-    // const _err = new Error(message)
-    // _err.stack = message + '\n' + stack
-    // throw _err
+    return 'exports.__JITI_ERROR__ = ' + JSON.stringify({
+      filename: opts.filename,
+      line: err.loc?.line || 0,
+      column: err.loc?.column || 0,
+      code: err.code.replace('BABEL_', '').replace('PARSE_ERROR', 'ParseError'),
+      message: err.message.replace('/: ', '').replace(/\(.+\)\s*$/, '')
+    })
   }
 }
