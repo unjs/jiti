@@ -1,1 +1,2 @@
 dist
+test/fixtures/error/parse-error.ts
