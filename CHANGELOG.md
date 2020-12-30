@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.19](https://github.com/nuxt-contrib/jiti/compare/v0.1.18...v0.1.19) (2020-12-30)
+
+
+### Features
+
+* improved parse and runtime error stack trace ([9d94ca1](https://github.com/nuxt-contrib/jiti/commit/9d94ca1c5b5e1f2aa6d5dafcf5361dfcdd6f38c5))
+
+
+### Bug Fixes
+
+* remove duplicate v8-compile-cache ([#13](https://github.com/nuxt-contrib/jiti/issues/13)) ([3f81fc9](https://github.com/nuxt-contrib/jiti/commit/3f81fc9cf4e560a624a6d8bd3a98f0fc5de0f4cc))
+
 ### [0.1.18](https://github.com/nuxt-contrib/jiti/compare/v0.1.17...v0.1.18) (2020-12-22)
 
 
