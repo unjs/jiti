@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { Module, builtinModules } from 'module'
-import { dirname, join, basename } from 'path'
+import { dirname, join, basename, extname } from 'path'
 import { tmpdir } from 'os'
 import { createHash } from 'crypto'
 import vm from 'vm'
@@ -76,7 +76,15 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
   }
 
   const _resolve = (id: string, options?: { paths?: string[] }) => {
-    return tryResolve(id + '.ts', options) || tryResolve(id + '.mjs', options) || nativeRequire.resolve(id, options)
+    if (['.js', '.ts', '.mjs'].includes(extname(id))) {
+      return nativeRequire.resolve(id, options)
+    }
+    return tryResolve(id, options) ||
+      tryResolve(id + '.ts', options) ||
+      tryResolve(id + '/index.ts', options) ||
+      tryResolve(id + '.mjs', options) ||
+      tryResolve(id + '/index.mjs', options) ||
+      nativeRequire.resolve(id, options)
   }
   _resolve.paths = nativeRequire.resolve.paths
 
