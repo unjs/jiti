@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.20](https://github.com/nuxt-contrib/jiti/compare/v0.1.19...v0.1.20) (2021-01-12)
+
+
+### Bug Fixes
+
+* resolve with index.{ts,mjs} ([2fe1846](https://github.com/nuxt-contrib/jiti/commit/2fe184690897c7f5e02456fecaf6a94099fd75e2))
+
 ### [0.1.19](https://github.com/nuxt-contrib/jiti/compare/v0.1.18...v0.1.19) (2020-12-30)
 
 
