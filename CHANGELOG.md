@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/nuxt-contrib/jiti/compare/v1.0.0...v1.1.0) (2021-01-13)
+
+
+### Features
+
+* support mixed sytax via esm fallback ([1e642e4](https://github.com/nuxt-contrib/jiti/commit/1e642e42ddf12669896f4ac9049d5a4d5bd9bf8c))
+
+
+### Bug Fixes
+
+* consistantly use tmpdir as cache dir ([e49a791](https://github.com/nuxt-contrib/jiti/commit/e49a791dc83a0b02ccc4e24842633eb395f55643))
+
 ## [1.0.0](https://github.com/nuxt-contrib/jiti/compare/v0.1.20...v1.0.0) (2021-01-12)
 
 ### [0.1.20](https://github.com/nuxt-contrib/jiti/compare/v0.1.19...v0.1.20) (2021-01-12)
