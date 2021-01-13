@@ -146,7 +146,13 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
       source = getCache(filename, source, () => opts.transform!({ source, filename }))
     } else {
       debug('[bail]', filename)
-      return nativeRequire(id)
+      try {
+        return nativeRequire(id)
+      } catch (err) {
+        debug('Native require error:', err)
+        debug('[esm fallback]', filename)
+        source = getCache(filename, source, () => opts.transform!({ source, filename }))
+      }
     }
 
     // Compile module
