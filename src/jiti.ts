@@ -48,25 +48,18 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
   }
 
   if (opts.cache === true) {
-    // Default to ./node_modules/.cache/jiti only if ./node_modules exists
-    const nodeModulesDir = join(process.cwd(), 'node_modules')
-    if (isDir(nodeModulesDir)) {
-      opts.cache = join(nodeModulesDir, '.cache/jiti')
-    }
-    // Check if is writable
-    if (opts.cache === true || !isWritable(opts.cache)) {
-      opts.cache = join(tmpdir(), 'node-jiti')
-    } else if (!isWritable(opts.cache)) {
-      opts.cache = false
-    }
+    opts.cache = join(tmpdir(), 'node-jiti')
   }
   if (opts.cache) {
-    if (!isDir(opts.cache)) {
+    try {
       mkdirp.sync(opts.cache as string)
+      if (!isWritable(opts.cache)) {
+        throw new Error('directory is not writable')
+      }
+    } catch (err) {
+      debug('Error creating cache directory at ', opts.cache, err)
+      opts.cache = false
     }
-    debug('Cache dir:', opts.cache)
-  } else {
-    debug('Cache is disabled')
   }
 
   const nativeRequire = createRequire(_filename)
