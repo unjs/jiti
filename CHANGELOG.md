@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/nuxt-contrib/jiti/compare/v1.1.0...v1.2.0) (2021-01-14)
+
+
+### Features
+
+* expose transform ([6b1ab5e](https://github.com/nuxt-contrib/jiti/commit/6b1ab5eae6d396e12579f0d84da0cbca41a08c0f))
+
 ## [1.1.0](https://github.com/nuxt-contrib/jiti/compare/v1.0.0...v1.1.0) (2021-01-13)
 
 
