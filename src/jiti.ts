@@ -32,7 +32,12 @@ function md5 (content: string, len = 8) {
   return createHash('md5').update(content).digest('hex').substr(0, len)
 }
 
-export default function createJITI (_filename: string = process.cwd(), opts: JITIOptions = {}): typeof require {
+type Require = typeof require
+export interface JITI extends Require {
+  transform: (opts: TransformOptions) => string
+}
+
+export default function createJITI (_filename: string = process.cwd(), opts: JITIOptions = {}): JITI {
   opts = { ...defaults, ...opts }
 
   function debug (...args: string[]) {
@@ -206,6 +211,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
   jiti.cache = nativeRequire.cache
   jiti.extensions = nativeRequire.extensions
   jiti.main = nativeRequire.main
+  jiti.transform = opts.transform!
 
   return jiti
 }

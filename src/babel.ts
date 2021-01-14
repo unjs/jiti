@@ -6,7 +6,7 @@ export default function transform (opts: TransformOptions): string {
     babelrc: false,
     configFile: false,
     compact: false,
-    retainLines: true,
+    retainLines: typeof opts.retainLines === 'boolean' ? opts.retainLines : true,
     filename: '',
     cwd: '/',
     plugins: [
