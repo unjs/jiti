@@ -120,10 +120,17 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
 
     // Resolve path
     const filename = _resolve(id)
+    const ext = extname(filename)
 
-    // Giveup on mjs extension
-    if (filename.match(/\.mjs$/) && opts.dynamicImport) {
-      debug('[mjs bail]', filename)
+    // Unknown format
+    if (!['.js', '.ts'].includes(ext)) {
+      debug('[unknown]', filename)
+      return nativeRequire(id)
+    }
+
+    // MJS
+    if (ext === '.mjs' && opts.dynamicImport) {
+      debug('[mjs]', filename)
       return opts.dynamicImport(filename)
     }
 
@@ -135,24 +142,27 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     // Read source
     let source = readFileSync(filename, 'utf-8')
 
-    // Transpile if needed
-    if (filename.match(/\.ts$/)) {
+    // Typescript
+    if (ext === '.ts') {
       debug('[ts]', filename)
       source = getCache(filename, source, () => opts.transform!({ source, filename, ts: true }))
-    } else if (source.match(/^\s*import .* from/m) || source.match(/import\s*\(/) || source.match(/^\s*export /m)) {
-      debug('[esm]', filename)
-      source = getCache(filename, source, () => opts.transform!({ source, filename }))
     } else {
-      debug('[bail]', filename)
-      try {
-        return nativeRequire(id)
-      } catch (err) {
-        debug('Native require error:', err)
-        debug('[esm fallback]', filename)
+      // ESM ~> CJS
+      const esmSyntaxDetected = source.match(/^\s*import .* from/m) || source.match(/import\s*\(/) || source.match(/^\s*export /m)
+      if (esmSyntaxDetected) {
+        debug('[esm]', filename)
         source = getCache(filename, source, () => opts.transform!({ source, filename }))
+      } else {
+        try {
+          debug('[cjs]', filename)
+          return nativeRequire(id)
+        } catch (err) {
+          debug('Native require error:', err)
+          debug('[esm fallback]', filename)
+          source = getCache(filename, source, () => opts.transform!({ source, filename }))
+        }
       }
     }
-
     // Compile module
     const mod = new Module(filename)
     mod.filename = filename
