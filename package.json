@@ -37,6 +37,7 @@
     "eslint": "latest",
     "esm": "latest",
     "mkdirp": "latest",
+    "pirates": "latest",
     "standard-version": "latest",
     "ts-loader": "latest",
     "tslib": "latest",
