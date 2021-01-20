@@ -7,6 +7,10 @@
   "main": "./lib/index.js",
   "types": "dist/jiti.d.ts",
   "bin": "bin/jiti.js",
+  "exports": {
+    "./": "./",
+    "./register": "./lib/register.js"
+  },
   "files": [
     "lib",
     "dist"
