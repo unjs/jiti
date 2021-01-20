@@ -148,7 +148,9 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
       source = getCache(filename, source, () => opts.transform!({ source, filename, ts: true }))
     } else {
       // ESM ~> CJS
-      const esmSyntaxDetected = source.match(/^\s*import .* from/m) || source.match(/import\s*\(/) || source.match(/^\s*export /m)
+      const esmSyntaxDetected = source.match(/^\s*import .* from/m) ||
+        (!opts.dynamicImport && source.match(/import\s*\(/)) ||
+        source.match(/^\s*export /m)
       if (esmSyntaxDetected) {
         debug('[esm]', filename)
         source = getCache(filename, source, () => opts.transform!({ source, filename }))
