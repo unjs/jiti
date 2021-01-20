@@ -36,6 +36,7 @@ function md5 (content: string, len = 8) {
 type Require = typeof require
 export interface JITI extends Require {
   transform: (opts: TransformOptions) => string
+  register: () => (() => void)
 }
 
 export default function createJITI (_filename: string = process.cwd(), opts: JITIOptions = {}): JITI {
@@ -221,7 +222,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
   }
 
   function register () {
-    addHook(
+    return addHook(
       (source, filename) =>
         jiti.transform({ source, filename, ts: !!filename.match(/.ts$/) })
       ,

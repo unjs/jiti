@@ -47,7 +47,7 @@ node -r jiti/register index.ts
 Alternatively, you can register `jiti` as a require hook programmatically:
 ```js
 const jiti = require('jiti')()
-jiti.register()
+const unregister = jiti.register()
 ```
 
 ## Options
