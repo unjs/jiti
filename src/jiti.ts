@@ -7,6 +7,7 @@ import vm from 'vm'
 import mkdirp from 'mkdirp'
 import destr from 'destr'
 import createRequire from 'create-require'
+import { addHook } from 'pirates'
 import { isDir, isWritable } from './utils'
 import { TransformOptions } from './types'
 
@@ -219,11 +220,21 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     return mod.exports
   }
 
+  function register () {
+    addHook(
+      (source, filename) =>
+        jiti.transform({ source, filename, ts: !!filename.match(/.ts$/) })
+      ,
+      { exts: ['.js', '.ts'] }
+    )
+  }
+
   jiti.resolve = _resolve
   jiti.cache = nativeRequire.cache
   jiti.extensions = nativeRequire.extensions
   jiti.main = nativeRequire.main
   jiti.transform = opts.transform!
+  jiti.register = register
 
   return jiti
 }
