@@ -17,6 +17,8 @@
 
 ## Usage
 
+### Programmatic
+
 ```js
 const jiti = require('jiti')(__filename)
 
@@ -27,6 +29,25 @@ You can also pass options as second argument:
 
 ```js
 const jiti = require('jiti')(__filename, { debug: true })
+```
+
+### CLI
+
+```bash
+jiti index.ts
+# or npx jiti index.ts
+```
+
+### Register require hook
+
+```bash
+node -r jiti/register index.ts
+```
+
+Alternatively, you can register `jiti` as a require hook programmatically:
+```js
+const jiti = require('jiti')()
+const unregister = jiti.register()
 ```
 
 ## Options

@@ -9,7 +9,8 @@
   "bin": "bin/jiti.js",
   "files": [
     "lib",
-    "dist"
+    "dist",
+    "register.js"
   ],
   "scripts": {
     "build": "yarn clean && NODE_ENV=production yarn webpack",
@@ -37,6 +38,7 @@
     "eslint": "latest",
     "esm": "latest",
     "mkdirp": "latest",
+    "pirates": "latest",
     "standard-version": "latest",
     "ts-loader": "latest",
     "tslib": "latest",
