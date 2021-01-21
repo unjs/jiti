@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/nuxt-contrib/jiti/compare/v1.2.1...v1.3.0) (2021-01-21)
+
+
+### Features
+
+* support node register hook ([#15](https://github.com/nuxt-contrib/jiti/issues/15)) ([f5127cb](https://github.com/nuxt-contrib/jiti/commit/f5127cb2726bb8957323d413fef45aa5a2e275ae))
+
 ### [1.2.1](https://github.com/nuxt-contrib/jiti/compare/v1.2.0...v1.2.1) (2021-01-20)
 
 
