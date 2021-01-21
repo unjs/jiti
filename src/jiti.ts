@@ -223,7 +223,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
 
   function register () {
     return addHook(
-      (source, filename) =>
+      (source: string, filename: string) =>
         jiti.transform({ source, filename, ts: !!filename.match(/.ts$/) })
       ,
       { exts: ['.js', '.ts'] }
