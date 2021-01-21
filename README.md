@@ -135,7 +135,7 @@ Meanwhile it would be much better making an optimized bundle to deploy to produc
 - [x] File system cache
 - [x] Configurable transform
 - [ ] Add tests
-- [ ] Support `node -r jiti`
+- [x] Support `node -r jiti`
 - [ ] esbuild support
 
 ## License
