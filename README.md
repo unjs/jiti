@@ -90,7 +90,7 @@ Transform function. See [src/babel](./src/babel.ts) for more details
 
 - `+` Smaller install size (~1M vs ~11M with same plugins)
 - `+` Configured out of the box
-- `+` Smart syntax detect to avoid unnecessary trnaspilation
+- `+` Smart syntax detect to avoid unnecessary transpilation
 - `+` Does not ignores `node_modules`. ESM everywhere yay!
 - `+` Embeddable
 
