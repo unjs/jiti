@@ -3,4 +3,5 @@ export type TransformOptions = {
   filename?: string,
   ts?: Boolean
   retainLines?: Boolean
+  legacy?: Boolean
 }

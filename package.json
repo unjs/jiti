@@ -18,12 +18,15 @@
     "clean": "rm -rf dist",
     "dev": "yarn clean && yarn webpack --watch",
     "jiti": "JITI_DEBUG=1 ./bin/jiti.js",
+    "jiti:legacy": "JITI_DEBUG=1 npx node@12 ./bin/jiti.js",
     "lint": "eslint --ext .ts,.js .",
     "release": "yarn test && yarn build && yarn standard-version && git push --follow-tags && npm publish",
     "test": "yarn lint"
   },
   "devDependencies": {
     "@babel/core": "latest",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
+    "@babel/plugin-proposal-optional-chaining": "^7.13.8",
     "@babel/plugin-transform-modules-commonjs": "latest",
     "@babel/plugin-transform-typescript": "latest",
     "@babel/preset-typescript": "latest",
@@ -39,6 +42,7 @@
     "esm": "latest",
     "mkdirp": "latest",
     "pirates": "latest",
+    "semver": "^7.3.4",
     "standard-version": "latest",
     "ts-loader": "latest",
     "tslib": "latest",
@@ -46,5 +50,8 @@
     "v8-compile-cache": "latest",
     "webpack": "latest",
     "webpack-cli": "latest"
+  },
+  "dependencies": {
+    "@types/semver": "^7.3.4"
   }
 }

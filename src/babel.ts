@@ -19,6 +19,11 @@ export default function transform (opts: TransformOptions): string {
     _opts.plugins!.push(require('@babel/plugin-transform-typescript'))
   }
 
+  if (opts.legacy) {
+    _opts.plugins!.push(require('@babel/plugin-proposal-nullish-coalescing-operator'))
+    _opts.plugins!.push(require('@babel/plugin-proposal-optional-chaining'))
+  }
+
   try {
     return transformSync(opts.source, _opts)?.code || ''
   } catch (err) {
@@ -26,8 +31,8 @@ export default function transform (opts: TransformOptions): string {
       filename: opts.filename,
       line: err.loc?.line || 0,
       column: err.loc?.column || 0,
-      code: err.code.replace('BABEL_', '').replace('PARSE_ERROR', 'ParseError'),
-      message: err.message.replace('/: ', '').replace(/\(.+\)\s*$/, '')
+      code: err.code?.replace('BABEL_', '').replace('PARSE_ERROR', 'ParseError'),
+      message: err.message?.replace('/: ', '').replace(/\(.+\)\s*$/, '')
     })
   }
 }

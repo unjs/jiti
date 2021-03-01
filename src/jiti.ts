@@ -7,6 +7,7 @@ import vm from 'vm'
 import mkdirp from 'mkdirp'
 import destr from 'destr'
 import createRequire from 'create-require'
+import semver from 'semver'
 import { addHook } from 'pirates'
 import { isDir, isWritable } from './utils'
 import { TransformOptions } from './types'
@@ -17,6 +18,7 @@ export type JITIOptions = {
   cache?: boolean | string
   dynamicImport?: (id: string) => Promise<any>
   onError?: (error: Error) => void
+  legacy?: boolean
 }
 
 const _EnvDebug = destr(process.env.JITI_DEBUG)
@@ -24,10 +26,9 @@ const _EnvCache = destr(process.env.JITI_CACHE)
 
 const defaults = {
   debug: _EnvDebug,
-  cache: _EnvCache !== undefined ? _EnvCache : true
+  cache: _EnvCache !== undefined ? _EnvCache : true,
+  legacy: semver.lt(process.version || '0.0.0', '14.0.0')
 }
-
-const TRANSPILE_VERSION = 3
 
 function md5 (content: string, len = 8) {
   return createHash('md5').update(content).digest('hex').substr(0, len)
@@ -41,6 +42,8 @@ export interface JITI extends Require {
 
 export default function createJITI (_filename: string = process.cwd(), opts: JITIOptions = {}): JITI {
   opts = { ...defaults, ...opts }
+
+  const TRANSPILE_VERSION = '3' + (opts.legacy ? '-legacy' : '')
 
   function debug (...args: string[]) {
     if (opts.debug) {
@@ -144,29 +147,37 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     // Read source
     let source = readFileSync(filename, 'utf-8')
 
-    // Typescript
-    if (ext === '.ts') {
-      debug('[ts]', filename)
-      source = getCache(filename, source, () => opts.transform!({ source, filename, ts: true }))
+    // Transpile
+    const isTypescript = ext === '.ts'
+    const needsTranspile = isTypescript ||
+      (source.match(/^\s*import .* from/m)) ||
+      (source.match(/^\s*export /m)) ||
+      (opts.legacy && (source.match(/\?\./) || source.match(/\?\?/))) ||
+      (!opts.dynamicImport && source.match(/import\s*\(/))
+
+    if (needsTranspile) {
+      debug('[transpile]', filename)
+      source = getCache(filename, source, () => opts.transform!({
+        source,
+        filename,
+        legacy: opts.legacy,
+        ts: isTypescript
+      }))
     } else {
-      // ESM ~> CJS
-      const esmSyntaxDetected = source.match(/^\s*import .* from/m) ||
-        (!opts.dynamicImport && source.match(/import\s*\(/)) ||
-        source.match(/^\s*export /m)
-      if (esmSyntaxDetected) {
-        debug('[esm]', filename)
-        source = getCache(filename, source, () => opts.transform!({ source, filename }))
-      } else {
-        try {
-          debug('[cjs]', filename)
-          return nativeRequire(id)
-        } catch (err) {
-          debug('Native require error:', err)
-          debug('[esm fallback]', filename)
-          source = getCache(filename, source, () => opts.transform!({ source, filename }))
-        }
+      try {
+        debug('[native]', filename)
+        return nativeRequire(id)
+      } catch (err) {
+        debug('Native require error:', err)
+        debug('[fallback]', filename)
+        source = getCache(filename, source, () => opts.transform!({
+          source,
+          filename,
+          legacy: opts.legacy
+        }))
       }
     }
+
     // Compile module
     const mod = new Module(filename)
     mod.filename = filename
