@@ -25,8 +25,8 @@
   },
   "devDependencies": {
     "@babel/core": "latest",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
-    "@babel/plugin-proposal-optional-chaining": "^7.13.8",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "latest",
+    "@babel/plugin-proposal-optional-chaining": "latest",
     "@babel/plugin-transform-modules-commonjs": "latest",
     "@babel/plugin-transform-typescript": "latest",
     "@babel/preset-typescript": "latest",
@@ -36,14 +36,14 @@
     "@types/node": "latest",
     "@types/resolve": "latest",
     "babel-plugin-dynamic-import-node": "latest",
-    "babel-plugin-transform-import-meta": "^1.0.1",
+    "babel-plugin-transform-import-meta": "latest",
     "create-require": "latest",
     "destr": "latest",
     "eslint": "latest",
     "esm": "latest",
     "mkdirp": "latest",
     "pirates": "latest",
-    "semver": "^7.3.4",
+    "semver": "latest",
     "standard-version": "latest",
     "ts-loader": "latest",
     "tslib": "latest",
@@ -51,6 +51,6 @@
     "v8-compile-cache": "latest",
     "webpack": "latest",
     "webpack-cli": "latest",
-    "@types/semver": "^7.3.4"
+    "@types/semver": "latest"
   }
 }
