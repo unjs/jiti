@@ -133,12 +133,18 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
   }
 
   function transform (filename: string, source: string, transformOptions: any) {
-    return getCache(filename, source, () => opts.transform!({
+    let transfortmed = getCache(filename, source, () => opts.transform!({
       source,
       filename,
       legacy: opts.legacy,
       ...transformOptions
     }))
+
+    if (transfortmed.startsWith('#!')) {
+      transfortmed = '// ' + transfortmed
+    }
+
+    return transfortmed
   }
 
   function jiti (id: string) {
