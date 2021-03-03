@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/nuxt-contrib/jiti/compare/v1.4.0...v1.5.0) (2021-03-03)
+
+
+### Features
+
+* `extensions` option (fixes mjs handling) ([3804b3c](https://github.com/nuxt-contrib/jiti/commit/3804b3c2e5086dad0bc1feb0518579d4d5b10c6a))
+
+
+### Bug Fixes
+
+* don't cache errors ([8a7f881](https://github.com/nuxt-contrib/jiti/commit/8a7f8813e21586160530b99a43c36e3dcfc76e64)), closes [nuxt/nuxt.js#8916](https://github.com/nuxt/nuxt.js/issues/8916)
+* fix issues with dynamic import ([e318cf5](https://github.com/nuxt-contrib/jiti/commit/e318cf511bb787ad4ad3fd4e64301cc1be1d701a))
+
 ## [1.4.0](https://github.com/nuxt-contrib/jiti/compare/v1.3.0...v1.4.0) (2021-03-01)
 
 
