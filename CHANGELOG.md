@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/nuxt-contrib/jiti/compare/v1.5.0...v1.6.0) (2021-03-03)
+
+
+### Features
+
+* transpile import.meta.url (resolves [#21](https://github.com/nuxt-contrib/jiti/issues/21)) ([d071704](https://github.com/nuxt-contrib/jiti/commit/d07170452837cd28a93d205786b1e28de4bd8d04))
+
+
+### Bug Fixes
+
+* support hashbang (closes [#18](https://github.com/nuxt-contrib/jiti/issues/18)) ([6a1f816](https://github.com/nuxt-contrib/jiti/commit/6a1f81626d9428ce3aa0c46f94f3d10c79c7dd08))
+
 ## [1.5.0](https://github.com/nuxt-contrib/jiti/compare/v1.4.0...v1.5.0) (2021-03-03)
 
 
