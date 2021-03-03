@@ -36,6 +36,7 @@
     "@types/node": "latest",
     "@types/resolve": "latest",
     "babel-plugin-dynamic-import-node": "latest",
+    "babel-plugin-transform-import-meta": "^1.0.1",
     "create-require": "latest",
     "destr": "latest",
     "eslint": "latest",
@@ -49,9 +50,7 @@
     "typescript": "latest",
     "v8-compile-cache": "latest",
     "webpack": "latest",
-    "webpack-cli": "latest"
-  },
-  "dependencies": {
+    "webpack-cli": "latest",
     "@types/semver": "^7.3.4"
   }
 }

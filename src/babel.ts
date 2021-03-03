@@ -11,7 +11,8 @@ export default function transform (opts: TransformOptions): string {
     cwd: '/',
     plugins: [
       [require('@babel/plugin-transform-modules-commonjs'), { allowTopLevelThis: true }],
-      [require('babel-plugin-dynamic-import-node'), { noInterop: true }]
+      [require('babel-plugin-dynamic-import-node'), { noInterop: true }],
+      [require('babel-plugin-transform-import-meta')]
     ]
   }
 
