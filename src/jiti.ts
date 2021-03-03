@@ -159,10 +159,8 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     // Transpile
     const isTypescript = ext === '.ts'
     const needsTranspile = isTypescript ||
-      (source.match(/^\s*import .* from/m)) ||
-      (source.match(/^\s*export /m)) ||
-      (opts.legacy && (source.match(/\?\./) || source.match(/\?\?/))) ||
-      (!opts.dynamicImport && source.match(/import\s*\(/))
+      (source.match(/^\s*import .* from|\s*export |import\s*\(/m)) ||
+      (opts.legacy && (source.match(/\?\.|\?\?/)))
 
     if (needsTranspile) {
       debug('[transpile]', filename)
