@@ -45,7 +45,7 @@ export interface JITI extends Require {
 export default function createJITI (_filename: string = process.cwd(), opts: JITIOptions = {}): JITI {
   opts = { ...defaults, ...opts }
 
-  const TRANSPILE_VERSION = '3' + (opts.legacy ? '-legacy' : '')
+  const CACHE_VERSION = '4' + (opts.legacy ? '-legacy' : '')
 
   function debug (...args: string[]) {
     if (opts.debug) {
@@ -108,7 +108,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     }
 
     // Calculate source hash
-    const sourceHash = ` /* v${TRANSPILE_VERSION}-${md5(source, 16)} */`
+    const sourceHash = ` /* v${CACHE_VERSION}-${md5(source, 16)} */`
 
     // Check cache file
     const filebase = basename(dirname(filename)) + '-' + basename(filename)
@@ -117,13 +117,17 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     if (existsSync(cacheFile)) {
       const cacheSource = readFileSync(cacheFile, 'utf-8')
       if (cacheSource.endsWith(sourceHash)) {
+        debug('[cache hit]', filename, '~>', cacheFile)
         return cacheSource
       }
     }
 
+    debug('[cache miss]', filename)
     const result = get()
 
-    writeFileSync(cacheFile, result + sourceHash, 'utf-8')
+    if (!result.includes('__JITI_ERROR__')) {
+      writeFileSync(cacheFile, result + sourceHash, 'utf-8')
+    }
 
     return result
   }
