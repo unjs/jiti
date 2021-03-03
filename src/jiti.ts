@@ -132,6 +132,15 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     return result
   }
 
+  function transform (filename: string, source: string, transformOptions: any) {
+    return getCache(filename, source, () => opts.transform!({
+      source,
+      filename,
+      legacy: opts.legacy,
+      ...transformOptions
+    }))
+  }
+
   function jiti (id: string) {
     // Check for builtin node module like fs
     if (builtinModules.includes(id)) {
@@ -164,12 +173,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
 
     if (needsTranspile) {
       debug('[transpile]', filename)
-      source = getCache(filename, source, () => opts.transform!({
-        source,
-        filename,
-        legacy: opts.legacy,
-        ts: isTypescript
-      }))
+      source = transform(filename, source, { ts: isTypescript })
     } else {
       try {
         debug('[native]', filename)
@@ -177,11 +181,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
       } catch (err) {
         debug('Native require error:', err)
         debug('[fallback]', filename)
-        source = getCache(filename, source, () => opts.transform!({
-          source,
-          filename,
-          legacy: opts.legacy
-        }))
+        source = transform(filename, source, { ts: isTypescript })
       }
     }
 
