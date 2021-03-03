@@ -19,6 +19,7 @@ export type JITIOptions = {
   dynamicImport?: (id: string) => Promise<any>
   onError?: (error: Error) => void
   legacy?: boolean
+  extensions?: string[]
 }
 
 const _EnvDebug = destr(process.env.JITI_DEBUG)
@@ -27,7 +28,8 @@ const _EnvCache = destr(process.env.JITI_CACHE)
 const defaults = {
   debug: _EnvDebug,
   cache: _EnvCache !== undefined ? _EnvCache : true,
-  legacy: semver.lt(process.version || '0.0.0', '14.0.0')
+  legacy: semver.lt(process.version || '0.0.0', '14.0.0'),
+  extensions: ['.js', '.mjs', '.ts']
 }
 
 function md5 (content: string, len = 8) {
@@ -78,16 +80,25 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     try { return nativeRequire.resolve(id, options) } catch (e) {}
   }
 
+  const _additionalExts = [...opts.extensions!].filter(ext => ext !== '.js')
   const _resolve = (id: string, options?: { paths?: string[] }) => {
-    if (['.js', '.ts', '.mjs'].includes(extname(id))) {
+    if (opts.extensions!.includes(extname(id))) {
       return nativeRequire.resolve(id, options)
     }
-    return tryResolve(id, options) ||
-      tryResolve(id + '.ts', options) ||
-      tryResolve(id + '/index.ts', options) ||
-      tryResolve(id + '.mjs', options) ||
-      tryResolve(id + '/index.mjs', options) ||
-      nativeRequire.resolve(id, options)
+    let resolved, err
+    try {
+      return nativeRequire.resolve(id, options)
+    } catch (_err) {
+      err = _err
+    }
+    for (const ext of _additionalExts) {
+      resolved = tryResolve(id + ext, options) ||
+        tryResolve(id + '/index' + ext, options)
+      if (resolved) {
+        return resolved
+      }
+    }
+    throw err
   }
   _resolve.paths = nativeRequire.resolve.paths
 
@@ -128,15 +139,9 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     const ext = extname(filename)
 
     // Unknown format
-    if (!['.js', '.ts'].includes(ext)) {
+    if (!opts.extensions!.includes(ext)) {
       debug('[unknown]', filename)
       return nativeRequire(id)
-    }
-
-    // MJS
-    if (ext === '.mjs' && opts.dynamicImport) {
-      debug('[mjs]', filename)
-      return opts.dynamicImport(filename)
     }
 
     // Check for CJS cache
@@ -237,7 +242,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
       (source: string, filename: string) =>
         jiti.transform({ source, filename, ts: !!filename.match(/.ts$/) })
       ,
-      { exts: ['.js', '.ts'] }
+      { exts: opts.extensions }
     )
   }
 
