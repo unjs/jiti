@@ -20,7 +20,8 @@ module.exports = {
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
     alias: {
-      '@babel/code-frame': require.resolve('./stubs/babel_codeframe')
+      '@babel/code-frame': require.resolve('./stubs/babel_codeframe'),
+      '@babel/helper-compilation-targets': require.resolve('./stubs/helper_compilation_targets')
     }
   },
   stats: {
