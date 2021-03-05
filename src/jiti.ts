@@ -10,10 +10,10 @@ import createRequire from 'create-require'
 import semver from 'semver'
 import { addHook } from 'pirates'
 import { isDir, isWritable } from './utils'
-import { TransformOptions } from './types'
+import { TransformOptions, TRANSFORM_RESULT } from './types'
 
 export type JITIOptions = {
-  transform?: (opts: TransformOptions) => string,
+  transform?: (opts: TransformOptions) => TRANSFORM_RESULT,
   debug?: boolean,
   cache?: boolean | string
   dynamicImport?: (id: string) => Promise<any>
@@ -132,19 +132,18 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     return result
   }
 
-  function transform (filename: string, source: string, transformOptions: any) {
-    let transfortmed = getCache(filename, source, () => opts.transform!({
-      source,
-      filename,
-      legacy: opts.legacy,
-      ...transformOptions
-    }))
-
-    if (transfortmed.startsWith('#!')) {
-      transfortmed = '// ' + transfortmed
+  function transform (topts: any): string {
+    let code = getCache(topts.filename, topts.source, () => {
+      const res = opts.transform!({ legacy: opts.legacy, ...topts })
+      if (res.error && opts.debug) {
+        debug(res.error)
+      }
+      return res.code
+    })
+    if (code.startsWith('#!')) {
+      code = '// ' + code
     }
-
-    return transfortmed
+    return code
   }
 
   function jiti (id: string) {
@@ -179,7 +178,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
 
     if (needsTranspile) {
       debug('[transpile]', filename)
-      source = transform(filename, source, { ts: isTypescript })
+      source = transform({ filename, source, ts: isTypescript })
     } else {
       try {
         debug('[native]', filename)
@@ -187,7 +186,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
       } catch (err) {
         debug('Native require error:', err)
         debug('[fallback]', filename)
-        source = transform(filename, source, { ts: isTypescript })
+        source = transform({ filename, source, ts: isTypescript })
       }
     }
 
@@ -258,7 +257,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
   jiti.cache = nativeRequire.cache
   jiti.extensions = nativeRequire.extensions
   jiti.main = nativeRequire.main
-  jiti.transform = opts.transform!
+  jiti.transform = transform
   jiti.register = register
 
   return jiti

@@ -1,7 +1,7 @@
 import { transformSync, TransformOptions as BabelTransformOptions } from '@babel/core'
-import { TransformOptions } from './types'
+import { TransformOptions, TRANSFORM_RESULT } from './types'
 
-export default function transform (opts: TransformOptions): string {
+export default function transform (opts: TransformOptions): TRANSFORM_RESULT {
   const _opts: BabelTransformOptions = {
     babelrc: false,
     configFile: false,
@@ -26,14 +26,19 @@ export default function transform (opts: TransformOptions): string {
   }
 
   try {
-    return transformSync(opts.source, _opts)?.code || ''
+    return {
+      code: transformSync(opts.source, _opts)?.code || ''
+    }
   } catch (err) {
-    return 'exports.__JITI_ERROR__ = ' + JSON.stringify({
-      filename: opts.filename,
-      line: err.loc?.line || 0,
-      column: err.loc?.column || 0,
-      code: err.code?.replace('BABEL_', '').replace('PARSE_ERROR', 'ParseError'),
-      message: err.message?.replace('/: ', '').replace(/\(.+\)\s*$/, '')
-    })
+    return {
+      error: err,
+      code: 'exports.__JITI_ERROR__ = ' + JSON.stringify({
+        filename: opts.filename,
+        line: err.loc?.line || 0,
+        column: err.loc?.column || 0,
+        code: err.code?.replace('BABEL_', '').replace('PARSE_ERROR', 'ParseError'),
+        message: err.message?.replace('/: ', '').replace(/\(.+\)\s*$/, '')
+      })
+    }
   }
 }

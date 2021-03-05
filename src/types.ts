@@ -5,3 +5,8 @@ export type TransformOptions = {
   retainLines?: Boolean
   legacy?: Boolean
 }
+
+export type TRANSFORM_RESULT = {
+  code: string,
+  error?: any
+}
