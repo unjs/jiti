@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.1](https://github.com/nuxt-contrib/jiti/compare/v1.6.0...v1.6.1) (2021-03-05)
+
+
+### Bug Fixes
+
+* stub @babel/helper-compilation-targets to ignore browserslist in package.json ([af8fedc](https://github.com/nuxt-contrib/jiti/commit/af8fedc57fbe742c219d41c42a84e5df91e97f13)), closes [nuxt/nuxt.js#8916](https://github.com/nuxt/nuxt.js/issues/8916)
+
 ## [1.6.0](https://github.com/nuxt-contrib/jiti/compare/v1.5.0...v1.6.0) (2021-03-03)
 
 
