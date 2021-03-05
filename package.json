@@ -27,6 +27,7 @@
     "@babel/core": "latest",
     "@babel/plugin-proposal-nullish-coalescing-operator": "latest",
     "@babel/plugin-proposal-optional-chaining": "latest",
+    "@babel/plugin-syntax-class-properties": "^7.12.13",
     "@babel/plugin-transform-modules-commonjs": "latest",
     "@babel/plugin-transform-typescript": "latest",
     "@babel/preset-typescript": "latest",
@@ -35,6 +36,7 @@
     "@types/mkdirp": "latest",
     "@types/node": "latest",
     "@types/resolve": "latest",
+    "@types/semver": "latest",
     "babel-plugin-dynamic-import-node": "latest",
     "babel-plugin-transform-import-meta": "latest",
     "create-require": "latest",
@@ -50,7 +52,6 @@
     "typescript": "latest",
     "v8-compile-cache": "latest",
     "webpack": "latest",
-    "webpack-cli": "latest",
-    "@types/semver": "latest"
+    "webpack-cli": "latest"
   }
 }

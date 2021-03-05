@@ -18,6 +18,8 @@ export default function transform (opts: TransformOptions): TRANSFORM_RESULT {
 
   if (opts.ts) {
     _opts.plugins!.push(require('@babel/plugin-transform-typescript'))
+  } else {
+    _opts.plugins!.push(require('@babel/plugin-syntax-class-properties'))
   }
 
   if (opts.legacy) {
