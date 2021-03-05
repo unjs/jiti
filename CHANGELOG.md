@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.2](https://github.com/nuxt-contrib/jiti/compare/v1.6.1...v1.6.2) (2021-03-05)
+
+
+### Bug Fixes
+
+* support class property syntax for esm ([64b1636](https://github.com/nuxt-contrib/jiti/commit/64b16368833fbb10f92343b1a057830a4b545281))
+
 ### [1.6.1](https://github.com/nuxt-contrib/jiti/compare/v1.6.0...v1.6.1) (2021-03-05)
 
 
