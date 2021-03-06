@@ -102,8 +102,8 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
   }
   _resolve.paths = nativeRequire.resolve.paths
 
-  function getCache (filename: string, source: string, get: () => string): string {
-    if (!opts.cache) {
+  function getCache (filename: string | undefined, source: string, get: () => string): string {
+    if (!opts.cache || !filename) {
       return get()
     }
 
