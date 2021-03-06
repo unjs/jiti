@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.3](https://github.com/nuxt-contrib/jiti/compare/v1.6.2...v1.6.3) (2021-03-06)
+
+
+### Bug Fixes
+
+* disable transform cache if no filename provided ([69113bc](https://github.com/nuxt-contrib/jiti/commit/69113bcf6482c601aedaed63f66a7cdc91ec353c)), closes [unjsio/mkdist#3](https://github.com/unjsio/mkdist/issues/3)
+
 ### [1.6.2](https://github.com/nuxt-contrib/jiti/compare/v1.6.1...v1.6.2) (2021-03-05)
 
 
