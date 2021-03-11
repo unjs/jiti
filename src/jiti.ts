@@ -148,7 +148,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
 
   function jiti (id: string) {
     // Check for builtin node module like fs
-    if (builtinModules.includes(id)) {
+    if (builtinModules.includes(id) || id === '.pnp.js' /* #24 */) {
       return nativeRequire(id)
     }
 
