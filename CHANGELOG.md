@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.4](https://github.com/nuxt-contrib/jiti/compare/v1.6.3...v1.6.4) (2021-03-11)
+
+
+### Bug Fixes
+
+* exclude `.pnp.js` from transpiling (resolves [#24](https://github.com/nuxt-contrib/jiti/issues/24)) ([0280b58](https://github.com/nuxt-contrib/jiti/commit/0280b588018cc0933733bee842f538b851f5689c))
+* skip unknown guard if input has not ext (resolves [#17](https://github.com/nuxt-contrib/jiti/issues/17)) ([afe6706](https://github.com/nuxt-contrib/jiti/commit/afe67069b1681be8768aff07ff294f3bdbf095b4))
+* **babel:** always add class syntax plugin ([c0098fe](https://github.com/nuxt-contrib/jiti/commit/c0098fec5e6bcc991e0203a456f88a23803737f0)), closes [#23](https://github.com/nuxt-contrib/jiti/issues/23)
+* update require cache children ([ce3b084](https://github.com/nuxt-contrib/jiti/commit/ce3b0845d7aa1dabf9e6caf7e285ddc5fbd01e31)), closes [nuxt/nuxt.js#8976](https://github.com/nuxt/nuxt.js/issues/8976)
+
 ### [1.6.3](https://github.com/nuxt-contrib/jiti/compare/v1.6.2...v1.6.3) (2021-03-06)
 
 
