@@ -157,7 +157,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     const ext = extname(filename)
 
     // Unknown format
-    if (!opts.extensions!.includes(ext)) {
+    if (ext && !opts.extensions!.includes(ext)) {
       debug('[unknown]', filename)
       return nativeRequire(id)
     }
