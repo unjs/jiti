@@ -42,7 +42,7 @@ export interface JITI extends Require {
   register: () => (() => void)
 }
 
-export default function createJITI (_filename: string = process.cwd(), opts: JITIOptions = {}): JITI {
+export default function createJITI (_filename: string = process.cwd(), opts: JITIOptions = {}, parentModule?: typeof module): JITI {
   opts = { ...defaults, ...opts }
 
   const CACHE_VERSION = '4' + (opts.legacy ? '-legacy' : '')
@@ -193,8 +193,15 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     // Compile module
     const mod = new Module(filename)
     mod.filename = filename
-    mod.parent = module
-    mod.require = createJITI(filename, opts)
+    if (parentModule) {
+      mod.parent = parentModule
+      if (Array.isArray(parentModule.children) &&
+        !parentModule.children.includes(mod)
+      ) {
+        parentModule.children.push(mod)
+      }
+    }
+    mod.require = createJITI(filename, opts, mod)
 
     // @ts-ignore
     mod.path = dirname(filename)
