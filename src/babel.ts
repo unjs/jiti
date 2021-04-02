@@ -13,12 +13,17 @@ export default function transform (opts: TransformOptions): TRANSFORM_RESULT {
       [require('@babel/plugin-transform-modules-commonjs'), { allowTopLevelThis: true }],
       [require('babel-plugin-dynamic-import-node'), { noInterop: true }],
       [require('babel-plugin-transform-import-meta')],
-      [require('@babel/plugin-syntax-class-properties')]
+      [require('@babel/plugin-proposal-class-properties'), { loose: true }]
     ]
   }
 
   if (opts.ts) {
     _opts.plugins!.push(require('@babel/plugin-transform-typescript'))
+
+    if (opts.decorators) {
+      // `unshift` because this plugin must come before `@babel/plugin-proposal-class-properties`
+      _opts.plugins!.unshift([require('@babel/plugin-proposal-decorators'), { legacy: true }])
+    }
   }
 
   if (opts.legacy) {

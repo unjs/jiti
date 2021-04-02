@@ -4,6 +4,7 @@ export type TransformOptions = {
   ts?: Boolean
   retainLines?: Boolean
   legacy?: Boolean
+  decorators?: Boolean
 }
 
 export type TRANSFORM_RESULT = {

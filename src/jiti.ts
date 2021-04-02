@@ -80,6 +80,12 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     try { return nativeRequire.resolve(id, options) } catch (e) {}
   }
 
+  let tsConfig = { compilerOptions: {} as any }
+  const tsConfigPath = tryResolve('tsconfig')
+  if (tsConfigPath) {
+    tsConfig = { ...tsConfig, ...nativeRequire(tsConfigPath) }
+  }
+
   const _additionalExts = [...opts.extensions!].filter(ext => ext !== '.js')
   const _resolve = (id: string, options?: { paths?: string[] }) => {
     if (opts.extensions!.includes(extname(id))) {
@@ -178,7 +184,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
 
     if (needsTranspile) {
       debug('[transpile]', filename)
-      source = transform({ filename, source, ts: isTypescript })
+      source = transform({ filename, source, ts: isTypescript, decorators: tsConfig.compilerOptions.experimentalDecorators })
     } else {
       try {
         debug('[native]', filename)
@@ -186,7 +192,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
       } catch (err) {
         debug('Native require error:', err)
         debug('[fallback]', filename)
-        source = transform({ filename, source, ts: isTypescript })
+        source = transform({ filename, source, ts: isTypescript, decorators: tsConfig.compilerOptions.experimentalDecorators })
       }
     }
 

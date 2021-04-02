@@ -1,6 +1,6 @@
 {
   "name": "jiti",
-  "version": "1.6.4",
+  "version": "1.7.0",
   "description": "Runtime typescript and ESM support for Node.js (CommonJS)",
   "repository": "nuxt-contrib/jiti",
   "license": "MIT",
@@ -25,9 +25,10 @@
   },
   "devDependencies": {
     "@babel/core": "latest",
+    "@babel/plugin-proposal-class-properties": "latest",
+    "@babel/plugin-proposal-decorators": "latest",
     "@babel/plugin-proposal-nullish-coalescing-operator": "latest",
     "@babel/plugin-proposal-optional-chaining": "latest",
-    "@babel/plugin-syntax-class-properties": "^7.12.13",
     "@babel/plugin-transform-modules-commonjs": "latest",
     "@babel/plugin-transform-typescript": "latest",
     "@babel/preset-typescript": "latest",
