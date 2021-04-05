@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@babel/core": "latest",
+    "@babel/plugin-proposal-decorators": "latest",
     "@babel/plugin-proposal-nullish-coalescing-operator": "latest",
     "@babel/plugin-proposal-optional-chaining": "latest",
     "@babel/plugin-syntax-class-properties": "^7.12.13",
