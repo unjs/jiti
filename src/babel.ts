@@ -21,6 +21,7 @@ export default function transform (opts: TransformOptions): TRANSFORM_RESULT {
     _opts.plugins!.push(require('@babel/plugin-transform-typescript'))
     // `unshift` because this plugin must come before `@babel/plugin-syntax-class-properties`
     _opts.plugins!.unshift([require('@babel/plugin-proposal-decorators'), { legacy: true }])
+    _opts.plugins!.push(require('babel-plugin-parameter-decorator'))
   }
 
   if (opts.legacy) {
