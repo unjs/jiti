@@ -125,7 +125,7 @@ Meanwhile it would be much better making an optimized bundle to deploy to produc
 - Run `yarn`
 - Run `yarn build`
 - Run `yarn dev`
-- Run `node ./test/jiti.js`
+- Run `yarn jiti ./test/path/to/file.ts`
 
 ## Roadmap
 
