@@ -9,17 +9,18 @@ import createRequire from 'create-require'
 import semver from 'semver'
 import { addHook } from 'pirates'
 import objectHash from 'object-hash'
-import { isDir, isWritable, md5 } from './utils'
+import { isDir, isWritable, md5, interopDefault } from './utils'
 import { TransformOptions, JITIOptions } from './types'
 
 const _EnvDebug = destr(process.env.JITI_DEBUG)
 const _EnvCache = destr(process.env.JITI_CACHE)
 const _EnvRequireCache = destr(process.env.JITI_REQUIRE_CACHE)
 
-const defaults = {
+const defaults: JITIOptions = {
   debug: _EnvDebug,
   cache: _EnvCache !== undefined ? !!_EnvCache : true,
   requireCache: _EnvRequireCache !== undefined ? !!_EnvRequireCache : true,
+  interopDefault: false,
   cacheVersion: '5',
   legacy: semver.lt(process.version || '0.0.0', '14.0.0'),
   extensions: ['.js', '.mjs', '.ts']
@@ -252,8 +253,14 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     // Set as loaded
     mod.loaded = true
 
+    // interopDefault
+    let _exports = mod.exports
+    if (opts.interopDefault) {
+      _exports = interopDefault(_exports)
+    }
+
     // Return exports
-    return mod.exports
+    return _exports
   }
 
   function register () {

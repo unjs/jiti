@@ -18,6 +18,7 @@ export type JITIOptions = {
   debug?: boolean,
   cache?: boolean | string
   requireCache?: boolean
+  interopDefault?: boolean
   cacheVersion?: string
   dynamicImport?: (id: string) => Promise<any>
   onError?: (error: Error) => void
