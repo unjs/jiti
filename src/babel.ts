@@ -9,6 +9,7 @@ export default function transform (opts: TransformOptions): TRANSFORM_RESULT {
     retainLines: typeof opts.retainLines === 'boolean' ? opts.retainLines : true,
     filename: '',
     cwd: '/',
+    ...opts.babel,
     plugins: [
       [require('@babel/plugin-transform-modules-commonjs'), { allowTopLevelThis: true }],
       [require('babel-plugin-dynamic-import-node'), { noInterop: true }],
@@ -27,6 +28,10 @@ export default function transform (opts: TransformOptions): TRANSFORM_RESULT {
   if (opts.legacy) {
     _opts.plugins!.push(require('@babel/plugin-proposal-nullish-coalescing-operator'))
     _opts.plugins!.push(require('@babel/plugin-proposal-optional-chaining'))
+  }
+
+  if (opts.babel && Array.isArray(opts.babel.plugins)) {
+    _opts.plugins?.push(opts.babel.plugins)
   }
 
   try {

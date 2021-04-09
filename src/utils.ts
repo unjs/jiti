@@ -1,4 +1,5 @@
 import { lstatSync, accessSync, constants } from 'fs'
+import { createHash } from 'crypto'
 
 export function isDir (filename: string): boolean {
   try {
@@ -21,4 +22,8 @@ export function isWritable (filename: string): boolean {
 
 export function interopDefault (ex: any): any {
   return (ex && (typeof ex === 'object') && 'default' in ex) ? ex.default : ex
+}
+
+export function md5 (content: string, len = 8) {
+  return createHash('md5').update(content).digest('hex').substr(0, len)
 }

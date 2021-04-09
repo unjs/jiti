@@ -2,25 +2,15 @@ import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { Module, builtinModules } from 'module'
 import { dirname, join, basename, extname } from 'path'
 import { tmpdir } from 'os'
-import { createHash } from 'crypto'
 import vm from 'vm'
 import mkdirp from 'mkdirp'
 import destr from 'destr'
 import createRequire from 'create-require'
 import semver from 'semver'
 import { addHook } from 'pirates'
-import { isDir, isWritable } from './utils'
-import { TransformOptions, TRANSFORM_RESULT } from './types'
-
-export type JITIOptions = {
-  transform?: (opts: TransformOptions) => TRANSFORM_RESULT,
-  debug?: boolean,
-  cache?: boolean | string
-  dynamicImport?: (id: string) => Promise<any>
-  onError?: (error: Error) => void
-  legacy?: boolean
-  extensions?: string[]
-}
+import objectHash from 'object-hash'
+import { isDir, isWritable, md5 } from './utils'
+import { TransformOptions, JITIOptions } from './types'
 
 const _EnvDebug = destr(process.env.JITI_DEBUG)
 const _EnvCache = destr(process.env.JITI_CACHE)
@@ -28,12 +18,9 @@ const _EnvCache = destr(process.env.JITI_CACHE)
 const defaults = {
   debug: _EnvDebug,
   cache: _EnvCache !== undefined ? _EnvCache : true,
+  cacheVersion: '5',
   legacy: semver.lt(process.version || '0.0.0', '14.0.0'),
   extensions: ['.js', '.mjs', '.ts']
-}
-
-function md5 (content: string, len = 8) {
-  return createHash('md5').update(content).digest('hex').substr(0, len)
 }
 
 type Require = typeof require
@@ -45,7 +32,13 @@ export interface JITI extends Require {
 export default function createJITI (_filename: string = process.cwd(), opts: JITIOptions = {}, parentModule?: typeof module): JITI {
   opts = { ...defaults, ...opts }
 
-  const CACHE_VERSION = '5' + (opts.legacy ? '-legacy' : '')
+  // Cache dependencies
+  if (opts.legacy) {
+    opts.cacheVersion += '-legacy'
+  }
+  if (opts.transformOptions) {
+    opts.cacheVersion += '-' + objectHash(opts.transformOptions)
+  }
 
   function debug (...args: string[]) {
     if (opts.debug) {
@@ -108,7 +101,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     }
 
     // Calculate source hash
-    const sourceHash = ` /* v${CACHE_VERSION}-${md5(source, 16)} */`
+    const sourceHash = ` /* v${opts.cacheVersion}-${md5(source, 16)} */`
 
     // Check cache file
     const filebase = basename(dirname(filename)) + '-' + basename(filename)
@@ -134,7 +127,11 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
 
   function transform (topts: any): string {
     let code = getCache(topts.filename, topts.source, () => {
-      const res = opts.transform!({ legacy: opts.legacy, ...topts })
+      const res = opts.transform!({
+        legacy: opts.legacy,
+        ...opts.transformOptions,
+        ...topts
+      })
       if (res.error && opts.debug) {
         debug(res.error)
       }
