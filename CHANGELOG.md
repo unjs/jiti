@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/nuxt-contrib/jiti/compare/v1.6.4...v1.7.0) (2021-04-09)
+
+
+### Features
+
+* support legacy decorators for typescript ([#28](https://github.com/nuxt-contrib/jiti/issues/28)) ([801b798](https://github.com/nuxt-contrib/jiti/commit/801b79835978876b604a4a53b6abbe9054564e15)), closes [#27](https://github.com/nuxt-contrib/jiti/issues/27)
+* support legacy parameter decorators for typescript ([#29](https://github.com/nuxt-contrib/jiti/issues/29)) ([6586a1c](https://github.com/nuxt-contrib/jiti/commit/6586a1c1852719176be2619f642caaf1821059d9))
+
 ### [1.6.4](https://github.com/nuxt-contrib/jiti/compare/v1.6.3...v1.6.4) (2021-03-11)
 
 
