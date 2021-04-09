@@ -17,6 +17,7 @@ export type JITIOptions = {
   transform?: (opts: TransformOptions) => TRANSFORM_RESULT,
   debug?: boolean,
   cache?: boolean | string
+  requireCache?: boolean
   cacheVersion?: string
   dynamicImport?: (id: string) => Promise<any>
   onError?: (error: Error) => void

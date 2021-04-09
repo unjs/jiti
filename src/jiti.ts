@@ -14,10 +14,12 @@ import { TransformOptions, JITIOptions } from './types'
 
 const _EnvDebug = destr(process.env.JITI_DEBUG)
 const _EnvCache = destr(process.env.JITI_CACHE)
+const _EnvRequireCache = destr(process.env.JITI_REQUIRE_CACHE)
 
 const defaults = {
   debug: _EnvDebug,
-  cache: _EnvCache !== undefined ? _EnvCache : true,
+  cache: _EnvCache !== undefined ? !!_EnvCache : true,
+  requireCache: _EnvRequireCache !== undefined ? !!_EnvRequireCache : true,
   cacheVersion: '5',
   legacy: semver.lt(process.version || '0.0.0', '14.0.0'),
   extensions: ['.js', '.mjs', '.ts']
@@ -160,7 +162,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     }
 
     // Check for CJS cache
-    if (nativeRequire.cache[filename]) {
+    if (opts.requireCache && nativeRequire.cache[filename]) {
       return nativeRequire.cache[filename]?.exports
     }
 
@@ -207,7 +209,9 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     mod.paths = Module._nodeModulePaths(mod.path)
 
     // Set CJS cache before eval
-    nativeRequire.cache[filename] = mod
+    if (opts.requireCache) {
+      nativeRequire.cache[filename] = mod
+    }
 
     // Compile wrapped script
     let compiled
@@ -220,7 +224,9 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
         displayErrors: false
       })
     } catch (err) {
-      delete nativeRequire.cache[filename]
+      if (opts.requireCache) {
+        delete nativeRequire.cache[filename]
+      }
       opts.onError!(err)
     }
 
@@ -228,7 +234,9 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     try {
       compiled(mod.exports, mod.require, mod, mod.filename, dirname(mod.filename))
     } catch (err) {
-      delete nativeRequire.cache[filename]
+      if (opts.requireCache) {
+        delete nativeRequire.cache[filename]
+      }
       opts.onError!(err)
     }
 
@@ -258,7 +266,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
   }
 
   jiti.resolve = _resolve
-  jiti.cache = nativeRequire.cache
+  jiti.cache = opts.requireCache ? nativeRequire.cache : {}
   jiti.extensions = nativeRequire.extensions
   jiti.main = nativeRequire.main
   jiti.transform = transform
