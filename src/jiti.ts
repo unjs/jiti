@@ -45,7 +45,7 @@ export interface JITI extends Require {
 export default function createJITI (_filename: string = process.cwd(), opts: JITIOptions = {}, parentModule?: typeof module): JITI {
   opts = { ...defaults, ...opts }
 
-  const CACHE_VERSION = '4' + (opts.legacy ? '-legacy' : '')
+  const CACHE_VERSION = '5' + (opts.legacy ? '-legacy' : '')
 
   function debug (...args: string[]) {
     if (opts.debug) {
