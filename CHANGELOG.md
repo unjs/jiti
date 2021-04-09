@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/nuxt-contrib/jiti/compare/v1.7.0...v1.8.0) (2021-04-09)
+
+
+### Features
+
+* requireCache ([490e1d0](https://github.com/nuxt-contrib/jiti/commit/490e1d069d9d5146eb32820a8982b8e72b7de71e))
+* transformOptions ([0066a8d](https://github.com/nuxt-contrib/jiti/commit/0066a8d13993eba39c543772151feae4117f89e4))
+
 ## [1.7.0](https://github.com/nuxt-contrib/jiti/compare/v1.6.4...v1.7.0) (2021-04-09)
 
 
