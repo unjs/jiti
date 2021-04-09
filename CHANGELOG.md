@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://github.com/nuxt-contrib/jiti/compare/v1.8.0...v1.9.0) (2021-04-09)
+
+
+### Features
+
+* interopDefault option (opt-in) ([5203145](https://github.com/nuxt-contrib/jiti/commit/5203145b0f6638f141510770301de1c00a69198a))
+
 ## [1.8.0](https://github.com/nuxt-contrib/jiti/compare/v1.7.0...v1.8.0) (2021-04-09)
 
 
