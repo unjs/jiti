@@ -8,12 +8,14 @@
 
 ## Features
 
-- Stable typescript and esm syntax support
-- Provide sync interface to replace require
+- Seemless typescript and ESM syntax support
+- Seemsles interoperability between ESM and CommonJS
+- Synchronous API to replace `require`
 - Super slim and zero dependency
-- Syntax detect to avoid extra transform
+- Smart syntax detection to avoid extra transforms
 - CommonJS cache integration
-- Filesystem transpile cache + V8 compile cache
+- Filesystem transpile hard cache
+- V8 compile cache
 
 ## Usage
 
@@ -77,48 +79,6 @@ If set to `true` will use `node_modules/.cache/jiti` (if exists) or `{TMP_DIR}/n
 
 Transform function. See [src/babel](./src/babel.ts) for more details
 
-## Compared to Alternatives
-
-### [`standard-things/esm`](https://github.com/standard-things/esm)
-
-- `+` Much more stable thanks to babel
-- `+` Less low level operations
-- `+` Typescript support
-- `-` Slower (without cache)
-
-### [`babel-register`](https://babeljs.io/docs/en/babel-register)
-
-- `+` Smaller install size (~1M vs ~11M with same plugins)
-- `+` Configured out of the box
-- `+` Smart syntax detect to avoid unnecessary transpilation
-- `+` Does not ignores `node_modules`. ESM everywhere yay!
-- `+` Embeddable
-
-### [`esbuild`](https://github.com/evanw/esbuild)
-
-- `+` No native dependency
-- `+` More stable thanks to babel
-- `-` Slower
-- `+` Embeddable
-
-### `ts-node`
-
-- `+` Support both esm and typescript
-- `/` No typechecking support / Faster
-- `+` Smart syntax detect to avoid unnecessary transpilation
-
-### Native ESM Support (MJS)
-
-- It is not (yet) landed as a stable feature
-- No typescript support
-- Limitted to `.mjs` files with different executation context (no `__filename`, `require`, etc)
-
-### Bundlers (`rollup`, `webpack`, `snowpack`, etc)
-
-Meanwhile it would be much better making an optimized bundle to deploy to production or as npm package, using bundler setup and watching is frustrating during project development that's where `jiti` (or similar tools like `ts-node`) would be more convenient.
-
-**Note:** However currently only babel transform is supported, configurable transform support is in the roadmap so using `esbuild` or other solutions would be possible.
-
 ## Development
 
 - Clone Repo
@@ -126,17 +86,6 @@ Meanwhile it would be much better making an optimized bundle to deploy to produc
 - Run `yarn build`
 - Run `yarn dev`
 - Run `yarn jiti ./test/path/to/file.ts`
-
-## Roadmap
-
-- [x] Basic working
-- [x] Syntax detect and fallback to CJS require
-- [x] Improve project build system
-- [x] File system cache
-- [x] Configurable transform
-- [ ] Add tests
-- [x] Support `node -r jiti`
-- [ ] esbuild support
 
 ## License
 
@@ -149,8 +98,8 @@ MIT. Made with 💖
 [npm-d-src]: https://img.shields.io/npm/dm/jiti?style=flat-square
 [npm-d-href]: https://npmjs.com/package/jiti
 
-[github-actions-src]: https://img.shields.io/github/workflow/status/nuxt-contrib/jiti/ci/master?style=flat-square
-[github-actions-href]: https://github.com/nuxt-contrib/jiti/actions?query=workflow%3Aci
+[github-actions-src]: https://img.shields.io/github/workflow/status/unjs/jiti/ci/master?style=flat-square
+[github-actions-href]: https://github.com/unjs/jiti/actions?query=workflow%3Aci
 
 [size-src]: https://packagephobia.now.sh/badge?p=jiti
 [size-href]: https://packagephobia.now.sh/result?p=jiti
