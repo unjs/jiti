@@ -31,7 +31,7 @@ export default function transform (opts: TransformOptions): TRANSFORM_RESULT {
   }
 
   if (opts.babel && Array.isArray(opts.babel.plugins)) {
-    _opts.plugins?.push(opts.babel.plugins)
+    _opts.plugins?.push(...opts.babel.plugins)
   }
 
   try {
