@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.9.2](https://github.com/unjs/jiti/compare/v1.9.1...v1.9.2) (2021-05-11)
+
+
+### Bug Fixes
+
+* spread when pushing babel plugins from transformOptions ([#31](https://github.com/unjs/jiti/issues/31)) ([f25960a](https://github.com/unjs/jiti/commit/f25960af1111401fd1ce2a094bb42e0e868341e9))
+
 ### [1.9.1](https://github.com/unjs/jiti/compare/v1.9.0...v1.9.1) (2021-04-09)
 
 ## [1.9.0](https://github.com/unjs/jiti/compare/v1.8.0...v1.9.0) (2021-04-09)
