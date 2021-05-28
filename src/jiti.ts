@@ -21,7 +21,7 @@ const defaults: JITIOptions = {
   cache: _EnvCache !== undefined ? !!_EnvCache : true,
   requireCache: _EnvRequireCache !== undefined ? !!_EnvRequireCache : true,
   interopDefault: false,
-  cacheVersion: '5',
+  cacheVersion: '6',
   legacy: semver.lt(process.version || '0.0.0', '14.0.0'),
   extensions: ['.js', '.mjs', '.ts']
 }
