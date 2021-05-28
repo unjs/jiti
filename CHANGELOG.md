@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.1](https://github.com/unjs/jiti/compare/v1.10.0...v1.10.1) (2021-05-28)
+
+
+### Bug Fixes
+
+* **babel:** properly pass plugin-transform-typescript options ([7a1ae3b](https://github.com/unjs/jiti/commit/7a1ae3be90589516840dbfeb27a64903ae121033))
+
 ## [1.10.0](https://github.com/unjs/jiti/compare/v1.9.2...v1.10.0) (2021-05-28)
 
 
