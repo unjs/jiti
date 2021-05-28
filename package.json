@@ -1,6 +1,6 @@
 {
   "name": "jiti",
-  "version": "1.9.2",
+  "version": "1.10.0",
   "description": "Runtime typescript and ESM support for Node.js (CommonJS)",
   "repository": "unjs/jiti",
   "license": "MIT",
