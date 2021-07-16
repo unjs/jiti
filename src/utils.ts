@@ -27,3 +27,11 @@ export function interopDefault (ex: any): any {
 export function md5 (content: string, len = 8) {
   return createHash('md5').update(content).digest('hex').substr(0, len)
 }
+
+export function detectESMSyntax (code: string) {
+  return code.match(/^\s*import .* from|\s*export |import\s*\(/m)
+}
+
+export function detectLegacySyntax (code: string) {
+  return code.match(/\?\.|\?\?/)
+}
