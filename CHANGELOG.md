@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0](https://github.com/unjs/jiti/compare/v1.10.1...v1.11.0) (2021-07-26)
+
+
+### Features
+
+* support `node:` and `file:` protocols ([bbb1cb3](https://github.com/unjs/jiti/commit/bbb1cb3249ee78ea200537969675d96ad4ef34a6)), closes [#30](https://github.com/unjs/jiti/issues/30)
+* support mjs and cjs extensions ([369c3ff](https://github.com/unjs/jiti/commit/369c3ffba4ce595516f6bc3541a3c5d7cf340ccc))
+
 ### [1.10.1](https://github.com/unjs/jiti/compare/v1.10.0...v1.10.1) (2021-05-28)
 
 
