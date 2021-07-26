@@ -3,6 +3,7 @@ import { Module, builtinModules } from 'module'
 import { dirname, join, basename, extname } from 'path'
 import { tmpdir } from 'os'
 import vm from 'vm'
+import { fileURLToPath } from 'url'
 import mkdirp from 'mkdirp'
 import destr from 'destr'
 import createRequire from 'create-require'
@@ -147,6 +148,13 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
   }
 
   function jiti (id: string) {
+    // Check for node: and file: protocol
+    if (id.startsWith('node:')) {
+      id = id.substr(5)
+    } else if (id.startsWith('file:')) {
+      id = fileURLToPath(id)
+    }
+
     // Check for builtin node module like fs
     if (builtinModules.includes(id) || id === '.pnp.js' /* #24 */) {
       return nativeRequire(id)
