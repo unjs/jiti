@@ -8,8 +8,8 @@
 
 ## Features
 
-- Seemless typescript and ESM syntax support
-- Seemsles interoperability between ESM and CommonJS
+- Seamless typescript and ESM syntax support
+- Seamless interoperability between ESM and CommonJS
 - Synchronous API to replace `require`
 - Super slim and zero dependency
 - Smart syntax detection to avoid extra transforms
