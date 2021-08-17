@@ -35,3 +35,9 @@ export function detectESMSyntax (code: string) {
 export function detectLegacySyntax (code: string) {
   return code.match(/\?\.|\?\?/)
 }
+
+export const ESM_IMPORT_RE = /(?<=import .* from ['"])([^'"]+)(?=['"])|(?<=export .* from ['"])([^'"]+)(?=['"])|(?<=import\s*['"])([^'"]+)(?=['"])|(?<=import\s*\(['"])([^'"]+)(?=['"]\))/g
+
+export function rewriteESMPaths (code: string, rewriteFn: (id: string) => string) {
+  return code.replace(ESM_IMPORT_RE, id => rewriteFn(id))
+}

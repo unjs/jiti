@@ -13,4 +13,13 @@ if (!script) {
 const pwd = process.cwd()
 const jiti = require('..')(pwd)
 const resolved = process.argv[1] = jiti.resolve(resolve(pwd, script))
-jiti(resolved)
+
+if (resolved.endsWith('.mjs')) {
+  jiti.import(resolved).catch((err) => {
+    // eslint-disable-next-line no-console
+    console.error(err)
+    process.exit(1)
+  })
+} else {
+  jiti(resolved)
+}
