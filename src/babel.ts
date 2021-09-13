@@ -38,7 +38,7 @@ export default function transform (opts: TransformOptions): TRANSFORM_RESULT {
     return {
       code: transformSync(opts.source, _opts)?.code || ''
     }
-  } catch (err) {
+  } catch (err: any) {
     return {
       error: err,
       code: 'exports.__JITI_ERROR__ = ' + JSON.stringify({

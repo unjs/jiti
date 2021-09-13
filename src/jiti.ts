@@ -65,7 +65,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
       if (!isWritable(opts.cache)) {
         throw new Error('directory is not writable')
       }
-    } catch (err) {
+    } catch (err: any) {
       debug('Error creating cache directory at ', opts.cache, err)
       opts.cache = false
     }
@@ -196,7 +196,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
       try {
         debug('[native]', filename)
         return nativeRequire(id)
-      } catch (err) {
+      } catch (err: any) {
         debug('Native require error:', err)
         debug('[fallback]', filename)
         source = transform({ filename, source, ts: isTypescript })
@@ -237,7 +237,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
         lineOffset: 0,
         displayErrors: false
       })
-    } catch (err) {
+    } catch (err: any) {
       if (opts.requireCache) {
         delete nativeRequire.cache[filename]
       }
@@ -247,7 +247,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     // Evaluate module
     try {
       compiled(mod.exports, mod.require, mod, mod.filename, dirname(mod.filename))
-    } catch (err) {
+    } catch (err: any) {
       if (opts.requireCache) {
         delete nativeRequire.cache[filename]
       }
