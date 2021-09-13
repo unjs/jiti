@@ -2,9 +2,9 @@
 export type TransformOptions = {
   source: string,
   filename?: string,
-  ts?: Boolean
-  retainLines?: Boolean
-  legacy?: Boolean
+  ts?: boolean
+  retainLines?: boolean
+  legacy?: boolean
   [key: string]: any
 }
 
@@ -18,6 +18,7 @@ export type JITIOptions = {
   debug?: boolean,
   cache?: boolean | string
   requireCache?: boolean
+  v8cache?: boolean
   interopDefault?: boolean
   cacheVersion?: string
   dynamicImport?: (id: string) => Promise<any>
