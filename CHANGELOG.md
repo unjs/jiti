@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0](https://github.com/unjs/jiti/compare/v1.11.0...v1.12.0) (2021-09-13)
+
+
+### Features
+
+* add v8cache option ([#39](https://github.com/unjs/jiti/issues/39)) ([ffdd372](https://github.com/unjs/jiti/commit/ffdd3729526b8688ff4a5ed2a4ea3ab9e23493cc))
+
 ## [1.11.0](https://github.com/unjs/jiti/compare/v1.10.1...v1.11.0) (2021-07-26)
 
 
