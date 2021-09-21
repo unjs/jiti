@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.1](https://github.com/unjs/jiti/compare/v1.12.0...v1.12.1) (2021-09-21)
+
+
+### Bug Fixes
+
+* **interopDefault:** support mixed CJS + default ([4392c6a](https://github.com/unjs/jiti/commit/4392c6ac5c6571f1981934456b3635970f7c22a4))
+
 ## [1.12.0](https://github.com/unjs/jiti/compare/v1.11.0...v1.12.0) (2021-09-13)
 
 
