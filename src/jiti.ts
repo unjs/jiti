@@ -147,6 +147,10 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     return code
   }
 
+  function _interopDefault (mod: any) {
+    return opts.interopDefault ? interopDefault(mod) : mod
+  }
+
   function jiti (id: string) {
     // Check for node: and file: protocol
     if (id.startsWith('node:')) {
@@ -172,7 +176,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
 
     // Check for CJS cache
     if (opts.requireCache && nativeRequire.cache[filename]) {
-      return nativeRequire.cache[filename]?.exports
+      return _interopDefault(nativeRequire.cache[filename]?.exports)
     }
 
     // Read source
@@ -195,7 +199,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     } else {
       try {
         debug('[native]', filename)
-        return nativeRequire(id)
+        return _interopDefault(nativeRequire(id))
       } catch (err: any) {
         debug('Native require error:', err)
         debug('[fallback]', filename)
@@ -267,10 +271,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     mod.loaded = true
 
     // interopDefault
-    let _exports = mod.exports
-    if (opts.interopDefault) {
-      _exports = interopDefault(_exports)
-    }
+    const _exports = _interopDefault(mod.exports)
 
     // Return exports
     return _exports
