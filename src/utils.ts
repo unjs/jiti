@@ -26,14 +26,23 @@ export function interopDefault (sourceModule: any): any {
   }
   const newModule = sourceModule.default
   for (const key in sourceModule) {
-    if (key === 'default') { continue }
-    try {
-      Object.defineProperty(newModule, key, {
-        enumerable: true,
-        configurable: true,
-        get () { return sourceModule[key] }
-      })
-    } catch (_err) {}
+    if (key === 'default') {
+      try {
+        Object.defineProperty(newModule, key, {
+          enumerable: false,
+          configurable: false,
+          get () { return newModule }
+        })
+      } catch (_err) {}
+    } else {
+      try {
+        Object.defineProperty(newModule, key, {
+          enumerable: true,
+          configurable: true,
+          get () { return sourceModule[key] }
+        })
+      } catch (_err) {}
+    }
   }
   return newModule
 }
