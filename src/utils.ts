@@ -20,8 +20,22 @@ export function isWritable (filename: string): boolean {
   }
 }
 
-export function interopDefault (ex: any): any {
-  return (ex && (typeof ex === 'object') && 'default' in ex) ? ex.default : ex
+export function interopDefault (sourceModule: any): any {
+  if (!(sourceModule && 'default' in sourceModule)) {
+    return sourceModule
+  }
+  const newModule = sourceModule.default
+  for (const key in sourceModule) {
+    if (key === 'default') { continue }
+    try {
+      Object.defineProperty(newModule, key, {
+        enumerable: true,
+        configurable: true,
+        get () { return sourceModule[key] }
+      })
+    } catch (_err) {}
+  }
+  return newModule
 }
 
 export function md5 (content: string, len = 8) {
