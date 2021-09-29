@@ -21,7 +21,6 @@ export type JITIOptions = {
   v8cache?: boolean
   interopDefault?: boolean
   cacheVersion?: string
-  dynamicImport?: (id: string) => Promise<any>
   onError?: (error: Error) => void
   legacy?: boolean
   extensions?: string[]

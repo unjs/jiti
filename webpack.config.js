@@ -7,8 +7,7 @@ module.exports = {
   mode: isProd ? 'production' : 'development',
   entry: {
     jiti: './src/jiti.ts',
-    babel: './src/babel.ts',
-    v8cache: 'v8-compile-cache'
+    babel: './src/babel.ts'
   },
   devtool: false,
   output: {

@@ -54,7 +54,6 @@
     "ts-loader": "latest",
     "tslib": "latest",
     "typescript": "latest",
-    "v8-compile-cache": "latest",
     "webpack": "latest",
     "webpack-cli": "latest"
   }
