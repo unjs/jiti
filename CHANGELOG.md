@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.6](https://github.com/unjs/jiti/compare/v1.12.5...v1.12.6) (2021-10-02)
+
+
+### Bug Fixes
+
+* avoid detecting dynamic import as esm syntax ([0b904a9](https://github.com/unjs/jiti/commit/0b904a9a756533e2ca77f17847c4e8cbf794f668))
+
 ### [1.12.5](https://github.com/unjs/jiti/compare/v1.12.4...v1.12.5) (2021-09-29)
 
 
