@@ -52,7 +52,7 @@ export function md5 (content: string, len = 8) {
 }
 
 export function detectESMSyntax (code: string) {
-  return code.match(/^\s*import .* from|\s*export |import\s*\(/m)
+  return code.match(/^\s*import .* from|\s*export .*/m)
 }
 
 export function detectLegacySyntax (code: string) {
