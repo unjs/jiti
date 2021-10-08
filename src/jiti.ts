@@ -17,11 +17,13 @@ import { TransformOptions, JITIOptions } from './types'
 const _EnvDebug = destr(process.env.JITI_DEBUG)
 const _EnvCache = destr(process.env.JITI_CACHE)
 const _EnvRequireCache = destr(process.env.JITI_REQUIRE_CACHE)
+const _EnvPlainTSSourceMaps = destr(process.env.JITI_PLAIN_TS_SOURCE_MAPS)
 
 const defaults: JITIOptions = {
   debug: _EnvDebug,
   cache: _EnvCache !== undefined ? !!_EnvCache : true,
   requireCache: _EnvRequireCache !== undefined ? !!_EnvRequireCache : true,
+  plainTSSourceMaps: _EnvPlainTSSourceMaps !== undefined ? !!_EnvPlainTSSourceMaps : false,
   interopDefault: false,
   cacheVersion: '6',
   legacy: semver.lt(process.version || '0.0.0', '14.0.0'),
@@ -135,6 +137,9 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
       const res = opts.transform!({
         legacy: opts.legacy,
         ...opts.transformOptions,
+        ...(opts.plainTSSourceMaps
+          ? { babel: { ...opts.transformOptions?.babel, sourceFileName: topts.filename, sourceMaps: 'both' } }
+          : {}),
         ...topts
       })
       if (res.error && opts.debug) {

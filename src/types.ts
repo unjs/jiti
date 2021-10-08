@@ -17,6 +17,7 @@ export type JITIOptions = {
   transform?: (opts: TransformOptions) => TRANSFORM_RESULT,
   debug?: boolean,
   cache?: boolean | string
+  plainTSSourceMaps?: boolean
   requireCache?: boolean
   v8cache?: boolean
   interopDefault?: boolean
