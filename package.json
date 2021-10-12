@@ -47,7 +47,7 @@
     "eslint": "latest",
     "esm": "latest",
     "mkdirp": "latest",
-    "mlly": "^0.2.5",
+    "mlly": "^0.2.6",
     "object-hash": "latest",
     "pirates": "latest",
     "semver": "latest",
