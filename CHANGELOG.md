@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.9](https://github.com/unjs/jiti/compare/v1.12.8...v1.12.9) (2021-10-18)
+
+
+### Bug Fixes
+
+* inline `mlly.interopDefault` (resolves [#48](https://github.com/unjs/jiti/issues/48)) ([32e606f](https://github.com/unjs/jiti/commit/32e606fef722f06f428058ad34ed40d1081bd3e4))
+
 ### [1.12.8](https://github.com/unjs/jiti/compare/v1.12.7...v1.12.8) (2021-10-18)
 
 
