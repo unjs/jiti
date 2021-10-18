@@ -10,8 +10,7 @@ import createRequire from 'create-require'
 import semver from 'semver'
 import { addHook } from 'pirates'
 import objectHash from 'object-hash'
-import { interopDefault } from 'mlly'
-import { isDir, isWritable, md5, detectESMSyntax, detectLegacySyntax } from './utils'
+import { interopDefault, isDir, isWritable, md5, detectESMSyntax, detectLegacySyntax } from './utils'
 import { TransformOptions, JITIOptions } from './types'
 
 const _EnvDebug = destr(process.env.JITI_DEBUG)
