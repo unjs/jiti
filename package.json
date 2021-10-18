@@ -44,7 +44,7 @@
     "babel-plugin-transform-import-meta": "latest",
     "create-require": "latest",
     "destr": "latest",
-    "eslint": "latest",
+    "eslint": "^7",
     "esm": "latest",
     "mkdirp": "latest",
     "mlly": "latest",
