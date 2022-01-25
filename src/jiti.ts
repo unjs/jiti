@@ -3,14 +3,14 @@ import { Module, builtinModules } from 'module'
 import { dirname, join, basename, extname } from 'path'
 import { tmpdir } from 'os'
 import vm from 'vm'
-import { fileURLToPath } from 'url'
+import { fileURLToPath, pathToFileURL } from 'url'
 import mkdirp from 'mkdirp'
 import destr from 'destr'
 import createRequire from 'create-require'
 import semver from 'semver'
 import { addHook } from 'pirates'
 import objectHash from 'object-hash'
-import { hasESMSyntax, interopDefault } from 'mlly'
+import { hasESMSyntax, interopDefault, resolvePathSync } from 'mlly'
 import { isDir, isWritable, md5, detectLegacySyntax } from './utils'
 import { TransformOptions, JITIOptions } from './types'
 
@@ -78,12 +78,24 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     try { return nativeRequire.resolve(id, options) } catch (e) {}
   }
 
+  const _url = pathToFileURL(_filename)
   const _additionalExts = [...opts.extensions!].filter(ext => ext !== '.js')
   const _resolve = (id: string, options?: { paths?: string[] }) => {
+    // Try ESM resolve
+    let resolved, err
+    try {
+      resolved = resolvePathSync(id, { url: _url, conditions: ['node', 'require', 'import'] })
+    } catch (_err) {
+      err = _err
+    }
+    if (resolved) {
+      return resolved
+    }
+
+    // Try native require resolve
     if (opts.extensions!.includes(extname(id))) {
       return nativeRequire.resolve(id, options)
     }
-    let resolved, err
     try {
       return nativeRequire.resolve(id, options)
     } catch (_err) {

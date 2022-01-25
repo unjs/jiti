@@ -31,8 +31,14 @@ describe('fixtures', async () => {
           .trim()
       }
 
-      const { stdout, stderr } = await execa('node', [jitiPath, fixtureEntry], { cwd, stdio: 'pipe', reject: false })
-      expect(cleanUpSnap(stdout)).toMatchSnapshot('stdout')
+      const { stdout, stderr } = await execa('node', [jitiPath, fixtureEntry], {
+        cwd,
+        stdio: 'pipe',
+        reject: false,
+        env: {
+          JITI_CACHE: 'false'
+        }
+      })
 
       if (name.includes('error')) {
         expect(cleanUpSnap(stderr)).toMatchSnapshot('stderr')
@@ -40,6 +46,8 @@ describe('fixtures', async () => {
         // expect no error
         expect(stderr).toBe('')
       }
+
+      expect(cleanUpSnap(stdout)).toMatchSnapshot('stdout')
     })
   }
 })
