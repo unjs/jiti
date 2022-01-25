@@ -38,8 +38,11 @@ jobs:
       - name: Lint
         run: yarn lint
 
-      # - name: Test
-      #   run: yarn jest
+      - name: Build
+        run: yarn build
+
+      - name: Test
+        run: yarn test
 
       # - name: Coverage
       #   uses: codecov/codecov-action@v1

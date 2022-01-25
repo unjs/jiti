@@ -1,0 +1,98 @@
+// Vitest Snapshot v1
+
+exports[`fixtures > async > stderr 1`] = `
+"Error [ERR_MODULE_NOT_FOUND]: Cannot find module '<cwd>/async' imported from <cwd>/index.js
+Did you mean to import ../async.js?
+    at new NodeError (node:internal/errors:371:5)
+    at finalizeResolution (node:internal/modules/esm/resolve:416:11)
+    at moduleResolve (node:internal/modules/esm/resolve:932:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1044:11)
+    at ESMLoader.resolve (node:internal/modules/esm/loader:422:30)
+    at ESMLoader.getModuleJob (node:internal/modules/esm/loader:222:40)
+    at ESMLoader.import (node:internal/modules/esm/loader:276:22)
+    at importModuleDynamically (node:internal/modules/cjs/loader:1041:29)
+    at importModuleDynamicallyWrapper (node:internal/vm/module:437:21)
+    at importModuleDynamically (node:vm:381:46) {
+  code: 'ERR_MODULE_NOT_FOUND'
+}"
+`;
+
+exports[`fixtures > async > stdout 1`] = `""`;
+
+exports[`fixtures > circular > stderr 1`] = `""`;
+
+exports[`fixtures > circular > stdout 1`] = `"FooBar"`;
+
+exports[`fixtures > error-parse > stderr 1`] = `
+"<root>/lib/index.js:2
+  throw err /* ↓ Check stack trace ↓ */
+  ^
+
+Error: ParseError: \`import\` can only be used in \`import 
+ <cwd>/index.ts:2:18
+    at Object.<anonymous> (<root>/bin/jiti.js:16:1)
+    at Module._compile (node:internal/modules/cjs/loader:1101:14)
+    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1153:10)
+    at Module.load (node:internal/modules/cjs/loader:981:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:822:12)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:81:12)
+    at node:internal/main/run_main_module:17:47"
+`;
+
+exports[`fixtures > error-parse > stdout 1`] = `""`;
+
+exports[`fixtures > error-runtime > stderr 1`] = `
+"<root>/lib/index.js:2
+  throw err /* ↓ Check stack trace ↓ */
+  ^
+
+TypeError [ERR_INVALID_ARG_TYPE]: The \\"listener\\" argument must be of type function. Received undefined
+    at checkListener (node:events:128:3)
+    at _addListener (node:events:423:3)
+    at process.addListener (node:events:487:10)
+    at <cwd>/index.ts:1:84
+    at g (<root>/dist/jiti.js:1:55111)
+    at Object.<anonymous> (<root>/bin/jiti.js:16:1)
+    at Module._compile (node:internal/modules/cjs/loader:1101:14)
+    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1153:10)
+    at Module.load (node:internal/modules/cjs/loader:981:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:822:12) {
+  code: 'ERR_INVALID_ARG_TYPE'
+}"
+`;
+
+exports[`fixtures > error-runtime > stdout 1`] = `""`;
+
+exports[`fixtures > esm > stderr 1`] = `""`;
+
+exports[`fixtures > esm > stdout 1`] = `"[Function: test]"`;
+
+exports[`fixtures > hashbang > stderr 1`] = `""`;
+
+exports[`fixtures > hashbang > stdout 1`] = `"1"`;
+
+exports[`fixtures > legacy > stderr 1`] = `""`;
+
+exports[`fixtures > legacy > stdout 1`] = `"Should be undefined: undefined"`;
+
+exports[`fixtures > mixed > stderr 1`] = `""`;
+
+exports[`fixtures > mixed > stdout 1`] = `"Mixed works for: <cwd>"`;
+
+exports[`fixtures > native > stderr 1`] = `""`;
+
+exports[`fixtures > native > stdout 1`] = `"[Module: null prototype] { default: { hasRequire: false } }"`;
+
+exports[`fixtures > proto > stderr 1`] = `""`;
+
+exports[`fixtures > proto > stdout 1`] = `"exists: true"`;
+
+exports[`fixtures > typescript > stderr 1`] = `""`;
+
+exports[`fixtures > typescript > stdout 1`] = `
+"{
+  file: '<cwd>/test.ts',
+  dir: '<cwd>',
+  resolve: '<cwd>/test.ts'
+}"
+`;
