@@ -32,9 +32,9 @@ exports[`fixtures > error-runtime > stderr 1`] = `
   ^
 
 TypeError [ERR_INVALID_ARG_TYPE]: The \\"listener\\" argument must be of type function. Received undefined
-    at checkListener (node:events)
-    at _addListener (node:events)
-    at process.addListener (node:events)
+    at checkListener (events)
+    at _addListener (events)
+    at process.addListener (events)
     at <cwd>/index.ts
     at g (<root>/dist/jiti)
     at Object.<anonymous> (<root>/bin/jiti)
