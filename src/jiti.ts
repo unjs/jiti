@@ -4,10 +4,10 @@ import { dirname, join, basename, extname } from 'path'
 import { tmpdir } from 'os'
 import vm from 'vm'
 import { fileURLToPath, pathToFileURL } from 'url'
-import mkdirp from 'mkdirp'
+import { sync as mkdirpSync } from 'mkdirp'
 import destr from 'destr'
 import createRequire from 'create-require'
-import semver from 'semver'
+import { lt } from 'semver'
 import { addHook } from 'pirates'
 import objectHash from 'object-hash'
 import { hasESMSyntax, interopDefault, resolvePathSync } from 'mlly'
@@ -24,7 +24,7 @@ const defaults: JITIOptions = {
   requireCache: _EnvRequireCache !== undefined ? !!_EnvRequireCache : true,
   interopDefault: false,
   cacheVersion: '6',
-  legacy: semver.lt(process.version || '0.0.0', '14.0.0'),
+  legacy: lt(process.version || '0.0.0', '14.0.0'),
   extensions: ['.js', '.mjs', '.cjs', '.ts']
 }
 
@@ -62,7 +62,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
   }
   if (opts.cache) {
     try {
-      mkdirp.sync(opts.cache as string)
+      mkdirpSync(opts.cache as string)
       if (!isWritable(opts.cache)) {
         throw new Error('directory is not writable')
       }
