@@ -91,7 +91,8 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
     } catch (_err) {
       err = _err
     }
-    if (resolved) {
+    // TODO: Hot fix for mlly bypasses absolute id
+    if (resolved && existsSync(resolved)) {
       return resolved
     }
 
