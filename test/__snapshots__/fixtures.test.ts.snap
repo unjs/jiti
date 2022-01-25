@@ -15,13 +15,13 @@ exports[`fixtures > error-parse > stderr 1`] = `
 
 Error: ParseError: \`import\` can only be used in \`import 
  <cwd>/index.ts
-    at Object.<anonymous> (<root>/bin/jiti.js)
+    at Object.<anonymous> (<root>/bin/jiti)
     at Module._compile (internal/modules/cjs/loader)
     at Object.Module._extensions..js (internal/modules/cjs/loader)
     at Module.load (internal/modules/cjs/loader)
     at Function.Module._load (internal/modules/cjs/loader)
     at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)
-    at internal/main/run_main_module:17:47"
+    at internal/main/run_main_module"
 `;
 
 exports[`fixtures > error-parse > stdout 1`] = `""`;
@@ -36,8 +36,8 @@ TypeError [ERR_INVALID_ARG_TYPE]: The \\"listener\\" argument must be of type fu
     at _addListener (node:events)
     at process.addListener (node:events)
     at <cwd>/index.ts
-    at g (<root>/dist/jiti.js)
-    at Object.<anonymous> (<root>/bin/jiti.js)
+    at g (<root>/dist/jiti)
+    at Object.<anonymous> (<root>/bin/jiti)
     at Module._compile (internal/modules/cjs/loader)
     at Object.Module._extensions..js (internal/modules/cjs/loader)
     at Module.load (internal/modules/cjs/loader)
@@ -56,11 +56,11 @@ exports[`fixtures > esm > stdout 1`] = `
   dir: '<cwd>',
   'import.meta.url': 'file://<cwd>/test.js',
   stack: [
-    'at getStack (<cwd>/test.js)',
-    'at test (<cwd>/test.js)',
+    'at getStack (<cwd>/test)',
+    'at test (<cwd>/test)',
     'at <cwd>/index.js',
-    'at g (<root>/dist/jiti.js)',
-    'at Object.<anonymous> (<root>/bin/jiti.js)',
+    'at g (<root>/dist/jiti)',
+    'at Object.<anonymous> (<root>/bin/jiti)',
     'at Module._compile (internal/modules/cjs/loader)',
     'at Object.Module._extensions..js (internal/modules/cjs/loader)',
     'at Module.load (internal/modules/cjs/loader)',
