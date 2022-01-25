@@ -1,10 +1,6 @@
 // Vitest Snapshot v1
 
-exports[`fixtures > async > stderr 1`] = `""`;
-
 exports[`fixtures > async > stdout 1`] = `"works"`;
-
-exports[`fixtures > circular > stderr 1`] = `""`;
 
 exports[`fixtures > circular > stdout 1`] = `"FooBar"`;
 
@@ -48,8 +44,6 @@ TypeError [ERR_INVALID_ARG_TYPE]: The \\"listener\\" argument must be of type fu
 
 exports[`fixtures > error-runtime > stdout 1`] = `""`;
 
-exports[`fixtures > esm > stderr 1`] = `""`;
-
 exports[`fixtures > esm > stdout 1`] = `
 "{
   file: '<cwd>/test.js',
@@ -70,27 +64,15 @@ exports[`fixtures > esm > stdout 1`] = `
 }"
 `;
 
-exports[`fixtures > hashbang > stderr 1`] = `""`;
-
 exports[`fixtures > hashbang > stdout 1`] = `"1"`;
-
-exports[`fixtures > legacy > stderr 1`] = `""`;
 
 exports[`fixtures > legacy > stdout 1`] = `"Should be undefined: undefined"`;
 
-exports[`fixtures > mixed > stderr 1`] = `""`;
-
 exports[`fixtures > mixed > stdout 1`] = `"Mixed works for: <cwd>"`;
-
-exports[`fixtures > native > stderr 1`] = `""`;
 
 exports[`fixtures > native > stdout 1`] = `"[Module: null prototype] { default: { hasRequire: false } }"`;
 
-exports[`fixtures > proto > stderr 1`] = `""`;
-
 exports[`fixtures > proto > stdout 1`] = `"exists: true"`;
-
-exports[`fixtures > typescript > stderr 1`] = `""`;
 
 exports[`fixtures > typescript > stdout 1`] = `
 "{

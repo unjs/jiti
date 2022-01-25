@@ -11,7 +11,8 @@ describe('fixtures', async () => {
   const fixtures = await fg('*/index.*', { cwd: dir })
 
   for (const fixture of fixtures) {
-    it(dirname(fixture), async () => {
+    const name = dirname(fixture)
+    it(name, async () => {
       const fixtureEntry = join(dir, fixture)
       const cwd = dirname(fixtureEntry)
 
@@ -32,7 +33,13 @@ describe('fixtures', async () => {
 
       const { stdout, stderr } = await execa('node', [jitiPath, fixtureEntry], { cwd, stdio: 'pipe', reject: false })
       expect(cleanUpSnap(stdout)).toMatchSnapshot('stdout')
-      expect(cleanUpSnap(stderr)).toMatchSnapshot('stderr')
+
+      if (name.includes('error')) {
+        expect(cleanUpSnap(stderr)).toMatchSnapshot('stderr')
+      } else {
+        // expect no error
+        expect(stderr).toBe('')
+      }
     })
   }
 })
