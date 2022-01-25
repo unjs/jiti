@@ -7,11 +7,13 @@
     "strict": true,
     "declarationDir": "dist",
     "declaration": true,
+    "experimentalDecorators": true,
     "types": [
       "node"
     ]
   },
   "include": [
-    "src"
+    "src",
+    "test"
   ]
 }
