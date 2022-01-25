@@ -74,6 +74,8 @@ exports[`fixtures > native > stdout 1`] = `"[Module: null prototype] { default: 
 
 exports[`fixtures > proto > stdout 1`] = `"exists: true"`;
 
+exports[`fixtures > pure-esm-dep > stdout 1`] = `""`;
+
 exports[`fixtures > typescript > stdout 1`] = `
 "{
   file: '<cwd>/test.ts',
