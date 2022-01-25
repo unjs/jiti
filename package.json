@@ -51,7 +51,7 @@
     "execa": "^6.0.0",
     "fast-glob": "^3.2.11",
     "mkdirp": "latest",
-    "mlly": "latest",
+    "mlly": "^0.3.15",
     "object-hash": "latest",
     "pathe": "^0.2.0",
     "pirates": "latest",

@@ -10,8 +10,8 @@ import createRequire from 'create-require'
 import semver from 'semver'
 import { addHook } from 'pirates'
 import objectHash from 'object-hash'
-import { resolvePathSync } from 'mlly'
-import { interopDefault, isDir, isWritable, md5, detectESMSyntax, detectLegacySyntax } from './utils'
+import { hasESMSyntax, interopDefault, resolvePathSync } from 'mlly'
+import { isDir, isWritable, md5, detectLegacySyntax } from './utils'
 import { TransformOptions, JITIOptions } from './types'
 
 const _EnvDebug = destr(process.env.JITI_DEBUG)
@@ -202,7 +202,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     const needsTranspile = !isCommonJS && (
       isTypescript ||
       isNativeModule ||
-      detectESMSyntax(source) ||
+      hasESMSyntax(source) ||
       (opts.legacy && detectLegacySyntax(source))
     )
 
