@@ -34,7 +34,7 @@ export interface JITI extends Require {
   register: () => (() => void)
 }
 
-export default function createJITI (_filename: string = process.cwd(), opts: JITIOptions = {}, parentModule?: typeof module): JITI {
+export default function createJITI (_filename: string, opts: JITIOptions = {}, parentModule?: typeof module): JITI {
   opts = { ...defaults, ...opts }
 
   // Cache dependencies
@@ -53,6 +53,9 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
   }
 
   // If filename is dir, createRequire goes with parent directory, so we need fakepath
+  if (!_filename) {
+    _filename = process.cwd()
+  }
   if (isDir(_filename)) {
     _filename = join(_filename, 'index.js')
   }
