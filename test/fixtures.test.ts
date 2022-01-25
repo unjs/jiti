@@ -26,6 +26,7 @@ describe('fixtures', async () => {
           .replace(/node:(internal|events)/g, '$1') // in Node 16 internal will be presented as node:internal
           .replace(/\.js\)/g, ')')
           .replace(/file:\/\/\//g, 'file://')
+          .replace(/ParseError: \w:\/:\s+/, 'ParseError: ') // Unknown chars in Windows
           .trim()
       }
 
