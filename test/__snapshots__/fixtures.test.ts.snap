@@ -14,13 +14,13 @@ exports[`fixtures > error-parse > stderr 1`] = `
   ^
 
 Error: ParseError: \`import\` can only be used in \`import 
- <cwd>/index.ts:2:18
-    at Object.<anonymous> (<root>/bin/jiti.js:16:1)
-    at Module._compile (node:internal/modules/cjs/loader:1101:14)
-    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1153:10)
-    at Module.load (node:internal/modules/cjs/loader:981:32)
-    at Function.Module._load (node:internal/modules/cjs/loader:822:12)
-    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:81:12)
+ <cwd>/index.ts
+    at Object.<anonymous> (<root>/bin/jiti.js)
+    at Module._compile (node:internal/modules/cjs/loader)
+    at Object.Module._extensions..js (node:internal/modules/cjs/loader)
+    at Module.load (node:internal/modules/cjs/loader)
+    at Function.Module._load (node:internal/modules/cjs/loader)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main)
     at node:internal/main/run_main_module:17:47"
 `;
 
@@ -32,16 +32,16 @@ exports[`fixtures > error-runtime > stderr 1`] = `
   ^
 
 TypeError [ERR_INVALID_ARG_TYPE]: The \\"listener\\" argument must be of type function. Received undefined
-    at checkListener (node:events:128:3)
-    at _addListener (node:events:423:3)
-    at process.addListener (node:events:487:10)
-    at <cwd>/index.ts:1:84
-    at g (<root>/dist/jiti.js:1:55111)
-    at Object.<anonymous> (<root>/bin/jiti.js:16:1)
-    at Module._compile (node:internal/modules/cjs/loader:1101:14)
-    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1153:10)
-    at Module.load (node:internal/modules/cjs/loader:981:32)
-    at Function.Module._load (node:internal/modules/cjs/loader:822:12) {
+    at checkListener (node:events)
+    at _addListener (node:events)
+    at process.addListener (node:events)
+    at <cwd>/index.ts
+    at g (<root>/dist/jiti.js)
+    at Object.<anonymous> (<root>/bin/jiti.js)
+    at Module._compile (node:internal/modules/cjs/loader)
+    at Object.Module._extensions..js (node:internal/modules/cjs/loader)
+    at Module.load (node:internal/modules/cjs/loader)
+    at Function.Module._load (node:internal/modules/cjs/loader) {
   code: 'ERR_INVALID_ARG_TYPE'
 }"
 `;
@@ -56,16 +56,16 @@ exports[`fixtures > esm > stdout 1`] = `
   dir: '<cwd>',
   'import.meta.url': 'file://<cwd>/test.js',
   stack: [
-    'at getStack (<cwd>/test.js:1:184)',
-    'at test (<cwd>/test.js:8:12)',
-    'at <cwd>/index.js:3:31',
-    'at g (<root>/dist/jiti.js:1:55111)',
-    'at Object.<anonymous> (<root>/bin/jiti.js:16:1)',
-    'at Module._compile (node:internal/modules/cjs/loader:1101:14)',
-    'at Object.Module._extensions..js (node:internal/modules/cjs/loader:1153:10)',
-    'at Module.load (node:internal/modules/cjs/loader:981:32)',
-    'at Function.Module._load (node:internal/modules/cjs/loader:822:12)',
-    'at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:81:12)'
+    'at getStack (<cwd>/test.js)',
+    'at test (<cwd>/test.js)',
+    'at <cwd>/index.js',
+    'at g (<root>/dist/jiti.js)',
+    'at Object.<anonymous> (<root>/bin/jiti.js)',
+    'at Module._compile (node:internal/modules/cjs/loader)',
+    'at Object.Module._extensions..js (node:internal/modules/cjs/loader)',
+    'at Module.load (node:internal/modules/cjs/loader)',
+    'at Function.Module._load (node:internal/modules/cjs/loader)',
+    'at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main)'
   ]
 }"
 `;

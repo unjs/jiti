@@ -50,6 +50,7 @@
     "mkdirp": "latest",
     "mlly": "latest",
     "object-hash": "latest",
+    "pathe": "^0.2.0",
     "pirates": "latest",
     "semver": "latest",
     "standard-version": "latest",
