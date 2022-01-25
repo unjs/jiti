@@ -21,7 +21,8 @@ describe('fixtures', async () => {
           .replace(/\\/g, '/')
           .split(cwd).join('<cwd>') // workaround for replaceAll in Node 14
           .split(root).join('<root>') // workaround for replaceAll in Node 14
-          .replace(/:\d+:\d+([)'\n])/g, '$1')
+          .replace(/:\d+:\d+([)'\n])/g, '$1') // remove line numbers in stacktrace
+          .replace(/node:internal/g, 'internal') // in Node 16 internal will be presented as node:internal
       }
 
       const { stdout, stderr } = await execa('node', [jitiPath, fixtureEntry], { cwd, stdio: 'pipe', reject: false })

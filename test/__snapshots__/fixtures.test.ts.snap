@@ -16,12 +16,12 @@ exports[`fixtures > error-parse > stderr 1`] = `
 Error: ParseError: \`import\` can only be used in \`import 
  <cwd>/index.ts
     at Object.<anonymous> (<root>/bin/jiti.js)
-    at Module._compile (node:internal/modules/cjs/loader)
-    at Object.Module._extensions..js (node:internal/modules/cjs/loader)
-    at Module.load (node:internal/modules/cjs/loader)
-    at Function.Module._load (node:internal/modules/cjs/loader)
-    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main)
-    at node:internal/main/run_main_module:17:47"
+    at Module._compile (internal/modules/cjs/loader)
+    at Object.Module._extensions..js (internal/modules/cjs/loader)
+    at Module.load (internal/modules/cjs/loader)
+    at Function.Module._load (internal/modules/cjs/loader)
+    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)
+    at internal/main/run_main_module:17:47"
 `;
 
 exports[`fixtures > error-parse > stdout 1`] = `""`;
@@ -38,10 +38,10 @@ TypeError [ERR_INVALID_ARG_TYPE]: The \\"listener\\" argument must be of type fu
     at <cwd>/index.ts
     at g (<root>/dist/jiti.js)
     at Object.<anonymous> (<root>/bin/jiti.js)
-    at Module._compile (node:internal/modules/cjs/loader)
-    at Object.Module._extensions..js (node:internal/modules/cjs/loader)
-    at Module.load (node:internal/modules/cjs/loader)
-    at Function.Module._load (node:internal/modules/cjs/loader) {
+    at Module._compile (internal/modules/cjs/loader)
+    at Object.Module._extensions..js (internal/modules/cjs/loader)
+    at Module.load (internal/modules/cjs/loader)
+    at Function.Module._load (internal/modules/cjs/loader) {
   code: 'ERR_INVALID_ARG_TYPE'
 }"
 `;
@@ -61,11 +61,11 @@ exports[`fixtures > esm > stdout 1`] = `
     'at <cwd>/index.js',
     'at g (<root>/dist/jiti.js)',
     'at Object.<anonymous> (<root>/bin/jiti.js)',
-    'at Module._compile (node:internal/modules/cjs/loader)',
-    'at Object.Module._extensions..js (node:internal/modules/cjs/loader)',
-    'at Module.load (node:internal/modules/cjs/loader)',
-    'at Function.Module._load (node:internal/modules/cjs/loader)',
-    'at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main)'
+    'at Module._compile (internal/modules/cjs/loader)',
+    'at Object.Module._extensions..js (internal/modules/cjs/loader)',
+    'at Module.load (internal/modules/cjs/loader)',
+    'at Function.Module._load (internal/modules/cjs/loader)',
+    'at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)'
   ]
 }"
 `;
