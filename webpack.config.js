@@ -1,4 +1,5 @@
 const path = require('path')
+const TerserPlugin = require('terser-webpack-plugin')
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -40,6 +41,14 @@ module.exports = {
   optimization: {
     nodeEnv: false,
     moduleIds: 'named',
-    chunkIds: 'named'
+    chunkIds: 'named',
+    minimizer: isProd && [
+      new TerserPlugin({
+        terserOptions: {
+          // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+          mangle: false
+        }
+      })
+    ]
   }
 }

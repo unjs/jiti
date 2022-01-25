@@ -57,6 +57,7 @@
     "pirates": "latest",
     "semver": "latest",
     "standard-version": "latest",
+    "terser-webpack-plugin": "latest",
     "ts-loader": "latest",
     "tslib": "latest",
     "typescript": "latest",
