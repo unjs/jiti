@@ -1,23 +1,8 @@
 // Vitest Snapshot v1
 
-exports[`fixtures > async > stderr 1`] = `
-"Error [ERR_MODULE_NOT_FOUND]: Cannot find module '<cwd>/async' imported from <cwd>/index.js
-Did you mean to import ../async.js?
-    at new NodeError (node:internal/errors:371:5)
-    at finalizeResolution (node:internal/modules/esm/resolve:416:11)
-    at moduleResolve (node:internal/modules/esm/resolve:932:10)
-    at defaultResolve (node:internal/modules/esm/resolve:1044:11)
-    at ESMLoader.resolve (node:internal/modules/esm/loader:422:30)
-    at ESMLoader.getModuleJob (node:internal/modules/esm/loader:222:40)
-    at ESMLoader.import (node:internal/modules/esm/loader:276:22)
-    at importModuleDynamically (node:internal/modules/cjs/loader:1041:29)
-    at importModuleDynamicallyWrapper (node:internal/vm/module:437:21)
-    at importModuleDynamically (node:vm:381:46) {
-  code: 'ERR_MODULE_NOT_FOUND'
-}"
-`;
+exports[`fixtures > async > stderr 1`] = `""`;
 
-exports[`fixtures > async > stdout 1`] = `""`;
+exports[`fixtures > async > stdout 1`] = `"works"`;
 
 exports[`fixtures > circular > stderr 1`] = `""`;
 
