@@ -10,7 +10,7 @@ import createRequire from 'create-require'
 import semver from 'semver'
 import { addHook } from 'pirates'
 import objectHash from 'object-hash'
-import { hasESMSyntax, interopDefault, resolvePathSync } from 'mlly'
+import { hasESMSyntax, interopDefault, ResolveOptions, resolvePathSync } from 'mlly'
 import { isDir, isWritable, md5, detectLegacySyntax } from './utils'
 import { TransformOptions, JITIOptions } from './types'
 
@@ -84,7 +84,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     // Try ESM resolve
     let resolved, err
     try {
-      resolved = resolvePathSync(id, { from: _url, conditions: ['node', 'require'] })
+      resolved = resolvePathSync(id, { url: _url, conditions: ['node', 'require', 'import'] })
     } catch (_err) {
       err = _err
     }
