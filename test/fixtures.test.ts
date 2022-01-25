@@ -18,9 +18,9 @@ describe('fixtures', async () => {
       // Clean up absolute paths and sourcemap locations for stable snapshots
       function cleanUpSnap (str:string) {
         return str
-          .replaceAll(/\\/g, '/')
-          .replaceAll(cwd, '<cwd>')
-          .replaceAll(root, '<root>')
+          .replace(/\\/g, '/')
+          .split(cwd).join('<cwd>') // workaround for replaceAll in Node 14
+          .split(root).join('<root>') // workaround for replaceAll in Node 14
           .replace(/:\d+:\d+([)'\n])/g, '$1')
       }
 
