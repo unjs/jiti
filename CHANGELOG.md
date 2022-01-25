@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.12](https://github.com/unjs/jiti/compare/v1.12.11...v1.12.12) (2022-01-25)
+
+
+### Bug Fixes
+
+* ensure resolve esm id exists ([2d44274](https://github.com/unjs/jiti/commit/2d4427488625acc42dfc517eacf14e70f1aaaf30))
+
 ### [1.12.11](https://github.com/unjs/jiti/compare/v1.12.10...v1.12.11) (2022-01-25)
 
 
