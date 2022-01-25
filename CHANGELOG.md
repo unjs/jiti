@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.10](https://github.com/unjs/jiti/compare/v1.12.9...v1.12.10) (2022-01-25)
+
+
+### Bug Fixes
+
+* support resolving with import condition ([#52](https://github.com/unjs/jiti/issues/52)) ([1e1bb0c](https://github.com/unjs/jiti/commit/1e1bb0c99236841d8318d5c24de99d90ffd030be))
+
 ### [1.12.9](https://github.com/unjs/jiti/compare/v1.12.8...v1.12.9) (2021-10-18)
 
 
