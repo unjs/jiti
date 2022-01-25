@@ -1,2 +1,2 @@
 const a = {}
-console.log(a?.foo?.bar)
+console.log('Should be undefined:', a?.foo?.bar)

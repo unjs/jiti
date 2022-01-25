@@ -13,15 +13,14 @@
     "register.js"
   ],
   "scripts": {
-    "build": "yarn clean && NODE_ENV=production yarn webpack",
-    "build:babel": "ncc build src/babel.ts -t -m -o dist/babel",
+    "build": "yarn clean && cross-env NODE_ENV=production yarn webpack",
     "clean": "rm -rf dist",
     "dev": "yarn clean && yarn webpack --watch",
-    "jiti": "JITI_DEBUG=1 ./bin/jiti.js",
-    "jiti:legacy": "JITI_DEBUG=1 npx node@12 ./bin/jiti.js",
+    "jiti": "cross-env JITI_DEBUG=1 ./bin/jiti.js",
+    "jiti:legacy": "cross-env JITI_DEBUG=1 npx node@12 ./bin/jiti.js",
     "lint": "eslint --ext .ts,.js .",
     "release": "yarn test && yarn build && yarn standard-version && git push --follow-tags && npm publish",
-    "test": "yarn lint"
+    "test": "vitest run"
   },
   "devDependencies": {
     "@babel/core": "latest",
@@ -43,18 +42,23 @@
     "babel-plugin-parameter-decorator": "latest",
     "babel-plugin-transform-import-meta": "latest",
     "create-require": "latest",
+    "cross-env": "^7.0.3",
     "destr": "latest",
     "eslint": "^7",
     "esm": "latest",
+    "execa": "^6.0.0",
+    "fast-glob": "^3.2.11",
     "mkdirp": "latest",
     "mlly": "latest",
     "object-hash": "latest",
+    "pathe": "^0.2.0",
     "pirates": "latest",
     "semver": "latest",
     "standard-version": "latest",
     "ts-loader": "latest",
     "tslib": "latest",
     "typescript": "latest",
+    "vitest": "^0.2.1",
     "webpack": "latest",
     "webpack-cli": "latest"
   }
