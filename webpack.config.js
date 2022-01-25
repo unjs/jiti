@@ -42,13 +42,15 @@ module.exports = {
     nodeEnv: false,
     moduleIds: 'named',
     chunkIds: 'named',
-    minimizer: isProd && [
-      new TerserPlugin({
-        terserOptions: {
-          // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
-          mangle: false
-        }
-      })
-    ]
+    minimizer: isProd
+      ? [
+          new TerserPlugin({
+            terserOptions: {
+              // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+              mangle: false
+            }
+          })
+        ]
+      : []
   }
 }
