@@ -51,7 +51,6 @@
     "estree-walker": "^3.0.1",
     "execa": "^6.0.0",
     "fast-glob": "^3.2.11",
-    "is-ip": "^4.0.0",
     "mkdirp": "latest",
     "mlly": "latest",
     "object-hash": "latest",
