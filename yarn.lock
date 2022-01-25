@@ -1822,11 +1822,6 @@ eslint@^7:
     text-table "^0.2.0"
     v8-compile-cache "^2.0.3"
 
-esm-resolve@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/esm-resolve/-/esm-resolve-1.0.6.tgz#f5c0927ca3cd98bd17bc871a869283621a3ad3d9"
-  integrity sha512-EfPWOVgTsfaIlN4VdliGmgcaAT8b5OHF79HHdI8/2yJKRcNnLsISlmbzG9XtfvguZnKuXEmS53gJJktkaBKxfA==
-
 esm@latest:
   version "3.2.25"
   resolved "https://registry.yarnpkg.com/esm/-/esm-3.2.25.tgz#342c18c29d56157688ba5ce31f8431fbb795cc10"

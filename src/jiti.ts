@@ -1,16 +1,16 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { Module, builtinModules } from 'module'
-import { dirname, join, basename, extname, resolve as pathResolve } from 'path'
+import { dirname, join, basename, extname } from 'path'
 import { tmpdir } from 'os'
 import vm from 'vm'
-import { fileURLToPath } from 'url'
-import createESMResolver from 'esm-resolve'
+import { fileURLToPath, pathToFileURL } from 'url'
 import mkdirp from 'mkdirp'
 import destr from 'destr'
 import createRequire from 'create-require'
 import semver from 'semver'
 import { addHook } from 'pirates'
 import objectHash from 'object-hash'
+import { resolvePathSync } from 'mlly'
 import { interopDefault, isDir, isWritable, md5, detectESMSyntax, detectLegacySyntax } from './utils'
 import { TransformOptions, JITIOptions } from './types'
 
@@ -78,18 +78,18 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     try { return nativeRequire.resolve(id, options) } catch (e) {}
   }
 
-  const _esmResolve = createESMResolver(_filename, { constraints: ['node'] })
+  const _url = pathToFileURL(_filename)
   const _additionalExts = [...opts.extensions!].filter(ext => ext !== '.js')
   const _resolve = (id: string, options?: { paths?: string[] }) => {
     // Try ESM resolve
     let resolved, err
     try {
-      resolved = _esmResolve(id)
+      resolved = resolvePathSync(id, { from: _url, conditions: ['node', 'require'] })
     } catch (_err) {
       err = _err
     }
     if (resolved) {
-      return pathResolve(_filename, '..', resolved)
+      return resolved
     }
 
     // Try native require resolve

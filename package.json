@@ -47,7 +47,6 @@
     "destr": "latest",
     "eslint": "^7",
     "esm": "latest",
-    "esm-resolve": "^1.0.6",
     "estree-walker": "^3.0.1",
     "execa": "^6.0.0",
     "fast-glob": "^3.2.11",
