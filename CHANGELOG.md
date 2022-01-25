@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.11](https://github.com/unjs/jiti/compare/v1.12.10...v1.12.11) (2022-01-25)
+
+
+### Bug Fixes
+
+* default _filename if null or falsy value passed ([1a24f2a](https://github.com/unjs/jiti/commit/1a24f2ac686f5ebc3802711a4dc83e52f7b3d963))
+* **pkg:** do not mangle dist build ([3b456e1](https://github.com/unjs/jiti/commit/3b456e1be6a672c29ee47ebed594da14d42cb73d))
+
 ### [1.12.10](https://github.com/unjs/jiti/compare/v1.12.9...v1.12.10) (2022-01-25)
 
 
