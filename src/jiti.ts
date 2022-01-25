@@ -87,12 +87,14 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
     // Try ESM resolve
     let resolved, err
     try {
-      resolved = resolvePathSync(id, { url: _url, conditions: ['node', 'require', 'import'] })
+      resolved = resolvePathSync(id, {
+        url: _url,
+        conditions: ['node', 'require', 'import']
+      })
     } catch (_err) {
       err = _err
     }
-    // TODO: Hot fix for mlly bypasses absolute id
-    if (resolved && existsSync(resolved)) {
+    if (resolved) {
       return resolved
     }
 
