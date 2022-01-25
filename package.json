@@ -13,11 +13,11 @@
     "register.js"
   ],
   "scripts": {
-    "build": "yarn clean && NODE_ENV=production yarn webpack",
+    "build": "yarn clean && cross-env NODE_ENV=production yarn webpack",
     "clean": "rm -rf dist",
     "dev": "yarn clean && yarn webpack --watch",
-    "jiti": "JITI_DEBUG=1 ./bin/jiti.js",
-    "jiti:legacy": "JITI_DEBUG=1 npx node@12 ./bin/jiti.js",
+    "jiti": "cross-env JITI_DEBUG=1 ./bin/jiti.js",
+    "jiti:legacy": "cross-env JITI_DEBUG=1 npx node@12 ./bin/jiti.js",
     "lint": "eslint --ext .ts,.js .",
     "release": "yarn test && yarn build && yarn standard-version && git push --follow-tags && npm publish",
     "test": "vitest run"
@@ -42,6 +42,7 @@
     "babel-plugin-parameter-decorator": "latest",
     "babel-plugin-transform-import-meta": "latest",
     "create-require": "latest",
+    "cross-env": "^7.0.3",
     "destr": "latest",
     "eslint": "^7",
     "esm": "latest",
