@@ -10,7 +10,7 @@ import createRequire from 'create-require'
 import semver from 'semver'
 import { addHook } from 'pirates'
 import objectHash from 'object-hash'
-import { hasESMSyntax, interopDefault, ResolveOptions, resolvePathSync } from 'mlly'
+import { hasESMSyntax, interopDefault, resolvePathSync } from 'mlly'
 import { isDir, isWritable, md5, detectLegacySyntax } from './utils'
 import { TransformOptions, JITIOptions } from './types'
 
