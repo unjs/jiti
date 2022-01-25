@@ -39,7 +39,6 @@ describe('fixtures', async () => {
           JITI_CACHE: 'false'
         }
       })
-      expect(cleanUpSnap(stdout)).toMatchSnapshot('stdout')
 
       if (name.includes('error')) {
         expect(cleanUpSnap(stderr)).toMatchSnapshot('stderr')
@@ -47,6 +46,8 @@ describe('fixtures', async () => {
         // expect no error
         expect(stderr).toBe('')
       }
+
+      expect(cleanUpSnap(stdout)).toMatchSnapshot('stdout')
     })
   }
 })
