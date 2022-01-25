@@ -32,7 +32,7 @@ TypeError [ERR_INVALID_ARG_TYPE]: The \\"listener\\" argument must be of type fu
     at _addListener (events)
     at process.addListener (events)
     at <cwd>/index.ts
-    at g (<root>/dist/jiti)
+    at E (<root>/dist/jiti)
     at Object.<anonymous> (<root>/bin/jiti)
     at Module._compile (internal/modules/cjs/loader)
     at Object.Module._extensions..js (internal/modules/cjs/loader)
@@ -53,7 +53,7 @@ exports[`fixtures > esm > stdout 1`] = `
     'at getStack (<cwd>/test)',
     'at test (<cwd>/test)',
     'at <cwd>/index.js',
-    'at g (<root>/dist/jiti)',
+    'at E (<root>/dist/jiti)',
     'at Object.<anonymous> (<root>/bin/jiti)',
     'at Module._compile (internal/modules/cjs/loader)',
     'at Object.Module._extensions..js (internal/modules/cjs/loader)',
@@ -74,7 +74,13 @@ exports[`fixtures > native > stdout 1`] = `"[Module: null prototype] { default: 
 
 exports[`fixtures > proto > stdout 1`] = `"exists: true"`;
 
-exports[`fixtures > pure-esm-dep > stdout 1`] = `""`;
+exports[`fixtures > pure-esm-dep > stdout 1`] = `
+"Enter Program
+Enter VariableDeclaration
+Enter VariableDeclarator
+Enter Identifier
+Enter Literal"
+`;
 
 exports[`fixtures > typescript > stdout 1`] = `
 "{
