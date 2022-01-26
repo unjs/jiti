@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.14](https://github.com/unjs/jiti/compare/v1.12.13...v1.12.14) (2022-01-26)
+
+
+### Bug Fixes
+
+* move esm resolve behind a flag ([60e094c](https://github.com/unjs/jiti/commit/60e094c63ceadc3c63313f14b1d60bcd719faab6))
+
 ### [1.12.13](https://github.com/unjs/jiti/compare/v1.12.12...v1.12.13) (2022-01-25)
 
 ### [1.12.12](https://github.com/unjs/jiti/compare/v1.12.11...v1.12.12) (2022-01-25)
