@@ -72,6 +72,14 @@ Use transpile cache
 
 If set to `true` will use `node_modules/.cache/jiti` (if exists) or `{TMP_DIR}/node-jiti`
 
+### `esmResolve`
+
+- Type: Boolean | String
+- Default: `false`
+- Environment Vriable: `JITI_ESM_RESOLVE`
+
+Using esm resolution algorithm to support `import` condition.
+
 ### `transform`
 
 - Type: Function

@@ -16,6 +16,7 @@ import { TransformOptions, JITIOptions } from './types'
 
 const _EnvDebug = destr(process.env.JITI_DEBUG)
 const _EnvCache = destr(process.env.JITI_CACHE)
+const _EnvESMReolve = destr(process.env.JITI_ESM_RESOLVE)
 const _EnvRequireCache = destr(process.env.JITI_REQUIRE_CACHE)
 
 const defaults: JITIOptions = {
@@ -23,6 +24,7 @@ const defaults: JITIOptions = {
   cache: _EnvCache !== undefined ? !!_EnvCache : true,
   requireCache: _EnvRequireCache !== undefined ? !!_EnvRequireCache : true,
   interopDefault: false,
+  esmResolve: _EnvESMReolve || false,
   cacheVersion: '6',
   legacy: lt(process.version || '0.0.0', '14.0.0'),
   extensions: ['.js', '.mjs', '.cjs', '.ts']
@@ -84,18 +86,21 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
   const _url = pathToFileURL(_filename)
   const _additionalExts = [...opts.extensions!].filter(ext => ext !== '.js')
   const _resolve = (id: string, options?: { paths?: string[] }) => {
-    // Try ESM resolve
     let resolved, err
-    try {
-      resolved = resolvePathSync(id, {
-        url: _url,
-        conditions: ['node', 'require', 'import']
-      })
-    } catch (_err) {
-      err = _err
-    }
-    if (resolved) {
-      return resolved
+
+    // Try ESM resolve
+    if (opts.esmResolve) {
+      try {
+        resolved = resolvePathSync(id, {
+          url: _url,
+          conditions: ['node', 'require', 'import']
+        })
+      } catch (_err) {
+        err = _err
+      }
+      if (resolved) {
+        return resolved
+      }
     }
 
     // Try native require resolve

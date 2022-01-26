@@ -20,6 +20,7 @@ export type JITIOptions = {
   requireCache?: boolean
   v8cache?: boolean
   interopDefault?: boolean
+  esmResolve?: boolean,
   cacheVersion?: string
   onError?: (error: Error) => void
   legacy?: boolean
