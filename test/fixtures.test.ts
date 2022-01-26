@@ -36,7 +36,8 @@ describe('fixtures', async () => {
         stdio: 'pipe',
         reject: false,
         env: {
-          JITI_CACHE: 'false'
+          JITI_CACHE: 'false',
+          JITI_ESM_RESOLVE: 'true'
         }
       })
 
