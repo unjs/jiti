@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.15](https://github.com/unjs/jiti/compare/v1.12.14...v1.12.15) (2022-01-28)
+
+
+### Bug Fixes
+
+* force transpile `config` package ([2ddcb8a](https://github.com/unjs/jiti/commit/2ddcb8a7be24d051cc0edf8d00ac3568858b54b2)), closes [#56](https://github.com/unjs/jiti/issues/56)
+
 ### [1.12.14](https://github.com/unjs/jiti/compare/v1.12.13...v1.12.14) (2022-01-26)
 
 
