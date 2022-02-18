@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.0](https://github.com/unjs/jiti/compare/v1.12.15...v1.13.0) (2022-02-18)
+
+
+### Features
+
+* support inline sourceMaps for easier debugging ([#46](https://github.com/unjs/jiti/issues/46)) ([888db00](https://github.com/unjs/jiti/commit/888db0075f0c71b643f7d63a6a0f31cae66e6ff9))
+
+
+### Bug Fixes
+
+* use backslash to make import maps working in windows ([e8696c7](https://github.com/unjs/jiti/commit/e8696c7edd2f8f58d3bf7835bd2eb04498880833))
+
 ### [1.12.15](https://github.com/unjs/jiti/compare/v1.12.14...v1.12.15) (2022-01-28)
 
 
