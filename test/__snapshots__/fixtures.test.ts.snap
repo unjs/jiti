@@ -66,6 +66,8 @@ exports[`fixtures > esm > stdout 1`] = `
 
 exports[`fixtures > hashbang > stdout 1`] = `"1"`;
 
+exports[`fixtures > import-map > stdout 1`] = `"{ alias: 'alias' }"`;
+
 exports[`fixtures > legacy > stdout 1`] = `"Should be undefined: undefined"`;
 
 exports[`fixtures > mixed > stdout 1`] = `"Mixed works for: <cwd>"`;
