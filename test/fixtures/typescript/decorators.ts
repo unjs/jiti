@@ -5,7 +5,7 @@ function decorator (...args: any) {
 @decorator
 export default class DecoratedClass {
   @decorator
-  decoratedProperty = null
+    decoratedProperty = null
 
   @decorator
   get decoratedAccessor () {

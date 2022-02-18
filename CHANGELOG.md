@@ -2,6 +2,60 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.15](https://github.com/unjs/jiti/compare/v1.12.14...v1.12.15) (2022-01-28)
+
+
+### Bug Fixes
+
+* force transpile `config` package ([2ddcb8a](https://github.com/unjs/jiti/commit/2ddcb8a7be24d051cc0edf8d00ac3568858b54b2)), closes [#56](https://github.com/unjs/jiti/issues/56)
+
+### [1.12.14](https://github.com/unjs/jiti/compare/v1.12.13...v1.12.14) (2022-01-26)
+
+
+### Bug Fixes
+
+* move esm resolve behind a flag ([60e094c](https://github.com/unjs/jiti/commit/60e094c63ceadc3c63313f14b1d60bcd719faab6))
+
+### [1.12.13](https://github.com/unjs/jiti/compare/v1.12.12...v1.12.13) (2022-01-25)
+
+### [1.12.12](https://github.com/unjs/jiti/compare/v1.12.11...v1.12.12) (2022-01-25)
+
+
+### Bug Fixes
+
+* ensure resolve esm id exists ([2d44274](https://github.com/unjs/jiti/commit/2d4427488625acc42dfc517eacf14e70f1aaaf30))
+
+### [1.12.11](https://github.com/unjs/jiti/compare/v1.12.10...v1.12.11) (2022-01-25)
+
+
+### Bug Fixes
+
+* default _filename if null or falsy value passed ([1a24f2a](https://github.com/unjs/jiti/commit/1a24f2ac686f5ebc3802711a4dc83e52f7b3d963))
+* **pkg:** do not mangle dist build ([3b456e1](https://github.com/unjs/jiti/commit/3b456e1be6a672c29ee47ebed594da14d42cb73d))
+
+### [1.12.10](https://github.com/unjs/jiti/compare/v1.12.9...v1.12.10) (2022-01-25)
+
+
+### Bug Fixes
+
+* support resolving with import condition ([#52](https://github.com/unjs/jiti/issues/52)) ([1e1bb0c](https://github.com/unjs/jiti/commit/1e1bb0c99236841d8318d5c24de99d90ffd030be))
+
+### [1.12.9](https://github.com/unjs/jiti/compare/v1.12.8...v1.12.9) (2021-10-18)
+
+
+### Bug Fixes
+
+* inline `mlly.interopDefault` (resolves [#48](https://github.com/unjs/jiti/issues/48)) ([32e606f](https://github.com/unjs/jiti/commit/32e606fef722f06f428058ad34ed40d1081bd3e4))
+
+### [1.12.8](https://github.com/unjs/jiti/compare/v1.12.7...v1.12.8) (2021-10-18)
+
+
+### Bug Fixes
+
+* update mlly to latest ([cf178ce](https://github.com/unjs/jiti/commit/cf178ce40615a7bf1438f22bf396809c3d181d3c))
+
+### [1.12.7](https://github.com/unjs/jiti/compare/v1.12.6...v1.12.7) (2021-10-12)
+
 ### [1.12.6](https://github.com/unjs/jiti/compare/v1.12.5...v1.12.6) (2021-10-02)
 
 

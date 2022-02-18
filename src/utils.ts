@@ -21,13 +21,13 @@ export function isWritable (filename: string): boolean {
 }
 
 export function md5 (content: string, len = 8) {
-  return createHash('md5').update(content).digest('hex').substr(0, len)
-}
-
-export function detectESMSyntax (code: string) {
-  return code.match(/^\s*import .* from|\s*export .*/m)
+  return createHash('md5').update(content).digest('hex').slice(0, len)
 }
 
 export function detectLegacySyntax (code: string) {
   return code.match(/\?\.|\?\?/)
+}
+
+export function isObject (val: any) {
+  return val !== null && typeof val === 'object'
 }

@@ -3,19 +3,20 @@ import { Module, builtinModules } from 'module'
 import { dirname, join, basename, extname } from 'path'
 import { tmpdir } from 'os'
 import vm from 'vm'
-import { fileURLToPath } from 'url'
-import mkdirp from 'mkdirp'
+import { fileURLToPath, pathToFileURL } from 'url'
+import { sync as mkdirpSync } from 'mkdirp'
 import destr from 'destr'
 import createRequire from 'create-require'
-import semver from 'semver'
+import { lt } from 'semver'
 import { addHook } from 'pirates'
 import objectHash from 'object-hash'
-import { interopDefault } from 'mlly'
-import { isDir, isWritable, md5, detectESMSyntax, detectLegacySyntax } from './utils'
+import { hasESMSyntax, interopDefault, resolvePathSync } from 'mlly'
+import { isDir, isWritable, md5, detectLegacySyntax } from './utils'
 import { TransformOptions, JITIOptions } from './types'
 
 const _EnvDebug = destr(process.env.JITI_DEBUG)
 const _EnvCache = destr(process.env.JITI_CACHE)
+const _EnvESMReolve = destr(process.env.JITI_ESM_RESOLVE)
 const _EnvRequireCache = destr(process.env.JITI_REQUIRE_CACHE)
 const _EnvPlainTSSourceMaps = destr(process.env.JITI_PLAIN_TS_SOURCE_MAPS)
 
@@ -25,8 +26,9 @@ const defaults: JITIOptions = {
   requireCache: _EnvRequireCache !== undefined ? !!_EnvRequireCache : true,
   plainTSSourceMaps: _EnvPlainTSSourceMaps !== undefined ? !!_EnvPlainTSSourceMaps : false,
   interopDefault: false,
+  esmResolve: _EnvESMReolve || false,
   cacheVersion: '6',
-  legacy: semver.lt(process.version || '0.0.0', '14.0.0'),
+  legacy: lt(process.version || '0.0.0', '14.0.0'),
   extensions: ['.js', '.mjs', '.cjs', '.ts']
 }
 
@@ -36,7 +38,7 @@ export interface JITI extends Require {
   register: () => (() => void)
 }
 
-export default function createJITI (_filename: string = process.cwd(), opts: JITIOptions = {}, parentModule?: typeof module): JITI {
+export default function createJITI (_filename: string, opts: JITIOptions = {}, parentModule?: typeof module): JITI {
   opts = { ...defaults, ...opts }
 
   // Cache dependencies
@@ -55,6 +57,9 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
   }
 
   // If filename is dir, createRequire goes with parent directory, so we need fakepath
+  if (!_filename) {
+    _filename = process.cwd()
+  }
   if (isDir(_filename)) {
     _filename = join(_filename, 'index.js')
   }
@@ -64,7 +69,7 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
   }
   if (opts.cache) {
     try {
-      mkdirp.sync(opts.cache as string)
+      mkdirpSync(opts.cache as string)
       if (!isWritable(opts.cache)) {
         throw new Error('directory is not writable')
       }
@@ -80,12 +85,30 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     try { return nativeRequire.resolve(id, options) } catch (e) {}
   }
 
+  const _url = pathToFileURL(_filename)
   const _additionalExts = [...opts.extensions!].filter(ext => ext !== '.js')
   const _resolve = (id: string, options?: { paths?: string[] }) => {
+    let resolved, err
+
+    // Try ESM resolve
+    if (opts.esmResolve) {
+      try {
+        resolved = resolvePathSync(id, {
+          url: _url,
+          conditions: ['node', 'require', 'import']
+        })
+      } catch (_err) {
+        err = _err
+      }
+      if (resolved) {
+        return resolved
+      }
+    }
+
+    // Try native require resolve
     if (opts.extensions!.includes(extname(id))) {
       return nativeRequire.resolve(id, options)
     }
-    let resolved, err
     try {
       return nativeRequire.resolve(id, options)
     } catch (_err) {
@@ -195,8 +218,10 @@ export default function createJITI (_filename: string = process.cwd(), opts: JIT
     const needsTranspile = !isCommonJS && (
       isTypescript ||
       isNativeModule ||
-      detectESMSyntax(source) ||
-      (opts.legacy && detectLegacySyntax(source))
+      hasESMSyntax(source) ||
+      (opts.legacy && detectLegacySyntax(source)) ||
+      // https://github.com/unjs/jiti/issues/56
+      filename.includes('node_modules/config/')
     )
 
     if (needsTranspile) {
