@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { Module, builtinModules } from 'module'
 import { dirname, join, basename, extname } from 'path'
-import { tmpdir } from 'os'
+import { tmpdir, platform } from 'os'
 import vm from 'vm'
 import { fileURLToPath, pathToFileURL } from 'url'
 import { sync as mkdirpSync } from 'mkdirp'
@@ -18,6 +18,8 @@ const _EnvDebug = destr(process.env.JITI_DEBUG)
 const _EnvCache = destr(process.env.JITI_CACHE)
 const _EnvESMReolve = destr(process.env.JITI_ESM_RESOLVE)
 const _EnvRequireCache = destr(process.env.JITI_REQUIRE_CACHE)
+
+const isWindows = platform() === 'win32'
 
 const defaults: JITIOptions = {
   debug: _EnvDebug,
@@ -77,7 +79,9 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
     }
   }
 
-  const nativeRequire = createRequire(_filename)
+  const nativeRequire = createRequire(isWindows
+    ? _filename.replace(/\//g, '\\') // Import maps does not work with normalized paths!
+    : _filename)
 
   const tryResolve = (id: string, options?: { paths?: string[] }) => {
     try { return nativeRequire.resolve(id, options) } catch (e) {}
