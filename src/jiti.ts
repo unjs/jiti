@@ -18,6 +18,7 @@ const _EnvDebug = destr(process.env.JITI_DEBUG)
 const _EnvCache = destr(process.env.JITI_CACHE)
 const _EnvESMReolve = destr(process.env.JITI_ESM_RESOLVE)
 const _EnvRequireCache = destr(process.env.JITI_REQUIRE_CACHE)
+const _EnvSourceMaps = destr(process.env.JITI_SOURCE_MAPS)
 
 const isWindows = platform() === 'win32'
 
@@ -25,6 +26,7 @@ const defaults: JITIOptions = {
   debug: _EnvDebug,
   cache: _EnvCache !== undefined ? !!_EnvCache : true,
   requireCache: _EnvRequireCache !== undefined ? !!_EnvRequireCache : true,
+  sourceMaps: _EnvSourceMaps !== undefined ? !!_EnvSourceMaps : false,
   interopDefault: false,
   esmResolve: _EnvESMReolve || false,
   cacheVersion: '6',
@@ -162,6 +164,15 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
       const res = opts.transform!({
         legacy: opts.legacy,
         ...opts.transformOptions,
+        babel: {
+          ...(opts.sourceMaps
+            ? {
+                sourceFileName: topts.filename,
+                sourceMaps: 'inline'
+              }
+            : {}),
+          ...opts.transformOptions?.babel
+        },
         ...topts
       })
       if (res.error && opts.debug) {
