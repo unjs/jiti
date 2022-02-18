@@ -160,9 +160,15 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
       const res = opts.transform!({
         legacy: opts.legacy,
         ...opts.transformOptions,
-        ...(opts.sourceMaps
-          ? { babel: { ...opts.transformOptions?.babel, sourceFileName: topts.filename, sourceMaps: 'both' } }
-          : {}),
+        babel: {
+          ...(opts.sourceMaps
+            ? {
+                sourceFileName: topts.filename,
+                sourceMaps: 'inline'
+              }
+            : {}),
+          ...opts.transformOptions?.babel
+        },
         ...topts
       })
       if (res.error && opts.debug) {
