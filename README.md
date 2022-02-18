@@ -87,6 +87,14 @@ Using esm resolution algorithm to support `import` condition.
 
 Transform function. See [src/babel](./src/babel.ts) for more details
 
+### `sourceMaps`
+
+- Type: Boolean
+- Default `false`
+- Environment Vriable: `JITI_SOURCE_MAPS`
+
+Add inline source map to transformed source for better debugging.
+
 ## Development
 
 - Clone Repo
