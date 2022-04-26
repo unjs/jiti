@@ -66,7 +66,7 @@ Enable debug to see which files are transpiled
 
 - Type: Boolean | String
 - Default: `true`
-- Environment Vriable: `JITI_CACHE`
+- Environment Variable: `JITI_CACHE`
 
 Use transpile cache
 
@@ -76,7 +76,7 @@ If set to `true` will use `node_modules/.cache/jiti` (if exists) or `{TMP_DIR}/n
 
 - Type: Boolean | String
 - Default: `false`
-- Environment Vriable: `JITI_ESM_RESOLVE`
+- Environment Variable: `JITI_ESM_RESOLVE`
 
 Using esm resolution algorithm to support `import` condition.
 
@@ -91,7 +91,7 @@ Transform function. See [src/babel](./src/babel.ts) for more details
 
 - Type: Boolean
 - Default `false`
-- Environment Vriable: `JITI_SOURCE_MAPS`
+- Environment Variable: `JITI_SOURCE_MAPS`
 
 Add inline source map to transformed source for better debugging.
 
