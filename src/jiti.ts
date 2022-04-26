@@ -16,7 +16,7 @@ import { TransformOptions, JITIOptions } from './types'
 
 const _EnvDebug = destr(process.env.JITI_DEBUG)
 const _EnvCache = destr(process.env.JITI_CACHE)
-const _EnvESMReolve = destr(process.env.JITI_ESM_RESOLVE)
+const _EnvESMResolve = destr(process.env.JITI_ESM_RESOLVE)
 const _EnvRequireCache = destr(process.env.JITI_REQUIRE_CACHE)
 const _EnvSourceMaps = destr(process.env.JITI_SOURCE_MAPS)
 
@@ -28,7 +28,7 @@ const defaults: JITIOptions = {
   requireCache: _EnvRequireCache !== undefined ? !!_EnvRequireCache : true,
   sourceMaps: _EnvSourceMaps !== undefined ? !!_EnvSourceMaps : false,
   interopDefault: false,
-  esmResolve: _EnvESMReolve || false,
+  esmResolve: _EnvESMResolve || false,
   cacheVersion: '6',
   legacy: lt(process.version || '0.0.0', '14.0.0'),
   extensions: ['.js', '.mjs', '.cjs', '.ts']

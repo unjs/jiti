@@ -1,2 +1,5 @@
 dist
 test/fixtures/error-*
+renovate.json
+package.json
+tsconfig.json
