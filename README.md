@@ -95,6 +95,13 @@ Transform function. See [src/babel](./src/babel.ts) for more details
 
 Add inline source map to transformed source for better debugging.
 
+### `interopDefault`
+
+- Type: Boolean
+- Default: `false`
+
+Return the default export of a module at the top-level
+
 ## Development
 
 - Clone Repo
