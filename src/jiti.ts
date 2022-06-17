@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { Module, builtinModules } from 'module'
-import { dirname, join, basename, extname, isAbsolute } from 'path'
+import { dirname, join, basename, extname } from 'path'
 import { tmpdir, platform } from 'os'
 import vm from 'vm'
 import { fileURLToPath, pathToFileURL } from 'url'
