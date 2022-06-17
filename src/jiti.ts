@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { Module, builtinModules } from 'module'
-import { dirname, join, basename, extname } from 'path'
+import { dirname, join, basename, extname, isAbsolute } from 'path'
 import { tmpdir, platform } from 'os'
 import vm from 'vm'
 import { fileURLToPath, pathToFileURL } from 'url'
@@ -223,7 +223,20 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
 
     // Transpile
     const isTypescript = ext === '.ts'
-    const isNativeModule = ext === '.mjs'
+    let isNativeModule = ext === '.mjs'
+    let path = filename
+    if (ext === '.js') {
+      while (!isNativeModule && path && path !== '.' && path !== '/') {
+        path = join(path, '..')
+        try {
+          const pkg = readFileSync(join(path, 'package.json'), 'utf-8')
+          try {
+            isNativeModule = JSON.parse(pkg).type === 'module'
+          } catch {}
+          break
+        } catch {}
+      }
+    }
     const isCommonJS = ext === '.cjs'
     const needsTranspile = !isCommonJS && (
       isTypescript ||
