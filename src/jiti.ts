@@ -334,7 +334,7 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
   function register () {
     return addHook(
       (source: string, filename: string) =>
-        jiti.transform({ source, filename, ts: !!filename.match(/.ts$/) })
+        jiti.transform({ source, filename, ts: !!filename.match(/\.[cm]?ts$/) })
       ,
       { exts: opts.extensions }
     )
