@@ -236,7 +236,7 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
     )
 
     if (needsTranspile) {
-      debug(`[transpile${isNativeModule ? ' native' : ''}]`, filename)
+      debug(`[transpile${isNativeModule ? ' esm' : ''}]`, filename)
       source = transform({ filename, source, ts: isTypescript })
     } else {
       try {
