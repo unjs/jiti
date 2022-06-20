@@ -4,7 +4,8 @@ import type { NodePath, PluginObj } from '@babel/core'
 import type { Statement, MemberExpression } from '@babel/types'
 
 // Based on https://github.com/javiertury/babel-plugin-transform-import-meta/blob/master/src/index.ts v2.1.1 (MIT License)
-export function TransformImportMetaPlugin (opts: { filename?: string }) {
+// Modification: Inlines resolved filename into the code when possible instead of injecting a require
+export function TransformImportMetaPlugin (_ctx: any, opts: { filename?: string }) {
   return <PluginObj> {
     name: 'transform-import-meta',
     visitor: {
