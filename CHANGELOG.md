@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.14.0](https://github.com/unjs/jiti/compare/v1.13.0...v1.14.0) (2022-06-20)
+
+
+### Features
+
+* detect native esm using `type: module` ([#67](https://github.com/unjs/jiti/issues/67)) ([986f146](https://github.com/unjs/jiti/commit/986f146eed92ef1f7e469b35be012223ffcd62a3))
+
+
+### Bug Fixes
+
+* use inlined import meta plugin to inject url ([#68](https://github.com/unjs/jiti/issues/68)) ([b52bb17](https://github.com/unjs/jiti/commit/b52bb173be67bda83c3723ef46ebce64559e2797))
+
 ## [1.13.0](https://github.com/unjs/jiti/compare/v1.12.15...v1.13.0) (2022-02-18)
 
 
