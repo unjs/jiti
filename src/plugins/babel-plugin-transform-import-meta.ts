@@ -4,15 +4,15 @@ import type { NodePath, PluginObj } from '@babel/core'
 import type { Statement, MemberExpression } from '@babel/types'
 
 // Based on https://github.com/javiertury/babel-plugin-transform-import-meta/blob/master/src/index.ts v2.1.1 (MIT License)
-export function TransformImportMetaPlugin(opts: { filename?: string }): PluginObj {
-  return {
+export function TransformImportMetaPlugin (opts: { filename?: string }) {
+  return <PluginObj> {
     name: 'transform-import-meta',
     visitor: {
-      Program(path) {
+      Program (path) {
         const metas: Array<NodePath<MemberExpression>> = []
 
         path.traverse({
-          MemberExpression(memberExpPath) {
+          MemberExpression (memberExpPath) {
             const { node } = memberExpPath
 
             if (
