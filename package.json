@@ -41,7 +41,6 @@
     "acorn": "latest",
     "babel-plugin-dynamic-import-node": "latest",
     "babel-plugin-parameter-decorator": "latest",
-    "babel-plugin-transform-import-meta": "latest",
     "create-require": "latest",
     "cross-env": "latest",
     "destr": "latest",
