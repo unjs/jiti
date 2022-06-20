@@ -1,5 +1,6 @@
 import { transformSync, TransformOptions as BabelTransformOptions } from '@babel/core'
 import { TransformOptions, TRANSFORM_RESULT } from './types'
+import { TransformImportMetaPlugin } from './plugins/babel-plugin-transform-import-meta'
 
 export default function transform (opts: TransformOptions): TRANSFORM_RESULT {
   const _opts: BabelTransformOptions = {
@@ -13,7 +14,7 @@ export default function transform (opts: TransformOptions): TRANSFORM_RESULT {
     plugins: [
       [require('@babel/plugin-transform-modules-commonjs'), { allowTopLevelThis: true }],
       [require('babel-plugin-dynamic-import-node'), { noInterop: true }],
-      [require('babel-plugin-transform-import-meta')],
+      [TransformImportMetaPlugin, { filename: opts.filename }],
       [require('@babel/plugin-syntax-class-properties')]
     ]
   }
