@@ -34,6 +34,7 @@ specifiers:
   object-hash: latest
   pathe: latest
   pirates: latest
+  pkg-types: latest
   semver: latest
   standard-version: latest
   terser-webpack-plugin: latest
@@ -78,6 +79,7 @@ devDependencies:
   object-hash: 3.0.0
   pathe: 0.3.0
   pirates: 4.0.5
+  pkg-types: 0.3.3
   semver: 7.3.7
   standard-version: 9.5.0
   terser-webpack-plugin: 5.3.3_webpack@5.73.0
@@ -1306,7 +1308,7 @@ packages:
     dev: true
 
   /concat-map/0.0.1:
-    resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
+    resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
     dev: true
 
   /concat-stream/2.0.0:
