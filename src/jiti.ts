@@ -11,7 +11,7 @@ import { lt } from 'semver'
 import { addHook } from 'pirates'
 import objectHash from 'object-hash'
 import { hasESMSyntax, interopDefault, resolvePathSync } from 'mlly'
-import { isDir, isWritable, md5, detectLegacySyntax } from './utils'
+import { isDir, isWritable, md5, detectLegacySyntax, readNearestPackageJSON } from './utils'
 import { TransformOptions, JITIOptions } from './types'
 
 const _EnvDebug = destr(process.env.JITI_DEBUG)
@@ -223,20 +223,8 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
 
     // Transpile
     const isTypescript = ext === '.ts'
-    let isNativeModule = ext === '.mjs'
-    let path = filename
-    if (ext === '.js') {
-      while (!isNativeModule && path && path !== '.' && path !== '/') {
-        path = join(path, '..')
-        try {
-          const pkg = readFileSync(join(path, 'package.json'), 'utf-8')
-          try {
-            isNativeModule = JSON.parse(pkg).type === 'module'
-          } catch {}
-          break
-        } catch {}
-      }
-    }
+    const isNativeModule = ext === '.mjs' ||
+      (ext === '.js' && readNearestPackageJSON(filename)?.type === 'module')
     const isCommonJS = ext === '.cjs'
     const needsTranspile = !isCommonJS && (
       isTypescript ||
@@ -248,7 +236,7 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
     )
 
     if (needsTranspile) {
-      debug('[transpile]', filename)
+      debug(`[transpile${isNativeModule ? ' native' : ''}]`, filename)
       source = transform({ filename, source, ts: isTypescript })
     } else {
       try {

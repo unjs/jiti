@@ -1,5 +1,7 @@
-import { lstatSync, accessSync, constants } from 'fs'
+import { lstatSync, accessSync, constants, readFileSync } from 'fs'
 import { createHash } from 'crypto'
+import { join } from 'path'
+import type { PackageJson } from 'pkg-types'
 
 export function isDir (filename: string): boolean {
   try {
@@ -30,4 +32,17 @@ export function detectLegacySyntax (code: string) {
 
 export function isObject (val: any) {
   return val !== null && typeof val === 'object'
+}
+
+export function readNearestPackageJSON (path: string): PackageJson | undefined {
+  while (path && path !== '.' && path !== '/') {
+    path = join(path, '..')
+    try {
+      const pkg = readFileSync(join(path, 'package.json'), 'utf-8')
+      try {
+        return JSON.parse(pkg)
+      } catch {}
+      break
+    } catch {}
+  }
 }

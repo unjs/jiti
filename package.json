@@ -55,6 +55,7 @@
     "object-hash": "latest",
     "pathe": "latest",
     "pirates": "latest",
+    "pkg-types": "latest",
     "semver": "latest",
     "standard-version": "latest",
     "terser-webpack-plugin": "latest",
