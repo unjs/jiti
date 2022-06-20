@@ -31,6 +31,8 @@
     "@babel/plugin-transform-modules-commonjs": "latest",
     "@babel/plugin-transform-typescript": "latest",
     "@babel/preset-typescript": "latest",
+    "@babel/template": "latest",
+    "@babel/types": "latest",
     "@nuxtjs/eslint-config-typescript": "latest",
     "@types/babel__core": "latest",
     "@types/mkdirp": "latest",

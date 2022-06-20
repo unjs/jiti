@@ -9,6 +9,8 @@ specifiers:
   '@babel/plugin-transform-modules-commonjs': latest
   '@babel/plugin-transform-typescript': latest
   '@babel/preset-typescript': latest
+  '@babel/template': latest
+  '@babel/types': latest
   '@nuxtjs/eslint-config-typescript': latest
   '@types/babel__core': latest
   '@types/mkdirp': latest
@@ -51,6 +53,8 @@ devDependencies:
   '@babel/plugin-transform-modules-commonjs': 7.18.2_@babel+core@7.18.5
   '@babel/plugin-transform-typescript': 7.18.4_@babel+core@7.18.5
   '@babel/preset-typescript': 7.17.12_@babel+core@7.18.5
+  '@babel/template': 7.16.7
+  '@babel/types': 7.18.4
   '@nuxtjs/eslint-config-typescript': 10.0.0_b5e7v2qnwxfo6hmiq56u52mz3e
   '@types/babel__core': 7.1.19
   '@types/mkdirp': 1.0.2
@@ -1302,7 +1306,7 @@ packages:
     dev: true
 
   /concat-map/0.0.1:
-    resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
+    resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
     dev: true
 
   /concat-stream/2.0.0:
