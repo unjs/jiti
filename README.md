@@ -100,7 +100,7 @@ Add inline source map to transformed source for better debugging.
 - Type: Boolean
 - Default: `false`
 
-Return the default export of a module at the top-level
+Return the `.default` export of a module at the top-level.
 
 ## Development
 
