@@ -13,6 +13,7 @@ specifiers:
   '@babel/types': latest
   '@nuxtjs/eslint-config-typescript': latest
   '@types/babel__core': latest
+  '@types/babel__template': latest
   '@types/mkdirp': latest
   '@types/node': latest
   '@types/object-hash': latest
@@ -58,6 +59,7 @@ devDependencies:
   '@babel/types': 7.18.4
   '@nuxtjs/eslint-config-typescript': 10.0.0_b5e7v2qnwxfo6hmiq56u52mz3e
   '@types/babel__core': 7.1.19
+  '@types/babel__template': 7.4.1
   '@types/mkdirp': 1.0.2
   '@types/node': 18.0.0
   '@types/object-hash': 2.2.1
@@ -1308,7 +1310,7 @@ packages:
     dev: true
 
   /concat-map/0.0.1:
-    resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
+    resolution: {integrity: sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=}
     dev: true
 
   /concat-stream/2.0.0:

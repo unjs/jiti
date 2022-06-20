@@ -35,6 +35,7 @@
     "@babel/types": "latest",
     "@nuxtjs/eslint-config-typescript": "latest",
     "@types/babel__core": "latest",
+    "@types/babel__template": "latest",
     "@types/mkdirp": "latest",
     "@types/node": "latest",
     "@types/object-hash": "latest",
