@@ -1,7 +1,7 @@
 
 export type TransformOptions = {
-  source: string,
-  filename?: string,
+  source: string
+  filename?: string
   ts?: boolean
   retainLines?: boolean
   legacy?: boolean
@@ -9,19 +9,19 @@ export type TransformOptions = {
 }
 
 export type TRANSFORM_RESULT = {
-  code: string,
+  code: string
   error?: any
 }
 
 export type JITIOptions = {
-  transform?: (opts: TransformOptions) => TRANSFORM_RESULT,
-  debug?: boolean,
+  transform?: (opts: TransformOptions) => TRANSFORM_RESULT
+  debug?: boolean
   cache?: boolean | string
   sourceMaps?: boolean
   requireCache?: boolean
   v8cache?: boolean
   interopDefault?: boolean
-  esmResolve?: boolean,
+  esmResolve?: boolean
   cacheVersion?: string
   onError?: (error: Error) => void
   legacy?: boolean
