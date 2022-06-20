@@ -29,7 +29,7 @@ const defaults: JITIOptions = {
   sourceMaps: _EnvSourceMaps !== undefined ? !!_EnvSourceMaps : false,
   interopDefault: false,
   esmResolve: _EnvESMResolve || false,
-  cacheVersion: '6',
+  cacheVersion: '7',
   legacy: lt(process.version || '0.0.0', '14.0.0'),
   extensions: ['.js', '.mjs', '.cjs', '.ts']
 }
