@@ -13,13 +13,13 @@
     "register.js"
   ],
   "scripts": {
-    "build": "yarn clean && cross-env NODE_ENV=production yarn webpack",
+    "build": "pnpm clean && cross-env NODE_ENV=production pnpm webpack",
     "clean": "rm -rf dist",
-    "dev": "yarn clean && yarn webpack --watch",
+    "dev": "pnpm clean && pnpm webpack --watch",
     "jiti": "cross-env JITI_DEBUG=1 JITI_CACHE=false ./bin/jiti.js",
     "jiti:legacy": "cross-env JITI_DEBUG=1 npx node@12 ./bin/jiti.js",
     "lint": "eslint --ext .ts,.js .",
-    "release": "yarn test && yarn build && yarn standard-version && git push --follow-tags && npm publish",
+    "release": "pnpm test && pnpm build && pnpm standard-version && git push --follow-tags && pnpm publish",
     "test": "vitest"
   },
   "devDependencies": {
@@ -64,5 +64,6 @@
     "vitest": "latest",
     "webpack": "latest",
     "webpack-cli": "latest"
-  }
+  },
+  "packageManager": "pnpm@7.3.0"
 }
