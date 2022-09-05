@@ -237,7 +237,7 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
     !filename.includes('node_modules/typescript/')
 
     if (needsTranspile) {
-      debug(`[transpile${isNativeModule ? ' esm module' : ''}]`, filename)
+      debug(`[transpile]${isNativeModule ? ' [esm]' : ''}`, filename)
       source = transform({ filename, source, ts: isTypescript })
     } else {
       try {
