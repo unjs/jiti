@@ -233,7 +233,8 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
       (opts.legacy && detectLegacySyntax(source)) ||
       // https://github.com/unjs/jiti/issues/56
       filename.includes('node_modules/config/')
-    )
+    ) &&
+    !filename.includes('node_modules/typescript/')
 
     if (needsTranspile) {
       debug(`[transpile${isNativeModule ? ' esm module' : ''}]`, filename)
