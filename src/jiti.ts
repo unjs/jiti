@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'fs'
 import { Module, builtinModules } from 'module'
 import { dirname, join, basename, extname } from 'path'
+import { performance } from 'perf_hooks'
 import { tmpdir, platform } from 'os'
 import vm from 'vm'
 import { fileURLToPath, pathToFileURL } from 'url'
@@ -236,9 +237,11 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
     ) &&
     !filename.includes('node_modules/typescript/')
 
+    const start = performance.now()
     if (needsTranspile) {
-      debug(`[transpile]${isNativeModule ? ' [esm]' : ''}`, filename)
       source = transform({ filename, source, ts: isTypescript })
+      const time = Math.round((performance.now() - start) * 1000) / 1000
+      debug(`[transpile]${isNativeModule ? ' [esm]' : ''}`, filename, `(${time}ms)`)
     } else {
       try {
         debug('[native]', filename)
