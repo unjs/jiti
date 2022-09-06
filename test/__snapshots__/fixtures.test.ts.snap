@@ -64,6 +64,8 @@ exports[`fixtures > esm > stdout 1`] = `
 }"
 `;
 
+exports[`fixtures > exotic > stdout 1`] = `"Typescript: true"`;
+
 exports[`fixtures > hashbang > stdout 1`] = `"1"`;
 
 exports[`fixtures > import-map > stdout 1`] = `"{ alias: 'alias' }"`;
