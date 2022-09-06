@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.15.0](https://github.com/unjs/jiti/compare/v1.14.0...v1.15.0) (2022-09-06)
+
+
+### Features
+
+* basic alias support (resolves [#37](https://github.com/unjs/jiti/issues/37)) ([cab50cc](https://github.com/unjs/jiti/commit/cab50cc0ebba4934c010857241d7cc72e151fd86))
+* options for `nativeModules` and `transformModules` ([64151af](https://github.com/unjs/jiti/commit/64151afdda6543173615574ba8c44c893fb411e5))
+
+
+### Bug Fixes
+
+* manually exclude `typescript` from transpilation ([dbd3f22](https://github.com/unjs/jiti/commit/dbd3f220feabe148d64088fd2d0106672bca96f2))
+* use pathe for path resolution ([000c6ad](https://github.com/unjs/jiti/commit/000c6ade6b8071d4144a702ea026b56800ef6b08)), closes [#74](https://github.com/unjs/jiti/issues/74)
+
 ## [1.14.0](https://github.com/unjs/jiti/compare/v1.13.0...v1.14.0) (2022-06-20)
 
 
