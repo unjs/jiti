@@ -9,6 +9,7 @@ import { sync as mkdirpSync } from 'mkdirp'
 import destr from 'destr'
 import createRequire from 'create-require'
 import { lt } from 'semver'
+import { normalizeAliases, resolveAlias } from 'pathe/utils'
 import { addHook } from 'pirates'
 import objectHash from 'object-hash'
 import { hasESMSyntax, interopDefault, resolvePathSync } from 'mlly'
@@ -20,6 +21,7 @@ const _EnvCache = destr(process.env.JITI_CACHE)
 const _EnvESMResolve = destr(process.env.JITI_ESM_RESOLVE)
 const _EnvRequireCache = destr(process.env.JITI_REQUIRE_CACHE)
 const _EnvSourceMaps = destr(process.env.JITI_SOURCE_MAPS)
+const _EnvAlias = destr(process.env.JITI_ALIAS)
 
 const isWindows = platform() === 'win32'
 
@@ -32,7 +34,8 @@ const defaults: JITIOptions = {
   esmResolve: _EnvESMResolve || false,
   cacheVersion: '7',
   legacy: lt(process.version || '0.0.0', '14.0.0'),
-  extensions: ['.js', '.mjs', '.cjs', '.ts']
+  extensions: ['.js', '.mjs', '.cjs', '.ts'],
+  alias: _EnvAlias
 }
 
 type Require = typeof require
@@ -51,6 +54,11 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
   if (opts.transformOptions) {
     opts.cacheVersion += '-' + objectHash(opts.transformOptions)
   }
+
+  // Normalize aliases (and disable if non given)
+  const alias = opts.alias && Object.keys(opts.alias).length
+    ? normalizeAliases(opts.alias || {})
+    : null
 
   function debug (...args: string[]) {
     if (opts.debug) {
@@ -94,6 +102,11 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
   const _additionalExts = [...opts.extensions!].filter(ext => ext !== '.js')
   const _resolve = (id: string, options?: { paths?: string[] }) => {
     let resolved, err
+
+    // Resolve alias
+    if (alias) {
+      id = resolveAlias(id, alias)
+    }
 
     // Try ESM resolve
     if (opts.esmResolve) {

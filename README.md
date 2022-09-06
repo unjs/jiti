@@ -16,6 +16,7 @@
 - CommonJS cache integration
 - Filesystem transpile hard cache
 - V8 compile cache
+- Custom resolve alias
 
 ## Usage
 
@@ -101,6 +102,14 @@ Add inline source map to transformed source for better debugging.
 - Default: `false`
 
 Return the `.default` export of a module at the top-level.
+
+### `alias`
+
+- Type: Object
+- Default: -
+- Environment Variable: `JITI_ALIAS`
+
+Custom alias map used to resolve ids.
 
 ## Development
 

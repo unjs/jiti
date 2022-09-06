@@ -27,4 +27,5 @@ export type JITIOptions = {
   legacy?: boolean
   extensions?: string[]
   transformOptions?: Omit<TransformOptions, 'source'>
+  alias?: Record<string, string>
 }

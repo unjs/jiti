@@ -33,7 +33,7 @@ specifiers:
   mkdirp: ^1.0.4
   mlly: ^0.5.14
   object-hash: ^3.0.0
-  pathe: ^0.3.6
+  pathe: ^0.3.7
   pirates: ^4.0.5
   pkg-types: ^0.3.4
   semver: ^7.3.7
@@ -79,7 +79,7 @@ devDependencies:
   mkdirp: 1.0.4
   mlly: 0.5.14
   object-hash: 3.0.0
-  pathe: 0.3.6
+  pathe: 0.3.7
   pirates: 4.0.5
   pkg-types: 0.3.4
   semver: 7.3.7
@@ -3223,7 +3223,7 @@ packages:
     resolution: {integrity: sha512-DgRgNUSX9NIxxCxygX4Xeg9C7GX7OUx1wuQ8cXx9o9LE0e9wrH+OZ9fcnrlEedsC/rtqry3ZhUddC759XD/L0w==}
     dependencies:
       acorn: 8.8.0
-      pathe: 0.3.6
+      pathe: 0.3.7
       pkg-types: 0.3.4
       ufo: 0.8.5
     dev: true
@@ -3487,8 +3487,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /pathe/0.3.6:
-    resolution: {integrity: sha512-oGkbljpfqFPhK8gFOXEYHfJQ2ZR0c7vgXEE65ySpXFlFUHubCNYnz5VCAAfnf0ns+2LAhNTrfcqqzzowWEuePg==}
+  /pathe/0.3.7:
+    resolution: {integrity: sha512-yz7GK+kSsS27x727jtXpd5VT4dDfP/JDIQmaowfxyWCnFjOWtE1VIh7i6TzcSfzW0n4+bRQztj1VdKnITNq/MA==}
     dev: true
 
   /pathval/1.1.1:
@@ -3531,7 +3531,7 @@ packages:
     dependencies:
       jsonc-parser: 3.2.0
       mlly: 0.5.14
-      pathe: 0.3.6
+      pathe: 0.3.7
     dev: true
 
   /pluralize/8.0.0:
