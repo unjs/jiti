@@ -1,4 +1,4 @@
-import test from './test'
+import test, { FeedService } from './test'
 export type { Test } from './types'
 
-console.log(test())
+console.log(test(), FeedService)

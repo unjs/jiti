@@ -27,7 +27,7 @@ exports[`fixtures > error-runtime > stderr 1`] = `
   throw err /* ↓ Check stack trace ↓ */
   ^
 
-TypeError [ERR_INVALID_ARG_TYPE]: The \\"listener\\" argument must be of type function. Received undefined
+TypeError: The \\"listener\\" argument must be of type function. Received undefined
     at checkListener (events)
     at _addListener (events)
     at process.addListener (events)
@@ -70,8 +70,6 @@ exports[`fixtures > hashbang > stdout 1`] = `"1"`;
 
 exports[`fixtures > import-map > stdout 1`] = `"{ alias: 'alias' }"`;
 
-exports[`fixtures > legacy > stdout 1`] = `"Should be undefined: undefined"`;
-
 exports[`fixtures > mixed > stdout 1`] = `"Mixed works for: <cwd>"`;
 
 exports[`fixtures > native > stdout 1`] = `"[Module: null prototype] { default: { hasRequire: false } }"`;
@@ -86,10 +84,17 @@ Enter Identifier
 Enter Literal"
 `;
 
+exports[`fixtures > syntax > stdout 1`] = `
+"Optional chaining: undefined
+Nullish coalescing: 0
+Logical or assignment: 50 title is empty.
+Logical nullish assignment: 50 20"
+`;
+
 exports[`fixtures > typescript > stdout 1`] = `
 "{
   file: '<cwd>/test.ts',
   dir: '<cwd>',
   resolve: '<cwd>/test.ts'
-}"
+} undefined"
 `;
