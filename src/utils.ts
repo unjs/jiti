@@ -1,6 +1,6 @@
 import { lstatSync, accessSync, constants, readFileSync } from 'fs'
 import { createHash } from 'crypto'
-import { join } from 'path'
+import { join } from 'pathe'
 import type { PackageJson } from 'pkg-types'
 
 export function isDir (filename: string): boolean {
