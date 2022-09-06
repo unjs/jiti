@@ -64,45 +64,7 @@ exports[`fixtures > esm > stdout 1`] = `
 }"
 `;
 
-exports[`fixtures > exotic > stdout 1`] = `
-"Typescript: [
-  'ShimCollections',      'versionMajorMinor',  'version',
-  'Comparison',           'Map',                'Set',
-  'getIterator',          'emptyArray',         'emptyMap',
-  'emptySet',             'length',             'forEach',
-  'forEachRight',         'firstDefined',       'firstDefinedIterator',
-  'reduceLeftIterator',   'zipWith',            'zipToIterator',
-  'zipToMap',             'intersperse',        'every',
-  'find',                 'findLast',           'findIndex',
-  'findLastIndex',        'findMap',            'contains',
-  'arraysEqual',          'indexOfAnyCharCode', 'countWhere',
-  'filter',               'filterMutate',       'clear',
-  'map',                  'mapIterator',        'sameMap',
-  'flatten',              'flatMap',            'flatMapToMutable',
-  'flatMapIterator',      'sameFlatMap',        'mapAllOrFail',
-  'mapDefined',           'mapDefinedIterator', 'mapDefinedEntries',
-  'mapDefinedValues',     'getOrUpdate',        'tryAddToSet',
-  'emptyIterator',        'singleIterator',     'spanMap',
-  'mapEntries',           'some',               'getRangesWhere',
-  'concatenate',          'indicesOf',          'deduplicate',
-  'createSortedArray',    'insertSorted',       'sortAndDeduplicate',
-  'arrayIsSorted',        'arrayIsEqualTo',     'compact',
-  'relativeComplement',   'sum',                'append',
-  'combine',              'addRange',           'pushIfUnique',
-  'appendIfUnique',       'sort',               'arrayIterator',
-  'arrayReverseIterator', 'stableSort',         'rangeEquals',
-  'elementAt',            'firstOrUndefined',   'first',
-  'lastOrUndefined',      'last',               'singleOrUndefined',
-  'singleOrMany',         'replaceElement',     'binarySearch',
-  'binarySearchKey',      'reduceLeft',         'hasProperty',
-  'getProperty',          'getOwnKeys',         'getAllKeys',
-  'getOwnValues',         'getEntries',         'arrayOf',
-  'arrayFrom',            'assign',             'equalOwnProperties',
-  'arrayToMap',           'arrayToNumericMap',  'arrayToMultiMap',
-  'group',
-  ... 2368 more items
-]"
-`;
+exports[`fixtures > exotic > stdout 1`] = `"Typescript: true"`;
 
 exports[`fixtures > hashbang > stdout 1`] = `"1"`;
 
