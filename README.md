@@ -111,6 +111,22 @@ Return the `.default` export of a module at the top-level.
 
 Custom alias map used to resolve ids.
 
+### `nativeModules`
+
+- Type: Array
+- Default: ['typescript`]
+- Environment Variable: `JITI_NATIVE_MODULES`
+
+List of modules (within `node_modules`) to always use native require for them.
+
+### `transformModules`
+
+- Type: Array
+- Default: []
+- Environment Variable: `JITI_TRANSFORM_MODULES`
+
+List of modules (within `node_modules`) to transform them regardless of syntax.
+
 ## Development
 
 - Clone Repo

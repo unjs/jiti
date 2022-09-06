@@ -28,4 +28,6 @@ export type JITIOptions = {
   extensions?: string[]
   transformOptions?: Omit<TransformOptions, 'source'>
   alias?: Record<string, string>
+  nativeModules?: string[]
+  transformModules?: string[]
 }

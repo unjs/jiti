@@ -7,6 +7,7 @@ import { fileURLToPath, pathToFileURL } from 'url'
 import { dirname, join, basename, extname } from 'pathe'
 import { sync as mkdirpSync } from 'mkdirp'
 import destr from 'destr'
+import escapeStringRegexp from 'escape-string-regexp'
 import createRequire from 'create-require'
 import { lt } from 'semver'
 import { normalizeAliases, resolveAlias } from 'pathe/utils'
@@ -22,6 +23,8 @@ const _EnvESMResolve = destr(process.env.JITI_ESM_RESOLVE)
 const _EnvRequireCache = destr(process.env.JITI_REQUIRE_CACHE)
 const _EnvSourceMaps = destr(process.env.JITI_SOURCE_MAPS)
 const _EnvAlias = destr(process.env.JITI_ALIAS)
+const _EnvTransform = destr(process.env.JITI_TRANSFORM_MODULES)
+const _EnvNative = destr(process.env.JITI_NATIVE_MODULES)
 
 const isWindows = platform() === 'win32'
 
@@ -35,7 +38,9 @@ const defaults: JITIOptions = {
   cacheVersion: '7',
   legacy: lt(process.version || '0.0.0', '14.0.0'),
   extensions: ['.js', '.mjs', '.cjs', '.ts'],
-  alias: _EnvAlias
+  alias: _EnvAlias,
+  nativeModules: _EnvNative || [],
+  transformModules: _EnvTransform || []
 }
 
 type Require = typeof require
@@ -59,6 +64,12 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
   const alias = opts.alias && Object.keys(opts.alias).length
     ? normalizeAliases(opts.alias || {})
     : null
+
+  // List of modules to force transform or native
+  const nativeModules = ['typescript', 'jiti'].concat(opts.nativeModules || [])
+  const transformModules = ([] as string[]).concat(opts.transformModules || [])
+  const isNativeRe = new RegExp(`node_modules/(${nativeModules.map(m => escapeStringRegexp(m)).join('|')})/`)
+  const isTransformRe = new RegExp(`node_modules/(${transformModules.map(m => escapeStringRegexp(m)).join('|')})/`)
 
   function debug (...args: string[]) {
     if (opts.debug) {
@@ -227,6 +238,12 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
       return nativeRequire(id)
     }
 
+    // Force native modules
+    if (isNativeRe.test(filename)) {
+      debug('[native]', filename)
+      return nativeRequire(id)
+    }
+
     // Check for CJS cache
     if (opts.requireCache && nativeRequire.cache[filename]) {
       return _interopDefault(nativeRequire.cache[filename]?.exports)
@@ -243,12 +260,10 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
     const needsTranspile = !isCommonJS && (
       isTypescript ||
       isNativeModule ||
+      isTransformRe.test(filename) ||
       hasESMSyntax(source) ||
-      (opts.legacy && detectLegacySyntax(source)) ||
-      // https://github.com/unjs/jiti/issues/56
-      filename.includes('node_modules/config/')
-    ) &&
-    !filename.includes('node_modules/typescript/')
+      (opts.legacy && detectLegacySyntax(source))
+    )
 
     const start = performance.now()
     if (needsTranspile) {
