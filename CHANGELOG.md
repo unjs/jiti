@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.16.0](https://github.com/unjs/jiti/compare/v1.15.0...v1.16.0) (2022-09-19)
+
+
+### Features
+
+* support export namespace from syntax (resolves [#84](https://github.com/unjs/jiti/issues/84)) ([ebb59cf](https://github.com/unjs/jiti/commit/ebb59cf96c9d9809fc7e81f708028d0861fd329e))
+
+
+### Bug Fixes
+
+* **deps:** update pathe ([6231320](https://github.com/unjs/jiti/commit/623132069d90520af2227e9fd851e8d728281ef4))
+
 ## [1.15.0](https://github.com/unjs/jiti/compare/v1.14.0...v1.15.0) (2022-09-06)
 
 
