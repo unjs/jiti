@@ -15,7 +15,7 @@ specifiers:
   '@types/babel__core': ^7.1.19
   '@types/babel__template': ^7.4.1
   '@types/mkdirp': ^1.0.2
-  '@types/node': ^18.7.15
+  '@types/node': ^18.7.18
   '@types/object-hash': ^2.2.1
   '@types/resolve': ^1.20.2
   '@types/semver': ^7.3.12
@@ -35,13 +35,13 @@ specifiers:
   mkdirp: ^1.0.4
   mlly: ^0.5.14
   object-hash: ^3.0.0
-  pathe: ^0.3.7
+  pathe: ^0.3.8
   pirates: ^4.0.5
   pkg-types: ^0.3.5
   semver: ^7.3.7
   standard-version: ^9.5.0
   terser-webpack-plugin: ^5.3.6
-  ts-loader: ^9.3.1
+  ts-loader: ^9.4.0
   tslib: ^2.4.0
   typescript: ^4.8.3
   vitest: ^0.23.4
@@ -63,7 +63,7 @@ devDependencies:
   '@types/babel__core': 7.1.19
   '@types/babel__template': 7.4.1
   '@types/mkdirp': 1.0.2
-  '@types/node': 18.7.15
+  '@types/node': 18.7.18
   '@types/object-hash': 2.2.1
   '@types/resolve': 1.20.2
   '@types/semver': 7.3.12
@@ -83,13 +83,13 @@ devDependencies:
   mkdirp: 1.0.4
   mlly: 0.5.14
   object-hash: 3.0.0
-  pathe: 0.3.7
+  pathe: 0.3.8
   pirates: 4.0.5
   pkg-types: 0.3.5
   semver: 7.3.7
   standard-version: 9.5.0
   terser-webpack-plugin: 5.3.6_webpack@5.74.0
-  ts-loader: 9.3.1_kb3egcnme7w23lfa5xodfjfhge
+  ts-loader: 9.4.0_kb3egcnme7w23lfa5xodfjfhge
   tslib: 2.4.0
   typescript: 4.8.3
   vitest: 0.23.4
@@ -785,11 +785,11 @@ packages:
   /@types/mkdirp/1.0.2:
     resolution: {integrity: sha512-o0K1tSO0Dx5X6xlU5F1D6625FawhC3dU3iqr25lluNv/+/QIVH8RLNEiVokgIZo+mz+87w/3Mkg/VvQS+J51fQ==}
     dependencies:
-      '@types/node': 18.7.15
+      '@types/node': 18.7.18
     dev: true
 
-  /@types/node/18.7.15:
-    resolution: {integrity: sha512-XnjpaI8Bgc3eBag2Aw4t2Uj/49lLBSStHWfqKvIuXD7FIrZyMLWp8KuAFHAqxMZYTF9l08N1ctUn9YNybZJVmQ==}
+  /@types/node/18.7.18:
+    resolution: {integrity: sha512-m+6nTEOadJZuTPkKR/SYK3A2d7FZrgElol9UP1Kae90VVU4a6mxnPuLiIW1m4Cq4gZ/nWb9GrdVXJCoCazDAbg==}
     dev: true
 
   /@types/normalize-package-data/2.4.1:
@@ -3025,7 +3025,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 18.7.15
+      '@types/node': 18.7.18
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: true
@@ -3280,7 +3280,7 @@ packages:
     resolution: {integrity: sha512-DgRgNUSX9NIxxCxygX4Xeg9C7GX7OUx1wuQ8cXx9o9LE0e9wrH+OZ9fcnrlEedsC/rtqry3ZhUddC759XD/L0w==}
     dependencies:
       acorn: 8.8.0
-      pathe: 0.3.7
+      pathe: 0.3.8
       pkg-types: 0.3.5
       ufo: 0.8.5
     dev: true
@@ -3544,8 +3544,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /pathe/0.3.7:
-    resolution: {integrity: sha512-yz7GK+kSsS27x727jtXpd5VT4dDfP/JDIQmaowfxyWCnFjOWtE1VIh7i6TzcSfzW0n4+bRQztj1VdKnITNq/MA==}
+  /pathe/0.3.8:
+    resolution: {integrity: sha512-c71n61F1skhj/jzZe+fWE9XDoTYjWbUwIKVwFftZ5IOgiX44BVkTkD+/803YDgR50tqeO4eXWxLyVHBLWQAD1g==}
     dev: true
 
   /pathval/1.1.1:
@@ -3588,7 +3588,7 @@ packages:
     dependencies:
       jsonc-parser: 3.2.0
       mlly: 0.5.14
-      pathe: 0.3.7
+      pathe: 0.3.8
     dev: true
 
   /pluralize/8.0.0:
@@ -4169,8 +4169,8 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /ts-loader/9.3.1_kb3egcnme7w23lfa5xodfjfhge:
-    resolution: {integrity: sha512-OkyShkcZTsTwyS3Kt7a4rsT/t2qvEVQuKCTg4LJmpj9fhFR7ukGdZwV6Qq3tRUkqcXtfGpPR7+hFKHCG/0d3Lw==}
+  /ts-loader/9.4.0_kb3egcnme7w23lfa5xodfjfhge:
+    resolution: {integrity: sha512-0G3UMhk1bjgsgiwF4rnZRAeTi69j9XMDtmDDMghGSqlWESIAS3LFgJe//GYfE4vcjbyzuURLB9Us2RZIWp2clQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       typescript: '*'
@@ -4350,7 +4350,7 @@ packages:
     dependencies:
       '@types/chai': 4.3.3
       '@types/chai-subset': 1.3.3
-      '@types/node': 18.7.15
+      '@types/node': 18.7.18
       chai: 4.3.6
       debug: 4.3.4
       local-pkg: 0.4.2
