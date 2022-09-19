@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@babel/core': ^7.19.1
   '@babel/plugin-proposal-decorators': ^7.19.1
+  '@babel/plugin-proposal-export-namespace-from': ^7.18.9
   '@babel/plugin-proposal-nullish-coalescing-operator': ^7.18.6
   '@babel/plugin-proposal-optional-chaining': ^7.18.9
   '@babel/plugin-syntax-class-properties': ^7.12.13
@@ -52,6 +53,7 @@ specifiers:
 devDependencies:
   '@babel/core': 7.19.1
   '@babel/plugin-proposal-decorators': 7.19.1_@babel+core@7.19.1
+  '@babel/plugin-proposal-export-namespace-from': 7.18.9_@babel+core@7.19.1
   '@babel/plugin-proposal-nullish-coalescing-operator': 7.18.6_@babel+core@7.19.1
   '@babel/plugin-proposal-optional-chaining': 7.18.9_@babel+core@7.19.1
   '@babel/plugin-syntax-class-properties': 7.12.13_@babel+core@7.19.1
@@ -382,6 +384,17 @@ packages:
       - supports-color
     dev: true
 
+  /@babel/plugin-proposal-export-namespace-from/7.18.9_@babel+core@7.19.1:
+    resolution: {integrity: sha512-k1NtHyOMvlDDFeb9G5PhUXuGj8m/wiwojgQVEhJ/fsVsMCpLyOP4h0uGEjYJKrRI+EVPlb5Jk+Gt9P97lOGwtA==}
+    engines: {node: '>=6.9.0'}
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+    dependencies:
+      '@babel/core': 7.19.1
+      '@babel/helper-plugin-utils': 7.19.0
+      '@babel/plugin-syntax-export-namespace-from': 7.8.3_@babel+core@7.19.1
+    dev: true
+
   /@babel/plugin-proposal-nullish-coalescing-operator/7.18.6_@babel+core@7.19.1:
     resolution: {integrity: sha512-wQxQzxYeJqHcfppzBDnm1yAY0jSRkUXR2z8RePZYrKwMKgMlE8+Z6LUno+bd6LvbGh8Gltvy74+9pIYkr+XkKA==}
     engines: {node: '>=6.9.0'}
@@ -417,6 +430,15 @@ packages:
   /@babel/plugin-syntax-decorators/7.19.0_@babel+core@7.19.1:
     resolution: {integrity: sha512-xaBZUEDntt4faL1yN8oIFlhfXeQAWJW7CLKYsHTUqriCUbj8xOra8bfxxKGi/UwExPFBuPdH4XfHc9rGQhrVkQ==}
     engines: {node: '>=6.9.0'}
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+    dependencies:
+      '@babel/core': 7.19.1
+      '@babel/helper-plugin-utils': 7.19.0
+    dev: true
+
+  /@babel/plugin-syntax-export-namespace-from/7.8.3_@babel+core@7.19.1:
+    resolution: {integrity: sha512-MXf5laXo6c1IbEbegDmzGPwGNTsHZmEy6QGznu5Sh2UCWvueywb2ee+CCE4zQiZstxU9BMoQO9i6zUFSY0Kj0Q==}
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:

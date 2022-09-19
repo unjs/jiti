@@ -47,7 +47,8 @@ TypeError: The \\"listener\\" argument must be of type function. Received undefi
 exports[`fixtures > error-runtime > stdout 1`] = `""`;
 
 exports[`fixtures > esm > stdout 1`] = `
-"{
+"{ utilsLib: { utils: { a: 'a', default: 'default' }, version: '123' } }
+{
   file: '<cwd>/test.js',
   dir: '<cwd>',
   'import.meta.url': 'file://<cwd>/test.js',
