@@ -19,7 +19,7 @@
     "jiti": "cross-env JITI_DEBUG=1 JITI_CACHE=false ./bin/jiti.js",
     "jiti:legacy": "cross-env JITI_DEBUG=1 npx node@12 ./bin/jiti.js",
     "lint": "eslint --ext .ts,.js .",
-    "release": "pnpm test && pnpm build && pnpm standard-version && git push --follow-tags && pnpm publish",
+    "release": "pnpm build && pnpm test && pnpm standard-version && git push --follow-tags && pnpm publish",
     "test": "pnpm lint && vitest run --coverage"
   },
   "devDependencies": {
