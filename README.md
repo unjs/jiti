@@ -130,7 +130,7 @@ List of modules (within `node_modules`) to transform them regardless of syntax.
 ## Development
 
 - Clone this repository
-- Enable [Corepack](https://github.com/nodejs/corepack) using `corepack enable` (use `npm i -g corepack` for Node.js < 16.10)
+- Enable [Corepack](https://github.com/nodejs/corepack) using `corepack enable`
 - Install dependencies using `pnpm install`
 - Run `pnpm dev`
 - Run `pnpm jiti ./test/path/to/file.ts`
