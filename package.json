@@ -61,7 +61,7 @@
     "object-hash": "^3.0.0",
     "pathe": "^0.3.9",
     "pirates": "^4.0.5",
-    "pkg-types": "^0.3.6",
+    "pkg-types": "^1.0.1",
     "semver": "^7.3.8",
     "standard-version": "^9.5.0",
     "terser-webpack-plugin": "^5.3.6",

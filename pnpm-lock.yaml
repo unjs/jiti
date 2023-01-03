@@ -39,7 +39,7 @@ specifiers:
   object-hash: ^3.0.0
   pathe: ^0.3.9
   pirates: ^4.0.5
-  pkg-types: ^0.3.6
+  pkg-types: ^1.0.1
   semver: ^7.3.8
   standard-version: ^9.5.0
   terser-webpack-plugin: ^5.3.6
@@ -89,7 +89,7 @@ devDependencies:
   object-hash: 3.0.0
   pathe: 0.3.9
   pirates: 4.0.5
-  pkg-types: 0.3.6
+  pkg-types: 1.0.1
   semver: 7.3.8
   standard-version: 9.5.0
   terser-webpack-plugin: 5.3.6_webpack@5.75.0
@@ -3706,14 +3706,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       find-up: 4.1.0
-    dev: true
-
-  /pkg-types/0.3.6:
-    resolution: {integrity: sha512-uQZutkkh6axl1GxDm5/+8ivVdwuJ5pyDGqJeSiIWIUWIqYiK3p9QKozN/Rv6eVvFoeSWkN1uoYeSDBwwBJBtbg==}
-    dependencies:
-      jsonc-parser: 3.2.0
-      mlly: 0.5.17
-      pathe: 0.3.9
     dev: true
 
   /pkg-types/1.0.1:
