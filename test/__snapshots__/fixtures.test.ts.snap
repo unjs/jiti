@@ -103,5 +103,12 @@ exports[`fixtures > typescript > stdout 1`] = `
   file: '<cwd>/test.ts',
   dir: '<cwd>',
   resolve: '<cwd>/test.ts'
-} undefined"
+} undefined
+{
+  satisfiesTest: {
+    firstTest: { name: 'first', avatar: 'https://example.com/first.png' },
+    secondTest: { name: 'second', avatar: [Object] },
+    normalizeUserEntity: [Function: normalizeUserEntity]
+  }
+}"
 `;
