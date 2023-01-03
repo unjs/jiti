@@ -1,3 +1,3 @@
 export default {
-  hasRequire: typeof require !== 'undefined'
-}
+  hasRequire: typeof require !== "undefined",
+};

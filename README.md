@@ -1,6 +1,6 @@
 # jiti
 
-> Runtime typescript and ESM support for Node.js (CommonJS)
+> Runtime typescript and ESM support for Node.js
 
 [![version][npm-v-src]][npm-v-href]
 [![downloads][npm-d-src]][npm-d-href]
@@ -23,15 +23,15 @@
 ### Programmatic
 
 ```js
-const jiti = require('jiti')(__filename)
+const jiti = require("jiti")(__filename);
 
-jiti('./path/to/file.ts')
+jiti("./path/to/file.ts");
 ```
 
 You can also pass options as second argument:
 
 ```js
-const jiti = require('jiti')(__filename, { debug: true })
+const jiti = require("jiti")(__filename, { debug: true });
 ```
 
 ### CLI
@@ -48,9 +48,10 @@ node -r jiti/register index.ts
 ```
 
 Alternatively, you can register `jiti` as a require hook programmatically:
+
 ```js
-const jiti = require('jiti')()
-const unregister = jiti.register()
+const jiti = require("jiti")();
+const unregister = jiti.register();
 ```
 
 ## Options
@@ -140,14 +141,12 @@ List of modules (within `node_modules`) to transform them regardless of syntax.
 MIT. Made with 💖
 
 <!-- Refs -->
+
 [npm-v-src]: https://img.shields.io/npm/v/jiti?style=flat-square
 [npm-v-href]: https://npmjs.com/package/jiti
-
 [npm-d-src]: https://img.shields.io/npm/dm/jiti?style=flat-square
 [npm-d-href]: https://npmjs.com/package/jiti
-
 [github-actions-src]: https://img.shields.io/github/workflow/status/unjs/jiti/ci/master?style=flat-square
 [github-actions-href]: https://github.com/unjs/jiti/actions?query=workflow%3Aci
-
 [size-src]: https://packagephobia.now.sh/badge?p=jiti
 [size-href]: https://packagephobia.now.sh/result?p=jiti

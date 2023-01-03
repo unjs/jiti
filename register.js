@@ -1,3 +1,3 @@
-const jiti = require('.')()
+const jiti = require(".")();
 
-jiti.register()
+jiti.register();

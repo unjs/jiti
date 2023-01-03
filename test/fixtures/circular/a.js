@@ -1,5 +1,5 @@
-import { addBase } from './b'
+import { addBase } from "./b";
 
-export const base = 'Foo'
+export const base = "Foo";
 
-export const withBase = val => addBase(val)
+export const withBase = (val) => addBase(val);

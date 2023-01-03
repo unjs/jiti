@@ -1,1 +1,1 @@
-export default 'alias'
+export default "alias";

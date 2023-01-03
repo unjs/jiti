@@ -1,7 +1,7 @@
-import test from './test'
+import test from "./test";
 
-import * as utilsLib from './utilsLib'
+import * as utilsLib from "./utils-lib";
 
-console.log({ utilsLib })
+console.log({ utilsLib });
 
-console.log(test())
+console.log(test());

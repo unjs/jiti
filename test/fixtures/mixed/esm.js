@@ -1,3 +1,3 @@
-import path from 'path'
+import path from "path";
 
-console.log('Mixed works for:', path.resolve('.'))
+console.log("Mixed works for:", path.resolve("."));

@@ -1,19 +1,19 @@
-function decorator (...args: any) {
-  console.log('Decorator called with arguments:', args)
+function decorator(...args: any) {
+  console.log("Decorator called with arguments:", args);
 }
 
 @decorator
 export default class DecoratedClass {
   @decorator
-    decoratedProperty = null
+  decoratedProperty = null;
 
   @decorator
-  get decoratedAccessor () {
-    return null
+  get decoratedAccessor() {
+    return null;
   }
 
   @decorator
-  decoratedFunction (@decorator decoratedParameter: any) {
-    return decoratedParameter
+  decoratedFunction(@decorator decoratedParameter: any) {
+    return decoratedParameter;
   }
 }

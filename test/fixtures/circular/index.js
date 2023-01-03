@@ -1,3 +1,3 @@
-import { withBase } from './a'
+import { withBase } from "./a";
 
-console.log(withBase('Bar'))
+console.log(withBase("Bar"));

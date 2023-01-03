@@ -1,4 +1,4 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import fs from 'node:fs'
+import fs from "node:fs";
 
-console.log('exists:', fs.existsSync('index.js'))
+console.log("exists:", fs.existsSync("index.js"));

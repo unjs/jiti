@@ -1,32 +1,38 @@
-import { existsSync, readFileSync, writeFileSync } from 'fs'
-import { Module, builtinModules } from 'module'
-import { performance } from 'perf_hooks'
-import { tmpdir, platform } from 'os'
-import vm from 'vm'
-import { fileURLToPath, pathToFileURL } from 'url'
-import { dirname, join, basename, extname } from 'pathe'
-import { sync as mkdirpSync } from 'mkdirp'
-import destr from 'destr'
-import escapeStringRegexp from 'escape-string-regexp'
-import createRequire from 'create-require'
-import { lt } from 'semver'
-import { normalizeAliases, resolveAlias } from 'pathe/utils'
-import { addHook } from 'pirates'
-import objectHash from 'object-hash'
-import { hasESMSyntax, interopDefault, resolvePathSync } from 'mlly'
-import { isDir, isWritable, md5, detectLegacySyntax, readNearestPackageJSON } from './utils'
-import { TransformOptions, JITIOptions } from './types'
+import { existsSync, readFileSync, writeFileSync } from "fs";
+import { Module, builtinModules } from "module";
+import { performance } from "perf_hooks";
+import { tmpdir, platform } from "os";
+import vm from "vm";
+import { fileURLToPath, pathToFileURL } from "url";
+import { dirname, join, basename, extname } from "pathe";
+import { sync as mkdirpSync } from "mkdirp";
+import destr from "destr";
+import escapeStringRegexp from "escape-string-regexp";
+import createRequire from "create-require";
+import { lt } from "semver";
+import { normalizeAliases, resolveAlias } from "pathe/utils";
+import { addHook } from "pirates";
+import objectHash from "object-hash";
+import { hasESMSyntax, interopDefault, resolvePathSync } from "mlly";
+import {
+  isDir,
+  isWritable,
+  md5,
+  detectLegacySyntax,
+  readNearestPackageJSON,
+} from "./utils";
+import { TransformOptions, JITIOptions } from "./types";
 
-const _EnvDebug = destr(process.env.JITI_DEBUG)
-const _EnvCache = destr(process.env.JITI_CACHE)
-const _EnvESMResolve = destr(process.env.JITI_ESM_RESOLVE)
-const _EnvRequireCache = destr(process.env.JITI_REQUIRE_CACHE)
-const _EnvSourceMaps = destr(process.env.JITI_SOURCE_MAPS)
-const _EnvAlias = destr(process.env.JITI_ALIAS)
-const _EnvTransform = destr(process.env.JITI_TRANSFORM_MODULES)
-const _EnvNative = destr(process.env.JITI_NATIVE_MODULES)
+const _EnvDebug = destr(process.env.JITI_DEBUG);
+const _EnvCache = destr(process.env.JITI_CACHE);
+const _EnvESMResolve = destr(process.env.JITI_ESM_RESOLVE);
+const _EnvRequireCache = destr(process.env.JITI_REQUIRE_CACHE);
+const _EnvSourceMaps = destr(process.env.JITI_SOURCE_MAPS);
+const _EnvAlias = destr(process.env.JITI_ALIAS);
+const _EnvTransform = destr(process.env.JITI_TRANSFORM_MODULES);
+const _EnvNative = destr(process.env.JITI_NATIVE_MODULES);
 
-const isWindows = platform() === 'win32'
+const isWindows = platform() === "win32";
 
 const defaults: JITIOptions = {
   debug: _EnvDebug,
@@ -35,88 +41,107 @@ const defaults: JITIOptions = {
   sourceMaps: _EnvSourceMaps !== undefined ? !!_EnvSourceMaps : false,
   interopDefault: false,
   esmResolve: _EnvESMResolve || false,
-  cacheVersion: '7',
-  legacy: lt(process.version || '0.0.0', '14.0.0'),
-  extensions: ['.js', '.mjs', '.cjs', '.ts'],
+  cacheVersion: "7",
+  legacy: lt(process.version || "0.0.0", "14.0.0"),
+  extensions: [".js", ".mjs", ".cjs", ".ts"],
   alias: _EnvAlias,
   nativeModules: _EnvNative || [],
-  transformModules: _EnvTransform || []
-}
+  transformModules: _EnvTransform || [],
+};
 
-type Require = typeof require
+type Require = typeof require;
 export interface JITI extends Require {
-  transform: (opts: TransformOptions) => string
-  register: () => (() => void)
+  transform: (opts: TransformOptions) => string;
+  register: () => () => void;
 }
 
-export default function createJITI (_filename: string, opts: JITIOptions = {}, parentModule?: typeof module): JITI {
-  opts = { ...defaults, ...opts }
+export default function createJITI(
+  _filename: string,
+  opts: JITIOptions = {},
+  parentModule?: typeof module
+): JITI {
+  opts = { ...defaults, ...opts };
 
   // Cache dependencies
   if (opts.legacy) {
-    opts.cacheVersion += '-legacy'
+    opts.cacheVersion += "-legacy";
   }
   if (opts.transformOptions) {
-    opts.cacheVersion += '-' + objectHash(opts.transformOptions)
+    opts.cacheVersion += "-" + objectHash(opts.transformOptions);
   }
 
   // Normalize aliases (and disable if non given)
-  const alias = opts.alias && Object.keys(opts.alias).length
-    ? normalizeAliases(opts.alias || {})
-    : null
+  const alias =
+    opts.alias && Object.keys(opts.alias).length > 0
+      ? normalizeAliases(opts.alias || {})
+      : null;
 
   // List of modules to force transform or native
-  const nativeModules = ['typescript', 'jiti'].concat(opts.nativeModules || [])
-  const transformModules = ([] as string[]).concat(opts.transformModules || [])
-  const isNativeRe = new RegExp(`node_modules/(${nativeModules.map(m => escapeStringRegexp(m)).join('|')})/`)
-  const isTransformRe = new RegExp(`node_modules/(${transformModules.map(m => escapeStringRegexp(m)).join('|')})/`)
+  const nativeModules = ["typescript", "jiti", ...(opts.nativeModules || [])];
+  const transformModules = [...(opts.transformModules || [])];
+  const isNativeRe = new RegExp(
+    `node_modules/(${nativeModules
+      .map((m) => escapeStringRegexp(m))
+      .join("|")})/`
+  );
+  const isTransformRe = new RegExp(
+    `node_modules/(${transformModules
+      .map((m) => escapeStringRegexp(m))
+      .join("|")})/`
+  );
 
-  function debug (...args: string[]) {
+  function debug(...args: string[]) {
     if (opts.debug) {
       // eslint-disable-next-line no-console
-      console.log('[jiti]', ...args)
+      console.log("[jiti]", ...args);
     }
   }
 
   // If filename is dir, createRequire goes with parent directory, so we need fakepath
   if (!_filename) {
-    _filename = process.cwd()
+    _filename = process.cwd();
   }
   if (isDir(_filename)) {
-    _filename = join(_filename, 'index.js')
+    _filename = join(_filename, "index.js");
   }
 
   if (opts.cache === true) {
-    opts.cache = join(tmpdir(), 'node-jiti')
+    opts.cache = join(tmpdir(), "node-jiti");
   }
   if (opts.cache) {
     try {
-      mkdirpSync(opts.cache as string)
+      mkdirpSync(opts.cache as string);
       if (!isWritable(opts.cache)) {
-        throw new Error('directory is not writable')
+        throw new Error("directory is not writable");
       }
-    } catch (err: any) {
-      debug('Error creating cache directory at ', opts.cache, err)
-      opts.cache = false
+    } catch (error: any) {
+      debug("Error creating cache directory at ", opts.cache, error);
+      opts.cache = false;
     }
   }
 
-  const nativeRequire = createRequire(isWindows
-    ? _filename.replace(/\//g, '\\') // Import maps does not work with normalized paths!
-    : _filename)
+  const nativeRequire = createRequire(
+    isWindows
+      ? _filename.replace(/\//g, "\\") // Import maps does not work with normalized paths!
+      : _filename
+  );
 
   const tryResolve = (id: string, options?: { paths?: string[] }) => {
-    try { return nativeRequire.resolve(id, options) } catch (e) {}
-  }
+    try {
+      return nativeRequire.resolve(id, options);
+    } catch {}
+  };
 
-  const _url = pathToFileURL(_filename)
-  const _additionalExts = [...opts.extensions!].filter(ext => ext !== '.js')
+  const _url = pathToFileURL(_filename);
+  const _additionalExts = [...(opts.extensions as string[])].filter(
+    (ext) => ext !== ".js"
+  );
   const _resolve = (id: string, options?: { paths?: string[] }) => {
-    let resolved, err
+    let resolved, err;
 
     // Resolve alias
     if (alias) {
-      id = resolveAlias(id, alias)
+      id = resolveAlias(id, alias);
     }
 
     // Try ESM resolve
@@ -124,67 +149,75 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
       try {
         resolved = resolvePathSync(id, {
           url: _url,
-          conditions: ['node', 'require', 'import']
-        })
-      } catch (_err) {
-        err = _err
+          conditions: ["node", "require", "import"],
+        });
+      } catch (error) {
+        err = error;
       }
       if (resolved) {
-        return resolved
+        return resolved;
       }
     }
 
     // Try native require resolve
-    if (opts.extensions!.includes(extname(id))) {
-      return nativeRequire.resolve(id, options)
+    if ((opts.extensions as string[]).includes(extname(id))) {
+      return nativeRequire.resolve(id, options);
     }
     try {
-      return nativeRequire.resolve(id, options)
-    } catch (_err) {
-      err = _err
+      return nativeRequire.resolve(id, options);
+    } catch (error) {
+      err = error;
     }
     for (const ext of _additionalExts) {
-      resolved = tryResolve(id + ext, options) ||
-        tryResolve(id + '/index' + ext, options)
+      resolved =
+        tryResolve(id + ext, options) ||
+        tryResolve(id + "/index" + ext, options);
       if (resolved) {
-        return resolved
+        return resolved;
       }
     }
-    throw err
-  }
-  _resolve.paths = nativeRequire.resolve.paths
+    throw err;
+  };
+  _resolve.paths = nativeRequire.resolve.paths;
 
-  function getCache (filename: string | undefined, source: string, get: () => string): string {
+  function getCache(
+    filename: string | undefined,
+    source: string,
+    get: () => string
+  ): string {
     if (!opts.cache || !filename) {
-      return get()
+      return get();
     }
 
     // Calculate source hash
-    const sourceHash = ` /* v${opts.cacheVersion}-${md5(source, 16)} */`
+    const sourceHash = ` /* v${opts.cacheVersion}-${md5(source, 16)} */`;
 
     // Check cache file
-    const filebase = basename(dirname(filename)) + '-' + basename(filename)
-    const cacheFile = join(opts.cache as string, filebase + '.' + md5(filename) + '.js')
+    const filebase = basename(dirname(filename)) + "-" + basename(filename);
+    const cacheFile = join(
+      opts.cache as string,
+      filebase + "." + md5(filename) + ".js"
+    );
 
     if (existsSync(cacheFile)) {
-      const cacheSource = readFileSync(cacheFile, 'utf-8')
+      const cacheSource = readFileSync(cacheFile, "utf8");
       if (cacheSource.endsWith(sourceHash)) {
-        debug('[cache hit]', filename, '~>', cacheFile)
-        return cacheSource
+        debug("[cache hit]", filename, "~>", cacheFile);
+        return cacheSource;
       }
     }
 
-    debug('[cache miss]', filename)
-    const result = get()
+    debug("[cache miss]", filename);
+    const result = get();
 
-    if (!result.includes('__JITI_ERROR__')) {
-      writeFileSync(cacheFile, result + sourceHash, 'utf-8')
+    if (!result.includes("__JITI_ERROR__")) {
+      writeFileSync(cacheFile, result + sourceHash, "utf8");
     }
 
-    return result
+    return result;
   }
 
-  function transform (topts: any): string {
+  function transform(topts: any): string {
     let code = getCache(topts.filename, topts.source, () => {
       const res = opts.transform!({
         legacy: opts.legacy,
@@ -193,179 +226,191 @@ export default function createJITI (_filename: string, opts: JITIOptions = {}, p
           ...(opts.sourceMaps
             ? {
                 sourceFileName: topts.filename,
-                sourceMaps: 'inline'
+                sourceMaps: "inline",
               }
             : {}),
-          ...opts.transformOptions?.babel
+          ...opts.transformOptions?.babel,
         },
-        ...topts
-      })
+        ...topts,
+      });
       if (res.error && opts.debug) {
-        debug(res.error)
+        debug(res.error);
       }
-      return res.code
-    })
-    if (code.startsWith('#!')) {
-      code = '// ' + code
+      return res.code;
+    });
+    if (code.startsWith("#!")) {
+      code = "// " + code;
     }
-    return code
+    return code;
   }
 
-  function _interopDefault (mod: any) {
-    return opts.interopDefault ? interopDefault(mod) : mod
+  function _interopDefault(mod: any) {
+    return opts.interopDefault ? interopDefault(mod) : mod;
   }
 
-  function jiti (id: string) {
+  function jiti(id: string) {
     // Check for node: and file: protocol
-    if (id.startsWith('node:')) {
-      id = id.substr(5)
-    } else if (id.startsWith('file:')) {
-      id = fileURLToPath(id)
+    if (id.startsWith("node:")) {
+      id = id.slice(5);
+    } else if (id.startsWith("file:")) {
+      id = fileURLToPath(id);
     }
 
     // Check for builtin node module like fs
-    if (builtinModules.includes(id) || id === '.pnp.js' /* #24 */) {
-      return nativeRequire(id)
+    if (builtinModules.includes(id) || id === ".pnp.js" /* #24 */) {
+      return nativeRequire(id);
     }
 
     // Resolve path
-    const filename = _resolve(id)
-    const ext = extname(filename)
+    const filename = _resolve(id);
+    const ext = extname(filename);
 
     // Unknown format
     if (ext && !opts.extensions!.includes(ext)) {
-      debug('[unknown]', filename)
-      return nativeRequire(id)
+      debug("[unknown]", filename);
+      return nativeRequire(id);
     }
 
     // Force native modules
     if (isNativeRe.test(filename)) {
-      debug('[native]', filename)
-      return nativeRequire(id)
+      debug("[native]", filename);
+      return nativeRequire(id);
     }
 
     // Check for CJS cache
     if (opts.requireCache && nativeRequire.cache[filename]) {
-      return _interopDefault(nativeRequire.cache[filename]?.exports)
+      return _interopDefault(nativeRequire.cache[filename]?.exports);
     }
 
     // Read source
-    let source = readFileSync(filename, 'utf-8')
+    let source = readFileSync(filename, "utf8");
 
     // Transpile
-    const isTypescript = ext === '.ts'
-    const isNativeModule = ext === '.mjs' ||
-      (ext === '.js' && readNearestPackageJSON(filename)?.type === 'module')
-    const isCommonJS = ext === '.cjs'
-    const needsTranspile = !isCommonJS && (
-      isTypescript ||
-      isNativeModule ||
-      isTransformRe.test(filename) ||
-      hasESMSyntax(source) ||
-      (opts.legacy && detectLegacySyntax(source))
-    )
+    const isTypescript = ext === ".ts";
+    const isNativeModule =
+      ext === ".mjs" ||
+      (ext === ".js" && readNearestPackageJSON(filename)?.type === "module");
+    const isCommonJS = ext === ".cjs";
+    const needsTranspile =
+      !isCommonJS &&
+      (isTypescript ||
+        isNativeModule ||
+        isTransformRe.test(filename) ||
+        hasESMSyntax(source) ||
+        (opts.legacy && detectLegacySyntax(source)));
 
-    const start = performance.now()
+    const start = performance.now();
     if (needsTranspile) {
-      source = transform({ filename, source, ts: isTypescript })
-      const time = Math.round((performance.now() - start) * 1000) / 1000
-      debug(`[transpile]${isNativeModule ? ' [esm]' : ''}`, filename, `(${time}ms)`)
+      source = transform({ filename, source, ts: isTypescript });
+      const time = Math.round((performance.now() - start) * 1000) / 1000;
+      debug(
+        `[transpile]${isNativeModule ? " [esm]" : ""}`,
+        filename,
+        `(${time}ms)`
+      );
     } else {
       try {
-        debug('[native]', filename)
-        return _interopDefault(nativeRequire(id))
-      } catch (err: any) {
-        debug('Native require error:', err)
-        debug('[fallback]', filename)
-        source = transform({ filename, source, ts: isTypescript })
+        debug("[native]", filename);
+        return _interopDefault(nativeRequire(id));
+      } catch (error: any) {
+        debug("Native require error:", error);
+        debug("[fallback]", filename);
+        source = transform({ filename, source, ts: isTypescript });
       }
     }
 
     // Compile module
-    const mod = new Module(filename)
-    mod.filename = filename
+    const mod = new Module(filename);
+    mod.filename = filename;
     if (parentModule) {
-      mod.parent = parentModule
-      if (Array.isArray(parentModule.children) &&
+      mod.parent = parentModule;
+      if (
+        Array.isArray(parentModule.children) &&
         !parentModule.children.includes(mod)
       ) {
-        parentModule.children.push(mod)
+        parentModule.children.push(mod);
       }
     }
-    mod.require = createJITI(filename, opts, mod)
+    mod.require = createJITI(filename, opts, mod);
 
     // @ts-ignore
-    mod.path = dirname(filename)
+    mod.path = dirname(filename);
 
     // @ts-ignore
-    mod.paths = Module._nodeModulePaths(mod.path)
+    mod.paths = Module._nodeModulePaths(mod.path);
 
     // Set CJS cache before eval
     if (opts.requireCache) {
-      nativeRequire.cache[filename] = mod
+      nativeRequire.cache[filename] = mod;
     }
 
     // Compile wrapped script
-    let compiled
+    let compiled;
     try {
       // @ts-ignore
       // mod._compile wraps require and require.resolve to global function
       compiled = vm.runInThisContext(Module.wrap(source), {
         filename,
         lineOffset: 0,
-        displayErrors: false
-      })
-    } catch (err: any) {
+        displayErrors: false,
+      });
+    } catch (error: any) {
       if (opts.requireCache) {
-        delete nativeRequire.cache[filename]
+        delete nativeRequire.cache[filename];
       }
-      opts.onError!(err)
+      opts.onError!(error);
     }
 
     // Evaluate module
     try {
-      compiled(mod.exports, mod.require, mod, mod.filename, dirname(mod.filename))
-    } catch (err: any) {
+      compiled(
+        mod.exports,
+        mod.require,
+        mod,
+        mod.filename,
+        dirname(mod.filename)
+      );
+    } catch (error: any) {
       if (opts.requireCache) {
-        delete nativeRequire.cache[filename]
+        delete nativeRequire.cache[filename];
       }
-      opts.onError!(err)
+      opts.onError!(error);
     }
 
     // Check for parse errors
     if (mod.exports && mod.exports.__JITI_ERROR__) {
-      const { filename, line, column, code, message } = mod.exports.__JITI_ERROR__
-      const loc = `${filename}:${line}:${column}`
-      const err = new Error(`${code}: ${message} \n ${loc}`)
-      Error.captureStackTrace(err, jiti)
-      opts.onError!(err)
+      const { filename, line, column, code, message } =
+        mod.exports.__JITI_ERROR__;
+      const loc = `${filename}:${line}:${column}`;
+      const err = new Error(`${code}: ${message} \n ${loc}`);
+      Error.captureStackTrace(err, jiti);
+      opts.onError!(err);
     }
 
     // Set as loaded
-    mod.loaded = true
+    mod.loaded = true;
 
     // interopDefault
-    const _exports = _interopDefault(mod.exports)
+    const _exports = _interopDefault(mod.exports);
 
     // Return exports
-    return _exports
+    return _exports;
   }
 
-  function register () {
+  function register() {
     return addHook(
       (source: string, filename: string) =>
-        jiti.transform({ source, filename, ts: !!filename.match(/\.[cm]?ts$/) })
-      ,
+        jiti.transform({ source, filename, ts: !!/\.[cm]?ts$/.test(filename) }),
       { exts: opts.extensions }
-    )
+    );
   }
 
-  jiti.resolve = _resolve
-  jiti.cache = opts.requireCache ? nativeRequire.cache : {}
-  jiti.extensions = nativeRequire.extensions
-  jiti.main = nativeRequire.main
-  jiti.transform = transform
-  jiti.register = register
+  jiti.resolve = _resolve;
+  jiti.cache = opts.requireCache ? nativeRequire.cache : {};
+  jiti.extensions = nativeRequire.extensions;
+  jiti.main = nativeRequire.main;
+  jiti.transform = transform;
+  jiti.register = register;
 
-  return jiti
+  return jiti;
 }

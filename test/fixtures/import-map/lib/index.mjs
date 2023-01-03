@@ -1,3 +1,3 @@
-import alias from '#alias'
+import alias from "#alias";
 
-console.log({ alias })
+console.log({ alias });

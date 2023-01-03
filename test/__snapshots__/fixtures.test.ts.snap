@@ -6,7 +6,7 @@ exports[`fixtures > circular > stdout 1`] = `"FooBar"`;
 
 exports[`fixtures > error-parse > stderr 1`] = `
 "<root>/lib/index.js:2
-  throw err /* ↓ Check stack trace ↓ */
+  throw err; /* ↓ Check stack trace ↓ */
   ^
 
 Error: ParseError: \`import\` can only be used in \`import 
@@ -24,7 +24,7 @@ exports[`fixtures > error-parse > stdout 1`] = `""`;
 
 exports[`fixtures > error-runtime > stderr 1`] = `
 "<root>/lib/index.js:2
-  throw err /* ↓ Check stack trace ↓ */
+  throw err; /* ↓ Check stack trace ↓ */
   ^
 
 TypeError: The \\"listener\\" argument must be of type function. Received undefined
