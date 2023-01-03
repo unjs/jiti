@@ -59,7 +59,7 @@
     "mkdirp": "^1.0.4",
     "mlly": "^0.5.17",
     "object-hash": "^3.0.0",
-    "pathe": "^0.3.9",
+    "pathe": "^1.0.0",
     "pirates": "^4.0.5",
     "pkg-types": "^0.3.6",
     "semver": "^7.3.8",
