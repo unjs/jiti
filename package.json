@@ -39,7 +39,7 @@
     "@types/babel__template": "^7.4.1",
     "@types/mkdirp": "^1.0.2",
     "@types/node": "^18.11.18",
-    "@types/object-hash": "^2.2.1",
+    "@types/object-hash": "^3.0.2",
     "@types/resolve": "^1.20.2",
     "@types/semver": "^7.3.13",
     "@vitest/coverage-c8": "^0.26.3",
