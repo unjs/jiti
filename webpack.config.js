@@ -1,5 +1,5 @@
-const path = require("path")
-const fsp = require('fs/promises')
+const path = require("path");
+const fsp = require("fs/promises");
 
 const TerserPlugin = require("terser-webpack-plugin");
 
@@ -32,14 +32,14 @@ module.exports = {
     // https://github.com/unjs/jiti/issues/109
     // TODO: Remove in next semver-major version
     (compiler) => {
-      const plugin = { name: 'replace node: protocol' }
+      const plugin = { name: "replace node: protocol" };
       compiler.hooks.done.tap(plugin, async () => {
-        const jitiDist = path.resolve(compiler.options.context, 'dist/jiti.js')
-        const src = await fsp.readFile(jitiDist, 'utf8')
-        const newSrc = src.replace(/require\("node:/g, "require(\"")
-        await fsp.writeFile(jitiDist, newSrc, 'utf8')
+        const jitiDist = path.resolve(compiler.options.context, "dist/jiti.js");
+        const src = await fsp.readFile(jitiDist, "utf8");
+        const newSrc = src.replace(/require\("node:/g, 'require("');
+        await fsp.writeFile(jitiDist, newSrc, "utf8");
       });
-    }
+    },
   ],
   ignoreWarnings: [/critical dependency:/i],
   module: {
