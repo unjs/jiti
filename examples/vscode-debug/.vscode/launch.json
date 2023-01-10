@@ -7,9 +7,7 @@
       "cwd": "${workspaceFolder}",
       "program": "${file}",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": [
-        "jiti"
-      ],
+      "runtimeArgs": ["jiti"],
       "type": "node",
       "env": {
         "JITI_SOURCE_MAPS": "true",
@@ -20,8 +18,8 @@
       "smartStep": true,
       "resolveSourceMapLocations": [
         "${workspaceFolder}/**",
-        "!**/node_modules/**",
-	      // If you have problems with sourcemaps in a monorepo, try adding the directories here
+        "!**/node_modules/**"
+        // If you have problems with sourcemaps in a monorepo, try adding the directories here
         // "${workspaceFolder}/../some-directory/**",
       ]
     }
