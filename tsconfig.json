@@ -5,7 +5,7 @@
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "declarationDir": "dist2",
+    "declarationDir": "dist",
     "declaration": true,
     "experimentalDecorators": true,
     "types": ["node"]
