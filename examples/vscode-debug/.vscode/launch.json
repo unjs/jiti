@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Typescript",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "program": "${file}",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "jiti"
+      ],
+      "type": "node",
+      "env": {
+        "JITI_SOURCE_MAPS": "true",
+        // When source maps is enabled
+        // we need to disable the cache to prevent it interfering
+        "JITI_CACHE": "false"
+      },
+      "smartStep": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**",
+	      // If you have problems with sourcemaps in a monorepo, try adding the directories here
+        // "${workspaceFolder}/../some-directory/**",
+      ]
+    }
+  ]
+}
