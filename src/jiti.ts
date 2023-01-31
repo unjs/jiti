@@ -43,7 +43,7 @@ const defaults: JITIOptions = {
   esmResolve: _EnvESMResolve || false,
   cacheVersion: "7",
   legacy: lt(process.version || "0.0.0", "14.0.0"),
-  extensions: [".js", ".mjs", ".cjs", ".ts", ".mts"],
+  extensions: [".js", ".mjs", ".cjs", ".ts", ".mts", ".cts"],
   alias: _EnvAlias,
   nativeModules: _EnvNative || [],
   transformModules: _EnvTransform || [],
@@ -286,7 +286,7 @@ export default function createJITI(
     let source = readFileSync(filename, "utf8");
 
     // Transpile
-    const isTypescript = ext === ".ts" || ext === ".mts";
+    const isTypescript = ext === ".ts" || ext === ".mts" || ext === ".cts";
     const isNativeModule =
       ext === ".mjs" ||
       (ext === ".js" && readNearestPackageJSON(filename)?.type === "module");
