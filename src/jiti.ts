@@ -270,7 +270,7 @@ export default function createJITI(
       debug("[json]", filename);
       const jsonModule = nativeRequire(id);
       Object.defineProperty(jsonModule, "default", { value: jsonModule });
-      return jsonModule
+      return jsonModule;
     }
 
     // Unknown format
