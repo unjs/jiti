@@ -18,7 +18,7 @@
     "dev": "pnpm clean && pnpm webpack --watch",
     "jiti": "cross-env JITI_DEBUG=1 JITI_CACHE=false ./bin/jiti.js",
     "jiti:legacy": "cross-env JITI_DEBUG=1 npx node@12 ./bin/jiti.js",
-    "lint": "eslint --ext .ts,.js . && prettier -c .",
+    "lint": "eslint --ext .ts,.js . && prettier -c src lib test stubs",
     "release": "pnpm build && pnpm test && pnpm standard-version && git push --follow-tags && pnpm publish",
     "test": "pnpm lint && vitest run --coverage"
   },
@@ -29,6 +29,7 @@
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.18.6",
     "@babel/plugin-proposal-optional-chaining": "^7.20.7",
     "@babel/plugin-syntax-class-properties": "^7.12.13",
+    "@babel/plugin-syntax-import-assertions": "^7.20.0",
     "@babel/plugin-transform-modules-commonjs": "^7.20.11",
     "@babel/plugin-transform-typescript": "^7.20.13",
     "@babel/preset-typescript": "^7.18.6",

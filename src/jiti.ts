@@ -43,7 +43,7 @@ const defaults: JITIOptions = {
   esmResolve: _EnvESMResolve || false,
   cacheVersion: "7",
   legacy: lt(process.version || "0.0.0", "14.0.0"),
-  extensions: [".js", ".mjs", ".cjs", ".ts", ".mts", ".cts"],
+  extensions: [".js", ".mjs", ".cjs", ".ts", ".mts", ".cts", ".json"],
   alias: _EnvAlias,
   nativeModules: _EnvNative || [],
   transformModules: _EnvTransform || [],
@@ -264,6 +264,14 @@ export default function createJITI(
     // Resolve path
     const filename = _resolve(id);
     const ext = extname(filename);
+
+    // Check for .json modules
+    if (ext === ".json") {
+      debug("[json]", filename);
+      const jsonModule = nativeRequire(id);
+      Object.defineProperty(jsonModule, "default", { value: jsonModule });
+      return jsonModule;
+    }
 
     // Unknown format
     if (ext && !opts.extensions!.includes(ext)) {

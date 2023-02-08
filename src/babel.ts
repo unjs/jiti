@@ -39,6 +39,7 @@ export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
       { legacy: true },
     ]);
     _opts.plugins.push(require("babel-plugin-parameter-decorator"));
+    _opts.plugins.push(require("@babel/plugin-syntax-import-assertions"));
   }
 
   if (opts.legacy) {
