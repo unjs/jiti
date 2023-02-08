@@ -57,7 +57,7 @@
     "estree-walker": "^3.0.3",
     "execa": "^6.1.0",
     "fast-glob": "^3.2.12",
-    "mkdirp": "^1.0.4",
+    "mkdirp": "^2.1.3",
     "mlly": "^1.1.0",
     "object-hash": "^3.0.0",
     "pathe": "^1.1.0",
