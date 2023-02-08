@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.17.0](https://github.com/unjs/jiti/compare/v1.16.2...v1.17.0) (2023-02-08)
+
+
+### Features
+
+* add support for `.mts` ([#112](https://github.com/unjs/jiti/issues/112)) ([94ab3f2](https://github.com/unjs/jiti/commit/94ab3f2bb03e5805ff97927579a1729e6eeaa8e5))
+* support import assertions and `.json` imports with `.default` property ([#114](https://github.com/unjs/jiti/issues/114)) ([08a9a47](https://github.com/unjs/jiti/commit/08a9a47daa6ba0fb0f2ced285703dcc446ef8375))
+
 ### [1.16.2](https://github.com/unjs/jiti/compare/v1.16.1...v1.16.2) (2023-01-10)
 
 ### [1.16.1](https://github.com/unjs/jiti/compare/v1.16.0...v1.16.1) (2023-01-03)
