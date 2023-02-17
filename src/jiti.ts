@@ -148,7 +148,7 @@ export default function createJITI(
       const conditionSets = [
         ["node", "require"],
         ["node", "import"],
-      ]
+      ];
       for (const conditions of conditionSets) {
         try {
           resolved = resolvePathSync(id, {
