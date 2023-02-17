@@ -112,3 +112,120 @@ exports[`fixtures > typescript > stdout 1`] = `
   resolve: '<cwd>/test.ts'
 } undefined"
 `;
+
+exports[`fixtures > typescript-metadata > stdout 1`] = `
+"Node {
+  type: 'ClassProperty',
+  start: 328,
+  end: 372,
+  loc: SourceLocation {
+    start: Position { line: 13, column: 2, index: 328 },
+    end: Position { line: 14, column: 31, index: 372 },
+    filename: undefined,
+    identifierName: undefined
+  },
+  decorators: [
+    Node {
+      type: 'Decorator',
+      start: 328,
+      end: 340,
+      loc: [SourceLocation],
+      expression: [Node],
+      leadingComments: undefined,
+      innerComments: undefined,
+      trailingComments: undefined
+    }
+  ],
+  static: false,
+  key: Node {
+    type: 'Identifier',
+    start: 343,
+    end: 351,
+    loc: SourceLocation {
+      start: [Position],
+      end: [Position],
+      filename: undefined,
+      identifierName: 'property'
+    },
+    name: 'property',
+    leadingComments: undefined,
+    innerComments: undefined,
+    trailingComments: undefined
+  },
+  computed: false,
+  typeAnnotation: Node {
+    type: 'TSTypeAnnotation',
+    start: 351,
+    end: 371,
+    loc: SourceLocation {
+      start: [Position],
+      end: [Position],
+      filename: undefined,
+      identifierName: undefined
+    },
+    typeAnnotation: Node {
+      type: 'TSUnionType',
+      start: 353,
+      end: 371,
+      loc: [SourceLocation],
+      types: [Array],
+      leadingComments: undefined,
+      innerComments: undefined,
+      trailingComments: undefined
+    },
+    leadingComments: undefined,
+    innerComments: undefined,
+    trailingComments: undefined
+  },
+  value: null,
+  leadingComments: undefined,
+  innerComments: undefined,
+  trailingComments: undefined
+} Node {
+  type: 'ClassDeclaration',
+  start: 313,
+  end: 374,
+  loc: SourceLocation {
+    start: Position { line: 12, column: 7, index: 313 },
+    end: Position { line: 15, column: 1, index: 374 },
+    filename: undefined,
+    identifierName: undefined
+  },
+  id: Node {
+    type: 'Identifier',
+    start: 319,
+    end: 323,
+    loc: SourceLocation {
+      start: [Position],
+      end: [Position],
+      filename: undefined,
+      identifierName: 'File'
+    },
+    name: 'File',
+    leadingComments: undefined,
+    innerComments: undefined,
+    trailingComments: undefined
+  },
+  superClass: null,
+  body: Node {
+    type: 'ClassBody',
+    start: 324,
+    end: 374,
+    loc: SourceLocation {
+      start: [Position],
+      end: [Position],
+      filename: undefined,
+      identifierName: undefined
+    },
+    body: [ [Node] ],
+    leadingComments: undefined,
+    innerComments: undefined,
+    trailingComments: undefined
+  },
+  leadingComments: undefined,
+  innerComments: undefined,
+  trailingComments: undefined
+}
+[Function: String]
+[class File]"
+`;
