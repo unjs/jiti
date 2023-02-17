@@ -146,16 +146,22 @@ export default function createJITI(
 
     // Try ESM resolve
     if (opts.esmResolve) {
-      try {
-        resolved = resolvePathSync(id, {
-          url: _url,
-          conditions: ["node", "require", "import"],
-        });
-      } catch (error) {
-        err = error;
-      }
-      if (resolved) {
-        return resolved;
+      const conditionSets = [
+        ["node", "require"],
+        ["node", "import"],
+      ]
+      for (const conditions of conditionSets) {
+        try {
+          resolved = resolvePathSync(id, {
+            url: _url,
+            conditions,
+          });
+        } catch (error) {
+          err = error;
+        }
+        if (resolved) {
+          return resolved;
+        }
       }
     }
 
