@@ -23,7 +23,7 @@ export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
       ],
       [require("babel-plugin-dynamic-import-node"), { noInterop: true }],
       [TransformImportMetaPlugin, { filename: opts.filename }],
-      [require("@babel/plugin-syntax-class-properties"), { loose: true }],
+      [require("@babel/plugin-syntax-class-properties")],
       [require("@babel/plugin-proposal-export-namespace-from")],
     ],
   };
