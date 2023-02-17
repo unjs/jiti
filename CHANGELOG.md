@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.17.1
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.17.0...v1.17.1)
+
+
+### 🩹 Fixes
+
+  - Prefer `require` condition first in esm resolve mode ([#117](https://github.com/unjs/jiti/pull/117))
+
+### 💅 Refactors
+
+  - Use `mkdirSync` from `node:fs` instead of `mkdirp` ([413d3c3](https://github.com/unjs/jiti/commit/413d3c3))
+
+### 🏡 Chore
+
+  - Update dependencies ([f532c57](https://github.com/unjs/jiti/commit/f532c57))
+  - Add missing semi ([a9c2876](https://github.com/unjs/jiti/commit/a9c2876))
+  - Switch to changelogen for releases ([bd4bd8c](https://github.com/unjs/jiti/commit/bd4bd8c))
+
+### ❤️  Contributors
+
+- Pooya Parsa <pooya@pi0.io>
+
 ## [1.17.0](https://github.com/unjs/jiti/compare/v1.16.2...v1.17.0) (2023-02-08)
 
 
