@@ -1,11 +1,10 @@
-import { existsSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
 import { Module, builtinModules } from "module";
 import { performance } from "perf_hooks";
 import { tmpdir, platform } from "os";
 import vm from "vm";
 import { fileURLToPath, pathToFileURL } from "url";
 import { dirname, join, basename, extname } from "pathe";
-import { sync as mkdirpSync } from "mkdirp";
 import destr from "destr";
 import escapeStringRegexp from "escape-string-regexp";
 import createRequire from "create-require";
@@ -110,7 +109,7 @@ export default function createJITI(
   }
   if (opts.cache) {
     try {
-      mkdirpSync(opts.cache as string);
+      mkdirSync(opts.cache as string, { recursive: true });
       if (!isWritable(opts.cache)) {
         throw new Error("directory is not writable");
       }
