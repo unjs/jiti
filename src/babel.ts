@@ -33,8 +33,10 @@ export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
       require("@babel/plugin-transform-typescript"),
       { allowDeclareFields: true },
     ]);
-    // `unshift` because this plugin must come before `@babel/plugin-syntax-class-properties`
+    // `unshift` because these plugin must come before `@babel/plugin-syntax-class-properties`
     _opts.plugins.unshift([
+      require("babel-plugin-transform-typescript-metadata"),
+    ],[
       require("@babel/plugin-proposal-decorators"),
       { legacy: true },
     ]);

@@ -23,6 +23,7 @@ specifiers:
   acorn: ^8.8.2
   babel-plugin-dynamic-import-node: ^2.3.3
   babel-plugin-parameter-decorator: ^1.0.16
+  babel-plugin-transform-typescript-metadata: ^0.3.2
   changelogen: ^0.4.1
   config: ^3.3.9
   create-require: ^1.1.1
@@ -73,6 +74,7 @@ devDependencies:
   acorn: 8.8.2
   babel-plugin-dynamic-import-node: 2.3.3
   babel-plugin-parameter-decorator: 1.0.16
+  babel-plugin-transform-typescript-metadata: 0.3.2
   changelogen: 0.4.1
   config: 3.3.9
   create-require: 1.1.1
@@ -1426,6 +1428,12 @@ packages:
 
   /babel-plugin-parameter-decorator/1.0.16:
     resolution: {integrity: sha512-yUT2WPTUg1JaPmRGRSF557m1HJ9vdFQInRWOkiOyO5a9HhqlXffJu+fQ2xd5+qU/35ICMrrk9eWKsHCairKA9w==}
+    dev: true
+
+  /babel-plugin-transform-typescript-metadata/0.3.2:
+    resolution: {integrity: sha512-mWEvCQTgXQf48yDqgN7CH50waTyYBeP2Lpqx4nNWab9sxEpdXVeKgfj1qYI2/TgUPQtNFZ85i3PemRtnXVYYJg==}
+    dependencies:
+      '@babel/helper-plugin-utils': 7.20.2
     dev: true
 
   /balanced-match/1.0.2:
