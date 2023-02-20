@@ -106,9 +106,14 @@ Logical nullish assignment: 50 20"
 `;
 
 exports[`fixtures > typescript > stdout 1`] = `
-"{
+"Decorator metadata keys: design:type
+Decorator called with 3 arguments.
+Decorator called with 3 arguments.
+Decorator called with 3 arguments.
+Decorator called with 1 arguments.
+{
   file: '<cwd>/test.ts',
   dir: '<cwd>',
   resolve: '<cwd>/test.ts'
-} undefined"
+} undefined [class DecoratedClass]"
 `;

@@ -23,6 +23,7 @@ specifiers:
   acorn: ^8.8.2
   babel-plugin-dynamic-import-node: ^2.3.3
   babel-plugin-parameter-decorator: ^1.0.16
+  babel-plugin-transform-typescript-metadata: ^0.3.2
   changelogen: ^0.4.1
   config: ^3.3.9
   create-require: ^1.1.1
@@ -41,11 +42,13 @@ specifiers:
   pirates: ^4.0.5
   pkg-types: ^1.0.2
   prettier: ^2.8.4
+  reflect-metadata: ^0.1.13
   semver: ^7.3.8
   terser-webpack-plugin: ^5.3.6
   ts-loader: ^9.4.2
   tslib: ^2.5.0
   typescript: ^4.9.5
+  vite: ^4.1.2
   vitest: ^0.28.5
   webpack: ^5.75.0
   webpack-cli: ^5.0.1
@@ -73,6 +76,7 @@ devDependencies:
   acorn: 8.8.2
   babel-plugin-dynamic-import-node: 2.3.3
   babel-plugin-parameter-decorator: 1.0.16
+  babel-plugin-transform-typescript-metadata: 0.3.2
   changelogen: 0.4.1
   config: 3.3.9
   create-require: 1.1.1
@@ -91,11 +95,13 @@ devDependencies:
   pirates: 4.0.5
   pkg-types: 1.0.2
   prettier: 2.8.4
+  reflect-metadata: 0.1.13
   semver: 7.3.8
   terser-webpack-plugin: 5.3.6_webpack@5.75.0
   ts-loader: 9.4.2_hhrrucqyg4eysmfpujvov2ym5u
   tslib: 2.5.0
   typescript: 4.9.5
+  vite: 4.1.2_@types+node@18.13.0
   vitest: 0.28.5
   webpack: 5.75.0_webpack-cli@5.0.1
   webpack-cli: 5.0.1_webpack@5.75.0
@@ -1426,6 +1432,12 @@ packages:
 
   /babel-plugin-parameter-decorator/1.0.16:
     resolution: {integrity: sha512-yUT2WPTUg1JaPmRGRSF557m1HJ9vdFQInRWOkiOyO5a9HhqlXffJu+fQ2xd5+qU/35ICMrrk9eWKsHCairKA9w==}
+    dev: true
+
+  /babel-plugin-transform-typescript-metadata/0.3.2:
+    resolution: {integrity: sha512-mWEvCQTgXQf48yDqgN7CH50waTyYBeP2Lpqx4nNWab9sxEpdXVeKgfj1qYI2/TgUPQtNFZ85i3PemRtnXVYYJg==}
+    dependencies:
+      '@babel/helper-plugin-utils': 7.20.2
     dev: true
 
   /balanced-match/1.0.2:
@@ -3506,6 +3518,10 @@ packages:
       resolve: 1.22.1
     dev: true
 
+  /reflect-metadata/0.1.13:
+    resolution: {integrity: sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==}
+    dev: true
+
   /regexp-tree/0.1.24:
     resolution: {integrity: sha512-s2aEVuLhvnVJW6s/iPgEGK6R+/xngd2jNQ+xy4bXNDKxZKJH6jpPHY6kVeVv1IeLCHgswRj+Kl3ELaDjG6V1iw==}
     hasBin: true
@@ -4086,7 +4102,7 @@ packages:
       picocolors: 1.0.0
       source-map: 0.6.1
       source-map-support: 0.5.21
-      vite: 4.1.1_@types+node@18.13.0
+      vite: 4.1.2_@types+node@18.13.0
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -4097,8 +4113,8 @@ packages:
       - terser
     dev: true
 
-  /vite/4.1.1_@types+node@18.13.0:
-    resolution: {integrity: sha512-LM9WWea8vsxhr782r9ntg+bhSFS06FJgCvvB0+8hf8UWtvaiDagKYWXndjfX6kGl74keHJUcpzrQliDXZlF5yg==}
+  /vite/4.1.2_@types+node@18.13.0:
+    resolution: {integrity: sha512-MWDb9Rfy3DI8omDQySbMK93nQqStwbsQWejXRY2EBzEWKmLAXWb1mkI9Yw2IJrc+oCvPCI1Os5xSSIBYY6DEAw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
@@ -4174,7 +4190,7 @@ packages:
       tinybench: 2.3.1
       tinypool: 0.3.1
       tinyspy: 1.1.1
-      vite: 4.1.1_@types+node@18.13.0
+      vite: 4.1.2_@types+node@18.13.0
       vite-node: 0.28.5_@types+node@18.13.0
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
