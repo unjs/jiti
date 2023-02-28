@@ -1,7 +1,24 @@
 import { lstatSync, accessSync, constants, readFileSync } from "fs";
 import { createHash } from "crypto";
+import { tmpdir } from "os";
 import { join } from "pathe";
 import type { PackageJson } from "pkg-types";
+
+// Workaround for pnpm setting an incorrect `TMPDIR`.
+// Set `JITI_TMPDIR_KEEP` to a truthy value to disable this workaround.
+// https://github.com/pnpm/pnpm/issues/6140
+// https://github.com/unjs/jiti/issues/120
+export function getOsTmpDir() {
+  if (process.env.JITI_TMPDIR_KEEP) {
+    return tmpdir();
+  }
+
+  const currentTmpDir = process.env.TMPDIR;
+  delete process.env.TMPDIR;
+  const osTmpDir = tmpdir();
+  process.env.TMPDIR = currentTmpDir;
+  return osTmpDir;
+}
 
 export function isDir(filename: string): boolean {
   try {
