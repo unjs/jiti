@@ -8,16 +8,16 @@ import type { PackageJson } from "pkg-types";
 // Set `JITI_TMPDIR_KEEP` to a truthy value to disable this workaround.
 // https://github.com/pnpm/pnpm/issues/6140
 // https://github.com/unjs/jiti/issues/120
-export function getOsTmpDir() {
+export function getCacheDir() {
   if (process.env.JITI_TMPDIR_KEEP) {
-    return tmpdir();
+    return join(tmpdir(), "node-jiti");
   }
 
   const currentTmpDir = process.env.TMPDIR;
   delete process.env.TMPDIR;
-  const osTmpDir = tmpdir();
+  const defaultTmpDir = tmpdir();
   process.env.TMPDIR = currentTmpDir;
-  return osTmpDir;
+  return join(defaultTmpDir, "node-jiti");
 }
 
 export function isDir(filename: string): boolean {

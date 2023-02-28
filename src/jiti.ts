@@ -14,7 +14,7 @@ import { addHook } from "pirates";
 import objectHash from "object-hash";
 import { hasESMSyntax, interopDefault, resolvePathSync } from "mlly";
 import {
-  getOsTmpDir,
+  getCacheDir,
   isDir,
   isWritable,
   md5,
@@ -106,7 +106,7 @@ export default function createJITI(
   }
 
   if (opts.cache === true) {
-    opts.cache = join(getOsTmpDir(), "node-jiti");
+    opts.cache = getCacheDir();
   }
   if (opts.cache) {
     try {
