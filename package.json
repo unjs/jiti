@@ -66,6 +66,7 @@
     "prettier": "^2.8.4",
     "reflect-metadata": "^0.1.13",
     "semver": "^7.3.8",
+    "std-env": "^3.3.2",
     "terser-webpack-plugin": "^5.3.6",
     "ts-loader": "^9.4.2",
     "tslib": "^2.5.0",

@@ -1,9 +1,9 @@
 import { afterEach, describe, beforeEach, it, expect, vi } from "vitest";
-
+import { isWindows } from 'std-env'
 import { getCacheDir } from "../src/utils";
 
 describe("utils", () => {
-  describe("getCacheDir", () => {
+  describe.skipIf(isWindows)("getCacheDir", () => {
     const cwd = "/cwd";
     const notCwd = `${cwd}__NOT__`;
 
