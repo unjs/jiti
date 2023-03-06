@@ -2,6 +2,39 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.17.1
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.17.0...v1.17.1)
+
+
+### 🩹 Fixes
+
+  - Prefer `require` condition first in esm resolve mode ([#117](https://github.com/unjs/jiti/pull/117))
+
+### 💅 Refactors
+
+  - Use `mkdirSync` from `node:fs` instead of `mkdirp` ([413d3c3](https://github.com/unjs/jiti/commit/413d3c3))
+
+### 🏡 Chore
+
+  - Update dependencies ([f532c57](https://github.com/unjs/jiti/commit/f532c57))
+  - Add missing semi ([a9c2876](https://github.com/unjs/jiti/commit/a9c2876))
+  - Switch to changelogen for releases ([bd4bd8c](https://github.com/unjs/jiti/commit/bd4bd8c))
+
+### ❤️  Contributors
+
+- Pooya Parsa <pooya@pi0.io>
+
+## [1.17.0](https://github.com/unjs/jiti/compare/v1.16.2...v1.17.0) (2023-02-08)
+
+
+### Features
+
+* add support for `.mts` ([#112](https://github.com/unjs/jiti/issues/112)) ([94ab3f2](https://github.com/unjs/jiti/commit/94ab3f2bb03e5805ff97927579a1729e6eeaa8e5))
+* support import assertions and `.json` imports with `.default` property ([#114](https://github.com/unjs/jiti/issues/114)) ([08a9a47](https://github.com/unjs/jiti/commit/08a9a47daa6ba0fb0f2ced285703dcc446ef8375))
+
+### [1.16.2](https://github.com/unjs/jiti/compare/v1.16.1...v1.16.2) (2023-01-10)
+
 ### [1.16.1](https://github.com/unjs/jiti/compare/v1.16.0...v1.16.1) (2023-01-03)
 
 ## [1.16.0](https://github.com/unjs/jiti/compare/v1.15.0...v1.16.0) (2022-09-19)

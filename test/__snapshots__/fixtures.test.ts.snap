@@ -77,6 +77,13 @@ exports[`fixtures > hashbang > stdout 1`] = `"1"`;
 
 exports[`fixtures > import-map > stdout 1`] = `"{ alias: 'alias' }"`;
 
+exports[`fixtures > json > stdout 1`] = `
+"Imported : { test: 123 } .default: { test: 123 }
+Imported with assertion : { test: 123 } .default: { test: 123 }
+Required : { test: 123 } .default: { test: 123 }
+Dynamic Imported : { test: 123 } .default: { test: 123 }"
+`;
+
 exports[`fixtures > mixed > stdout 1`] = `"Mixed works for: <cwd>"`;
 
 exports[`fixtures > native > stdout 1`] = `"[Module: null prototype] { default: { hasRequire: false } }"`;
@@ -99,11 +106,16 @@ Logical nullish assignment: 50 20"
 `;
 
 exports[`fixtures > typescript > stdout 1`] = `
-"{
+"Decorator metadata keys: design:type
+Decorator called with 3 arguments.
+Decorator called with 3 arguments.
+Decorator called with 3 arguments.
+Decorator called with 1 arguments.
+{
   file: '<cwd>/test.ts',
   dir: '<cwd>',
   resolve: '<cwd>/test.ts'
-} undefined
+} undefined [class DecoratedClass]
 {
   satisfiesTest: {
     firstTest: { name: 'first', avatar: 'https://example.com/first.png' },

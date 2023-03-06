@@ -1,11 +1,21 @@
+import "reflect-metadata";
 function decorator(...args: any) {
-  console.log("Decorator called with arguments:", args);
+  console.log("Decorator called with " + args.length + " arguments.");
+}
+
+function anotherDecorator() {
+  return function (object: any, propertyName: any) {
+    console.log(
+      "Decorator metadata keys: " +
+        Reflect.getMetadataKeys(object, propertyName)
+    );
+  };
 }
 
 @decorator
 export default class DecoratedClass {
-  @decorator
-  decoratedProperty = null;
+  @anotherDecorator()
+  decoratedProperty: string;
 
   @decorator
   get decoratedAccessor() {
@@ -15,5 +25,9 @@ export default class DecoratedClass {
   @decorator
   decoratedFunction(@decorator decoratedParameter: any) {
     return decoratedParameter;
+  }
+
+  constructor() {
+    this.decoratedProperty = "foo";
   }
 }

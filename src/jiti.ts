@@ -1,11 +1,10 @@
-import { existsSync, readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
 import { Module, builtinModules } from "module";
 import { performance } from "perf_hooks";
 import { tmpdir, platform } from "os";
 import vm from "vm";
 import { fileURLToPath, pathToFileURL } from "url";
 import { dirname, join, basename, extname } from "pathe";
-import { sync as mkdirpSync } from "mkdirp";
 import destr from "destr";
 import escapeStringRegexp from "escape-string-regexp";
 import createRequire from "create-require";
@@ -43,7 +42,7 @@ const defaults: JITIOptions = {
   esmResolve: _EnvESMResolve || false,
   cacheVersion: "7",
   legacy: lt(process.version || "0.0.0", "14.0.0"),
-  extensions: [".js", ".mjs", ".cjs", ".ts"],
+  extensions: [".js", ".mjs", ".cjs", ".ts", ".mts", ".cts", ".json"],
   alias: _EnvAlias,
   nativeModules: _EnvNative || [],
   transformModules: _EnvTransform || [],
@@ -58,7 +57,8 @@ export interface JITI extends Require {
 export default function createJITI(
   _filename: string,
   opts: JITIOptions = {},
-  parentModule?: typeof module
+  parentModule?: typeof module,
+  requiredModules?: Record<string, typeof module>
 ): JITI {
   opts = { ...defaults, ...opts };
 
@@ -110,7 +110,7 @@ export default function createJITI(
   }
   if (opts.cache) {
     try {
-      mkdirpSync(opts.cache as string);
+      mkdirSync(opts.cache as string, { recursive: true });
       if (!isWritable(opts.cache)) {
         throw new Error("directory is not writable");
       }
@@ -146,16 +146,22 @@ export default function createJITI(
 
     // Try ESM resolve
     if (opts.esmResolve) {
-      try {
-        resolved = resolvePathSync(id, {
-          url: _url,
-          conditions: ["node", "require", "import"],
-        });
-      } catch (error) {
-        err = error;
-      }
-      if (resolved) {
-        return resolved;
+      const conditionSets = [
+        ["node", "require"],
+        ["node", "import"],
+      ];
+      for (const conditions of conditionSets) {
+        try {
+          resolved = resolvePathSync(id, {
+            url: _url,
+            conditions,
+          });
+        } catch (error) {
+          err = error;
+        }
+        if (resolved) {
+          return resolved;
+        }
       }
     }
 
@@ -265,6 +271,14 @@ export default function createJITI(
     const filename = _resolve(id);
     const ext = extname(filename);
 
+    // Check for .json modules
+    if (ext === ".json") {
+      debug("[json]", filename);
+      const jsonModule = nativeRequire(id);
+      Object.defineProperty(jsonModule, "default", { value: jsonModule });
+      return jsonModule;
+    }
+
     // Unknown format
     if (ext && !opts.extensions!.includes(ext)) {
       debug("[unknown]", filename);
@@ -278,6 +292,9 @@ export default function createJITI(
     }
 
     // Check for CJS cache
+    if (requiredModules && requiredModules[filename]) {
+      return _interopDefault(requiredModules[filename]?.exports);
+    }
     if (opts.requireCache && nativeRequire.cache[filename]) {
       return _interopDefault(nativeRequire.cache[filename]?.exports);
     }
@@ -286,7 +303,7 @@ export default function createJITI(
     let source = readFileSync(filename, "utf8");
 
     // Transpile
-    const isTypescript = ext === ".ts";
+    const isTypescript = ext === ".ts" || ext === ".mts" || ext === ".cts";
     const isNativeModule =
       ext === ".mjs" ||
       (ext === ".js" && readNearestPackageJSON(filename)?.type === "module");
@@ -331,7 +348,7 @@ export default function createJITI(
         parentModule.children.push(mod);
       }
     }
-    mod.require = createJITI(filename, opts, mod);
+    mod.require = createJITI(filename, opts, mod, requiredModules || {});
 
     // @ts-ignore
     mod.path = dirname(filename);
@@ -340,6 +357,9 @@ export default function createJITI(
     mod.paths = Module._nodeModulePaths(mod.path);
 
     // Set CJS cache before eval
+    if (requiredModules) {
+      requiredModules[filename] = mod;
+    }
     if (opts.requireCache) {
       nativeRequire.cache[filename] = mod;
     }
@@ -375,6 +395,11 @@ export default function createJITI(
         delete nativeRequire.cache[filename];
       }
       opts.onError!(error);
+    }
+
+    // Remove from required modules cache
+    if (requiredModules) {
+      delete requiredModules[filename];
     }
 
     // Check for parse errors
