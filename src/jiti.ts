@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
 import { Module, builtinModules } from "module";
 import { performance } from "perf_hooks";
-import { tmpdir, platform } from "os";
+import { platform } from "os";
 import vm from "vm";
 import { fileURLToPath, pathToFileURL } from "url";
 import { dirname, join, basename, extname } from "pathe";
@@ -14,6 +14,7 @@ import { addHook } from "pirates";
 import objectHash from "object-hash";
 import { hasESMSyntax, interopDefault, resolvePathSync } from "mlly";
 import {
+  getCacheDir,
   isDir,
   isWritable,
   md5,
@@ -106,7 +107,7 @@ export default function createJITI(
   }
 
   if (opts.cache === true) {
-    opts.cache = join(tmpdir(), "node-jiti");
+    opts.cache = getCacheDir();
   }
   if (opts.cache) {
     try {
