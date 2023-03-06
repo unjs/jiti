@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.17.2
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.17.1...v1.17.2)
+
+
+### 🩹 Fixes
+
+  - Add support to emit decorator metadata ([#119](https://github.com/unjs/jiti/pull/119))
+  - Use inline require cache to avoid circular dependencies ([#125](https://github.com/unjs/jiti/pull/125))
+  - Workaround for pnpm and `TMPDIR` ([#123](https://github.com/unjs/jiti/pull/123))
+
+### 🏡 Chore
+
+  - Update lockfile ([6f8610f](https://github.com/unjs/jiti/commit/6f8610f))
+  - Update release script ([26b7003](https://github.com/unjs/jiti/commit/26b7003))
+
+### ✅ Tests
+
+  - Add typescript satisfies fixture ([#107](https://github.com/unjs/jiti/pull/107))
+
+### 🎨 Styles
+
+  - Format with prettier ([42669e5](https://github.com/unjs/jiti/commit/42669e5))
+
+### ❤️  Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Jonas Thelemann ([@dargmuesli](http://github.com/dargmuesli))
+- Sabin Marcu ([@sabinmarcu](http://github.com/sabinmarcu))
+- Peter <peter.placzek1996@gmail.com>
+
 ## v1.17.1
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.17.0...v1.17.1)
