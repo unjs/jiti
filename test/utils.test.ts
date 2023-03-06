@@ -35,7 +35,7 @@ describe("utils", () => {
 
     it("returns TMPDIR when TMPDIR is CWD and TMPDIR is kept", () => {
       vi.stubEnv('TMPDIR', cwd)
-      vi.stubEnv('JITI_TMPDIR_KEEP', 'true')
+      vi.stubEnv('JITI_RESPECT_TMPDIR_ENV', 'true')
 
       expect(getCacheDir()).toBe("/cwd/node-jiti");
     });

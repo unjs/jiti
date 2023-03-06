@@ -5,19 +5,20 @@ import { join } from "pathe";
 import type { PackageJson } from "pkg-types";
 
 export function getCacheDir() {
-  if (process.cwd() !== tmpdir() || process.env.JITI_TMPDIR_KEEP) {
-    return join(tmpdir(), "node-jiti");
-  }
+  let _tmpDir = tmpdir()
 
   // Workaround for pnpm setting an incorrect `TMPDIR`.
-  // Set `JITI_TMPDIR_KEEP` to a truthy value to disable this workaround.
+  // Set `JITI_RESPECT_TMPDIR_ENV` to a truthy value to disable this workaround.
   // https://github.com/pnpm/pnpm/issues/6140
   // https://github.com/unjs/jiti/issues/120
-  const currentTmpDir = process.env.TMPDIR;
-  delete process.env.TMPDIR;
-  const defaultTmpDir = tmpdir();
-  process.env.TMPDIR = currentTmpDir;
-  return join(defaultTmpDir, "node-jiti");
+  if (process.env.TMPDIR && _tmpDir === process.cwd() && !process.env.JITI_RESPECT_TMPDIR_ENV) {
+    const _env = process.env.TMPDIR
+    delete process.env.TMPDIR;
+    _tmpDir = tmpdir();
+    process.env.TMPDIR = _env;
+  }
+
+  return join(_tmpDir, "node-jiti");
 }
 
 export function isDir(filename: string): boolean {
