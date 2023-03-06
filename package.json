@@ -16,7 +16,7 @@
     "build": "pnpm clean && cross-env NODE_ENV=production pnpm webpack",
     "clean": "rm -rf dist",
     "dev": "pnpm clean && pnpm webpack --watch",
-    "jiti": "cross-env JITI_DEBUG=1 JITI_CACHE=false ./bin/jiti.js",
+    "jiti": "cross-env JITI_DEBUG=1 JITI_CACHE=false JITI_REQUIRE_CACHE=false ./bin/jiti.js",
     "jiti:legacy": "cross-env JITI_DEBUG=1 npx node@12 ./bin/jiti.js",
     "lint": "eslint --ext .ts,.js . && prettier -c src lib test stubs",
     "release": "pnpm build && pnpm test && changelogen --release && npm publish && git push --follow-tags",
