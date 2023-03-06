@@ -58,7 +58,7 @@ export default function createJITI(
   _filename: string,
   opts: JITIOptions = {},
   parentModule?: typeof module,
-  requiredModules: Record<string, typeof module> = {}
+  requiredModules?: Record<string, typeof module>
 ): JITI {
   opts = { ...defaults, ...opts };
 
@@ -292,7 +292,7 @@ export default function createJITI(
     }
 
     // Check for CJS cache
-    if (requiredModules[filename]) {
+    if (requiredModules && requiredModules[filename]) {
       return _interopDefault(requiredModules[filename]?.exports);
     }
     if (opts.requireCache && nativeRequire.cache[filename]) {
@@ -348,7 +348,7 @@ export default function createJITI(
         parentModule.children.push(mod);
       }
     }
-    mod.require = createJITI(filename, opts, mod, requiredModules);
+    mod.require = createJITI(filename, opts, mod, requiredModules || {});
 
     // @ts-ignore
     mod.path = dirname(filename);
@@ -357,7 +357,9 @@ export default function createJITI(
     mod.paths = Module._nodeModulePaths(mod.path);
 
     // Set CJS cache before eval
-    requiredModules[filename] = mod;
+    if (requiredModules) {
+      requiredModules[filename] = mod;
+    }
     if (opts.requireCache) {
       nativeRequire.cache[filename] = mod;
     }
@@ -396,7 +398,9 @@ export default function createJITI(
     }
 
     // Remove from required modules cache
-    delete requiredModules[filename];
+    if (requiredModules) {
+      delete requiredModules[filename];
+    }
 
     // Check for parse errors
     if (mod.exports && mod.exports.__JITI_ERROR__) {
@@ -427,7 +431,7 @@ export default function createJITI(
   }
 
   jiti.resolve = _resolve;
-  jiti.cache = opts.requireCache ? nativeRequire.cache : requiredModules;
+  jiti.cache = opts.requireCache ? nativeRequire.cache : {};
   jiti.extensions = nativeRequire.extensions;
   jiti.main = nativeRequire.main;
   jiti.transform = transform;
