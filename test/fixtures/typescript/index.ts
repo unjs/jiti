@@ -1,6 +1,6 @@
 import test, { FeedService } from "./test";
 import Clazz from "./decorators";
-import { test as satisfiesTest } from "./satisfies";
+import { test as satisfiesTest } from "./satisfies.js";
 
 export type { Test } from "./types";
 
