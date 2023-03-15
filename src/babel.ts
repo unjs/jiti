@@ -59,7 +59,6 @@ export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
   }
 
   try {
-    console.log(transformSync(opts.source, _opts)?.code);
     return {
       code: transformSync(opts.source, _opts)?.code || "",
     };
