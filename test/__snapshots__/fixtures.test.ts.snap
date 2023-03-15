@@ -122,5 +122,6 @@ Decorator called with 1 arguments.
     secondTest: { name: 'second', avatar: [Object] },
     normalizeUserEntity: [Function: normalizeUserEntity]
   }
-}"
+}
+child"
 `;

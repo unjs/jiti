@@ -55,6 +55,9 @@ export interface JITI extends Require {
   register: () => () => void;
 }
 
+const JS_EXT_RE = /\.(c|m)?j(sx?)$/;
+const TS_EXT_RE = /\.(c|m)?t(sx?)$/;
+
 export default function createJITI(
   _filename: string,
   opts: JITIOptions = {},
@@ -180,8 +183,8 @@ export default function createJITI(
         return resolved;
       }
       // Try resolving .ts files with .js extension
-      if (parentModule?.filename.endsWith(".ts")) {
-        resolved = tryResolve(id.replace(/\.(c|m)?j(sx?)$/, ".$1t$2"), options);
+      if (TS_EXT_RE.test(parentModule?.filename || "")) {
+        resolved = tryResolve(id.replace(JS_EXT_RE, ".$1t$2"), options);
         if (resolved) {
           return resolved;
         }
