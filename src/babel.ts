@@ -5,6 +5,7 @@ import type {
 } from "@babel/core";
 import { TransformOptions, TRANSFORM_RESULT } from "./types";
 import { TransformImportMetaPlugin } from "./plugins/babel-plugin-transform-import-meta";
+import { importMetaEnvPlugin } from "./plugins/import-meta-env";
 
 export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
   const _opts: BabelTransformOptions & { plugins: PluginItem[] } = {
@@ -25,6 +26,10 @@ export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
       [TransformImportMetaPlugin, { filename: opts.filename }],
       [require("@babel/plugin-syntax-class-properties")],
       [require("@babel/plugin-proposal-export-namespace-from")],
+      [
+        importMetaEnvPlugin,
+        { transformMode: "runtime", example: ".env", envFilePath: ".env" },
+      ],
     ],
   };
 
@@ -54,6 +59,7 @@ export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
   }
 
   try {
+    console.log(transformSync(opts.source, _opts)?.code);
     return {
       code: transformSync(opts.source, _opts)?.code || "",
     };
