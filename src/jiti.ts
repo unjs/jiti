@@ -167,9 +167,6 @@ export default function createJITI(
     }
 
     // Try native require resolve
-    if ((opts.extensions as string[]).includes(extname(id))) {
-      return nativeRequire.resolve(id, options);
-    }
     try {
       return nativeRequire.resolve(id, options);
     } catch (error) {
@@ -178,6 +175,8 @@ export default function createJITI(
     for (const ext of _additionalExts) {
       resolved =
         tryResolve(id + ext, options) ||
+        // TODO: Only do this for imports within a typescript parent module
+        tryResolve(id.replace(/\.(c|m)?j(sx?)$/, ".$1t$2"), options) ||
         tryResolve(id + "/index" + ext, options);
       if (resolved) {
         return resolved;
