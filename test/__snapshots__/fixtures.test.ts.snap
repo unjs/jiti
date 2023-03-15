@@ -4,6 +4,11 @@ exports[`fixtures > async > stdout 1`] = `"works"`;
 
 exports[`fixtures > circular > stdout 1`] = `"FooBar"`;
 
+exports[`fixtures > env > stdout 1`] = `
+"process.env.TEST true
+import.meta.env.TEST true"
+`;
+
 exports[`fixtures > error-parse > stderr 1`] = `
 "<root>/lib/index.js:2
   throw err; /* ↓ Check stack trace ↓ */
