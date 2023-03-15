@@ -175,6 +175,7 @@ export default function createJITI(
     for (const ext of _additionalExts) {
       resolved =
         tryResolve(id + ext, options) ||
+        // TODO: Only do this for imports within a typescript parent module
         tryResolve(id.replace(/\.(c|m)?j(sx?)$/, ".$1t$2"), options) ||
         tryResolve(id + "/index" + ext, options);
       if (resolved) {
