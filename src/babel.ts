@@ -26,10 +26,7 @@ export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
       [TransformImportMetaPlugin, { filename: opts.filename }],
       [require("@babel/plugin-syntax-class-properties")],
       [require("@babel/plugin-proposal-export-namespace-from")],
-      [
-        importMetaEnvPlugin,
-        { transformMode: "runtime", example: ".env", envFilePath: ".env" },
-      ],
+      [importMetaEnvPlugin],
     ],
   };
 
