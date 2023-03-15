@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## v1.18.1
+## v1.18.2
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.17.2...v1.18.1)
 
