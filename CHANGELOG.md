@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.18.1
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.17.2...v1.18.1)
+
+
+### 🚀 Enhancements
+
+  - Allow resolving `.ts` files with `.js` extension ([#128](https://github.com/unjs/jiti/pull/128))
+  - Support `import.meta.env` ([#129](https://github.com/unjs/jiti/pull/129))
+
+### 🔥 Performance
+
+  - Use extension resolutions only for parent typescript files ([27a9888](https://github.com/unjs/jiti/commit/27a9888))
+
+### 🩹 Fixes
+
+  - Handle parretns with `c ([mts` extension too](https://github.com/unjs/jiti/commit/mts` extension too))
+
+### 🏡 Chore
+
+  - Update lockfile ([e91d3a1](https://github.com/unjs/jiti/commit/e91d3a1))
+
+### ❤️  Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Db3f994 <Pooya Parsa>
+- Guillaume Chau ([@Akryum](http://github.com/Akryum))
+
 ## v1.17.2
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.17.1...v1.17.2)
