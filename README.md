@@ -1,10 +1,11 @@
 # jiti
 
-> Runtime typescript and ESM support for Node.js
+[![npm version][npm-version-src]][npm-version-href]
+[![npm downloads][npm-downloads-src]][npm-downloads-href]
+[![bundle][bundle-src]][bundle-href]
+[![License][license-src]][license-href]
 
-[![version][npm-v-src]][npm-v-href]
-[![downloads][npm-d-src]][npm-d-href]
-[![size][size-src]][size-href]
+Runtime Typescript and ESM support for Node.js
 
 ## Features
 
@@ -140,13 +141,13 @@ List of modules (within `node_modules`) to transform them regardless of syntax.
 
 MIT. Made with 💖
 
-<!-- Refs -->
+<!-- Badged -->
 
-[npm-v-src]: https://img.shields.io/npm/v/jiti?style=flat-square
-[npm-v-href]: https://npmjs.com/package/jiti
-[npm-d-src]: https://img.shields.io/npm/dm/jiti?style=flat-square
-[npm-d-href]: https://npmjs.com/package/jiti
-[github-actions-src]: https://img.shields.io/github/workflow/status/unjs/jiti/ci/master?style=flat-square
-[github-actions-href]: https://github.com/unjs/jiti/actions?query=workflow%3Aci
-[size-src]: https://packagephobia.now.sh/badge?p=jiti
-[size-href]: https://packagephobia.now.sh/result?p=jiti
+[npm-version-src]: https://img.shields.io/npm/v/jiti?style=flat&colorA=18181B&colorB=F0DB4F
+[npm-version-href]: https://npmjs.com/package/jiti
+[npm-downloads-src]: https://img.shields.io/npm/dm/jiti?style=flat&colorA=18181B&colorB=F0DB4F
+[npm-downloads-href]: https://npmjs.com/package/jiti
+[bundle-src]: https://img.shields.io/bundlephobia/minzip/jiti?style=flat&colorA=18181B&colorB=F0DB4F
+[bundle-href]: https://bundlephobia.com/result?p=h3
+[license-src]: https://img.shields.io/github/license/unjs/jiti.svg?style=flat&colorA=18181B&colorB=F0DB4F
+[license-href]: https://github.com/unjs/jiti/blob/main/LICENSE
