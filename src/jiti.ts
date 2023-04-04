@@ -268,7 +268,7 @@ export default function createJITI(
       id = id.slice(5);
     } else if (id.startsWith("file:")) {
       id = fileURLToPath(id);
-    } else if (isWindows && /^w+:/.test(id)) {
+    } else if (isWindows && /^\w:/.test(id)) {
       id = fileURLToPath(`file:///${id.replace(/\\/g, "/")}`);
     }
 
