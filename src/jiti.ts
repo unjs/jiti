@@ -268,6 +268,8 @@ export default function createJITI(
       id = id.slice(5);
     } else if (id.startsWith("file:")) {
       id = fileURLToPath(id);
+    } else if (isWindows && /^w+:/.test(id)) {
+      id = `file:///${id.replace(/\//g, "\\")}`;
     }
 
     // Check for builtin node module like fs
