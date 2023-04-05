@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "build": "pnpm clean && cross-env NODE_ENV=production pnpm webpack",
-    "clean": "rm -rf dist",
+    "clean": "rimraf dist",
     "dev": "pnpm clean && pnpm webpack --watch",
     "jiti": "cross-env JITI_DEBUG=1 JITI_CACHE=false JITI_REQUIRE_CACHE=false ./bin/jiti.js",
     "jiti:legacy": "cross-env JITI_DEBUG=1 npx node@12 ./bin/jiti.js",
@@ -65,6 +65,7 @@
     "pkg-types": "^1.0.2",
     "prettier": "^2.8.4",
     "reflect-metadata": "^0.1.13",
+    "rimraf": "^4.4.1",
     "semver": "^7.3.8",
     "std-env": "^3.3.2",
     "terser-webpack-plugin": "^5.3.7",
