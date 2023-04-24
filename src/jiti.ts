@@ -53,6 +53,7 @@ type Require = typeof require;
 export interface JITI extends Require {
   transform: (opts: TransformOptions) => string;
   register: () => () => void;
+  evalModule: (id: string, source: string) => any
 }
 
 const JS_EXT_RE = /\.(c|m)?j(sx?)$/;
@@ -239,9 +240,9 @@ export default function createJITI(
         babel: {
           ...(opts.sourceMaps
             ? {
-                sourceFileName: topts.filename,
-                sourceMaps: "inline",
-              }
+              sourceFileName: topts.filename,
+              sourceMaps: "inline",
+            }
             : {}),
           ...opts.transformOptions?.babel,
         },
@@ -308,7 +309,7 @@ export default function createJITI(
     }
 
     // Read source
-    let source = readFileSync(filename, "utf8");
+    const source = readFileSync(filename, "utf8");
 
     // Transpile
     const isTypescript = ext === ".ts" || ext === ".mts" || ext === ".cts";
@@ -324,26 +325,36 @@ export default function createJITI(
         hasESMSyntax(source) ||
         (opts.legacy && detectLegacySyntax(source)));
 
-    const start = performance.now();
     if (needsTranspile) {
-      source = transform({ filename, source, ts: isTypescript });
-      const time = Math.round((performance.now() - start) * 1000) / 1000;
-      debug(
-        `[transpile]${isNativeModule ? " [esm]" : ""}`,
-        filename,
-        `(${time}ms)`
-      );
-    } else {
-      try {
-        debug("[native]", filename);
-        return _interopDefault(nativeRequire(id));
-      } catch (error: any) {
-        debug("Native require error:", error);
-        debug("[fallback]", filename);
-        source = transform({ filename, source, ts: isTypescript });
-      }
+      return evalModule(filename, source)
     }
 
+    try {
+      debug("[native]", filename);
+      return _interopDefault(nativeRequire(id));
+    } catch (error: any) {
+      debug("Native require error:", error);
+      debug("[fallback]", filename);
+      return evalModule(filename, source)
+    }
+  }
+
+  function evalModule(filename: string, source: string) {
+    const packageJSON = readNearestPackageJSON(filename)
+    const ext = extname(filename);
+    const isTypescript = ext === ".ts" || ext === ".mts" || ext === ".cts";
+    const isNativeModule = ext === ".mjs" || (ext === ".js" && packageJSON?.type === 'module')
+    const isEvalModule = !existsSync(filename) 
+    const filenameReal = isEvalModule ? _filename : filename
+
+    const start = performance.now();
+    source = transform({ filename, source, ts: isTypescript });
+    const time = Math.round((performance.now() - start) * 1000) / 1000;
+    debug(
+      `[transpile]${isNativeModule ? " [esm]" : ""}`,
+      filename,
+      `(${time}ms)`
+    );
     // Compile module
     const mod = new Module(filename);
     mod.filename = filename;
@@ -356,10 +367,10 @@ export default function createJITI(
         parentModule.children.push(mod);
       }
     }
-    mod.require = createJITI(filename, opts, mod, requiredModules || {});
+    mod.require = createJITI(filenameReal, opts, mod, requiredModules || {});
 
     // @ts-ignore
-    mod.path = dirname(filename);
+    mod.path = dirname(filenameReal);
 
     // @ts-ignore
     mod.paths = Module._nodeModulePaths(mod.path);
@@ -444,6 +455,7 @@ export default function createJITI(
   jiti.main = nativeRequire.main;
   jiti.transform = transform;
   jiti.register = register;
+  jiti.evalModule = evalModule
 
   return jiti;
 }
