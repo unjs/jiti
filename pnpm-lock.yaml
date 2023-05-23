@@ -106,6 +106,9 @@ devDependencies:
   fast-glob:
     specifier: ^3.2.12
     version: 3.2.12
+  lodash-es:
+    specifier: ^4.17.21
+    version: 4.17.21
   mlly:
     specifier: ^1.2.0
     version: 1.2.0
@@ -3248,6 +3251,10 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       p-locate: 5.0.0
+    dev: true
+
+  /lodash-es@4.17.21:
+    resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
     dev: true
 
   /lodash.merge@4.6.2:

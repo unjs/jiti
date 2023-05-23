@@ -39,6 +39,7 @@ describe("fixtures", async () => {
         reject: false,
         env: {
           JITI_CACHE: "false",
+          JITI_REQUIRE_CACHE: "false",
           JITI_ESM_RESOLVE: "true",
         },
       });

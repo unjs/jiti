@@ -58,6 +58,7 @@
     "estree-walker": "^3.0.3",
     "execa": "^7.1.1",
     "fast-glob": "^3.2.12",
+    "lodash-es": "^4.17.21",
     "mlly": "^1.2.0",
     "object-hash": "^3.0.0",
     "pathe": "^1.1.0",
