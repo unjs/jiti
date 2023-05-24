@@ -1,3 +1,3 @@
-import { mergeWith } from 'lodash-es'
+import { mergeWith } from "lodash-es";
 
-export default mergeWith({ a: 1 }, { b: 2 })
+export default mergeWith({ a: 1 }, { b: 2 });
