@@ -1,3 +1,3 @@
-import { base } from "./a";
-
-export const addBase = (val) => base + val;
+export { a } from "./a";
+export const b = "b";
+export { c } from "./c";
