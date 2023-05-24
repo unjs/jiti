@@ -406,9 +406,9 @@ export default function createJITI(
     }
 
     // Remove from required modules cache
-    // if (requiredModules) {
-    // delete requiredModules[filename];
-    // }
+    if (!parentModule) {
+      delete requiredModules[filename];
+    }
 
     // Check for parse errors
     if (mod.exports && mod.exports.__JITI_ERROR__) {
