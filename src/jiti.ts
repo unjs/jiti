@@ -62,7 +62,7 @@ export default function createJITI(
   _filename: string,
   opts: JITIOptions = {},
   parentModule?: typeof module,
-  requiredModules?: Record<string, typeof module>
+  requiredModules: Record<string, typeof module> = {}
 ): JITI {
   opts = { ...defaults, ...opts };
 
@@ -406,9 +406,9 @@ export default function createJITI(
     }
 
     // Remove from required modules cache
-    if (requiredModules) {
-      delete requiredModules[filename];
-    }
+    // if (requiredModules) {
+    // delete requiredModules[filename];
+    // }
 
     // Check for parse errors
     if (mod.exports && mod.exports.__JITI_ERROR__) {
