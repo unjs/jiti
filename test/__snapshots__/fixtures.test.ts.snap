@@ -18,11 +18,13 @@ Error: ParseError: \`import\` can only be used in \`import
  <cwd>/index.ts
     at Object.<anonymous> (<root>/bin/jiti)
     at Module._compile (internal/modules/cjs/loader)
-    at Object.Module._extensions..js (internal/modules/cjs/loader)
+    at Module._extensions..js (internal/modules/cjs/loader)
     at Module.load (internal/modules/cjs/loader)
-    at Function.Module._load (internal/modules/cjs/loader)
+    at Module._load (internal/modules/cjs/loader)
     at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)
-    at internal/main/run_main_module"
+    at internal/main/run_main_module
+
+Node.js v18.16.0"
 `;
 
 exports[`fixtures > error-parse > stdout 1`] = `""`;
@@ -40,13 +42,15 @@ TypeError: The \\"listener\\" argument must be of type function. Received undefi
     at jiti (<root>/dist/jiti)
     at Object.<anonymous> (<root>/bin/jiti)
     at Module._compile (internal/modules/cjs/loader)
-    at Object.Module._extensions..js (internal/modules/cjs/loader)
+    at Module._extensions..js (internal/modules/cjs/loader)
     at Module.load (internal/modules/cjs/loader)
-    at Function.Module._load (internal/modules/cjs/loader)
+    at Module._load (internal/modules/cjs/loader)
     at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)
     at internal/main/run_main_module {
   code: 'ERR_INVALID_ARG_TYPE'
-}"
+}
+
+Node.js v18.16.0"
 `;
 
 exports[`fixtures > error-runtime > stdout 1`] = `""`;
@@ -64,9 +68,9 @@ exports[`fixtures > esm > stdout 1`] = `
     'at jiti (<root>/dist/jiti)',
     'at Object.<anonymous> (<root>/bin/jiti)',
     'at Module._compile (internal/modules/cjs/loader)',
-    'at Object.Module._extensions..js (internal/modules/cjs/loader)',
+    'at Module._extensions..js (internal/modules/cjs/loader)',
     'at Module.load (internal/modules/cjs/loader)',
-    'at Function.Module._load (internal/modules/cjs/loader)',
+    'at Module._load (internal/modules/cjs/loader)',
     'at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)',
     'at internal/main/run_main_module'
   ]
