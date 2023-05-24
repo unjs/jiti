@@ -36,9 +36,9 @@ const isWindows = platform() === "win32";
 
 const defaults: JITIOptions = {
   debug: _EnvDebug,
-  cache: _EnvCache !== undefined ? !!_EnvCache : true,
-  requireCache: _EnvRequireCache !== undefined ? !!_EnvRequireCache : true,
-  sourceMaps: _EnvSourceMaps !== undefined ? !!_EnvSourceMaps : false,
+  cache: _EnvCache === undefined ? true : !!_EnvCache,
+  requireCache: _EnvRequireCache === undefined ? true : !!_EnvRequireCache,
+  sourceMaps: _EnvSourceMaps === undefined ? false : !!_EnvSourceMaps,
   interopDefault: false,
   esmResolve: _EnvESMResolve || false,
   cacheVersion: "7",
