@@ -62,7 +62,7 @@ export default function createJITI(
   _filename: string,
   opts: JITIOptions = {},
   parentModule?: typeof module,
-  requiredModules?: Record<string, typeof module>
+  parentCache?: Record<string, typeof module>
 ): JITI {
   opts = { ...defaults, ...opts };
 
@@ -263,6 +263,8 @@ export default function createJITI(
   }
 
   function jiti(id: string) {
+    const requiredModules = parentCache || {};
+
     // Check for node: and file: protocol
     if (id.startsWith("node:")) {
       id = id.slice(5);
@@ -300,7 +302,7 @@ export default function createJITI(
     }
 
     // Check for CJS cache
-    if (requiredModules && requiredModules[filename]) {
+    if (requiredModules[filename]) {
       return _interopDefault(requiredModules[filename]?.exports);
     }
     if (opts.requireCache && nativeRequire.cache[filename]) {
@@ -356,7 +358,8 @@ export default function createJITI(
         parentModule.children.push(mod);
       }
     }
-    mod.require = createJITI(filename, opts, mod, requiredModules || {});
+
+    mod.require = createJITI(filename, opts, mod, requiredModules);
 
     // @ts-ignore
     mod.path = dirname(filename);
@@ -365,9 +368,7 @@ export default function createJITI(
     mod.paths = Module._nodeModulePaths(mod.path);
 
     // Set CJS cache before eval
-    if (requiredModules) {
-      requiredModules[filename] = mod;
-    }
+    requiredModules[filename] = mod;
     if (opts.requireCache) {
       nativeRequire.cache[filename] = mod;
     }
@@ -403,11 +404,6 @@ export default function createJITI(
         delete nativeRequire.cache[filename];
       }
       opts.onError!(error);
-    }
-
-    // Remove from required modules cache
-    if (requiredModules) {
-      delete requiredModules[filename];
     }
 
     // Check for parse errors
