@@ -5,7 +5,7 @@ import { platform } from "os";
 import vm from "vm";
 import { fileURLToPath, pathToFileURL } from "url";
 import { dirname, join, basename, extname } from "pathe";
-import destr from "destr";
+import { destr } from "destr";
 import escapeStringRegexp from "escape-string-regexp";
 import createRequire from "create-require";
 import { lt } from "semver";
