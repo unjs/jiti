@@ -23,14 +23,14 @@ import {
 } from "./utils";
 import { TransformOptions, JITIOptions } from "./types";
 
-const _EnvDebug = destr(process.env.JITI_DEBUG);
-const _EnvCache = destr(process.env.JITI_CACHE);
-const _EnvESMResolve = destr(process.env.JITI_ESM_RESOLVE);
-const _EnvRequireCache = destr(process.env.JITI_REQUIRE_CACHE);
-const _EnvSourceMaps = destr(process.env.JITI_SOURCE_MAPS);
-const _EnvAlias = destr(process.env.JITI_ALIAS);
-const _EnvTransform = destr(process.env.JITI_TRANSFORM_MODULES);
-const _EnvNative = destr(process.env.JITI_NATIVE_MODULES);
+const _EnvDebug = destr<boolean>(process.env.JITI_DEBUG);
+const _EnvCache = destr<boolean>(process.env.JITI_CACHE);
+const _EnvESMResolve = destr<boolean>(process.env.JITI_ESM_RESOLVE);
+const _EnvRequireCache = destr<boolean>(process.env.JITI_REQUIRE_CACHE);
+const _EnvSourceMaps = destr<boolean>(process.env.JITI_SOURCE_MAPS);
+const _EnvAlias = destr<Record<string, string>>(process.env.JITI_ALIAS);
+const _EnvTransform = destr<string[]>(process.env.JITI_TRANSFORM_MODULES);
+const _EnvNative = destr<string[]>(process.env.JITI_NATIVE_MODULES);
 
 const isWindows = platform() === "win32";
 
