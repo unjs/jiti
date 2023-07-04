@@ -13,11 +13,11 @@
     "register.js"
   ],
   "scripts": {
-    "build": "pnpm clean && cross-env NODE_ENV=production pnpm webpack",
+    "build": "pnpm clean && NODE_ENV=production pnpm webpack",
     "clean": "rm -rf dist",
     "dev": "pnpm clean && pnpm webpack --watch",
-    "jiti": "cross-env JITI_DEBUG=1 JITI_CACHE=false JITI_REQUIRE_CACHE=false ./bin/jiti.js",
-    "jiti:legacy": "cross-env JITI_DEBUG=1 npx node@12 ./bin/jiti.js",
+    "jiti": "JITI_DEBUG=1 JITI_CACHE=false JITI_REQUIRE_CACHE=false ./bin/jiti.js",
+    "jiti:legacy": "JITI_DEBUG=1 npx node@12 ./bin/jiti.js",
     "lint": "eslint --ext .ts,.js . && prettier -c src lib test stubs",
     "lint:fix": "eslint --fix --ext .ts,.js . && prettier -w src lib test stubs",
     "release": "pnpm build && pnpm test && changelogen --release --push && npm publish",
@@ -50,7 +50,6 @@
     "changelogen": "^0.5.4",
     "config": "^3.3.9",
     "create-require": "^1.1.1",
-    "cross-env": "^7.0.3",
     "destr": "^2.0.0",
     "escape-string-regexp": "^5.0.0",
     "eslint": "^8.44.0",
