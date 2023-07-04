@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "build": "pnpm clean && NODE_ENV=production pnpm webpack",
-    "clean": "rimraf dist",
+    "clean": "rm -rf dist",
     "dev": "pnpm clean && pnpm webpack --watch",
     "jiti": "JITI_DEBUG=1 JITI_CACHE=false JITI_REQUIRE_CACHE=false ./bin/jiti.js",
     "jiti:legacy": "JITI_DEBUG=1 npx node@12 ./bin/jiti.js",
