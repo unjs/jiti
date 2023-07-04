@@ -39,6 +39,7 @@ TypeError: The \\"listener\\" argument must be of type function. Received undefi
     at _addListener (events)
     at process.addListener (events)
     at <cwd>/index.ts
+    at evalModule (<root>/dist/jiti)
     at jiti (<root>/dist/jiti)
     at Object.<anonymous> (<root>/bin/jiti)
     at Module._compile (internal/modules/cjs/loader)
@@ -65,6 +66,7 @@ exports[`fixtures > esm > stdout 1`] = `
     'at getStack (<cwd>/test)',
     'at test (<cwd>/test)',
     'at <cwd>/index.js',
+    'at evalModule (<root>/dist/jiti)',
     'at jiti (<root>/dist/jiti)',
     'at Object.<anonymous> (<root>/bin/jiti)',
     'at Module._compile (internal/modules/cjs/loader)',
