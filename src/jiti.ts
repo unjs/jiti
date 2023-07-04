@@ -5,7 +5,7 @@ import { platform } from "os";
 import vm from "vm";
 import { fileURLToPath, pathToFileURL } from "url";
 import { dirname, join, basename, extname } from "pathe";
-import destr from "destr";
+import { destr } from "destr";
 import escapeStringRegexp from "escape-string-regexp";
 import createRequire from "create-require";
 import { lt } from "semver";
@@ -23,14 +23,14 @@ import {
 } from "./utils";
 import { TransformOptions, JITIOptions } from "./types";
 
-const _EnvDebug = destr(process.env.JITI_DEBUG);
-const _EnvCache = destr(process.env.JITI_CACHE);
-const _EnvESMResolve = destr(process.env.JITI_ESM_RESOLVE);
-const _EnvRequireCache = destr(process.env.JITI_REQUIRE_CACHE);
-const _EnvSourceMaps = destr(process.env.JITI_SOURCE_MAPS);
-const _EnvAlias = destr(process.env.JITI_ALIAS);
-const _EnvTransform = destr(process.env.JITI_TRANSFORM_MODULES);
-const _EnvNative = destr(process.env.JITI_NATIVE_MODULES);
+const _EnvDebug = destr<boolean>(process.env.JITI_DEBUG);
+const _EnvCache = destr<boolean>(process.env.JITI_CACHE);
+const _EnvESMResolve = destr<boolean>(process.env.JITI_ESM_RESOLVE);
+const _EnvRequireCache = destr<boolean>(process.env.JITI_REQUIRE_CACHE);
+const _EnvSourceMaps = destr<boolean>(process.env.JITI_SOURCE_MAPS);
+const _EnvAlias = destr<Record<string, string>>(process.env.JITI_ALIAS);
+const _EnvTransform = destr<string[]>(process.env.JITI_TRANSFORM_MODULES);
+const _EnvNative = destr<string[]>(process.env.JITI_NATIVE_MODULES);
 
 const isWindows = platform() === "win32";
 
@@ -62,7 +62,7 @@ export default function createJITI(
   _filename: string,
   opts: JITIOptions = {},
   parentModule?: typeof module,
-  requiredModules?: Record<string, typeof module>
+  parentCache?: Record<string, typeof module>
 ): JITI {
   opts = { ...defaults, ...opts };
 
@@ -263,6 +263,8 @@ export default function createJITI(
   }
 
   function jiti(id: string) {
+    const requiredModules = parentCache || {};
+
     // Check for node: and file: protocol
     if (id.startsWith("node:")) {
       id = id.slice(5);
@@ -300,7 +302,7 @@ export default function createJITI(
     }
 
     // Check for CJS cache
-    if (requiredModules && requiredModules[filename]) {
+    if (requiredModules[filename]) {
       return _interopDefault(requiredModules[filename]?.exports);
     }
     if (opts.requireCache && nativeRequire.cache[filename]) {
@@ -356,7 +358,8 @@ export default function createJITI(
         parentModule.children.push(mod);
       }
     }
-    mod.require = createJITI(filename, opts, mod, requiredModules || {});
+
+    mod.require = createJITI(filename, opts, mod, requiredModules);
 
     // @ts-ignore
     mod.path = dirname(filename);
@@ -365,9 +368,7 @@ export default function createJITI(
     mod.paths = Module._nodeModulePaths(mod.path);
 
     // Set CJS cache before eval
-    if (requiredModules) {
-      requiredModules[filename] = mod;
-    }
+    requiredModules[filename] = mod;
     if (opts.requireCache) {
       nativeRequire.cache[filename] = mod;
     }
@@ -403,11 +404,6 @@ export default function createJITI(
         delete nativeRequire.cache[filename];
       }
       opts.onError!(error);
-    }
-
-    // Remove from required modules cache
-    if (requiredModules) {
-      delete requiredModules[filename];
     }
 
     // Check for parse errors
