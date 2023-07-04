@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.19.1
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.19.0...v1.19.1)
+
+### 🩹 Fixes
+
+- Read cache from `evalOptions` ([2c1765e](https://github.com/unjs/jiti/commit/2c1765e))
+
+### ❤️  Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v1.19.0
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.18.2...v1.19.0)
