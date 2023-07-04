@@ -29,7 +29,7 @@ describe("fixtures", async () => {
           .replace(/node:(internal|events)/g, "$1") // in Node 16 internal will be presented as node:internal
           .replace(/\.js\)/g, ")")
           .replace(/file:\/{3}/g, "file://")
-          .replace(/Node.js v[0-9.]+/, "Node.js v<version>")
+          .replace(/Node.js v[\d.]+/, "Node.js v<version>")
           .replace(/ParseError: \w:\/:\s+/, "ParseError: ") // Unknown chars in Windows
           .trim();
       }
