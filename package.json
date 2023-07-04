@@ -23,8 +23,8 @@
     "test": "pnpm lint && vitest run --coverage"
   },
   "devDependencies": {
-    "@babel/core": "^7.22.5",
-    "@babel/plugin-proposal-decorators": "^7.22.5",
+    "@babel/core": "^7.22.6",
+    "@babel/plugin-proposal-decorators": "^7.22.6",
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.18.6",
     "@babel/plugin-proposal-optional-chaining": "^7.21.0",
@@ -50,7 +50,7 @@
     "config": "^3.3.9",
     "create-require": "^1.1.1",
     "cross-env": "^7.0.3",
-    "destr": "^1.2.2",
+    "destr": "^2.0.0",
     "escape-string-regexp": "^5.0.0",
     "eslint": "^8.44.0",
     "eslint-config-unjs": "^0.2.1",
