@@ -64,7 +64,7 @@ export type EvalModuleOptions = Partial<{
 export interface JITI extends Require {
   transform: (opts: TransformOptions) => string;
   register: () => () => void;
-  evalModule: (source: string, options?: EvalModuleOptions) => { exports: any };
+  evalModule: (source: string, options?: EvalModuleOptions) => unknown;
 }
 
 const JS_EXT_RE = /\.(c|m)?j(sx?)$/;
@@ -325,7 +325,7 @@ export default function createJITI(
     const source = readFileSync(filename, "utf8");
 
     // Evaluate module
-    return evalModule(source, { id, filename, ext, cache }).exports;
+    return evalModule(source, { id, filename, ext, cache });
   }
 
   function evalModule(source: string, evalOptions: EvalModuleOptions = {}) {
@@ -450,9 +450,7 @@ export default function createJITI(
     const _exports = _interopDefault(mod.exports);
 
     // Return exports
-    return {
-      exports: _exports,
-    };
+    return _exports;
   }
 
   function register() {
