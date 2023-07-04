@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.19.0
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.18.2...v1.19.0)
+
+### 🚀 Enhancements
+
+- Expose `jiti.evalModule` ([#146](https://github.com/unjs/jiti/pull/146))
+
+### 🩹 Fixes
+
+- Handle nested circular dependencies ([#142](https://github.com/unjs/jiti/pull/142))
+- **types:** Export `JITIOptions` and `TreansformOptions` ([#132](https://github.com/unjs/jiti/pull/132))
+
+### 📖 Documentation
+
+- Update badges ([6124894](https://github.com/unjs/jiti/commit/6124894))
+
+### 🏡 Chore
+
+- Lint code ([fbd46e4](https://github.com/unjs/jiti/commit/fbd46e4))
+- Update snapshots for node 18 ([c51f049](https://github.com/unjs/jiti/commit/c51f049))
+- Update dependencies ([9aedf07](https://github.com/unjs/jiti/commit/9aedf07))
+- Update destr import ([5b1c1ca](https://github.com/unjs/jiti/commit/5b1c1ca))
+- Fix vitest ([c6798c6](https://github.com/unjs/jiti/commit/c6798c6))
+- Speficy env types ([37e0692](https://github.com/unjs/jiti/commit/37e0692))
+- Lint ([37b6b7a](https://github.com/unjs/jiti/commit/37b6b7a))
+- Fix development in windows ([#135](https://github.com/unjs/jiti/pull/135))
+
+### ✅ Tests
+
+- Mask node version in snapshots ([64cf136](https://github.com/unjs/jiti/commit/64cf136))
+
+### ❤️  Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Joaquín Sánchez ([@userquin](http://github.com/userquin))
+- Sébastien Chopin <seb@nuxtjs.com>
+
 ## v1.18.2
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.17.2...v1.18.1)
