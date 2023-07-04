@@ -24,7 +24,7 @@ Error: ParseError: \`import\` can only be used in \`import
     at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)
     at internal/main/run_main_module
 
-Node.js v18.16.0"
+Node.js v<version>"
 `;
 
 exports[`fixtures > error-parse > stdout 1`] = `""`;
@@ -50,7 +50,7 @@ TypeError: The \\"listener\\" argument must be of type function. Received undefi
   code: 'ERR_INVALID_ARG_TYPE'
 }
 
-Node.js v18.16.0"
+Node.js v<version>"
 `;
 
 exports[`fixtures > error-runtime > stdout 1`] = `""`;
