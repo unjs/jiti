@@ -50,9 +50,18 @@ const defaults: JITIOptions = {
 };
 
 type Require = typeof require;
+
+export type EvalModuleOptions = Partial<{
+  id: string;
+  filename: string;
+  ext: string;
+  cache: Record<string, typeof module>;
+}>;
+
 export interface JITI extends Require {
   transform: (opts: TransformOptions) => string;
   register: () => () => void;
+  evalModule: (source: string, options?: EvalModuleOptions) => { exports: any };
 }
 
 const JS_EXT_RE = /\.(c|m)?j(sx?)$/;
@@ -263,7 +272,7 @@ export default function createJITI(
   }
 
   function jiti(id: string) {
-    const requiredModules = parentCache || {};
+    const cache = parentCache || {};
 
     // Check for node: and file: protocol
     if (id.startsWith("node:")) {
@@ -302,8 +311,8 @@ export default function createJITI(
     }
 
     // Check for CJS cache
-    if (requiredModules[filename]) {
-      return _interopDefault(requiredModules[filename]?.exports);
+    if (cache[filename]) {
+      return _interopDefault(cache[filename]?.exports);
     }
     if (opts.requireCache && nativeRequire.cache[filename]) {
       return _interopDefault(nativeRequire.cache[filename]?.exports);
@@ -311,6 +320,24 @@ export default function createJITI(
 
     // Read source
     let source = readFileSync(filename, "utf8");
+
+    // Evaluate module
+    return evalModule(source, { id, filename, ext, cache }).exports;
+  }
+
+  function evalModule(source: string, evalOptions: EvalModuleOptions = {}) {
+    // Resolve options
+    const id =
+      evalOptions.id ||
+      (evalOptions.filename
+        ? basename(evalOptions.filename)
+        : `module.${evalOptions.ext || ".js"}`);
+    const filename = evalOptions.filename || _resolve(id);
+    const ext = evalOptions.ext || extname(filename);
+    const cache = (opts.cache || parentCache || {}) as Record<
+      string,
+      typeof module
+    >;
 
     // Transpile
     const isTypescript = ext === ".ts" || ext === ".mts" || ext === ".cts";
@@ -359,7 +386,7 @@ export default function createJITI(
       }
     }
 
-    mod.require = createJITI(filename, opts, mod, requiredModules);
+    mod.require = createJITI(filename, opts, mod, cache);
 
     // @ts-ignore
     mod.path = dirname(filename);
@@ -368,7 +395,7 @@ export default function createJITI(
     mod.paths = Module._nodeModulePaths(mod.path);
 
     // Set CJS cache before eval
-    requiredModules[filename] = mod;
+    cache[filename] = mod;
     if (opts.requireCache) {
       nativeRequire.cache[filename] = mod;
     }
@@ -423,7 +450,9 @@ export default function createJITI(
     const _exports = _interopDefault(mod.exports);
 
     // Return exports
-    return _exports;
+    return {
+      exports: _exports,
+    };
   }
 
   function register() {
@@ -440,6 +469,7 @@ export default function createJITI(
   jiti.main = nativeRequire.main;
   jiti.transform = transform;
   jiti.register = register;
+  jiti.evalModule = evalModule;
 
   return jiti;
 }
