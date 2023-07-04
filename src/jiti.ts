@@ -23,6 +23,8 @@ import {
 } from "./utils";
 import { TransformOptions, JITIOptions } from "./types";
 
+export type { JITIOptions, TransformOptions } from "./types";
+
 const _EnvDebug = destr<boolean>(process.env.JITI_DEBUG);
 const _EnvCache = destr<boolean>(process.env.JITI_CACHE);
 const _EnvESMResolve = destr<boolean>(process.env.JITI_ESM_RESOLVE);
