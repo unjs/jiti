@@ -339,7 +339,7 @@ export default function createJITI(
         : `_jitiEval.${evalOptions.ext || ".js"}`);
     const filename = evalOptions.filename || _resolve(id);
     const ext = evalOptions.ext || extname(filename);
-    const cache = (opts.cache || parentCache || {}) as ModuleCache;
+    const cache = (evalOptions.cache || parentCache || {}) as ModuleCache;
 
     // Transpile
     const isTypescript = ext === ".ts" || ext === ".mts" || ext === ".cts";
