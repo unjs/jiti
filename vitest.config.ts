@@ -2,8 +2,6 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    coverage: {
-      reporter: ["text", "clover", "json"],
-    },
+    exclude: ["**/test.{ts,mjs,cjs,js}", "node_modules/**/*"],
   },
 });
