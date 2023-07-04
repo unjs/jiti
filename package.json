@@ -50,7 +50,7 @@
     "config": "^3.3.9",
     "create-require": "^1.1.1",
     "cross-env": "^7.0.3",
-    "destr": "^1.2.2",
+    "destr": "^2.0.0",
     "escape-string-regexp": "^5.0.0",
     "eslint": "^8.41.0",
     "eslint-config-unjs": "^0.2.0",
