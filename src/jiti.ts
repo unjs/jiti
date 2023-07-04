@@ -50,12 +50,15 @@ const defaults: JITIOptions = {
 };
 
 type Require = typeof require;
+type Module = typeof module;
+
+type ModuleCache = Record<string, Module>;
 
 export type EvalModuleOptions = Partial<{
   id: string;
   filename: string;
   ext: string;
-  cache: Record<string, typeof module>;
+  cache: ModuleCache;
 }>;
 
 export interface JITI extends Require {
@@ -70,8 +73,8 @@ const TS_EXT_RE = /\.(c|m)?t(sx?)$/;
 export default function createJITI(
   _filename: string,
   opts: JITIOptions = {},
-  parentModule?: typeof module,
-  parentCache?: Record<string, typeof module>
+  parentModule?: Module,
+  parentCache?: ModuleCache
 ): JITI {
   opts = { ...defaults, ...opts };
 
@@ -331,13 +334,10 @@ export default function createJITI(
       evalOptions.id ||
       (evalOptions.filename
         ? basename(evalOptions.filename)
-        : `module.${evalOptions.ext || ".js"}`);
+        : `_jitiEval.${evalOptions.ext || ".js"}`);
     const filename = evalOptions.filename || _resolve(id);
     const ext = evalOptions.ext || extname(filename);
-    const cache = (opts.cache || parentCache || {}) as Record<
-      string,
-      typeof module
-    >;
+    const cache = (opts.cache || parentCache || {}) as ModuleCache;
 
     // Transpile
     const isTypescript = ext === ".ts" || ext === ".mts" || ext === ".cts";
