@@ -322,7 +322,7 @@ export default function createJITI(
     }
 
     // Read source
-    let source = readFileSync(filename, "utf8");
+    const source = readFileSync(filename, "utf8");
 
     // Evaluate module
     return evalModule(source, { id, filename, ext, cache }).exports;
