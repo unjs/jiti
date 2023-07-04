@@ -6,6 +6,7 @@
     "unicorn/import-style": 0,
     "unicorn/no-null": 0,
     "@typescript-eslint/no-non-null-assertion": 0,
-    "indent": 0
+    "indent": 0,
+    "unicorn/prefer-string-replace-all": 0
   }
 }

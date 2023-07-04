@@ -5,7 +5,7 @@ import { platform } from "os";
 import vm from "vm";
 import { fileURLToPath, pathToFileURL } from "url";
 import { dirname, join, basename, extname } from "pathe";
-import destr from "destr";
+import { destr } from "destr";
 import escapeStringRegexp from "escape-string-regexp";
 import createRequire from "create-require";
 import { lt } from "semver";
@@ -36,9 +36,9 @@ const isWindows = platform() === "win32";
 
 const defaults: JITIOptions = {
   debug: _EnvDebug,
-  cache: _EnvCache !== undefined ? !!_EnvCache : true,
-  requireCache: _EnvRequireCache !== undefined ? !!_EnvRequireCache : true,
-  sourceMaps: _EnvSourceMaps !== undefined ? !!_EnvSourceMaps : false,
+  cache: _EnvCache === undefined ? true : !!_EnvCache,
+  requireCache: _EnvRequireCache === undefined ? true : !!_EnvRequireCache,
+  sourceMaps: _EnvSourceMaps === undefined ? false : !!_EnvSourceMaps,
   interopDefault: false,
   esmResolve: _EnvESMResolve || false,
   cacheVersion: "7",
@@ -53,7 +53,7 @@ type Require = typeof require;
 export interface JITI extends Require {
   transform: (opts: TransformOptions) => string;
   register: () => () => void;
-  evalModule: (id: string, source: string) => any
+  evalModule: (id: string, source: string) => any;
 }
 
 const JS_EXT_RE = /\.(c|m)?j(sx?)$/;
@@ -63,7 +63,7 @@ export default function createJITI(
   _filename: string,
   opts: JITIOptions = {},
   parentModule?: typeof module,
-  requiredModules?: Record<string, typeof module>
+  parentCache?: Record<string, typeof module>
 ): JITI {
   opts = { ...defaults, ...opts };
 
@@ -240,9 +240,9 @@ export default function createJITI(
         babel: {
           ...(opts.sourceMaps
             ? {
-              sourceFileName: topts.filename,
-              sourceMaps: "inline",
-            }
+                sourceFileName: topts.filename,
+                sourceMaps: "inline",
+              }
             : {}),
           ...opts.transformOptions?.babel,
         },
@@ -264,6 +264,8 @@ export default function createJITI(
   }
 
   function jiti(id: string) {
+    const requiredModules = parentCache || {};
+
     // Check for node: and file: protocol
     if (id.startsWith("node:")) {
       id = id.slice(5);
@@ -301,7 +303,7 @@ export default function createJITI(
     }
 
     // Check for CJS cache
-    if (requiredModules && requiredModules[filename]) {
+    if (requiredModules[filename]) {
       return _interopDefault(requiredModules[filename]?.exports);
     }
     if (opts.requireCache && nativeRequire.cache[filename]) {
@@ -326,7 +328,7 @@ export default function createJITI(
         (opts.legacy && detectLegacySyntax(source)));
 
     if (needsTranspile) {
-      return evalModule(filename, source)
+      return evalModule(filename, source);
     }
 
     try {
@@ -335,17 +337,18 @@ export default function createJITI(
     } catch (error: any) {
       debug("Native require error:", error);
       debug("[fallback]", filename);
-      return evalModule(filename, source)
+      return evalModule(filename, source);
     }
   }
 
   function evalModule(filename: string, source: string) {
-    const packageJSON = readNearestPackageJSON(filename)
+    const packageJSON = readNearestPackageJSON(filename);
     const ext = extname(filename);
     const isTypescript = ext === ".ts" || ext === ".mts" || ext === ".cts";
-    const isNativeModule = ext === ".mjs" || (ext === ".js" && packageJSON?.type === 'module')
-    const isEvalModule = !existsSync(filename) 
-    const filenameReal = isEvalModule ? _filename : filename
+    const isNativeModule =
+      ext === ".mjs" || (ext === ".js" && packageJSON?.type === "module");
+    const isEvalModule = !existsSync(filename);
+    const filenameReal = isEvalModule ? _filename : filename;
 
     const start = performance.now();
     source = transform({ filename, source, ts: isTypescript });
@@ -367,7 +370,8 @@ export default function createJITI(
         parentModule.children.push(mod);
       }
     }
-    mod.require = createJITI(filenameReal, opts, mod, requiredModules || {});
+
+    mod.require = createJITI(filename, opts, mod, requiredModules);
 
     // @ts-ignore
     mod.path = dirname(filenameReal);
@@ -376,9 +380,7 @@ export default function createJITI(
     mod.paths = Module._nodeModulePaths(mod.path);
 
     // Set CJS cache before eval
-    if (requiredModules) {
-      requiredModules[filename] = mod;
-    }
+    requiredModules[filename] = mod;
     if (opts.requireCache) {
       nativeRequire.cache[filename] = mod;
     }
@@ -416,11 +418,6 @@ export default function createJITI(
       opts.onError!(error);
     }
 
-    // Remove from required modules cache
-    if (requiredModules) {
-      delete requiredModules[filename];
-    }
-
     // Check for parse errors
     if (mod.exports && mod.exports.__JITI_ERROR__) {
       const { filename, line, column, code, message } =
@@ -455,7 +452,7 @@ export default function createJITI(
   jiti.main = nativeRequire.main;
   jiti.transform = transform;
   jiti.register = register;
-  jiti.evalModule = evalModule
+  jiti.evalModule = evalModule;
 
   return jiti;
 }

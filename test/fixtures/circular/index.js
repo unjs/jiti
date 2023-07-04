@@ -1,3 +1,5 @@
-import { withBase } from "./a";
+import { a } from "./b";
+import { b } from "./c";
+import { c } from "./a";
 
-console.log(withBase("Bar"));
+console.log(a, b, c);
