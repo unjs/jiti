@@ -173,6 +173,7 @@ export default function createJITI(
           resolved = resolvePathSync(id, {
             url: _url,
             conditions,
+            extensions: opts.extensions,
           });
         } catch (error) {
           err = error;
