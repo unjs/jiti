@@ -39,7 +39,7 @@ export const normalizeUserEntity = (({ name, avatar }: User) =>
       width: 100,
       height: 100,
     },
-  } satisfies NormalizedUser)) satisfies UserNormalizer;
+  }) satisfies NormalizedUser) satisfies UserNormalizer;
 
 export const test = () => {
   return {

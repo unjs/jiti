@@ -7,7 +7,7 @@ function anotherDecorator() {
   return function (object: any, propertyName: any) {
     console.log(
       "Decorator metadata keys: " +
-        Reflect.getMetadataKeys(object, propertyName)
+        Reflect.getMetadataKeys(object, propertyName),
     );
   };
 }

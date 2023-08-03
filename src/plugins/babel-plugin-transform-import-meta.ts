@@ -7,7 +7,7 @@ import type { Statement, MemberExpression } from "@babel/types";
 // Modification: Inlines resolved filename into the code when possible instead of injecting a require
 export function TransformImportMetaPlugin(
   _ctx: any,
-  opts: { filename?: string }
+  opts: { filename?: string },
 ) {
   return <PluginObj>{
     name: "transform-import-meta",
@@ -41,7 +41,7 @@ export function TransformImportMetaPlugin(
               opts.filename
                 ? JSON.stringify(pathToFileURL(opts.filename))
                 : "require('url').pathToFileURL(__filename).toString()"
-            }` as Statement
+            }` as Statement,
           );
         }
       },

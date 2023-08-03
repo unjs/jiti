@@ -38,7 +38,7 @@ export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
     // `unshift` because these plugin must come before `@babel/plugin-syntax-class-properties`
     _opts.plugins.unshift(
       [require("babel-plugin-transform-typescript-metadata")],
-      [require("@babel/plugin-proposal-decorators"), { legacy: true }]
+      [require("@babel/plugin-proposal-decorators"), { legacy: true }],
     );
     _opts.plugins.push(require("babel-plugin-parameter-decorator"));
     _opts.plugins.push(require("@babel/plugin-syntax-import-assertions"));
@@ -46,7 +46,7 @@ export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
 
   if (opts.legacy) {
     _opts.plugins.push(
-      require("@babel/plugin-proposal-nullish-coalescing-operator")
+      require("@babel/plugin-proposal-nullish-coalescing-operator"),
     );
     _opts.plugins.push(require("@babel/plugin-proposal-optional-chaining"));
   }
