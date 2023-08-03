@@ -63,7 +63,7 @@
     "pathe": "^1.1.1",
     "pirates": "^4.0.6",
     "pkg-types": "^1.0.3",
-    "prettier": "^2.8.8",
+    "prettier": "^3.0.1",
     "reflect-metadata": "^0.1.13",
     "semver": "^7.5.4",
     "std-env": "^3.3.3",
