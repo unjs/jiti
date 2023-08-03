@@ -76,7 +76,7 @@ export default function createJITI(
   _filename: string,
   opts: JITIOptions = {},
   parentModule?: Module,
-  parentCache?: ModuleCache
+  parentCache?: ModuleCache,
 ): JITI {
   opts = { ...defaults, ...opts };
 
@@ -100,12 +100,12 @@ export default function createJITI(
   const isNativeRe = new RegExp(
     `node_modules/(${nativeModules
       .map((m) => escapeStringRegexp(m))
-      .join("|")})/`
+      .join("|")})/`,
   );
   const isTransformRe = new RegExp(
     `node_modules/(${transformModules
       .map((m) => escapeStringRegexp(m))
-      .join("|")})/`
+      .join("|")})/`,
   );
 
   function debug(...args: string[]) {
@@ -141,7 +141,7 @@ export default function createJITI(
   const nativeRequire = createRequire(
     isWindows
       ? _filename.replace(/\//g, "\\") // Import maps does not work with normalized paths!
-      : _filename
+      : _filename,
   );
 
   const tryResolve = (id: string, options?: { paths?: string[] }) => {
@@ -152,7 +152,7 @@ export default function createJITI(
 
   const _url = pathToFileURL(_filename);
   const _additionalExts = [...(opts.extensions as string[])].filter(
-    (ext) => ext !== ".js"
+    (ext) => ext !== ".js",
   );
   const _resolve = (id: string, options?: { paths?: string[] }) => {
     let resolved, err;
@@ -212,7 +212,7 @@ export default function createJITI(
   function getCache(
     filename: string | undefined,
     source: string,
-    get: () => string
+    get: () => string,
   ): string {
     if (!opts.cache || !filename) {
       return get();
@@ -225,7 +225,7 @@ export default function createJITI(
     const filebase = basename(dirname(filename)) + "-" + basename(filename);
     const cacheFile = join(
       opts.cache as string,
-      filebase + "." + md5(filename) + ".js"
+      filebase + "." + md5(filename) + ".js",
     );
 
     if (existsSync(cacheFile)) {
@@ -363,7 +363,7 @@ export default function createJITI(
       debug(
         `[transpile]${isNativeModule ? " [esm]" : ""}`,
         filename,
-        `(${time}ms)`
+        `(${time}ms)`,
       );
     } else {
       try {
@@ -427,7 +427,7 @@ export default function createJITI(
         mod.require,
         mod,
         mod.filename,
-        dirname(mod.filename)
+        dirname(mod.filename),
       );
     } catch (error: any) {
       if (opts.requireCache) {
@@ -460,7 +460,7 @@ export default function createJITI(
     return addHook(
       (source: string, filename: string) =>
         jiti.transform({ source, filename, ts: !!/\.[cm]?ts$/.test(filename) }),
-      { exts: opts.extensions }
+      { exts: opts.extensions },
     );
   }
 

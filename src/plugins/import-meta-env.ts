@@ -35,7 +35,7 @@ export const accessor = `process.env`;
 
 const replaceEnvForRuntime = (
   template: typeof BabelCore.template,
-  property: string
+  property: string,
 ) => template.expression.ast(`${accessor}.${property}`);
 
 export function importMetaEnvPlugin({ template, types }: any) {
@@ -97,7 +97,7 @@ export function importMetaEnvPlugin({ template, types }: any) {
 
         path.parentPath.replaceWith(
           // @ts-ignore
-          replaceEnvForRuntime(template, path.parentPath.node.property.name)
+          replaceEnvForRuntime(template, path.parentPath.node.property.name),
         );
       },
     },
