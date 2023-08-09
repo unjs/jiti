@@ -3,9 +3,9 @@ import { readdirSync } from "node:fs";
 // @ts-ignore
 import { test } from "bun:test";
 
-import jiti from "../../lib/index.js";
+import jiti from "../lib/index.js";
 
-const fixturesDir = fileURLToPath(new URL("../fixtures", import.meta.url));
+const fixturesDir = fileURLToPath(new URL("fixtures", import.meta.url));
 
 const fixtures = readdirSync(fixturesDir);
 
