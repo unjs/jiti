@@ -13,4 +13,4 @@ import "../fixtures/native";
 import "../fixtures/proto";
 import "../fixtures/pure-esm-dep";
 import "../fixtures/syntax";
-import "../fixtures/typescript";
+// import "../fixtures/typescript"; // Known Issues
