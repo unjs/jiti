@@ -6,4 +6,4 @@ const _jiti = jiti(import.meta.url, {});
 _jiti("./fixtures.ts");
 
 // Use bun directly
-// require("./fixtures.mjs");
+// require("./fixtures.ts");
