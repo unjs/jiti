@@ -13,4 +13,4 @@ import "../fixtures/native";
 import "../fixtures/proto";
 import "../fixtures/pure-esm-dep";
 import "../fixtures/syntax";
-// import "../fixtures/typescript"; // TODO: import.meta.env support
+import "../fixtures/typescript";
