@@ -24,7 +24,7 @@ module.exports = {
     alias: {
       "@babel/code-frame": require.resolve("./stubs/babel-codeframe"),
       "@babel/helper-compilation-targets": require.resolve(
-        "./stubs/helper-compilation-targets"
+        "./stubs/helper-compilation-targets",
       ),
     },
   },
