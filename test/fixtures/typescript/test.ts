@@ -13,5 +13,4 @@ export namespace smart_player_namespace {
   export declare class FeedService {}
 }
 
-export type FeedService2 = smart_player_namespace.FeedService;
-export const FeedService = smart_player_namespace.FeedService;
+export type FeedService = smart_player_namespace.FeedService;
