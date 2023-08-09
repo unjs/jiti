@@ -22,7 +22,7 @@
     "lint:fix": "eslint --fix --ext .ts,.js . && prettier -w src lib test stubs",
     "release": "pnpm build && pnpm test && changelogen --release --push && npm publish",
     "test": "pnpm lint && vitest run --coverage",
-    "test:bun": "JITI_DEBUG=1 bun test/bun/index.ts"
+    "test:bun": "JITI_DEBUG=1 bun --bun test/bun/index.ts"
   },
   "devDependencies": {
     "@babel/core": "^7.22.10",
