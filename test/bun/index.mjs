@@ -2,4 +2,4 @@
 
 // const _jiti = jiti(import.meta.url);
 
-import("./fixtures.mjs");
+require("./fixtures.mjs");
