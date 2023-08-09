@@ -1,5 +1,9 @@
-// import jiti from "../../dist/jiti";
+import jiti from "../../lib/index";
 
-// const _jiti = jiti(import.meta.url);
+const _jiti = jiti(import.meta.url, {});
 
-require("./fixtures.mjs");
+// Jiti should bypass it's logic and prefer bun
+_jiti("./fixtures.mjs");
+
+// Use bun directly
+// require("./fixtures.mjs");

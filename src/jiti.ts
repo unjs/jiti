@@ -292,6 +292,12 @@ export default function createJITI(
       return nativeRequire(id);
     }
 
+    // Experimental Bun support
+    if (process.versions.bun) {
+      debug("[bun] [native require]", id);
+      return nativeRequire(id);
+    }
+
     // Resolve path
     const filename = _resolve(id);
     const ext = extname(filename);
