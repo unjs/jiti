@@ -295,7 +295,12 @@ export default function createJITI(
     // Experimental Bun support
     if (process.versions.bun) {
       debug("[bun] [native require]", id);
-      return nativeRequire(id);
+      try {
+        const _mod = nativeRequire(id);
+        return _interopDefault(_mod);
+      } catch (error: any) {
+        debug("[bun] [fallback]", id, error.toString());
+      }
     }
 
     // Resolve path

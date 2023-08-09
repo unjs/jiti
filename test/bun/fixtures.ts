@@ -1,6 +1,6 @@
 import "../fixtures/async";
 import "../fixtures/circular";
-// import "../fixtures/env"; // Known Issues
+import "../fixtures/env"; // Known Issues -- Fallbacks to Jiti
 // import "../fixtures/error-parse"; // Error expected
 // import "../fixtures/error-runtime"; // Error expected
 import "../fixtures/esm";
