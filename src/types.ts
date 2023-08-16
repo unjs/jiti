@@ -30,3 +30,10 @@ export type JITIOptions = {
   nativeModules?: string[];
   transformModules?: string[];
 };
+
+export interface JITIRequireOptions {
+  /**
+   * @internal
+   */
+  _import?: () => Promise<any>;
+}

@@ -21,7 +21,7 @@ import {
   detectLegacySyntax,
   readNearestPackageJSON,
 } from "./utils";
-import { TransformOptions, JITIOptions } from "./types";
+import { TransformOptions, JITIOptions, JITIRequireOptions } from "./types";
 
 export type { JITIOptions, TransformOptions } from "./types";
 
@@ -277,7 +277,8 @@ export default function createJITI(
     return opts.interopDefault ? interopDefault(mod) : mod;
   }
 
-  function jiti(id: string) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  function jiti(id: string, _options?: JITIRequireOptions) {
     const cache = parentCache || {};
 
     // Check for node: and file: protocol
