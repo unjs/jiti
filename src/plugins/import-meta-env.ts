@@ -48,30 +48,52 @@ export function importMetaEnvPlugin({ template, types }: any) {
         }
 
         // {}.{}
-        if (!types.isMemberExpression(path.parentPath)) {
-          return;
-        }
-        // {}.{}.{}
-        if (!types.isMemberExpression(path.parentPath.node)) {
-          return;
-        }
-        // {}.{}.{}.{}
-        // @ts-ignore
-        if (!types.isMemberExpression(path.parentPath.node.object)) {
+        if (
+          !types.isMemberExpression(path.parentPath) &&
+          !types.isOptionalMemberExpression(path.parentPath)
+        ) {
           return;
         }
 
-        // {}.{}.{}.PROPERTY
+        // {}.{}.{}
+        if (
+          !types.isMemberExpression(path.parentPath.node) &&
+          !types.isOptionalMemberExpression(path.parentPath.node)
+        ) {
+          return;
+        }
+
+        // {}.{}.{}.{}
+        // @ts-ignore
+        if (
+          // @ts-ignore
+          !types.isMemberExpression(path.parentPath.node.object) &&
+          // @ts-ignore
+          !types.isOptionalMemberExpression(path.parentPath.node.object)
+        ) {
+          // @ts-ignore
+          if (!types.isMetaProperty(path.parentPath.node.object)) {
+            return;
+          }
+          if (
+            // @ts-ignore
+            path.parentPath.node.object.meta.name !== "import" ||
+            // @ts-ignore
+            path.parentPath.node.object.property.name !== "meta"
+          ) {
+            return;
+          }
+          path.parentPath.replaceWith(template.expression.ast(accessor));
+          return;
+        }
+
+        // {}.{}.{}.KEY
         // @ts-ignore
         if (path.parentPath.computed) {
           return;
         }
-        // @ts-ignore
-        if (!types.isIdentifier(path.parentPath.node.property)) {
-          return;
-        }
 
-        // {}.{}.env.PROPERTY
+        // {}.{}.env.KEY
         // @ts-ignore
         if (!types.isIdentifier(path.parentPath.node.object.property)) {
           return;
@@ -81,7 +103,7 @@ export function importMetaEnvPlugin({ template, types }: any) {
           return;
         }
 
-        // import.meta.env.PROPERTY
+        // import.meta.env.KEY
         // @ts-ignore
         if (!types.isMetaProperty(path.parentPath.node.object.object)) {
           return;
