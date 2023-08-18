@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.19.2
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.19.1...v1.19.2)
+
+### 🩹 Fixes
+
+- Pass custom extensions to esm resolver ([#152](https://github.com/unjs/jiti/pull/152))
+- Support `import.meta.env` and `import.meta.env?.prop` ([#159](https://github.com/unjs/jiti/pull/159))
+
+### 🏡 Chore
+
+- Update dependencies ([09c1e7d](https://github.com/unjs/jiti/commit/09c1e7d))
+- Add autofix ci ([670c1f2](https://github.com/unjs/jiti/commit/670c1f2))
+- Update dependencies ([2325b70](https://github.com/unjs/jiti/commit/2325b70))
+- Upgrade dependencies ([f18508c](https://github.com/unjs/jiti/commit/f18508c))
+
+### ✅ Tests
+
+- **typescript:** Remove type-only namespace access ([de73bd9](https://github.com/unjs/jiti/commit/de73bd9))
+
+### 🎨 Styles
+
+- Format with prettier v3 ([fe61c6e](https://github.com/unjs/jiti/commit/fe61c6e))
+- Format report with prettier ([6098284](https://github.com/unjs/jiti/commit/6098284))
+
+### ❤️  Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Anhao
+
 ## v1.19.1
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.19.0...v1.19.1)
