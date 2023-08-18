@@ -28,16 +28,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-import type BabelCore from "@babel/core";
 import type { PluginObj } from "@babel/core";
-import { MemberExpression, MetaProperty } from "@babel/types";
-
-export const accessor = `process.env`;
-
-const replaceEnvForRuntime = (
-  template: typeof BabelCore.template,
-  property: string,
-) => template.expression.ast(`${accessor}.${property}`);
+import type { MemberExpression, MetaProperty } from "@babel/types";
 
 export function importMetaEnvPlugin({ template, types }: any) {
   return <PluginObj>{
@@ -48,7 +40,7 @@ export function importMetaEnvPlugin({ template, types }: any) {
           return;
         }
 
-        // {}.{}
+        // {}.{} or {}?.{} (meta.env or meta?.env)
         if (
           !types.isMemberExpression(path.parentPath) &&
           !types.isOptionalMemberExpression(path.parentPath)
@@ -56,61 +48,25 @@ export function importMetaEnvPlugin({ template, types }: any) {
           return;
         }
 
-        // {}.{}.{}
+        // {}.{}.{} (import.meta.env)
         if (!types.isMemberExpression(path.parentPath.node)) {
           return;
         }
+
         const parentNode = path.parentPath.node as MemberExpression;
 
-        // {}.{}.{}.{}
-        if (!types.isMemberExpression(parentNode.object)) {
-          if (!types.isMetaProperty(parentNode.object)) {
-            return;
-          }
-          const parentNodeObjMeta = parentNode.object as MetaProperty;
-          if (
-            parentNodeObjMeta.meta.name !== "import" ||
-            parentNodeObjMeta.property.name !== "meta"
-          ) {
-            return;
-          }
-          path.parentPath.replaceWith(template.expression.ast(accessor));
+        if (!types.isMetaProperty(parentNode.object)) {
           return;
         }
 
-        // {}.{}.{}.KEY
-        if (parentNode.computed) {
-          return;
-        }
+        const parentNodeObjMeta = parentNode.object as MetaProperty;
 
-        // {}.{}.env.KEY
-        // @ts-ignore
-        if (!types.isIdentifier(parentNode.object.property)) {
-          return;
+        if (
+          parentNodeObjMeta.meta.name === "import" ||
+          parentNodeObjMeta.property.name === "meta"
+        ) {
+          path.parentPath.replaceWith(template.expression.ast("process.env"));
         }
-        // @ts-ignore
-        if (parentNode.object.property.name !== "env") {
-          return;
-        }
-
-        // import.meta.env.KEY
-        // @ts-ignore
-        if (!types.isMetaProperty(parentNode.object.object)) {
-          return;
-        }
-        // @ts-ignore
-        if (parentNode.object.object.property.name !== "meta") {
-          return;
-        }
-        // @ts-ignore
-        if (parentNode.object.object.meta.name !== "import") {
-          return;
-        }
-
-        path.parentPath.replaceWith(
-          // @ts-ignore
-          replaceEnvForRuntime(template, parentNode.property.name),
-        );
       },
     },
   };
