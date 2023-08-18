@@ -30,6 +30,7 @@ SOFTWARE.
 
 import type BabelCore from "@babel/core";
 import type { PluginObj } from "@babel/core";
+import { MemberExpression, MetaProperty } from "@babel/types";
 
 export const accessor = `process.env`;
 
@@ -59,19 +60,17 @@ export function importMetaEnvPlugin({ template, types }: any) {
         if (!types.isMemberExpression(path.parentPath.node)) {
           return;
         }
+        const parentNode = path.parentPath.node as MemberExpression;
 
         // {}.{}.{}.{}
-        // @ts-ignore
-        if (!types.isMemberExpression(path.parentPath.node.object)) {
-          // @ts-ignore
-          if (!types.isMetaProperty(path.parentPath.node.object)) {
+        if (!types.isMemberExpression(parentNode.object)) {
+          if (!types.isMetaProperty(parentNode.object)) {
             return;
           }
+          const parentNodeObjMeta = parentNode.object as MetaProperty;
           if (
-            // @ts-ignore
-            path.parentPath.node.object.meta.name !== "import" ||
-            // @ts-ignore
-            path.parentPath.node.object.property.name !== "meta"
+            parentNodeObjMeta.meta.name !== "import" ||
+            parentNodeObjMeta.property.name !== "meta"
           ) {
             return;
           }
@@ -80,38 +79,37 @@ export function importMetaEnvPlugin({ template, types }: any) {
         }
 
         // {}.{}.{}.KEY
-        // @ts-ignore
-        if (path.parentPath.computed) {
+        if (parentNode.computed) {
           return;
         }
 
         // {}.{}.env.KEY
         // @ts-ignore
-        if (!types.isIdentifier(path.parentPath.node.object.property)) {
+        if (!types.isIdentifier(parentNode.object.property)) {
           return;
         }
         // @ts-ignore
-        if (path.parentPath.node.object.property.name !== "env") {
+        if (parentNode.object.property.name !== "env") {
           return;
         }
 
         // import.meta.env.KEY
         // @ts-ignore
-        if (!types.isMetaProperty(path.parentPath.node.object.object)) {
+        if (!types.isMetaProperty(parentNode.object.object)) {
           return;
         }
         // @ts-ignore
-        if (path.parentPath.node.object.object.property.name !== "meta") {
+        if (parentNode.object.object.property.name !== "meta") {
           return;
         }
         // @ts-ignore
-        if (path.parentPath.node.object.object.meta.name !== "import") {
+        if (parentNode.object.object.meta.name !== "import") {
           return;
         }
 
         path.parentPath.replaceWith(
           // @ts-ignore
-          replaceEnvForRuntime(template, path.parentPath.node.property.name),
+          replaceEnvForRuntime(template, parentNode.property.name),
         );
       },
     },
