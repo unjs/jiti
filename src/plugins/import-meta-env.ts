@@ -56,21 +56,13 @@ export function importMetaEnvPlugin({ template, types }: any) {
         }
 
         // {}.{}.{}
-        if (
-          !types.isMemberExpression(path.parentPath.node) &&
-          !types.isOptionalMemberExpression(path.parentPath.node)
-        ) {
+        if (!types.isMemberExpression(path.parentPath.node)) {
           return;
         }
 
         // {}.{}.{}.{}
         // @ts-ignore
-        if (
-          // @ts-ignore
-          !types.isMemberExpression(path.parentPath.node.object) &&
-          // @ts-ignore
-          !types.isOptionalMemberExpression(path.parentPath.node.object)
-        ) {
+        if (!types.isMemberExpression(path.parentPath.node.object)) {
           // @ts-ignore
           if (!types.isMetaProperty(path.parentPath.node.object)) {
             return;
