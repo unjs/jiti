@@ -3,7 +3,7 @@
  */
 
 import type { PluginObj } from "@babel/core";
-import type { MemberExpression, MetaProperty } from "@babel/types";
+import type { Identifier, MemberExpression, MetaProperty } from "@babel/types";
 
 export function importMetaEnvPlugin({ template, types }: any) {
   return <PluginObj>{
@@ -36,8 +36,9 @@ export function importMetaEnvPlugin({ template, types }: any) {
         const parentNodeObjMeta = parentNode.object as MetaProperty;
 
         if (
-          parentNodeObjMeta.meta.name === "import" ||
-          parentNodeObjMeta.property.name === "meta"
+          parentNodeObjMeta.meta.name === "import" &&
+          parentNodeObjMeta.property.name === "meta" &&
+          (parentNode.property as Identifier).name === "env"
         ) {
           path.parentPath.replaceWith(template.expression.ast("process.env"));
         }
