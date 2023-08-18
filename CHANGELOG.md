@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.19.3
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.19.2...v1.19.3)
+
+### 🩹 Fixes
+
+- Only replace `import.meta.env` ([c6895d6](https://github.com/unjs/jiti/commit/c6895d6))
+
+### ❤️  Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v1.19.2
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.19.1...v1.19.2)
