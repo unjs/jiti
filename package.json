@@ -56,7 +56,7 @@
     "eslint-config-unjs": "^0.2.1",
     "esm": "^3.2.25",
     "estree-walker": "^3.0.3",
-    "execa": "^7.2.0",
+    "execa": "^8.0.1",
     "fast-glob": "^3.3.1",
     "mlly": "^1.4.0",
     "object-hash": "^3.0.0",
