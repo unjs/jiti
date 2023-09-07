@@ -33,6 +33,7 @@ const _EnvSourceMaps = destr<boolean>(process.env.JITI_SOURCE_MAPS);
 const _EnvAlias = destr<Record<string, string>>(process.env.JITI_ALIAS);
 const _EnvTransform = destr<string[]>(process.env.JITI_TRANSFORM_MODULES);
 const _EnvNative = destr<string[]>(process.env.JITI_NATIVE_MODULES);
+const _ExpBun = destr<string[]>(process.env.JITI_EXPERIMENTAL_BUN);
 
 const isWindows = platform() === "win32";
 
@@ -49,6 +50,7 @@ const defaults: JITIOptions = {
   alias: _EnvAlias,
   nativeModules: _EnvNative || [],
   transformModules: _EnvTransform || [],
+  experimentalBun: _ExpBun === undefined ? !!process.versions.bun : !!_ExpBun,
 };
 
 type Require = typeof require;
@@ -290,6 +292,20 @@ export default function createJITI(
     // Check for builtin node module like fs
     if (builtinModules.includes(id) || id === ".pnp.js" /* #24 */) {
       return nativeRequire(id);
+    }
+
+    // Experimental Bun support
+    if (opts.experimentalBun && !opts.transformOptions) {
+      try {
+        debug(`[bun] [native] ${id}`);
+        const _mod = nativeRequire(id);
+        if (opts.requireCache === false) {
+          delete nativeRequire.cache[id];
+        }
+        return _interopDefault(_mod);
+      } catch (error: any) {
+        debug(`[bun] Using fallback for ${id} because of an error:`, error);
+      }
     }
 
     // Resolve path
