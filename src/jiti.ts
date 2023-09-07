@@ -298,7 +298,6 @@ export default function createJITI(
         debug(`[bun] [native] ${id}`);
         const _mod = nativeRequire(id);
         if (opts.requireCache === false) {
-          // debug(`[bun] Invalidating require cache for ${id}`);
           delete nativeRequire.cache[id];
         }
         return _interopDefault(_mod);
