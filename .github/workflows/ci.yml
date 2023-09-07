@@ -33,7 +33,7 @@ jobs:
       - run: pnpm lint
         if: ${{ matrix.os != 'windows-latest' }}
       - run: pnpm build
-      - run: pnpm vitest run
+      - run: pnpm vitest run --coverage
       - run: pnpm test:bun
         if: ${{ matrix.os != 'windows-latest' }}
       # - name: Coverage
