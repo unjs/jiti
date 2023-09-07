@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.20.0
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.19.3...v1.20.0)
+
+### 🚀 Enhancements
+
+- Experimental native bun support ([#156](https://github.com/unjs/jiti/pull/156))
+
+### 💅 Refactors
+
+- Replace proposal babel plugins with ecmascript transforms ([1fb4d8c](https://github.com/unjs/jiti/commit/1fb4d8c))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v1.19.3
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.19.2...v1.19.3)
