@@ -36,7 +36,7 @@ test("hmr", async () => {
   value = _jiti(tmpFile);
   expect(value).toBe(1);
 
-  value = _jiti(tmpFile);
   await writeFile(tmpFile, "export default 2");
+  value = _jiti(tmpFile);
   expect(value).toBe(2);
 });
