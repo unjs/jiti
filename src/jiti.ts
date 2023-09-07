@@ -297,10 +297,10 @@ export default function createJITI(
       try {
         debug(`[bun] [native] ${id}`);
         const _mod = nativeRequire(id);
-        // TODO: Not working...
-        // if (opts.requireCache === false) {
-        //   delete nativeRequire.cache[id];
-        // }
+        if (opts.requireCache === false) {
+          // debug(`[bun] Invalidating require cache for ${id}`);
+          delete nativeRequire.cache[id];
+        }
         return _interopDefault(_mod);
       } catch (error: any) {
         debug(`[bun] Using fallback for ${id} because of an error:`, error);
