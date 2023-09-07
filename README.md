@@ -129,6 +129,14 @@ List of modules (within `node_modules`) to always use native require for them.
 
 List of modules (within `node_modules`) to transform them regardless of syntax.
 
+### `experimentalBun`
+
+- Type: Boolean
+- Default: Enabled if `process.versions.bun` exists (Bun runtime)
+- Environment Variable: `JITI_EXPERIMENTAL_BUN`
+
+Enable experimental native Bun support for transformations.
+
 ## Development
 
 - Clone this repository
