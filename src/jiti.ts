@@ -293,7 +293,7 @@ export default function createJITI(
     }
 
     // Experimental Bun support
-    if (process.versions.bun) {
+    if (process.versions.bun && !opts.transformOptions) {
       try {
         debug(`[bun] [native] ${id}`);
         const _mod = nativeRequire(id);
