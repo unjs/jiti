@@ -1,5 +1,4 @@
-import { NodePath } from '@babel/traverse';
-import { types as t } from '@babel/core';
+import { NodePath, types as t } from '@babel/core';
 
 /**
  * Helper function to create a field/class decorator from a parameter decorator.
