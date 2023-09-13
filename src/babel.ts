@@ -37,7 +37,7 @@ export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
     ]);
     // `unshift` because these plugin must come before `@babel/plugin-syntax-class-properties`
     _opts.plugins.unshift(
-      [require("babel-plugin-transform-typescript-metadata")],
+      [require("@sirenko/babel-plugin-transform-typescript-metadata")],
       [require("@babel/plugin-proposal-decorators"), { legacy: true }],
     );
     _opts.plugins.push(require("babel-plugin-parameter-decorator"));
