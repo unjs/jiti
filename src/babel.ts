@@ -6,6 +6,7 @@ import type {
 import { TransformOptions, TRANSFORM_RESULT } from "./types";
 import { TransformImportMetaPlugin } from "./plugins/babel-plugin-transform-import-meta";
 import { importMetaEnvPlugin } from "./plugins/import-meta-env";
+import babelPluginTransformTypescriptMetadata from "./plugins/babel-plugin-transform-typescript-metadata";
 
 export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
   const _opts: BabelTransformOptions & { plugins: PluginItem[] } = {
@@ -37,7 +38,7 @@ export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
     ]);
     // `unshift` because these plugin must come before `@babel/plugin-syntax-class-properties`
     _opts.plugins.unshift(
-      [require("@sirenko/babel-plugin-transform-typescript-metadata")],
+      [babelPluginTransformTypescriptMetadata],
       [require("@babel/plugin-proposal-decorators"), { legacy: true }],
     );
     _opts.plugins.push(require("babel-plugin-parameter-decorator"));
