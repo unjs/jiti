@@ -281,7 +281,7 @@ export default function createJITI(
     return opts.interopDefault ? interopDefault(mod) : mod;
   }
 
-  function jiti(id: string) {
+  function jiti(id: string, importOptions?: JITIImportOptions) {
     const cache = parentCache || {};
 
     // Check for node: and file: protocol
@@ -489,8 +489,8 @@ export default function createJITI(
   jiti.transform = transform;
   jiti.register = register;
   jiti.evalModule = evalModule;
-  jiti.import = async (id: string, _importOptions?: JITIImportOptions) =>
-    await jiti(id);
+  jiti.import = async (id: string, importOptions?: JITIImportOptions) =>
+    await jiti(id, importOptions);
 
   return jiti;
 }
