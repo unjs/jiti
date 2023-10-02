@@ -31,7 +31,7 @@ export type JITIOptions = {
   transformModules?: string[];
 };
 
-export interface JITIRequireOptions {
+export interface JITIImportOptions {
   /**
    * @internal
    */
