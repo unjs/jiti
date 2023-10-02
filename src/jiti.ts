@@ -69,6 +69,7 @@ export interface JITI extends Require {
   transform: (opts: TransformOptions) => string;
   register: () => () => void;
   evalModule: (source: string, options?: EvalModuleOptions) => unknown;
+  /** @experimental Behavior of `jiti.import` might change in the future. */
   import: (id: string) => Promise<unknown>;
 }
 
