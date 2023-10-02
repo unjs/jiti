@@ -69,6 +69,7 @@ export interface JITI extends Require {
   transform: (opts: TransformOptions) => string;
   register: () => () => void;
   evalModule: (source: string, options?: EvalModuleOptions) => unknown;
+  import: (id: string) => Promise<unknown>;
 }
 
 const JS_EXT_RE = /\.(c|m)?j(sx?)$/;
@@ -487,6 +488,7 @@ export default function createJITI(
   jiti.transform = transform;
   jiti.register = register;
   jiti.evalModule = evalModule;
+  jiti.import = async (id: string) => await jiti(id);
 
   return jiti;
 }
