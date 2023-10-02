@@ -5,7 +5,10 @@
 [![bundle][bundle-src]][bundle-href]
 [![License][license-src]][license-href]
 
-Runtime Typescript and ESM support for Node.js
+Runtime Typescript and ESM support for Node.js.
+
+> [!IMPORTANT]
+> This is the support branch for jiti v1. Check out [jiti/main](https://github.com/unjs/jiti/tree/main) for the latest version and [unjs/jiti#174](https://github.com/unjs/jiti/issues/174) for the roadmap.
 
 ## Features
 
