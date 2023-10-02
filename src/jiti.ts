@@ -281,7 +281,7 @@ export default function createJITI(
     return opts.interopDefault ? interopDefault(mod) : mod;
   }
 
-  function jiti(id: string, importOptions?: JITIImportOptions) {
+  function jiti(id: string, _importOptions?: JITIImportOptions) {
     const cache = parentCache || {};
 
     // Check for node: and file: protocol
