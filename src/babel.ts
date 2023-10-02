@@ -25,7 +25,7 @@ export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
       [require("babel-plugin-dynamic-import-node"), { noInterop: true }],
       [TransformImportMetaPlugin, { filename: opts.filename }],
       [require("@babel/plugin-syntax-class-properties")],
-      [require("@babel/plugin-proposal-export-namespace-from")],
+      [require("@babel/plugin-transform-export-namespace-from")],
       [importMetaEnvPlugin],
     ],
   };
@@ -46,9 +46,9 @@ export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
 
   if (opts.legacy) {
     _opts.plugins.push(
-      require("@babel/plugin-proposal-nullish-coalescing-operator"),
+      require("@babel/plugin-transform-nullish-coalescing-operator"),
     );
-    _opts.plugins.push(require("@babel/plugin-proposal-optional-chaining"));
+    _opts.plugins.push(require("@babel/plugin-transform-optional-chaining"));
   }
 
   if (opts.babel && Array.isArray(opts.babel.plugins)) {

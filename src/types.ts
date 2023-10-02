@@ -29,6 +29,7 @@ export type JITIOptions = {
   alias?: Record<string, string>;
   nativeModules?: string[];
   transformModules?: string[];
+  experimentalBun?: boolean;
 };
 
 export interface JITIImportOptions {
