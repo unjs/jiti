@@ -5,13 +5,10 @@ import { platform } from "os";
 import vm from "vm";
 import { fileURLToPath, pathToFileURL } from "url";
 import { dirname, join, basename, extname } from "pathe";
-import { destr } from "destr";
 import escapeStringRegexp from "escape-string-regexp";
 import createRequire from "create-require";
-import { lt } from "semver";
 import { normalizeAliases, resolveAlias } from "pathe/utils";
 import { addHook } from "pirates";
-import objectHash from "object-hash";
 import { hasESMSyntax, interopDefault, resolvePathSync } from "mlly";
 import {
   getCacheDir,
@@ -22,36 +19,11 @@ import {
   readNearestPackageJSON,
 } from "./utils";
 import { TransformOptions, JITIOptions } from "./types";
+import { resolveJitiOptions } from "./options";
 
 export type { JITIOptions, TransformOptions } from "./types";
 
-const _EnvDebug = destr<boolean>(process.env.JITI_DEBUG);
-const _EnvCache = destr<boolean>(process.env.JITI_CACHE);
-const _EnvESMResolve = destr<boolean>(process.env.JITI_ESM_RESOLVE);
-const _EnvRequireCache = destr<boolean>(process.env.JITI_REQUIRE_CACHE);
-const _EnvSourceMaps = destr<boolean>(process.env.JITI_SOURCE_MAPS);
-const _EnvAlias = destr<Record<string, string>>(process.env.JITI_ALIAS);
-const _EnvTransform = destr<string[]>(process.env.JITI_TRANSFORM_MODULES);
-const _EnvNative = destr<string[]>(process.env.JITI_NATIVE_MODULES);
-const _ExpBun = destr<string[]>(process.env.JITI_EXPERIMENTAL_BUN);
-
 const isWindows = platform() === "win32";
-
-const defaults: JITIOptions = {
-  debug: _EnvDebug,
-  cache: _EnvCache === undefined ? true : !!_EnvCache,
-  requireCache: _EnvRequireCache === undefined ? true : !!_EnvRequireCache,
-  sourceMaps: _EnvSourceMaps === undefined ? false : !!_EnvSourceMaps,
-  interopDefault: false,
-  esmResolve: _EnvESMResolve || false,
-  cacheVersion: "7",
-  legacy: lt(process.version || "0.0.0", "14.0.0"),
-  extensions: [".js", ".mjs", ".cjs", ".ts", ".mts", ".cts", ".json"],
-  alias: _EnvAlias,
-  nativeModules: _EnvNative || [],
-  transformModules: _EnvTransform || [],
-  experimentalBun: _ExpBun === undefined ? !!process.versions.bun : !!_ExpBun,
-};
 
 type Require = typeof require;
 type Module = typeof module;
@@ -78,19 +50,11 @@ const TS_EXT_RE = /\.(c|m)?t(sx?)$/;
 
 export default function createJITI(
   _filename: string,
-  opts: JITIOptions = {},
+  userOptions: JITIOptions = {},
   parentModule?: Module,
   parentCache?: ModuleCache,
 ): JITI {
-  opts = { ...defaults, ...opts };
-
-  // Cache dependencies
-  if (opts.legacy) {
-    opts.cacheVersion += "-legacy";
-  }
-  if (opts.transformOptions) {
-    opts.cacheVersion += "-" + objectHash(opts.transformOptions);
-  }
+  const opts = resolveJitiOptions(userOptions);
 
   // Normalize aliases (and disable if non given)
   const alias =
