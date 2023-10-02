@@ -31,3 +31,8 @@ export type JITIOptions = {
   transformModules?: string[];
   experimentalBun?: boolean;
 };
+
+export interface JITIImportOptions {
+  /** @internal */
+  _import?: () => Promise<any>;
+}
