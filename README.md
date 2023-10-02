@@ -7,6 +7,9 @@
 
 Runtime Typescript and ESM support for Node.js
 
+> [!IMPORTANT]
+> This is the development branch for jiti v2. Check out [jiti/v1](https://github.com/unjs/jiti/tree/v1) for latest stable docs and [unjs/jiti#174](https://github.com/unjs/jiti/issues/174) for the v2 roadmap.
+
 ## Features
 
 - Seamless typescript and ESM syntax support
