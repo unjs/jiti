@@ -1,10 +1,13 @@
 import { performance } from "perf_hooks";
-import { dirname, basename, extname } from "pathe";
 import vm from "vm";
-import type { Module, ModuleCache } from "./jiti";
-import { join } from "pathe";
-import type { PackageJson } from "pkg-types";
 import { readFileSync } from "fs";
+import { Module as NodeModule } from "module";
+import { dirname, basename, extname, join } from "pathe";
+import type { PackageJson } from "pkg-types";
+import { hasESMSyntax } from "mlly";
+import type { Module, ModuleCache } from "./jiti";
+import { JITIContext } from "./context";
+import { JITIResolver } from "./resolver";
 
 export type EvalModuleOptions = Partial<{
   id: string;
@@ -12,10 +15,6 @@ export type EvalModuleOptions = Partial<{
   ext: string;
   cache: ModuleCache;
 }>;
-import { JITIContext } from "./context";
-import { JITIResolver } from "./resolver";
-import { hasESMSyntax } from "mlly";
-import { Module as NodeModule } from "module";
 
 export function evalModule(
   source: string,

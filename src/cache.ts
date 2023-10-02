@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from "fs";
+import { createHash } from "crypto";
 import { dirname, join, basename } from "pathe";
 import { JITIContext } from "./context";
-import { createHash } from "crypto";
 
 export type JITICache = ReturnType<typeof createCache>;
 

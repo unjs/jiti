@@ -1,14 +1,12 @@
-import { JITIOptions } from "./types";
+import { platform, tmpdir } from "os";
+import { mkdirSync, accessSync, constants } from "fs";
 import escapeStringRegexp from "escape-string-regexp";
 import createRequire from "create-require";
 import { join } from "pathe";
 import { normalizeAliases } from "pathe/utils";
-import { platform } from "os";
 import { interopDefault } from "mlly";
-import { mkdirSync } from "fs";
 import { isDir } from "./utils";
-import { accessSync, constants } from "fs";
-import { tmpdir } from "os";
+import { JITIOptions } from "./types";
 
 export type JITIContext = ReturnType<typeof createJitiContext>;
 

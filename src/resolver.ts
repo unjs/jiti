@@ -1,7 +1,7 @@
-import type { Module } from "./jiti";
 import { pathToFileURL } from "url";
 import { resolveAlias } from "pathe/utils";
 import { resolvePathSync } from "mlly";
+import type { Module } from "./jiti";
 import { JITIContext } from "./context";
 
 const JS_EXT_RE = /\.(c|m)?j(sx?)$/;
