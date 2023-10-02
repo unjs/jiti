@@ -1,6 +1,5 @@
 import { destr } from "destr";
 import { lt } from "semver";
-import { normalizeAliases } from "pathe/utils";
 import objectHash from "object-hash";
 
 import type { JITIOptions } from "./types";
