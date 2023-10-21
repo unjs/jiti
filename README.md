@@ -159,6 +159,6 @@ MIT. Made with 💖
 [npm-downloads-src]: https://img.shields.io/npm/dm/jiti?style=flat&colorA=18181B&colorB=F0DB4F
 [npm-downloads-href]: https://npmjs.com/package/jiti
 [bundle-src]: https://img.shields.io/bundlephobia/minzip/jiti?style=flat&colorA=18181B&colorB=F0DB4F
-[bundle-href]: https://bundlephobia.com/result?p=h3
+[bundle-href]: https://bundlephobia.com/result?p=jiti
 [license-src]: https://img.shields.io/github/license/unjs/jiti.svg?style=flat&colorA=18181B&colorB=F0DB4F
 [license-href]: https://github.com/unjs/jiti/blob/main/LICENSE
