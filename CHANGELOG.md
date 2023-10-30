@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.21.0
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.20.0...v1.21.0)
+
+### 🚀 Enhancements
+
+- Add `jiti.import` function for async import ([#170](https://github.com/unjs/jiti/pull/170))
+- Add forward compatible (stub) types for `jiti.import` ([#175](https://github.com/unjs/jiti/pull/175))
+
+### 🏡 Chore
+
+- Enable ci for `v1` branch ([0200f63](https://github.com/unjs/jiti/commit/0200f63))
+- Add banner about v1 ([cc742cb](https://github.com/unjs/jiti/commit/cc742cb))
+- Add `v1` to renovate branches ([2358645](https://github.com/unjs/jiti/commit/2358645))
+- Update dependencies ([fe8b267](https://github.com/unjs/jiti/commit/fe8b267))
+- Fix eslint warning ([c5c7220](https://github.com/unjs/jiti/commit/c5c7220))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Anthony Fu <anthonyfu117@hotmail.com>
+
 ## v1.20.0
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.19.3...v1.20.0)
