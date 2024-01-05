@@ -2,7 +2,7 @@ import { destr } from "destr";
 import { lt } from "semver";
 import objectHash from "object-hash";
 
-import type { JITIOptions } from "./types";
+import type { JITIOptions, JsxOption } from "./types";
 
 const _EnvDebug = destr<boolean>(process.env.JITI_DEBUG);
 const _EnvCache = destr<boolean>(process.env.JITI_CACHE);
@@ -13,7 +13,7 @@ const _EnvAlias = destr<Record<string, string>>(process.env.JITI_ALIAS);
 const _EnvTransform = destr<string[]>(process.env.JITI_TRANSFORM_MODULES);
 const _EnvNative = destr<string[]>(process.env.JITI_NATIVE_MODULES);
 const _ExpBun = destr<string[]>(process.env.JITI_EXPERIMENTAL_BUN);
-const _EnvJsx = destr<boolean>(process.env.JITI_ENABLE_JSX);
+const _EnvJsx = destr<boolean | JsxOption>(process.env.JITI_JSX);
 
 const jitiDefaults: JITIOptions = {
   debug: _EnvDebug,
