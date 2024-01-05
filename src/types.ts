@@ -1,9 +1,17 @@
+interface JsxOption {
+  pragma?: string;
+  pragmaFrag?: string
+  throwIfNamespace?: boolean;
+  runtime?: "classic"
+}
+
 export type TransformOptions = {
   source: string;
   filename?: string;
   ts?: boolean;
   retainLines?: boolean;
   legacy?: boolean;
+  jsx?: boolean | JsxOption;
   [key: string]: any;
 };
 

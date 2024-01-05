@@ -329,11 +329,13 @@ export default function createJITI(
     const isNativeModule =
       ext === ".mjs" ||
       (ext === ".js" && readNearestPackageJSON(filename)?.type === "module");
+    const isJsx = ext === ".jsx" || ext === ".tsx";
     const isCommonJS = ext === ".cjs";
     const needsTranspile =
       !isCommonJS &&
       (isTypescript ||
         isNativeModule ||
+        isJsx ||
         isTransformRe.test(filename) ||
         hasESMSyntax(source) ||
         (opts.legacy && detectLegacySyntax(source)));
