@@ -1,8 +1,8 @@
 interface JsxOption {
   pragma?: string;
-  pragmaFrag?: string
+  pragmaFrag?: string;
   throwIfNamespace?: boolean;
-  runtime?: "classic"
+  runtime?: "classic";
 }
 
 export type TransformOptions = {

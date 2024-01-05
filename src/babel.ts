@@ -45,7 +45,7 @@ export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
   }
 
   if (opts.jsx) {
-    if (!_opts.presets) { 
+    if (!_opts.presets) {
       _opts.presets = [];
     }
 
