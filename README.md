@@ -121,7 +121,7 @@ Custom alias map used to resolve ids.
 
 - Type: Boolean
 - Default: `false`
-- Environment Variable: `JITI_JSX`
+- Environment Variable: `JITI_ENABLE_JSX`
 
 Enable JSX support.
 
