@@ -14,6 +14,7 @@ Runtime Typescript and ESM support for Node.js
 
 - Seamless typescript and ESM syntax support
 - Seamless interoperability between ESM and CommonJS
+- `jsx` support with simple configuration
 - Synchronous API to replace `require`
 - Super slim and zero dependency
 - Smart syntax detection to avoid extra transforms
@@ -115,6 +116,14 @@ Return the `.default` export of a module at the top-level.
 - Environment Variable: `JITI_ALIAS`
 
 Custom alias map used to resolve ids.
+
+### `jsx`
+
+- Type: Boolean
+- Default: `false`
+- Environment Variable: `JITI_JSX`
+
+Enable JSX support.
 
 ### `nativeModules`
 

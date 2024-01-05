@@ -1,9 +1,18 @@
+// `@babel/preset-react` config, reference: https://babeljs.io/docs/babel-preset-react#development
+export interface JsxOption {
+  pragma?: string;
+  pragmaFrag?: string;
+  throwIfNamespace?: boolean;
+  runtime?: "classic" | "automatic";
+}
+
 export type TransformOptions = {
   source: string;
   filename?: string;
   ts?: boolean;
   retainLines?: boolean;
   legacy?: boolean;
+  jsx?: boolean | JsxOption;
   [key: string]: any;
 };
 

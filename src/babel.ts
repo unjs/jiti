@@ -44,6 +44,19 @@ export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
     _opts.plugins.push(require("@babel/plugin-syntax-import-assertions"));
   }
 
+  if (opts.jsx) {
+    if (!_opts.presets) {
+      _opts.presets = [];
+    }
+
+    _opts.presets.push([
+      require("@babel/preset-react"),
+      {
+        ...(typeof opts.jsx === "object" ? opts.jsx : {}),
+      },
+    ]);
+  }
+
   if (opts.legacy) {
     _opts.plugins.push(
       require("@babel/plugin-transform-nullish-coalescing-operator"),
