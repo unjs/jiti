@@ -14,7 +14,12 @@ Runtime Typescript and ESM support for Node.js
 
 - Seamless typescript and ESM syntax support
 - Seamless interoperability between ESM and CommonJS
-- `jsx` support with simple configuration
+- `jsx` support with simple configuration (transformOptions.jsx = true | {
+  pragma?: string;
+  pragmaFrag?: string;
+  throwIfNamespace?: boolean;
+  runtime?: "classic" | "automatic";
+})
 - Synchronous API to replace `require`
 - Super slim and zero dependency
 - Smart syntax detection to avoid extra transforms
@@ -119,7 +124,13 @@ Custom alias map used to resolve ids.
 
 ### `jsx`
 
-- Type: Boolean
+- Type: Boolean | {
+  pragma?: string;
+  pragmaFrag?: string;
+  throwIfNamespace?: boolean;
+  runtime?: "classic" | "automatic";
+}
+
 - Default: `false`
 - Environment Variable: `JITI_JSX`
 
