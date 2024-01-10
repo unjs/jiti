@@ -45,15 +45,13 @@ export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
   }
 
   if (opts.jsx) {
-    _opts.plugins.push(require("@babel/plugin-syntax-jsx"))
-    _opts.plugins.push(
-      [
-        require('@babel/plugin-transform-react-jsx'),
-        {
-          ...(typeof opts.jsx === "object" ? opts.jsx : {}),
-        },
-      ]
-    );
+    _opts.plugins.push(require("@babel/plugin-syntax-jsx"));
+    _opts.plugins.push([
+      require("@babel/plugin-transform-react-jsx"),
+      {
+        ...(typeof opts.jsx === "object" ? opts.jsx : {}),
+      },
+    ]);
   }
 
   if (opts.legacy) {

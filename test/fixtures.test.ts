@@ -41,7 +41,7 @@ describe("fixtures", async () => {
         env: {
           JITI_CACHE: "false",
           JITI_ESM_RESOLVE: "true",
-          JITI_ENABLE_JSX: "true",
+          JITI_JSX: "true",
         },
       });
 
