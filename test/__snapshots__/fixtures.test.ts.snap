@@ -38,7 +38,7 @@ exports[`fixtures > error-runtime > stderr 1`] = `
   throw err; /* ↓ Check stack trace ↓ */
   ^
 
-TypeError: The \\"listener\\" argument must be of type function. Received undefined
+TypeError: The "listener" argument must be of type function. Received undefined
     at checkListener (events)
     at _addListener (events)
     at process.addListener (events)
