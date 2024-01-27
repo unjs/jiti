@@ -25,8 +25,8 @@
     "test:bun": "bun --bun test test/bun"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.7",
-    "@babel/plugin-proposal-decorators": "^7.23.7",
+    "@babel/core": "^7.23.9",
+    "@babel/plugin-proposal-decorators": "^7.23.9",
     "@babel/plugin-syntax-class-properties": "^7.12.13",
     "@babel/plugin-syntax-import-assertions": "^7.23.3",
     "@babel/plugin-transform-export-namespace-from": "^7.23.4",
@@ -35,15 +35,15 @@
     "@babel/plugin-transform-optional-chaining": "^7.23.4",
     "@babel/plugin-transform-typescript": "^7.23.6",
     "@babel/preset-typescript": "^7.23.3",
-    "@babel/template": "^7.22.15",
-    "@babel/types": "^7.23.6",
+    "@babel/template": "^7.23.9",
+    "@babel/types": "^7.23.9",
     "@types/babel__core": "^7.20.5",
     "@types/babel__template": "^7.4.4",
-    "@types/node": "^20.11.5",
+    "@types/node": "^20.11.8",
     "@types/object-hash": "^3.0.6",
     "@types/resolve": "^1.20.6",
     "@types/semver": "^7.5.6",
-    "@vitest/coverage-v8": "^1.2.1",
+    "@vitest/coverage-v8": "^1.2.2",
     "acorn": "^8.11.3",
     "babel-plugin-dynamic-import-node": "^2.3.3",
     "babel-plugin-parameter-decorator": "^1.0.16",
@@ -73,9 +73,9 @@
     "tslib": "^2.6.2",
     "typescript": "^5.3.3",
     "vite": "^5.0.12",
-    "vitest": "^1.2.1",
-    "webpack": "^5.89.0",
+    "vitest": "^1.2.2",
+    "webpack": "^5.90.0",
     "webpack-cli": "^5.1.4"
   },
-  "packageManager": "pnpm@8.14.1"
+  "packageManager": "pnpm@8.15.0"
 }
