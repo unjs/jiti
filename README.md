@@ -22,6 +22,9 @@ Runtime Typescript and ESM support for Node.js.
 - V8 compile cache
 - Custom resolve alias
 
+## How to install
+`npm install jiti`
+
 ## Usage
 
 ### Programmatic
