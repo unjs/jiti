@@ -53,7 +53,7 @@
     "create-require": "^1.1.1",
     "destr": "^2.0.3",
     "escape-string-regexp": "^5.0.0",
-    "eslint": "^8.57.0",
+    "eslint": "^9.1.1",
     "eslint-config-unjs": "^0.2.1",
     "esm": "^3.2.25",
     "estree-walker": "^3.0.3",
