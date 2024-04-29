@@ -2,11 +2,16 @@
   "name": "jiti",
   "version": "1.21.0",
   "description": "Runtime typescript and ESM support for Node.js",
-  "repository": "unjs/jiti",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unjs/jiti.git"
+  },
   "license": "MIT",
   "main": "./lib/index.js",
   "types": "dist/jiti.d.ts",
-  "bin": "bin/jiti.js",
+  "bin": {
+    "jiti": "bin/jiti.js"
+  },
   "files": [
     "lib",
     "dist",
