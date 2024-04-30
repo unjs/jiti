@@ -1,6 +1,10 @@
 {
   "extends": ["eslint-config-unjs"],
   "rules": {
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" },
+    ],
     "unicorn/prefer-module": 0,
     "unicorn/prefer-node-protocol": 0,
     "unicorn/import-style": 0,
