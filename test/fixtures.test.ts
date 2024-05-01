@@ -1,4 +1,4 @@
-import { join, resolve, dirname } from "path";
+import { join, resolve, dirname } from "node:path";
 import { execa } from "execa";
 import { describe, it, expect } from "vitest";
 import fg from "fast-glob";

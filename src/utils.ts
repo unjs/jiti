@@ -1,6 +1,6 @@
-import { lstatSync, accessSync, constants, readFileSync } from "fs";
-import { createHash } from "crypto";
-import { tmpdir } from "os";
+import { lstatSync, accessSync, constants, readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { tmpdir } from "node:os";
 import { join } from "pathe";
 import type { PackageJson } from "pkg-types";
 
@@ -63,8 +63,12 @@ export function readNearestPackageJSON(path: string): PackageJson | undefined {
       const pkg = readFileSync(join(path, "package.json"), "utf8");
       try {
         return JSON.parse(pkg);
-      } catch {}
+      } catch {
+        // Ignore errors
+      }
       break;
-    } catch {}
+    } catch {
+      // Ignore errors
+    }
   }
 }
