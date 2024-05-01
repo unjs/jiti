@@ -1,9 +1,9 @@
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
-import { Module, builtinModules } from "module";
-import { performance } from "perf_hooks";
-import { platform } from "os";
-import vm from "vm";
-import { fileURLToPath, pathToFileURL } from "url";
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { Module, builtinModules } from "node:module";
+import { performance } from "node:perf_hooks";
+import { platform } from "node:os";
+import vm from "node:vm";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { dirname, join, basename, extname } from "pathe";
 import { destr } from "destr";
 import escapeStringRegexp from "escape-string-regexp";
@@ -114,7 +114,6 @@ export default function createJITI(
 
   function debug(...args: string[]) {
     if (opts.debug) {
-      // eslint-disable-next-line no-console
       console.log("[jiti]", ...args);
     }
   }
@@ -151,7 +150,9 @@ export default function createJITI(
   const tryResolve = (id: string, options?: { paths?: string[] }) => {
     try {
       return nativeRequire.resolve(id, options);
-    } catch {}
+    } catch {
+      // Ignore errors
+    }
   };
 
   const _url = pathToFileURL(_filename);

@@ -1,5 +1,5 @@
-const path = require("path");
-const fsp = require("fs/promises");
+const path = require("node:path");
+const fsp = require("node:fs/promises");
 
 const TerserPlugin = require("terser-webpack-plugin");
 
