@@ -282,7 +282,6 @@ export default function createJITI(
     return opts.interopDefault ? interopDefault(mod) : mod;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   function jiti(id: string, _importOptions?: JITIImportOptions) {
     const cache = parentCache || {};
 
