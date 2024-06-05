@@ -33,6 +33,7 @@ describe("fixtures", async () => {
             .replace(/Node.js v[\d.]+/, "Node.js v<version>")
             .replace(/ParseError: \w:\/:\s+/, "ParseError: ") // Unknown chars in Windows
             .replace("TypeError [ERR_INVALID_ARG_TYPE]:", "TypeError:")
+            .replace("eval_evalModule", "evalModule")
             // Node 18
             .replace(
               "  ErrorCaptureStackTrace(err);",

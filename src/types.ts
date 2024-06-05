@@ -1,3 +1,38 @@
+export type ModuleCache = Record<string, NodeModule>;
+
+export type EvalModuleOptions = Partial<{
+  id: string;
+  filename: string;
+  ext: string;
+  cache: ModuleCache;
+  async: boolean;
+}>;
+
+export interface JITI extends NodeRequire {
+  transform: (opts: TransformOptions) => string;
+  register: () => () => void;
+  evalModule: (source: string, options?: EvalModuleOptions) => unknown;
+  /** @experimental Behavior of `jiti.import` might change in the future. */
+  import: (id: string, importOptions: JITIImportOptions) => Promise<unknown>;
+}
+
+export interface Context {
+  filename: string;
+  url: URL;
+  userOptions: JITIOptions;
+  parentModule?: NodeModule;
+  parentCache?: ModuleCache;
+  parentImportOptions?: JITIImportOptions;
+  opts: JITIOptions;
+  nativeModules: string[];
+  transformModules: string[];
+  isNativeRe: RegExp;
+  isTransformRe: RegExp;
+  alias?: Record<string, string>;
+  additionalExts: string[];
+  nativeRequire: NodeRequire;
+}
+
 export type TransformOptions = {
   source: string;
   filename?: string;

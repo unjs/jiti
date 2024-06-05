@@ -1,6 +1,6 @@
 import { afterEach, describe, beforeEach, it, expect, vi } from "vitest";
 import { isWindows } from "std-env";
-import { getCacheDir } from "../src/utils";
+import { getCacheDir } from "../src/cache";
 
 describe("utils", () => {
   describe.skipIf(isWindows)("getCacheDir", () => {
