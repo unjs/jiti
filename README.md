@@ -14,13 +14,13 @@ Runtime Typescript and ESM support for Node.js.
 
 - Seamless typescript and ESM syntax support
 - Seamless interoperability between ESM and CommonJS
-- Synchronous API to replace `require`
+- Synchronous API to replace `require()`
+- Asynchronous API to replace `import()`
 - Super slim and zero dependency
 - Smart syntax detection to avoid extra transforms
-- CommonJS cache integration
-- Filesystem transpile hard cache
-- V8 compile cache
-- Custom resolve alias
+- Node.js native require cache integration
+- Filesystem transpile with hard disk caches
+- Custom resolve aliases
 
 ## Usage
 
@@ -29,7 +29,11 @@ Runtime Typescript and ESM support for Node.js.
 ```js
 const jiti = require("jiti")(__filename);
 
+// CommonJS mode
 jiti("./path/to/file.ts");
+
+// ESM mode
+await jiti.import("./path/to/file.ts");
 ```
 
 You can also pass options as second argument:
