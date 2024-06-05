@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - v1
   pull_request:
     branches:
       - main
+      - v1
 
 jobs:
   ci:
@@ -15,7 +17,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node: [18]
+        node: [18, 20]
       fail-fast: false
 
     steps:
@@ -26,15 +28,15 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: "pnpm"
       - uses: oven-sh/setup-bun@v1
-        if: ${{ matrix.os != 'windows-latest' }}
+        if: ${{ matrix.os != 'windows-latest' && matrix.node == 20 }}
         with:
           bun-version: latest
       - run: pnpm install
       - run: pnpm lint
-        if: ${{ matrix.os != 'windows-latest' }}
+        if: ${{ matrix.os != 'windows-latest' && matrix.node == 20 }}
       - run: pnpm build
       - run: pnpm vitest run --coverage
       - run: pnpm test:bun --coverage
-        if: ${{ matrix.os != 'windows-latest' }}
+        if: ${{ matrix.os != 'windows-latest' && matrix.node == 20 }}
       # - name: Coverage
       #   uses: codecov/codecov-action@v1

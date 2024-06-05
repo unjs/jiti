@@ -2,6 +2,73 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.21.3
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.21.2...v1.21.3)
+
+### 🩹 Fixes
+
+- Update mlly to ^1.7.1 ([9adbcb3](https://github.com/unjs/jiti/commit/9adbcb3))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
+## v1.21.2
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.21.1...v1.21.2)
+
+### 🩹 Fixes
+
+- Pin mlly to 1.4.2 ([#237](https://github.com/unjs/jiti/pull/237))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
+## v1.21.1
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.21.0...v1.21.1)
+
+### 🏡 Chore
+
+- Update dependencies ([0bd991b](https://github.com/unjs/jiti/commit/0bd991b))
+- Update dependencies ([cfb106c](https://github.com/unjs/jiti/commit/cfb106c))
+- Update to eslint v9 ([c11d953](https://github.com/unjs/jiti/commit/c11d953))
+- Update deps and lockfile ([95aa249](https://github.com/unjs/jiti/commit/95aa249))
+- Run ci against 18 and 22 ([65b4067](https://github.com/unjs/jiti/commit/65b4067))
+- Lint ([6f3bd76](https://github.com/unjs/jiti/commit/6f3bd76))
+
+### 🤖 CI
+
+- Skip extra checks ([8fe6417](https://github.com/unjs/jiti/commit/8fe6417))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
+## v1.21.0
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.20.0...v1.21.0)
+
+### 🚀 Enhancements
+
+- Add `jiti.import` function for async import ([#170](https://github.com/unjs/jiti/pull/170))
+- Add forward compatible (stub) types for `jiti.import` ([#175](https://github.com/unjs/jiti/pull/175))
+
+### 🏡 Chore
+
+- Enable ci for `v1` branch ([0200f63](https://github.com/unjs/jiti/commit/0200f63))
+- Add banner about v1 ([cc742cb](https://github.com/unjs/jiti/commit/cc742cb))
+- Add `v1` to renovate branches ([2358645](https://github.com/unjs/jiti/commit/2358645))
+- Update dependencies ([fe8b267](https://github.com/unjs/jiti/commit/fe8b267))
+- Fix eslint warning ([c5c7220](https://github.com/unjs/jiti/commit/c5c7220))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Anthony Fu <anthonyfu117@hotmail.com>
+
 ## v1.20.0
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.19.3...v1.20.0)

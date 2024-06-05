@@ -18,8 +18,8 @@ import {
   detectLegacySyntax,
   readNearestPackageJSON,
 } from "./utils";
-import { TransformOptions, JITIOptions } from "./types";
 import { resolveJitiOptions } from "./options";
+import type { TransformOptions, JITIOptions, JITIImportOptions } from "./types";
 
 export type { JITIOptions, TransformOptions } from "./types";
 
@@ -42,7 +42,7 @@ export interface JITI extends Require {
   register: () => () => void;
   evalModule: (source: string, options?: EvalModuleOptions) => unknown;
   /** @experimental Behavior of `jiti.import` might change in the future. */
-  import: (id: string) => Promise<unknown>;
+  import: (id: string, importOptions: JITIImportOptions) => Promise<unknown>;
 }
 
 const JS_EXT_RE = /\.(c|m)?j(sx?)$/;
@@ -246,7 +246,7 @@ export default function createJITI(
     return opts.interopDefault ? interopDefault(mod) : mod;
   }
 
-  function jiti(id: string) {
+  function jiti(id: string, _importOptions?: JITIImportOptions) {
     const cache = parentCache || {};
 
     // Check for node: and file: protocol
@@ -454,7 +454,8 @@ export default function createJITI(
   jiti.transform = transform;
   jiti.register = register;
   jiti.evalModule = evalModule;
-  jiti.import = async (id: string) => await jiti(id);
+  jiti.import = async (id: string, importOptions?: JITIImportOptions) =>
+    await jiti(id, importOptions);
 
   return jiti;
 }
