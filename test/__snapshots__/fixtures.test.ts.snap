@@ -132,7 +132,7 @@ Logical or assignment: 50 title is empty.
 Logical nullish assignment: 50 20"
 `;
 
-exports[`fixtures > top-level-await > stdout 1`] = `"async value works"`;
+exports[`fixtures > top-level-await > stdout 1`] = `"async value works from sub module"`;
 
 exports[`fixtures > typescript > stdout 1`] = `
 "Decorator metadata keys: design:type

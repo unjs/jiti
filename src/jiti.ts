@@ -400,7 +400,6 @@ export default function createJITI(
     // Compile wrapped script
     let compiled;
     try {
-      // @ts-ignore
       compiled = vm.runInThisContext(
         wrapModule(source, { async: evalOptions.async }),
         {
