@@ -54,7 +54,7 @@
     "destr": "^2.0.3",
     "escape-string-regexp": "^5.0.0",
     "eslint": "^9.2.0",
-    "eslint-config-unjs": "0.3.1",
+    "eslint-config-unjs": "^0.3.2",
     "esm": "^3.2.25",
     "estree-walker": "^3.0.3",
     "execa": "^9.1.0",
@@ -77,5 +77,5 @@
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4"
   },
-  "packageManager": "pnpm@8.15.8"
+  "packageManager": "pnpm@9.1.4"
 }
