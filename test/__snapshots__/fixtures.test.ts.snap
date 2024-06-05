@@ -16,12 +16,12 @@ import.meta.env?.TEST true"
 exports[`fixtures > error-parse > stderr 1`] = `
 "Error: ParseError: \`import\` can only be used in \`import 
  <cwd>/index.ts
-    at <root>/dist/jiti.js
+    at Function.<anonymous> (<root>/dist/jiti)
     at Generator.next (<anonymous>)
     at <root>/dist/jiti.js
     at new Promise (<anonymous>)
     at __awaiter (<root>/dist/jiti)
-    at jiti.import (<root>/dist/jiti)
+    at Function.import (<root>/dist/jiti)
     at Object.<anonymous> (<root>/bin/jiti)
     at Module._compile (internal/modules/cjs/loader)
     at Module._extensions..js (internal/modules/cjs/loader)
@@ -44,13 +44,13 @@ TypeError: The "listener" argument must be of type function. Received undefined
     at process.addListener (events)
     at <cwd>/index.ts
     at evalModule (<root>/dist/jiti)
-    at jiti (<root>/dist/jiti)
-    at <root>/dist/jiti.js
+    at jitiRequire (<root>/dist/jiti)
+    at Function.<anonymous> (<root>/dist/jiti)
     at Generator.next (<anonymous>)
     at <root>/dist/jiti.js
     at new Promise (<anonymous>)
     at __awaiter (<root>/dist/jiti)
-    at jiti.import (<root>/dist/jiti)
+    at Function.import (<root>/dist/jiti)
     at Object.<anonymous> (<root>/bin/jiti)
     at Module._compile (internal/modules/cjs/loader)
     at Module._extensions..js (internal/modules/cjs/loader)
@@ -77,13 +77,13 @@ exports[`fixtures > esm > stdout 1`] = `
     'at test (<cwd>/test)',
     'at <cwd>/index.js',
     'at evalModule (<root>/dist/jiti)',
-    'at jiti (<root>/dist/jiti)',
-    'at <root>/dist/jiti.js',
+    'at jitiRequire (<root>/dist/jiti)',
+    'at Function.<anonymous> (<root>/dist/jiti)',
     'at Generator.next (<anonymous>)',
     'at <root>/dist/jiti.js',
     'at new Promise (<anonymous>)',
     'at __awaiter (<root>/dist/jiti)',
-    'at jiti.import (<root>/dist/jiti)',
+    'at Function.import (<root>/dist/jiti)',
     'at Object.<anonymous> (<root>/bin/jiti)',
     'at Module._compile (internal/modules/cjs/loader)',
     'at Module._extensions..js (internal/modules/cjs/loader)',
