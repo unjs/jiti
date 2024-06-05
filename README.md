@@ -10,21 +10,6 @@ Just-in-Time Typescript and ESM support for Node.js.
 > [!IMPORTANT]
 > This is the development branch for jiti v2. Check out [jiti/v1](https://github.com/unjs/jiti/tree/v1) for latest stable docs and [unjs/jiti#174](https://github.com/unjs/jiti/issues/174) for the v2 roadmap.
 
-## Used by
-
-- [Nuxt](https://nuxt.com/)
-- [Nitro](https://nitro.unjs.io/)
-- [Docusaurus](https://docusaurus.io/)
-- [UnoCSS](https://unocss.dev/)
-- [Tailwind 3.x](https://www.npmjs.com/package/tailwindcss)
-- [postcss-loader](https://github.com/webpack-contrib/postcss-loader)
-- [Slidev](https://sli.dev/)
-- [FormKit](https://formkit.com/)
-- [Knip](https://knip.dev/)
-- [Histoire](https://histoire.dev/)
-- [5M+ public repositories](https://github.com/unjs/jiti/network/dependents)
-- [55M+ npm monthly downloads](https://www.npmjs.com/package/jiti)
-
 ## Features
 
 - Seamless typescript and ESM syntax support
@@ -36,6 +21,22 @@ Just-in-Time Typescript and ESM support for Node.js.
 - Node.js native require cache integration
 - Filesystem transpile with hard disk caches
 - Custom resolve aliases
+
+## Used by
+
+- [Nitro](https://nitro.unjs.io/) and [UnJS](https://unjs.io/) ecosystem
+- [Nuxt](https://nuxt.com/)
+- [Docusaurus](https://docusaurus.io/)
+- [UnoCSS](https://unocss.dev/)
+- [Tailwindcss 3.x](https://tailwindcss.com/)
+- [PostCSS loader](https://github.com/webpack-contrib/postcss-loader)
+- [Slidev](https://sli.dev/)
+- [FormKit](https://formkit.com/)
+- [Knip](https://knip.dev/)
+- [Histoire](https://histoire.dev/)
+- [...55M+ npm monthly downloads](https://www.npmjs.com/package/jiti)
+- [...5M+ public repositories](https://github.com/unjs/jiti/network/dependents)
+- [ add yours ]
 
 ## Usage
 
