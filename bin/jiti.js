@@ -13,5 +13,5 @@ const pwd = process.cwd();
 const jiti = require("..")(pwd);
 const resolved = (process.argv[1] = jiti.resolve(resolve(pwd, script)));
 
-// eslint-disable-next-line unicorn/prefer-top-level-await
+ 
 jiti.import(resolved).catch(console.error);
