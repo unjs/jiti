@@ -31,6 +31,7 @@ describe("fixtures", async () => {
           .replace(/file:\/{3}/g, "file://")
           .replace(/Node.js v[\d.]+/, "Node.js v<version>")
           .replace(/ParseError: \w:\/:\s+/, "ParseError: ") // Unknown chars in Windows
+          .replace('TypeError [ERR_INVALID_ARG_TYPE]:', 'TypeError:')
           .trim();
       }
 
