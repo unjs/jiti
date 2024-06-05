@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.21.3
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.21.2...v1.21.3)
+
+### 🩹 Fixes
+
+- Update mlly to ^1.7.1 ([9adbcb3](https://github.com/unjs/jiti/commit/9adbcb3))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v1.21.2
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.21.1...v1.21.2)
