@@ -1,4 +1,3 @@
-import { mkdirSync } from "node:fs";
 import { platform } from "node:os";
 import { pathToFileURL } from "node:url";
 import { join } from "pathe";
