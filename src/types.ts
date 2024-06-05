@@ -35,4 +35,7 @@ export type JITIOptions = {
 export interface JITIImportOptions {
   /** @internal */
   _import?: () => Promise<any>;
+
+  /** @internal */
+  _async?: boolean;
 }

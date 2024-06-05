@@ -14,28 +14,28 @@ import.meta.env?.TEST true"
 `;
 
 exports[`fixtures > error-parse > stderr 1`] = `
-"<root>/lib/index.js:2
-  throw err; /* ↓ Check stack trace ↓ */
-  ^
-
-Error: ParseError: \`import\` can only be used in \`import 
+"Error: ParseError: \`import\` can only be used in \`import 
  <cwd>/index.ts
+    at <root>/dist/jiti.js
+    at Generator.next (<anonymous>)
+    at <root>/dist/jiti.js
+    at new Promise (<anonymous>)
+    at __awaiter (<root>/dist/jiti)
+    at jiti.import (<root>/dist/jiti)
     at Object.<anonymous> (<root>/bin/jiti)
     at Module._compile (internal/modules/cjs/loader)
     at Module._extensions..js (internal/modules/cjs/loader)
     at Module.load (internal/modules/cjs/loader)
     at Module._load (internal/modules/cjs/loader)
     at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)
-    at internal/main/run_main_module
-
-Node.js v<version>"
+    at internal/main/run_main_module"
 `;
 
 exports[`fixtures > error-parse > stdout 1`] = `""`;
 
 exports[`fixtures > error-runtime > stderr 1`] = `
-"<root>/lib/index.js:2
-  throw err; /* ↓ Check stack trace ↓ */
+"events:276
+  validateFunction(listener, 'listener');
   ^
 
 TypeError: The "listener" argument must be of type function. Received undefined
@@ -45,6 +45,12 @@ TypeError: The "listener" argument must be of type function. Received undefined
     at <cwd>/index.ts
     at evalModule (<root>/dist/jiti)
     at jiti (<root>/dist/jiti)
+    at <root>/dist/jiti.js
+    at Generator.next (<anonymous>)
+    at <root>/dist/jiti.js
+    at new Promise (<anonymous>)
+    at __awaiter (<root>/dist/jiti)
+    at jiti.import (<root>/dist/jiti)
     at Object.<anonymous> (<root>/bin/jiti)
     at Module._compile (internal/modules/cjs/loader)
     at Module._extensions..js (internal/modules/cjs/loader)
@@ -72,6 +78,12 @@ exports[`fixtures > esm > stdout 1`] = `
     'at <cwd>/index.js',
     'at evalModule (<root>/dist/jiti)',
     'at jiti (<root>/dist/jiti)',
+    'at <root>/dist/jiti.js',
+    'at Generator.next (<anonymous>)',
+    'at <root>/dist/jiti.js',
+    'at new Promise (<anonymous>)',
+    'at __awaiter (<root>/dist/jiti)',
+    'at jiti.import (<root>/dist/jiti)',
     'at Object.<anonymous> (<root>/bin/jiti)',
     'at Module._compile (internal/modules/cjs/loader)',
     'at Module._extensions..js (internal/modules/cjs/loader)',
@@ -119,6 +131,8 @@ Nullish coalescing: 0
 Logical or assignment: 50 title is empty.
 Logical nullish assignment: 50 20"
 `;
+
+exports[`fixtures > top-level-await > stdout 1`] = `"async value works"`;
 
 exports[`fixtures > typescript > stdout 1`] = `
 "Decorator metadata keys: design:type
