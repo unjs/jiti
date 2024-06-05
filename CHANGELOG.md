@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.21.1
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.21.0...v1.21.1)
+
+### 🏡 Chore
+
+- Update dependencies ([0bd991b](https://github.com/unjs/jiti/commit/0bd991b))
+- Update dependencies ([cfb106c](https://github.com/unjs/jiti/commit/cfb106c))
+- Update to eslint v9 ([c11d953](https://github.com/unjs/jiti/commit/c11d953))
+- Update deps and lockfile ([95aa249](https://github.com/unjs/jiti/commit/95aa249))
+- Run ci against 18 and 22 ([65b4067](https://github.com/unjs/jiti/commit/65b4067))
+- Lint ([6f3bd76](https://github.com/unjs/jiti/commit/6f3bd76))
+
+### 🤖 CI
+
+- Skip extra checks ([8fe6417](https://github.com/unjs/jiti/commit/8fe6417))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v1.21.0
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.20.0...v1.21.0)
