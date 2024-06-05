@@ -21,9 +21,16 @@ for (const fixture of fixtures) {
   if (fixture.startsWith("error-")) {
     continue;
   }
-  test("fixtures/" + fixture, () => {
-    _jiti("./" + fixture);
-  });
+  if (!fixture.includes("await")) {
+    test("fixtures/" + fixture + " (CJS)", () => {
+      _jiti("./" + fixture);
+    });
+  }
+  if (!fixture.includes("typescript")) {
+    test("fixtures/" + fixture + " (ESM)", async () => {
+      await _jiti.import("./" + fixture);
+    });
+  }
 }
 
 test("hmr", async () => {

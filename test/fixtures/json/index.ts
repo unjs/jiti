@@ -10,5 +10,5 @@ const debug = (label: string, value) =>
 debug("Imported", imported);
 debug("Imported with assertion", importedWithAssertion);
 debug("Required", required);
-// eslint-disable-next-line unicorn/prefer-top-level-await
+
 import("./file.json").then((r) => debug("Dynamic Imported", r));

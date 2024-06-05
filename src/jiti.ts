@@ -17,6 +17,7 @@ import {
   md5,
   detectLegacySyntax,
   readNearestPackageJSON,
+  wrapModule,
 } from "./utils";
 import { resolveJitiOptions } from "./options";
 import type { TransformOptions, JITIOptions, JITIImportOptions } from "./types";
@@ -35,6 +36,7 @@ export type EvalModuleOptions = Partial<{
   filename: string;
   ext: string;
   cache: ModuleCache;
+  async: boolean;
 }>;
 
 export interface JITI extends Require {
@@ -53,6 +55,7 @@ export default function createJITI(
   userOptions: JITIOptions = {},
   parentModule?: Module,
   parentCache?: ModuleCache,
+  parentImportOptions?: JITIImportOptions,
 ): JITI {
   const opts = resolveJitiOptions(userOptions);
 
@@ -110,6 +113,14 @@ export default function createJITI(
       ? _filename.replace(/\//g, "\\") // Import maps does not work with normalized paths!
       : _filename,
   );
+
+  let _dynamicImport: (id: string) => Promise<any>;
+  const nativeImport = (id: string) => {
+    const resolvedId = _resolve(id, { paths: [dirname(_filename)] });
+    // TODO: use subpath to avoid webpack transform instead
+    _dynamicImport ??= new Function("url", "return import(url)") as any;
+    return _dynamicImport(resolvedId);
+  };
 
   const tryResolve = (id: string, options?: { paths?: string[] }) => {
     try {
@@ -246,7 +257,7 @@ export default function createJITI(
     return opts.interopDefault ? interopDefault(mod) : mod;
   }
 
-  function jiti(id: string, _importOptions?: JITIImportOptions) {
+  function jiti(id: string, importOptions?: JITIImportOptions) {
     const cache = parentCache || {};
 
     // Check for node: and file: protocol
@@ -265,11 +276,20 @@ export default function createJITI(
     if (opts.experimentalBun && !opts.transformOptions) {
       try {
         debug(`[bun] [native] ${id}`);
-        const _mod = nativeRequire(id);
-        if (opts.requireCache === false) {
-          delete nativeRequire.cache[id];
+        if (importOptions?._async) {
+          return nativeImport(id).then((m: any) => {
+            if (opts.requireCache === false) {
+              delete nativeRequire.cache[id];
+            }
+            return _interopDefault(m);
+          });
+        } else {
+          const _mod = nativeRequire(id);
+          if (opts.requireCache === false) {
+            delete nativeRequire.cache[id];
+          }
+          return _interopDefault(_mod);
         }
-        return _interopDefault(_mod);
       } catch (error: any) {
         debug(`[bun] Using fallback for ${id} because of an error:`, error);
       }
@@ -311,7 +331,13 @@ export default function createJITI(
     const source = readFileSync(filename, "utf8");
 
     // Evaluate module
-    return evalModule(source, { id, filename, ext, cache });
+    return evalModule(source, {
+      id,
+      filename,
+      ext,
+      cache,
+      async: importOptions?._async ?? parentImportOptions?._async,
+    });
   }
 
   function evalModule(source: string, evalOptions: EvalModuleOptions = {}) {
@@ -372,7 +398,9 @@ export default function createJITI(
       }
     }
 
-    mod.require = createJITI(filename, opts, mod, cache);
+    mod.require = createJITI(filename, opts, mod, cache, {
+      _async: evalOptions.async,
+    });
 
     // @ts-ignore
     mod.path = dirname(filename);
@@ -389,13 +417,14 @@ export default function createJITI(
     // Compile wrapped script
     let compiled;
     try {
-      // @ts-ignore
-      // mod._compile wraps require and require.resolve to global function
-      compiled = vm.runInThisContext(Module.wrap(source), {
-        filename,
-        lineOffset: 0,
-        displayErrors: false,
-      });
+      compiled = vm.runInThisContext(
+        wrapModule(source, { async: evalOptions.async }),
+        {
+          filename,
+          lineOffset: 0,
+          displayErrors: false,
+        },
+      );
     } catch (error: any) {
       if (opts.requireCache) {
         delete nativeRequire.cache[filename];
@@ -455,7 +484,7 @@ export default function createJITI(
   jiti.register = register;
   jiti.evalModule = evalModule;
   jiti.import = async (id: string, importOptions?: JITIImportOptions) =>
-    await jiti(id, importOptions);
+    await jiti(id, { _async: true, ...importOptions });
 
   return jiti;
 }
