@@ -114,6 +114,14 @@ export default function createJITI(
       : _filename,
   );
 
+  let _dynamicImport: (id: string) => Promise<any>;
+  const nativeImport = (id: string) => {
+    const resolvedId = _resolve(id, { paths: [dirname(_filename)] });
+    // TODO: use subpath to avoid webpack transform instead
+    _dynamicImport ??= new Function("url", "return import(url)") as any;
+    return _dynamicImport(resolvedId);
+  };
+
   const tryResolve = (id: string, options?: { paths?: string[] }) => {
     try {
       return nativeRequire.resolve(id, options);
@@ -268,11 +276,20 @@ export default function createJITI(
     if (opts.experimentalBun && !opts.transformOptions) {
       try {
         debug(`[bun] [native] ${id}`);
-        const _mod = nativeRequire(id);
-        if (opts.requireCache === false) {
-          delete nativeRequire.cache[id];
+        if (importOptions?._async) {
+          return nativeImport(id).then((m: any) => {
+            if (opts.requireCache === false) {
+              delete nativeRequire.cache[id];
+            }
+            return _interopDefault(m);
+          });
+        } else {
+          const _mod = nativeRequire(id);
+          if (opts.requireCache === false) {
+            delete nativeRequire.cache[id];
+          }
+          return _interopDefault(_mod);
         }
-        return _interopDefault(_mod);
       } catch (error: any) {
         debug(`[bun] Using fallback for ${id} because of an error:`, error);
       }
