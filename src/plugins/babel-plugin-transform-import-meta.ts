@@ -1,4 +1,4 @@
-import { pathToFileURL } from "node:url";
+import { pathToFileURL } from "url";
 import { smart } from "@babel/template";
 import type { NodePath, PluginObj } from "@babel/core";
 import type { Statement, MemberExpression } from "@babel/types";

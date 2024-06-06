@@ -5,6 +5,7 @@ export default unjs({
     "test/fixtures/error-*"
   ],
   rules: {
-    "unicorn/no-null": 0
+    "unicorn/no-null": 0,
+    "unicorn/prefer-node-protocol": 0
   },
 });

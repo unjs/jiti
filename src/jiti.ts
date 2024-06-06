@@ -1,9 +1,9 @@
-import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
-import { Module, builtinModules } from "node:module";
-import { performance } from "node:perf_hooks";
-import { platform } from "node:os";
-import vm from "node:vm";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from "fs";
+import { Module, builtinModules } from "module";
+import { performance } from "perf_hooks";
+import { platform } from "os";
+import vm from "vm";
+import { fileURLToPath, pathToFileURL } from "url";
 import { dirname, join, basename, extname } from "pathe";
 import { destr } from "destr";
 import escapeStringRegexp from "escape-string-regexp";

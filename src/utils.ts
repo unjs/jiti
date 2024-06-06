@@ -1,6 +1,6 @@
-import { lstatSync, accessSync, constants, readFileSync } from "node:fs";
-import { createHash } from "node:crypto";
-import { tmpdir } from "node:os";
+import { lstatSync, accessSync, constants, readFileSync } from "fs";
+import { createHash } from "crypto";
+import { tmpdir } from "os";
 import { join } from "pathe";
 import type { PackageJson } from "pkg-types";
 
