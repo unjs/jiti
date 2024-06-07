@@ -5,7 +5,6 @@
   "repository": "unjs/jiti",
   "license": "MIT",
   "main": "./lib/index.js",
-  "types": "dist/jiti.d.ts",
   "bin": "bin/jiti.js",
   "files": [
     "lib",
