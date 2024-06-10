@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.21.4
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.21.3...v1.21.4)
+
+### 🩹 Fixes
+
+- Avoid `node:` protocol for node 14 compatibility ([5d877de](https://github.com/unjs/jiti/commit/5d877de))
+- Use internal cached modules only if loaded ([#245](https://github.com/unjs/jiti/pull/245))
+
+### 🏡 Chore
+
+- Update deps ([5e11181](https://github.com/unjs/jiti/commit/5e11181))
+- Enable autofix ci for v1 ([5e26706](https://github.com/unjs/jiti/commit/5e26706))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v1.21.3
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.21.2...v1.21.3)
