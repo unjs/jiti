@@ -336,7 +336,11 @@ export default function createJITI(
     }
 
     // Check for CJS cache
-    if (cache[filename]) {
+    if (
+      cache[filename] &&
+      (cache[filename].loaded === true || // Either module is fully loaded
+        parentModule?.loaded === false) // Or it's a circular dependency (parent is not loaded yet)
+    ) {
       return _interopDefault(cache[filename]?.exports);
     }
     if (opts.requireCache && nativeRequire.cache[filename]) {
