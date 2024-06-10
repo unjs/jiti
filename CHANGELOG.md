@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.21.6
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.21.5...v1.21.6)
+
+### 🩹 Fixes
+
+- Use internal cached modules only if loaded ([#247](https://github.com/unjs/jiti/pull/247))
+
+### ❤️ Contributors
+
+- Pooya Parsa <pyapar@gmail.com>
+
 ## v1.21.5
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.21.4...v1.21.5)
