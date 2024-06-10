@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.21.5
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.21.4...v1.21.5)
+
+### 🩹 Fixes
+
+- Revert #245 ([#246](https://github.com/unjs/jiti/pull/246), [#245](https://github.com/unjs/jiti/issues/245))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v1.21.4
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.21.3...v1.21.4)
