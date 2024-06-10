@@ -336,7 +336,7 @@ export default function createJITI(
     }
 
     // Check for CJS cache
-    if (cache[filename]) {
+    if (cache[filename] && cache[filename].loaded !== false) {
       return _interopDefault(cache[filename]?.exports);
     }
     if (opts.requireCache && nativeRequire.cache[filename]) {
