@@ -10,6 +10,9 @@ Just-in-Time Typescript and ESM support for Node.js.
 > [!IMPORTANT]
 > This is the development branch for jiti v2. Check out [jiti/v1](https://github.com/unjs/jiti/tree/v1) for latest stable docs and [unjs/jiti#174](https://github.com/unjs/jiti/issues/174) for the v2 roadmap.
 
+
+`jiti` provides the runtime support of TypeScript, ESM for Node by transpiling the modules on the fly. Since it directly goes to your source files, there won’t be a misalignment between your source code and bundle dist - thus there is no watcher process needed!
+
 ## Features
 
 - Seamless typescript and ESM syntax support
