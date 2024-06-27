@@ -32,9 +32,6 @@ importers:
       '@babel/plugin-transform-export-namespace-from':
         specifier: ^7.24.7
         version: 7.24.7(@babel/core@7.24.7)
-      '@babel/plugin-transform-modules-commonjs':
-        specifier: ^7.24.7
-        version: 7.24.7(@babel/core@7.24.7)
       '@babel/plugin-transform-nullish-coalescing-operator':
         specifier: ^7.24.7
         version: 7.24.7(@babel/core@7.24.7)
