@@ -82,6 +82,7 @@
     "vite": "^5.3.1",
     "vitest": "^1.6.0",
     "webpack": "^5.92.1",
+    "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^5.1.4"
   },
   "packageManager": "pnpm@9.4.0"
