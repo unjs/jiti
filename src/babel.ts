@@ -6,6 +6,7 @@ import type {
 import { TransformOptions, TRANSFORM_RESULT } from "./types";
 import { TransformImportMetaPlugin } from "./plugins/babel-plugin-transform-import-meta";
 import { importMetaEnvPlugin } from "./plugins/import-meta-env";
+import transformModulesPlugin from "./plugins/transform-module";
 
 export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
   const _opts: BabelTransformOptions & { plugins: PluginItem[] } = {
@@ -18,11 +19,7 @@ export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
     cwd: "/",
     ...opts.babel,
     plugins: [
-      [
-        require("@babel/plugin-transform-modules-commonjs"),
-        { allowTopLevelThis: true },
-      ],
-      [require("babel-plugin-dynamic-import-node"), { noInterop: true }],
+      [transformModulesPlugin, { allowTopLevelThis: true, async: opts.async }],
       [TransformImportMetaPlugin, { filename: opts.filename }],
       [require("@babel/plugin-syntax-class-properties")],
       [require("@babel/plugin-transform-export-namespace-from")],

@@ -9,6 +9,7 @@ export function jitiResolve(
   ctx: Context,
   id: string,
   options?: { paths?: string[] },
+  async?: boolean,
 ) {
   let resolved, err;
 
@@ -17,29 +18,32 @@ export function jitiResolve(
     id = resolveAlias(id, ctx.alias);
   }
 
-  // Try ESM resolve
-  if (ctx.opts.esmResolve) {
-    const conditionSets = [
-      ["node", "require"],
-      ["node", "import"],
-    ];
-    for (const conditions of conditionSets) {
-      try {
-        resolved = resolvePathSync(id, {
-          url: ctx.url,
-          conditions,
-          extensions: ctx.opts.extensions,
-        });
-      } catch (error) {
-        err = error;
-      }
-      if (resolved) {
-        return resolved;
-      }
+  // Try resolving with ESM compatible Node.js resolution in async context
+  const conditionSets = async
+    ? [
+        ["node", "import"],
+        ["node", "require"],
+      ]
+    : [
+        ["node", "require"],
+        ["node", "import"],
+      ];
+  for (const conditions of conditionSets) {
+    try {
+      resolved = resolvePathSync(id, {
+        url: ctx.url,
+        conditions,
+        extensions: ctx.opts.extensions,
+      });
+    } catch (error) {
+      err = error;
+    }
+    if (resolved) {
+      return resolved;
     }
   }
 
-  // Try native require resolve
+  // Try native require resolve with additional extensions and /index as fallback
   try {
     return ctx.nativeRequire.resolve(id, options);
   } catch (error) {
@@ -64,6 +68,7 @@ export function jitiResolve(
       }
     }
   }
+
   throw err;
 }
 

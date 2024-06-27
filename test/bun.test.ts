@@ -18,19 +18,25 @@ const _jiti = jiti(fixturesDir, {
 });
 
 for (const fixture of fixtures) {
-  if (fixture.startsWith("error-")) {
+  if (
+    fixture === "error-runtime" ||
+    fixture === "error-parse" ||
+    fixture === "typescript"
+  ) {
     continue;
   }
-  if (!fixture.includes("await")) {
+  if (
+    fixture !== "esm" &&
+    fixture !== "top-level-await" &&
+    fixture !== "json"
+  ) {
     test("fixtures/" + fixture + " (CJS)", () => {
       _jiti("./" + fixture);
     });
   }
-  if (!fixture.includes("typescript")) {
-    test("fixtures/" + fixture + " (ESM)", async () => {
-      await _jiti.import("./" + fixture);
-    });
-  }
+  test("fixtures/" + fixture + " (ESM)", async () => {
+    await _jiti.import("./" + fixture);
+  });
 }
 
 test("hmr", async () => {

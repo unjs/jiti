@@ -5,7 +5,7 @@ export type EvalModuleOptions = Partial<{
   filename: string;
   ext: string;
   cache: ModuleCache;
-  async: boolean;
+  async?: boolean;
 }>;
 
 export interface JITI extends NodeRequire {
@@ -13,8 +13,10 @@ export interface JITI extends NodeRequire {
   register: () => () => void;
   evalModule: (source: string, options?: EvalModuleOptions) => unknown;
   /** @experimental Behavior of `jiti.import` might change in the future. */
-  import: (id: string, importOptions: JITIImportOptions) => Promise<unknown>;
+  import: (id: string) => Promise<unknown>;
 }
+
+type ESMImport = (id: string) => Promise<any>;
 
 export interface Context {
   filename: string;
@@ -22,7 +24,8 @@ export interface Context {
   userOptions: JITIOptions;
   parentModule?: NodeModule;
   parentCache?: ModuleCache;
-  parentImportOptions?: JITIImportOptions;
+  nativeImport: ESMImport;
+  onError?: (error: Error) => void;
   opts: JITIOptions;
   nativeModules: string[];
   transformModules: string[];
@@ -39,6 +42,7 @@ export type TransformOptions = {
   ts?: boolean;
   retainLines?: boolean;
   legacy?: boolean;
+  async?: boolean;
   [key: string]: any;
 };
 
@@ -55,9 +59,7 @@ export type JITIOptions = {
   requireCache?: boolean;
   v8cache?: boolean;
   interopDefault?: boolean;
-  esmResolve?: boolean;
   cacheVersion?: string;
-  onError?: (error: Error) => void;
   legacy?: boolean;
   extensions?: string[];
   transformOptions?: Omit<TransformOptions, "source">;
@@ -66,11 +68,3 @@ export type JITIOptions = {
   transformModules?: string[];
   experimentalBun?: boolean;
 };
-
-export interface JITIImportOptions {
-  /** @internal */
-  _import?: () => Promise<any>;
-
-  /** @internal */
-  _async?: boolean;
-}

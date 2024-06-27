@@ -6,7 +6,6 @@ import type { JITIOptions } from "./types";
 
 const _EnvDebug = destr<boolean>(process.env.JITI_DEBUG);
 const _EnvCache = destr<boolean>(process.env.JITI_CACHE);
-const _EnvESMResolve = destr<boolean>(process.env.JITI_ESM_RESOLVE);
 const _EnvRequireCache = destr<boolean>(process.env.JITI_REQUIRE_CACHE);
 const _EnvSourceMaps = destr<boolean>(process.env.JITI_SOURCE_MAPS);
 const _EnvAlias = destr<Record<string, string>>(process.env.JITI_ALIAS);
@@ -20,7 +19,6 @@ const jitiDefaults: JITIOptions = {
   requireCache: _EnvRequireCache === undefined ? true : !!_EnvRequireCache,
   sourceMaps: _EnvSourceMaps === undefined ? false : !!_EnvSourceMaps,
   interopDefault: false,
-  esmResolve: _EnvESMResolve || false,
   cacheVersion: "7",
   legacy: lt(process.version || "0.0.0", "14.0.0"),
   extensions: [".js", ".mjs", ".cjs", ".ts", ".mts", ".cts", ".json"],

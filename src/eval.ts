@@ -12,7 +12,7 @@ import {
 } from "./utils";
 import type { ModuleCache, Context, EvalModuleOptions } from "./types";
 import { jitiResolve } from "./resolve";
-import { jitiRequire } from "./require";
+import { jitiRequire, nativeImportOrRequire } from "./require";
 import createJITI from "./jiti";
 import { transform } from "./transform";
 
@@ -33,32 +33,42 @@ export function evalModule(
 
   // Transpile
   const isTypescript = ext === ".ts" || ext === ".mts" || ext === ".cts";
-  const isNativeModule =
+  const isESM =
     ext === ".mjs" ||
     (ext === ".js" && readNearestPackageJSON(filename)?.type === "module");
   const isCommonJS = ext === ".cjs";
   const needsTranspile =
-    !isCommonJS &&
+    !isCommonJS && // CommonJS skips transpile
+    !(isESM && evalOptions.async) && // In async mode, we can skip native ESM as well
     (isTypescript ||
-      isNativeModule ||
+      isESM ||
       ctx.isTransformRe.test(filename) ||
       hasESMSyntax(source) ||
       (ctx.opts.legacy && detectLegacySyntax(source)));
 
   const start = performance.now();
   if (needsTranspile) {
-    source = transform(ctx, { filename, source, ts: isTypescript });
+    source = transform(ctx, {
+      filename,
+      source,
+      ts: isTypescript,
+      async: evalOptions.async,
+    });
     const time = Math.round((performance.now() - start) * 1000) / 1000;
     debug(
       ctx,
-      `[transpile]${isNativeModule ? " [esm]" : ""}`,
+      `[transpile]${evalOptions.async ? " [esm]" : " [cjs]"}`,
       filename,
       `(${time}ms)`,
     );
   } else {
     try {
-      debug(ctx, "[native]", filename);
-      return jitiInteropDefault(ctx, ctx.nativeRequire(id));
+      debug(
+        ctx,
+        `[native]${evalOptions.async ? " [esm]" : " [cjs]"}`,
+        filename,
+      );
+      return nativeImportOrRequire(ctx, filename, evalOptions.async);
     } catch (error: any) {
       debug(ctx, "Native require error:", error);
       debug(ctx, "[fallback]", filename);
@@ -79,9 +89,14 @@ export function evalModule(
     }
   }
 
-  mod.require = createJITI(filename, ctx.opts, mod, cache, {
-    _async: evalOptions.async,
+  const _jiti = createJITI(filename, ctx.opts, {
+    nativeImport: ctx.nativeImport,
+    onError: ctx.onError,
+    parentModule: mod,
+    parentCache: cache,
   });
+
+  mod.require = _jiti;
 
   // @ts-ignore
   mod.path = dirname(filename);
@@ -110,41 +125,47 @@ export function evalModule(
     if (ctx.opts.requireCache) {
       delete ctx.nativeRequire.cache[filename];
     }
-    ctx.opts.onError!(error);
+    ctx.onError!(error);
   }
 
   // Evaluate module
+  let evalResult;
   try {
-    compiled(
+    evalResult = compiled(
       mod.exports,
       mod.require,
       mod,
       mod.filename,
       dirname(mod.filename),
+      _jiti.import,
     );
   } catch (error: any) {
     if (ctx.opts.requireCache) {
       delete ctx.nativeRequire.cache[filename];
     }
-    ctx.opts.onError!(error);
+    ctx.onError!(error);
   }
 
-  // Check for parse errors
-  if (mod.exports && mod.exports.__JITI_ERROR__) {
-    const { filename, line, column, code, message } =
-      mod.exports.__JITI_ERROR__;
-    const loc = `${filename}:${line}:${column}`;
-    const err = new Error(`${code}: ${message} \n ${loc}`);
-    Error.captureStackTrace(err, jitiRequire);
-    ctx.opts.onError!(err);
+  function next() {
+    // Check for parse errors
+    if (mod.exports && mod.exports.__JITI_ERROR__) {
+      const { filename, line, column, code, message } =
+        mod.exports.__JITI_ERROR__;
+      const loc = `${filename}:${line}:${column}`;
+      const err = new Error(`${code}: ${message} \n ${loc}`);
+      Error.captureStackTrace(err, jitiRequire);
+      ctx.onError!(err);
+    }
+
+    // Set as loaded
+    mod.loaded = true;
+
+    // interopDefault
+    const _exports = jitiInteropDefault(ctx, mod.exports);
+
+    // Return exports
+    return _exports;
   }
 
-  // Set as loaded
-  mod.loaded = true;
-
-  // interopDefault
-  const _exports = jitiInteropDefault(ctx, mod.exports);
-
-  // Return exports
-  return _exports;
+  return evalOptions.async ? Promise.resolve(evalResult).then(next) : next();
 }

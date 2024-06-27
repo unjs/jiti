@@ -2,18 +2,13 @@ import { readFileSync } from "node:fs";
 import { builtinModules } from "node:module";
 import { fileURLToPath } from "node:url";
 import { extname } from "pathe";
-import { jitiInteropDefault } from "./utils";
+import { jitiInteropDefault, normalizeWindowsImportId } from "./utils";
 import { debug } from "./utils";
-import type { JITIImportOptions, Context } from "./types";
+import type { Context } from "./types";
 import { jitiResolve } from "./resolve";
 import { evalModule } from "./eval";
-import { nativeImport } from "./esm";
 
-export function jitiRequire(
-  ctx: Context,
-  id: string,
-  importOptions?: JITIImportOptions,
-) {
+export function jitiRequire(ctx: Context, id: string, async: boolean) {
   const cache = ctx.parentCache || {};
 
   // Check for node: and file: protocol
@@ -32,8 +27,9 @@ export function jitiRequire(
   if (ctx.opts.experimentalBun && !ctx.opts.transformOptions) {
     try {
       debug(ctx, `[bun] [native] ${id}`);
-      if (importOptions?._async) {
-        return nativeImport(ctx, id).then((m: any) => {
+      id = jitiResolve(ctx, id);
+      if (async) {
+        return ctx.nativeImport(id).then((m: any) => {
           if (ctx.opts.requireCache === false) {
             delete ctx.nativeRequire.cache[id];
           }
@@ -59,20 +55,25 @@ export function jitiRequire(
   if (ext === ".json") {
     debug(ctx, "[json]", filename);
     const jsonModule = ctx.nativeRequire(id);
-    Object.defineProperty(jsonModule, "default", { value: jsonModule });
+    if (jsonModule && !("default" in jsonModule)) {
+      Object.defineProperty(jsonModule, "default", {
+        value: jsonModule,
+        enumerable: false,
+      });
+    }
     return jsonModule;
   }
 
   // Unknown format
   if (ext && !ctx.opts.extensions!.includes(ext)) {
     debug(ctx, "[unknown]", filename);
-    return ctx.nativeRequire(id);
+    return nativeImportOrRequire(ctx, id, async);
   }
 
   // Force native modules
   if (ctx.isNativeRe.test(filename)) {
-    debug(ctx, "[native]", filename);
-    return ctx.nativeRequire(id);
+    debug(ctx, `[native] ${async ? " [esm]" : ": [cjs]"}`, filename);
+    return nativeImportOrRequire(ctx, id, async);
   }
 
   // Check for CJS cache
@@ -92,6 +93,18 @@ export function jitiRequire(
     filename,
     ext,
     cache,
-    async: importOptions?._async ?? ctx.parentImportOptions?._async,
+    async,
   });
+}
+
+export function nativeImportOrRequire(
+  ctx: Context,
+  id: string,
+  async?: boolean,
+) {
+  return async
+    ? ctx
+        .nativeImport(normalizeWindowsImportId(id))
+        .then((m: any) => jitiInteropDefault(ctx, m))
+    : jitiInteropDefault(ctx, ctx.nativeRequire(id));
 }

@@ -1,8 +1,9 @@
 import { lstatSync, accessSync, constants, readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { join } from "pathe";
+import { isAbsolute, join } from "pathe";
 import type { PackageJson } from "pkg-types";
-import { interopDefault as mllyInteropDefault } from "mlly";
+import { interopDefault as mllyInteropDefault, pathToFileURL } from "mlly";
+import { isWindows } from "std-env";
 import { Context } from "./types";
 
 export function isDir(filename: string): boolean {
@@ -54,10 +55,7 @@ export function readNearestPackageJSON(path: string): PackageJson | undefined {
 }
 
 export function wrapModule(source: string, opts?: { async?: boolean }) {
-  if (opts?.async) {
-    source = source.replace(/(\s*=\s*)require\(/g, "$1await require(");
-  }
-  return `(${opts?.async ? "async " : ""}function (exports, require, module, __filename, __dirname) { ${source}\n});`;
+  return `(${opts?.async ? "async " : ""}function (exports, require, module, __filename, __dirname, jitiImport) { ${source}\n});`;
 }
 
 export function debug(ctx: Context, ...args: string[]) {
@@ -68,4 +66,11 @@ export function debug(ctx: Context, ...args: string[]) {
 
 export function jitiInteropDefault(ctx: Context, mod: any) {
   return ctx.opts.interopDefault ? mllyInteropDefault(mod) : mod;
+}
+
+export function normalizeWindowsImportId(id: string) {
+  if (!isWindows || !isAbsolute(id)) {
+    return id;
+  }
+  return pathToFileURL(id);
 }

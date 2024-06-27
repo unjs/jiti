@@ -1,3 +1,10 @@
+import type {
+  JITI,
+  TransformOptions,
+  JITIOptions,
+  Context,
+  EvalModuleOptions,
+} from "./types";
 import { platform } from "node:os";
 import { pathToFileURL } from "node:url";
 import { join } from "pathe";
@@ -7,15 +14,6 @@ import { normalizeAliases } from "pathe/utils";
 import { addHook } from "pirates";
 import { isDir } from "./utils";
 import { resolveJitiOptions } from "./options";
-import type {
-  JITI,
-  TransformOptions,
-  JITIOptions,
-  JITIImportOptions,
-  ModuleCache,
-  Context,
-  EvalModuleOptions,
-} from "./types";
 import { jitiResolve } from "./resolve";
 import { evalModule } from "./eval";
 import { transform } from "./transform";
@@ -29,9 +27,10 @@ const isWindows = platform() === "win32";
 export default function createJITI(
   filename: string,
   userOptions: JITIOptions = {},
-  parentModule?: NodeModule,
-  parentCache?: ModuleCache,
-  parentImportOptions?: JITIImportOptions,
+  _internal: Pick<
+    Context,
+    "parentModule" | "parentCache" | "nativeImport" | "onError"
+  >,
 ): JITI {
   // Resolve options
   const opts = resolveJitiOptions(userOptions);
@@ -82,9 +81,6 @@ export default function createJITI(
     filename,
     url,
     userOptions,
-    parentModule,
-    parentCache,
-    parentImportOptions,
     opts,
     alias,
     nativeModules,
@@ -93,6 +89,10 @@ export default function createJITI(
     isTransformRe,
     additionalExts,
     nativeRequire,
+    onError: _internal.onError,
+    parentModule: _internal.parentModule,
+    parentCache: _internal.parentCache,
+    nativeImport: _internal.nativeImport,
   };
 
   // Prepare cache dir
@@ -100,8 +100,8 @@ export default function createJITI(
 
   // Create jiti instance
   const jiti: JITI = Object.assign(
-    function jiti(id: string, importOptions?: JITIImportOptions) {
-      return jitiRequire(ctx, id, importOptions);
+    function jiti(id: string) {
+      return jitiRequire(ctx, id, false /* no async */);
     },
     {
       cache: opts.requireCache ? nativeRequire.cache : {},
@@ -132,8 +132,8 @@ export default function createJITI(
       evalModule(source: string, options?: EvalModuleOptions) {
         return evalModule(ctx, source, options);
       },
-      async import(id: string, importOptions?: JITIImportOptions) {
-        return await jitiRequire(ctx, id, { _async: true, ...importOptions });
+      async import(id: string) {
+        return await jitiRequire(ctx, id, true /* async */);
       },
     },
   );
