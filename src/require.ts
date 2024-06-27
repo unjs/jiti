@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { builtinModules } from "node:module";
 import { fileURLToPath } from "node:url";
 import { extname } from "pathe";
-import { jitiInteropDefault } from "./utils";
+import { jitiInteropDefault, normalizeWindowsImportId } from "./utils";
 import { debug } from "./utils";
 import type { Context } from "./types";
 import { jitiResolve } from "./resolve";
@@ -103,6 +103,8 @@ export function nativeImportOrRequire(
   async?: boolean,
 ) {
   return async
-    ? ctx.nativeImport(id).then((m: any) => jitiInteropDefault(ctx, m))
+    ? ctx
+        .nativeImport(normalizeWindowsImportId(id))
+        .then((m: any) => jitiInteropDefault(ctx, m))
     : jitiInteropDefault(ctx, ctx.nativeRequire(id));
 }
