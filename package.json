@@ -4,9 +4,17 @@
   "description": "Runtime typescript and ESM support for Node.js",
   "repository": "unjs/jiti",
   "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/jiti.d.ts",
+      "default": "./lib/index.js"
+    }
+  },
   "main": "./lib/index.js",
-  "types": "dist/jiti.d.ts",
-  "bin": "bin/jiti.js",
+  "types": "./dist/jiti.d.ts",
+  "bin": {
+    "jiti": "bin/jiti.js"
+  },
   "files": [
     "lib",
     "dist",
