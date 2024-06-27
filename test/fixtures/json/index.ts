@@ -11,4 +11,5 @@ debug("Imported", imported);
 debug("Imported with assertion", importedWithAssertion);
 debug("Required", required);
 
-import("./file.json").then((r) => debug("Dynamic Imported", r));
+const dynamicRes = await import("./file.json");
+debug("Dynamic Imported", dynamicRes);

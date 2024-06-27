@@ -54,10 +54,7 @@ export function readNearestPackageJSON(path: string): PackageJson | undefined {
 }
 
 export function wrapModule(source: string, opts?: { async?: boolean }) {
-  if (opts?.async) {
-    source = source.replace(/(\s*=\s*)require\(/g, "$1await require(");
-  }
-  return `(${opts?.async ? "async " : ""}function (exports, require, module, __filename, __dirname) { ${source}\n});`;
+  return `(${opts?.async ? "async " : ""}function (exports, require, module, __filename, __dirname, jitiImport) { ${source}\n});`;
 }
 
 export function debug(ctx: Context, ...args: string[]) {
