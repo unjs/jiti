@@ -5,7 +5,6 @@ import { dirname, basename, extname } from "pathe";
 import { hasESMSyntax } from "mlly";
 import {
   debug,
-  detectLegacySyntax,
   jitiInteropDefault,
   readNearestPackageJSON,
   wrapModule,
@@ -43,9 +42,7 @@ export function evalModule(
     (isTypescript ||
       isESM ||
       ctx.isTransformRe.test(filename) ||
-      hasESMSyntax(source) ||
-      (ctx.opts.legacy && detectLegacySyntax(source)));
-
+      hasESMSyntax(source));
   const start = performance.now();
   if (needsTranspile) {
     source = transform(ctx, {
