@@ -101,7 +101,7 @@ export default function createJITI(
   // Create jiti instance
   const jiti: JITI = Object.assign(
     function jiti(id: string) {
-      return jitiRequire(ctx, id);
+      return jitiRequire(ctx, id, false /* no async */);
     },
     {
       cache: opts.requireCache ? nativeRequire.cache : {},
