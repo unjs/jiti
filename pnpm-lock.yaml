@@ -146,6 +146,9 @@ importers:
       typescript:
         specifier: ^5.5.2
         version: 5.5.2
+      unplugin-purge-polyfills:
+        specifier: ^0.0.3
+        version: 0.0.3
       vite:
         specifier: ^5.3.1
         version: 5.3.1(@types/node@20.14.9)(terser@5.31.0)
@@ -2291,6 +2294,13 @@ packages:
   unist-util-stringify-position@2.0.3:
     resolution: {integrity: sha512-3faScn5I+hy9VleOq/qNbAd6pAx7iH5jYBMS9I1HgQVijz/4mv5Bvw5iw1sC/90CODiKo81G/ps8AJrISn687g==}
 
+  unplugin-purge-polyfills@0.0.3:
+    resolution: {integrity: sha512-FUthxYFu0Ko4x3Y8cagfnBC6A5N3bRmRnpPMpHYnc+I5Tfnt9N7jAzpz9dIDQvn8iUd9irHvqm6FxGh4fwvJhw==}
+
+  unplugin@1.10.1:
+    resolution: {integrity: sha512-d6Mhq8RJeGA8UfKCu54Um4lFA0eSaRa3XxdAJg8tIdxbu1ubW0hBCZUL7yI2uGyYCRndvbK8FLHzqy2XKfeMsg==}
+    engines: {node: '>=14.0.0'}
+
   untildify@4.0.0:
     resolution: {integrity: sha512-KK8xQ1mkzZeg9inewmFVDNkg3l5LUhoq9kN6iWYB/CC9YMG8HA+c1Q8HwDe6dEX7kErrEVNVBO3fWsVq5iDgtw==}
     engines: {node: '>=8'}
@@ -2398,6 +2408,9 @@ packages:
   webpack-sources@3.2.3:
     resolution: {integrity: sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==}
     engines: {node: '>=10.13.0'}
+
+  webpack-virtual-modules@0.6.2:
+    resolution: {integrity: sha512-66/V2i5hQanC51vBQKPH4aI8NMAcBW59FVBs+rC7eGHupMyfn34q7rZIE+ETlJ+XTevqfUhVVBgSUNSW2flEUQ==}
 
   webpack@5.92.1:
     resolution: {integrity: sha512-JECQ7IwJb+7fgUFBlrJzbyu3GEuNBcdqr1LD7IbSzwkSmIevTm8PF+wej3Oxuz/JFBUZ6O1o43zsPkwm1C4TmA==}
@@ -4620,6 +4633,20 @@ snapshots:
     dependencies:
       '@types/unist': 2.0.10
 
+  unplugin-purge-polyfills@0.0.3:
+    dependencies:
+      defu: 6.1.4
+      magic-string: 0.30.10
+      mlly: 1.7.1
+      unplugin: 1.10.1
+
+  unplugin@1.10.1:
+    dependencies:
+      acorn: 8.12.0
+      chokidar: 3.6.0
+      webpack-sources: 3.2.3
+      webpack-virtual-modules: 0.6.2
+
   untildify@4.0.0: {}
 
   update-browserslist-db@1.0.16(browserslist@4.23.0):
@@ -4746,6 +4773,8 @@ snapshots:
       wildcard: 2.0.1
 
   webpack-sources@3.2.3: {}
+
+  webpack-virtual-modules@0.6.2: {}
 
   webpack@5.92.1(webpack-cli@5.1.4):
     dependencies:
