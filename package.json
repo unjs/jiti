@@ -41,8 +41,6 @@
     "@babel/plugin-syntax-class-properties": "^7.12.13",
     "@babel/plugin-syntax-import-assertions": "^7.24.7",
     "@babel/plugin-transform-export-namespace-from": "^7.24.7",
-    "@babel/plugin-transform-nullish-coalescing-operator": "^7.24.7",
-    "@babel/plugin-transform-optional-chaining": "^7.24.7",
     "@babel/plugin-transform-typescript": "^7.24.7",
     "@babel/preset-typescript": "^7.24.7",
     "@babel/template": "^7.24.7",

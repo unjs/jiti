@@ -41,7 +41,6 @@ export type TransformOptions = {
   filename?: string;
   ts?: boolean;
   retainLines?: boolean;
-  legacy?: boolean;
   async?: boolean;
   [key: string]: any;
 };
@@ -60,7 +59,6 @@ export type JITIOptions = {
   v8cache?: boolean;
   interopDefault?: boolean;
   cacheVersion?: string;
-  legacy?: boolean;
   extensions?: string[];
   transformOptions?: Omit<TransformOptions, "source">;
   alias?: Record<string, string>;

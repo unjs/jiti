@@ -29,10 +29,6 @@ export function md5(content: string, len = 8) {
   return createHash("md5").update(content).digest("hex").slice(0, len);
 }
 
-export function detectLegacySyntax(code: string) {
-  return code.match(/\?\.|\?\?/);
-}
-
 export function isObject(val: any) {
   return val !== null && typeof val === "object";
 }

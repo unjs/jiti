@@ -5,7 +5,6 @@ import { debug } from "./utils";
 export function transform(ctx: Context, topts: any): string {
   let code = getCache(ctx, topts.filename, topts.source, () => {
     const res = ctx.opts.transform!({
-      legacy: ctx.opts.legacy,
       ...ctx.opts.transformOptions,
       babel: {
         ...(ctx.opts.sourceMaps

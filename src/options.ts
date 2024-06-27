@@ -20,7 +20,6 @@ const jitiDefaults: JITIOptions = {
   sourceMaps: _EnvSourceMaps === undefined ? false : !!_EnvSourceMaps,
   interopDefault: false,
   cacheVersion: "7",
-  legacy: lt(process.version || "0.0.0", "14.0.0"),
   extensions: [".js", ".mjs", ".cjs", ".ts", ".mts", ".cts", ".json"],
   alias: _EnvAlias,
   nativeModules: _EnvNative || [],
@@ -32,9 +31,6 @@ export function resolveJitiOptions(userOptions: JITIOptions): JITIOptions {
   const opts: JITIOptions = { ...jitiDefaults, ...userOptions };
 
   // Cache dependencies
-  if (opts.legacy) {
-    opts.cacheVersion += "-legacy";
-  }
   if (opts.transformOptions) {
     opts.cacheVersion += "-" + objectHash(opts.transformOptions);
   }
