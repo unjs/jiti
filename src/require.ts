@@ -102,7 +102,7 @@ export function nativeImportOrRequire(
   id: string,
   async?: boolean,
 ) {
-  return async
+  return async && ctx.nativeImport
     ? ctx
         .nativeImport(normalizeWindowsImportId(id))
         .then((m: any) => jitiInteropDefault(ctx, m))

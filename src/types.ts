@@ -24,7 +24,7 @@ export interface Context {
   userOptions: JITIOptions;
   parentModule?: NodeModule;
   parentCache?: ModuleCache;
-  nativeImport: ESMImport;
+  nativeImport?: ESMImport;
   onError?: (error: Error) => void;
   opts: JITIOptions;
   nativeModules: string[];

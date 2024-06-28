@@ -27,7 +27,7 @@ const isWindows = platform() === "win32";
 export default function createJITI(
   filename: string,
   userOptions: JITIOptions = {},
-  _internal: Pick<
+  _internal?: Pick<
     Context,
     "parentModule" | "parentCache" | "nativeImport" | "onError"
   >,
@@ -89,10 +89,10 @@ export default function createJITI(
     isTransformRe,
     additionalExts,
     nativeRequire,
-    onError: _internal.onError,
-    parentModule: _internal.parentModule,
-    parentCache: _internal.parentCache,
-    nativeImport: _internal.nativeImport,
+    onError: _internal?.onError,
+    parentModule: _internal?.parentModule,
+    parentCache: _internal?.parentCache,
+    nativeImport: _internal?.nativeImport,
   };
 
   // Prepare cache dir
