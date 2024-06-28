@@ -49,7 +49,7 @@ export function evalModule(
       filename,
       source,
       ts: isTypescript,
-      async: evalOptions.async,
+      async: evalOptions.async ?? false,
     });
     const time = Math.round((performance.now() - start) * 1000) / 1000;
     debug(
@@ -69,7 +69,12 @@ export function evalModule(
     } catch (error: any) {
       debug(ctx, "Native require error:", error);
       debug(ctx, "[fallback]", filename);
-      source = transform(ctx, { filename, source, ts: isTypescript });
+      source = transform(ctx, {
+        filename,
+        source,
+        ts: isTypescript,
+        async: evalOptions.async ?? false,
+      });
     }
   }
 

@@ -5,7 +5,7 @@ export type EvalModuleOptions = Partial<{
   filename: string;
   ext: string;
   cache: ModuleCache;
-  async?: boolean;
+  async: boolean;
 }>;
 
 export interface JITI extends NodeRequire {
@@ -41,7 +41,7 @@ export type TransformOptions = {
   filename?: string;
   ts?: boolean;
   retainLines?: boolean;
-  async?: boolean;
+  async: boolean;
   [key: string]: any;
 };
 

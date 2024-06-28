@@ -125,6 +125,7 @@ export default function createJITI(
               source,
               filename,
               ts: !!/\.[cm]?ts$/.test(filename),
+              async: false,
             }),
           { exts: ctx.opts.extensions },
         );

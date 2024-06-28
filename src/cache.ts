@@ -8,6 +8,7 @@ export function getCache(
   ctx: Context,
   filename: string | undefined,
   source: string,
+  async: boolean,
   get: () => string,
 ): string {
   if (!ctx.opts.cache || !filename) {
@@ -18,7 +19,11 @@ export function getCache(
   const sourceHash = ` /* v${ctx.opts.cacheVersion}-${md5(source, 16)} */`;
 
   // Check cache file
-  const filebase = basename(dirname(filename)) + "-" + basename(filename);
+  const filebase =
+    basename(dirname(filename)) +
+    "-" +
+    basename(filename) +
+    (async ? "-async" : "");
   const cacheFile = join(
     ctx.opts.cache as string,
     filebase + "." + md5(filename) + ".js",
