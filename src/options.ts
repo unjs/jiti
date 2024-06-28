@@ -19,7 +19,7 @@ const jitiDefaults: JITIOptions = {
   requireCache: _EnvRequireCache === undefined ? true : !!_EnvRequireCache,
   sourceMaps: _EnvSourceMaps === undefined ? false : !!_EnvSourceMaps,
   interopDefault: false,
-  cacheVersion: "7",
+  cacheVersion: "8",
   extensions: [".js", ".mjs", ".cjs", ".ts", ".mts", ".cts", ".json"],
   alias: _EnvAlias,
   nativeModules: _EnvNative || [],
