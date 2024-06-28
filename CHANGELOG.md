@@ -2,6 +2,56 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.0.0-beta.1
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.21.3...v2.0.0-beta.1)
+
+### 🚀 Enhancements
+
+- Basic top-level await support ([#239](https://github.com/unjs/jiti/pull/239))
+- Native esm support ([#259](https://github.com/unjs/jiti/pull/259))
+
+### 🩹 Fixes
+
+- Use distinct cache paths for async mode ([6e8ec7a](https://github.com/unjs/jiti/commit/6e8ec7a))
+
+### 💅 Refactors
+
+- Split option normalization ([#172](https://github.com/unjs/jiti/pull/172))
+- Split logic ([#240](https://github.com/unjs/jiti/pull/240))
+- Remove legacy node syntax polyfills ([#260](https://github.com/unjs/jiti/pull/260))
+- 3rd arg to createJiti is optional ([60a23e3](https://github.com/unjs/jiti/commit/60a23e3))
+- Upgrade cache version to `8` ([99224ae](https://github.com/unjs/jiti/commit/99224ae))
+
+### 📖 Documentation
+
+- Update bundlephobia link ([#179](https://github.com/unjs/jiti/pull/179))
+
+### 🏡 Chore
+
+- Add v2 banner ([61a49a9](https://github.com/unjs/jiti/commit/61a49a9))
+- Add `v1` to renovate branches ([38c38d2](https://github.com/unjs/jiti/commit/38c38d2))
+- Update dependencies ([bd6b14b](https://github.com/unjs/jiti/commit/bd6b14b))
+- Update to eslint v9 ([3c7740f](https://github.com/unjs/jiti/commit/3c7740f))
+- Update deps and lockfile ([18fd99a](https://github.com/unjs/jiti/commit/18fd99a))
+- Fix readme ([7746080](https://github.com/unjs/jiti/commit/7746080))
+- Update docs ([73b29bb](https://github.com/unjs/jiti/commit/73b29bb))
+- Update docs ([a1049a1](https://github.com/unjs/jiti/commit/a1049a1))
+- Update docs ([0e0c70e](https://github.com/unjs/jiti/commit/0e0c70e))
+- Update release script  prepare for v2 ([cdd61d9](https://github.com/unjs/jiti/commit/cdd61d9))
+- Update package.json ([420f1fb](https://github.com/unjs/jiti/commit/420f1fb))
+- Add webpack bundle analyzer ([a05dcdc](https://github.com/unjs/jiti/commit/a05dcdc))
+- Fix type issue ([9a36d0e](https://github.com/unjs/jiti/commit/9a36d0e))
+
+### 🤖 CI
+
+- Enable nightly channel ([bfd4f46](https://github.com/unjs/jiti/commit/bfd4f46))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Lehoczky Zoltán ([@Lehoczky](http://github.com/Lehoczky))
+
 ## v1.21.3
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.21.2...v1.21.3)
