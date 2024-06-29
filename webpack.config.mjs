@@ -1,12 +1,16 @@
-const path = require("node:path");
-const fsp = require("node:fs/promises");
+import path from "node:path";
+import fsp from "node:fs/promises";
 
-const TerserPlugin = require("terser-webpack-plugin");
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+import { purgePolyfills } from "unplugin-purge-polyfills";
+import TerserPlugin from "terser-webpack-plugin";
+import { createRequire } from "node:module";
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+
+const require = createRequire(import.meta.url);
 
 const isProd = process.env.NODE_ENV === "production";
 
-module.exports = {
+export default {
   target: "node",
   mode: isProd ? "production" : "development",
   entry: {
@@ -16,7 +20,7 @@ module.exports = {
   devtool: false,
   output: {
     filename: "[name].js",
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve("dist"),
     libraryTarget: "commonjs2",
     libraryExport: "default",
   },
@@ -30,7 +34,11 @@ module.exports = {
     },
   },
   plugins: [
-    process.argv.find(arg => arg.includes('--analyze')) && new BundleAnalyzerPlugin({})
+    process.argv.find(arg => arg.includes('--analyze')) && new BundleAnalyzerPlugin({}),
+    purgePolyfills.webpack({
+      mode: "transform",
+      logLevel: "verbose",
+    }),
   ],
   ignoreWarnings: [/critical dependency:/i],
   module: {
