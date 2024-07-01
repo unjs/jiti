@@ -93,7 +93,7 @@ const jiti = createJiti(import.meta.url, { debug: true });
 
 You can globally register jiti using [global hooks](https://nodejs.org/api/module.html#initialize).
 
-**Note:** This is an experimental approach and is not recommended unless you have to, please prefer explicit method.
+**Note:** This is an experimental approach and only tested to work on Node.js > 20. I don't recommend it and unless you have to, please prefer explicit method.
 
 ```js
 import "jiti/register";
