@@ -22,7 +22,7 @@ import { prepareCacheDir } from "./cache";
 
 const isWindows = platform() === "win32";
 
-export default function createJITI(
+export default function createJiti(
   filename: string,
   userOptions: JitiOptions = {},
   _internal?: Pick<
