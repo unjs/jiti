@@ -1,8 +1,10 @@
+import type { Context } from "./types";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join, basename } from "pathe";
 import { debug, isWritable, md5 } from "./utils";
-import { tmpdir } from "node:os";
-import type { Context } from "./types";
+
+const CACHE_VERSION = "8";
 
 export function getCache(
   ctx: Context,
@@ -11,28 +13,28 @@ export function getCache(
   async: boolean,
   get: () => string,
 ): string {
-  if (!ctx.opts.cache || !filename) {
+  if (!ctx.opts.fsCache || !filename) {
     return get();
   }
 
-  // Calculate source hash
-  const sourceHash = ` /* v${ctx.opts.cacheVersion}-${md5(source, 16)} */`;
+  // Compute inline hash for source
+  const sourceHash = ` /* v${CACHE_VERSION}-${md5(source, 16)} */`;
 
-  // Check cache file
-  const filebase =
+  // Compute cache file path
+  const cacheName =
     basename(dirname(filename)) +
     "-" +
     basename(filename) +
-    (async ? "-async" : "");
-  const cacheFile = join(
-    ctx.opts.cache as string,
-    filebase + "." + md5(filename) + ".js",
-  );
+    "." +
+    md5(filename) +
+    (async ? ".mjs" : ".cjs");
+  const cacheDir = ctx.opts.fsCache as string;
+  const cacheFilePath = join(cacheDir, cacheName);
 
-  if (existsSync(cacheFile)) {
-    const cacheSource = readFileSync(cacheFile, "utf8");
+  if (existsSync(cacheFilePath)) {
+    const cacheSource = readFileSync(cacheFilePath, "utf8");
     if (cacheSource.endsWith(sourceHash)) {
-      debug(ctx, "[cache hit]", filename, "~>", cacheFile);
+      debug(ctx, "[cache hit]", filename, "~>", cacheFilePath);
       return cacheSource;
     }
   }
@@ -41,25 +43,25 @@ export function getCache(
   const result = get();
 
   if (!result.includes("__JITI_ERROR__")) {
-    writeFileSync(cacheFile, result + sourceHash, "utf8");
+    writeFileSync(cacheFilePath, result + sourceHash, "utf8");
   }
 
   return result;
 }
 
 export function prepareCacheDir(ctx: Context) {
-  if (ctx.opts.cache === true) {
-    ctx.opts.cache = getCacheDir();
+  if (ctx.opts.fsCache === true) {
+    ctx.opts.fsCache = getCacheDir();
   }
-  if (ctx.opts.cache) {
+  if (ctx.opts.fsCache) {
     try {
-      mkdirSync(ctx.opts.cache as string, { recursive: true });
-      if (!isWritable(ctx.opts.cache)) {
+      mkdirSync(ctx.opts.fsCache as string, { recursive: true });
+      if (!isWritable(ctx.opts.fsCache)) {
         throw new Error("directory is not writable!");
       }
     } catch (error: any) {
-      debug(ctx, "Error creating cache directory at ", ctx.opts.cache, error);
-      ctx.opts.cache = false;
+      debug(ctx, "Error creating cache directory at ", ctx.opts.fsCache, error);
+      ctx.opts.fsCache = false;
     }
   }
 }

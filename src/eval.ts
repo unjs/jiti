@@ -108,7 +108,7 @@ export function evalModule(
 
   // Set CJS cache before eval
   cache[filename] = mod;
-  if (ctx.opts.requireCache) {
+  if (ctx.opts.moduleCache) {
     ctx.nativeRequire.cache[filename] = mod;
   }
 
@@ -124,7 +124,7 @@ export function evalModule(
       },
     );
   } catch (error: any) {
-    if (ctx.opts.requireCache) {
+    if (ctx.opts.moduleCache) {
       delete ctx.nativeRequire.cache[filename];
     }
     ctx.onError!(error);
@@ -142,7 +142,7 @@ export function evalModule(
       _jiti.import,
     );
   } catch (error: any) {
-    if (ctx.opts.requireCache) {
+    if (ctx.opts.moduleCache) {
       delete ctx.nativeRequire.cache[filename];
     }
     ctx.onError!(error);
