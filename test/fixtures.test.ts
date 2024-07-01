@@ -41,15 +41,6 @@ describe("fixtures", async () => {
             )
             .replace("internal/errors:496", "events:276")
             .replace("    ^", "  ^")
-            .replace(
-              "at async asyncRunEntryPointWithESMLoader (internal/modules/run_main) {",
-              "",
-            )
-            .replace("at async loadESM (internal/process/esm_loader)", "")
-            .replace(
-              "at async handleMainPromise (internal/modules/run_main) {",
-              "",
-            )
             .trim()
         );
       }

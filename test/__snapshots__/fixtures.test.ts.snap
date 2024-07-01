@@ -20,27 +20,7 @@ exports[`fixtures > error-parse > stderr 1`] = `
 
 exports[`fixtures > error-parse > stdout 1`] = `""`;
 
-exports[`fixtures > error-runtime > stderr 1`] = `
-"TypeError: The "listener" argument must be of type function. Received undefined
-    at checkListener (events)
-    at _addListener (events)
-    at process.addListener (events)
-    at <cwd>/index.ts
-    at evalModule (<root>/dist/jiti.cjs)
-    at jitiRequire (<root>/dist/jiti.cjs)
-    at Function.<anonymous> (<root>/dist/jiti.cjs)
-    at Generator.next (<anonymous>)
-    at <root>/dist/jiti.cjs
-    at new Promise (<anonymous>)
-    at __awaiter (<root>/dist/jiti.cjs)
-    at Function.import (<root>/dist/jiti.cjs)
-    at file://<root>/lib/jiti-cli.mjs
-    at ModuleJob.run (internal/modules/esm/module_job)
-    at async ModuleLoader.import (internal/modules/esm/loader)
-    
-  code: 'ERR_INVALID_ARG_TYPE'
-}"
-`;
+exports[`fixtures > error-runtime > stderr 1`] = `"test error"`;
 
 exports[`fixtures > error-runtime > stdout 1`] = `""`;
 
