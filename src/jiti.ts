@@ -11,7 +11,6 @@ import { join } from "pathe";
 import escapeStringRegexp from "escape-string-regexp";
 import createRequire from "create-require";
 import { normalizeAliases } from "pathe/utils";
-import { addHook } from "pirates";
 import { isDir } from "./utils";
 import { resolveJitiOptions } from "./options";
 import { jitiResolve } from "./resolve";
@@ -118,26 +117,18 @@ export default function createJiti(
       transform(opts: TransformOptions) {
         return transform(ctx, opts);
       },
-      register() {
-        return addHook(
-          (source: string, filename: string) =>
-            transform(ctx, {
-              source,
-              filename,
-              ts: !!/\.[cm]?ts$/.test(filename),
-              async: false,
-            }),
-          { exts: ctx.opts.extensions },
-        );
-      },
       evalModule(source: string, options?: EvalModuleOptions) {
         return evalModule(ctx, source, options);
       },
       async import(id: string) {
         return await jitiRequire(ctx, id, true /* async */);
       },
-      importResolve(id: string) {
-        return jitiResolve(ctx, id, { async: true });
+      importResolve(
+        id: string,
+        parentURL?: string,
+        opts?: { conditions?: string[] },
+      ) {
+        return jitiResolve(ctx, id, { ...opts, async: true, parentURL });
       },
     },
   );

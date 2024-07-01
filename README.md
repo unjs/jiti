@@ -19,6 +19,7 @@ Just-in-Time Typescript and ESM support for Node.js.
 - Seamless interoperability between ESM and CommonJS
 - Synchronous API to replace `require()`
 - Asynchronous API to replace `import()`
+- ESM Loader support
 - Super slim and zero dependency
 - Smart syntax detection to avoid extra transforms
 - Node.js native require cache integration
@@ -88,17 +89,20 @@ You can also pass options as second argument:
 const jiti = createJiti(import.meta.url, { debug: true });
 ```
 
-### Register require hook
+### Register global ESM loader
 
-```bash
-node -r jiti/register index.ts
-```
+You can globally register jiti using [global hooks](https://nodejs.org/api/module.html#initialize).
 
-Alternatively, you can register `jiti` as a require hook programmatically:
+**Note:** This is an experimental approach and is not recommended unless you have to, please prefer explicit method.
 
 ```js
-const jiti = require("jiti")();
-const unregister = jiti.register();
+import "jiti/register";
+```
+
+Or:
+
+```bash
+node --import jiti/register index.ts
 ```
 
 ## ⚙️ Options

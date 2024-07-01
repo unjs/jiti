@@ -8,9 +8,19 @@ const TS_EXT_RE = /\.(c|m)?t(sx?)$/;
 export function jitiResolve(
   ctx: Context,
   id: string,
-  options?: { paths?: string[]; async?: boolean },
+  options?: {
+    paths?: string[];
+    async?: boolean;
+    parentURL?: string;
+    conditions?: string[];
+  },
 ) {
   let resolved, err;
+
+  if (ctx.isNativeRe.test(id)) {
+    console.log("$$$$$", id);
+    return id;
+  }
 
   // Resolve alias
   if (ctx.alias) {
@@ -18,19 +28,15 @@ export function jitiResolve(
   }
 
   // Try resolving with ESM compatible Node.js resolution in async context
-  const conditionSets = options?.async
-    ? [
-        ["node", "import"],
-        ["node", "require"],
-      ]
-    : [
-        ["node", "require"],
-        ["node", "import"],
-      ];
+  const conditionSets = (
+    options?.async
+      ? [options?.conditions, ["node", "import"], ["node", "require"]]
+      : [options?.conditions, ["node", "require"], ["node", "import"]]
+  ).filter(Boolean);
   for (const conditions of conditionSets) {
     try {
       resolved = resolvePathSync(id, {
-        url: ctx.url,
+        url: options?.parentURL || ctx.url,
         conditions,
         extensions: ctx.opts.extensions,
       });
