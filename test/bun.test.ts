@@ -13,8 +13,8 @@ const fixtures = await readdir(fixturesDir);
 const _jiti = createJiti(fixturesDir, {
   debug: true,
   interopDefault: true,
-  requireCache: false,
-  cache: false,
+  fsCache: false,
+  moduleCache: false,
 });
 
 for (const fixture of fixtures) {

@@ -18,10 +18,10 @@ export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
   const _ExpBun = destr<string[]>(process.env.JITI_EXPERIMENTAL_BUN);
 
   const jitiDefaults: JitiOptions = {
-    fsCache: _EnvFSCache === undefined ? true : !!_EnvFSCache,
-    moduleCache: _EnvModuleCache === undefined ? true : !!_EnvModuleCache,
+    fsCache: _EnvFSCache ?? true,
+    moduleCache: _EnvModuleCache ?? true,
     debug: _EnvDebug,
-    sourceMaps: _EnvSourceMaps === undefined ? false : !!_EnvSourceMaps,
+    sourceMaps: _EnvSourceMaps ?? false,
     interopDefault: false,
     extensions: [".js", ".mjs", ".cjs", ".ts", ".mts", ".cts", ".json"],
     alias: _EnvAlias,
@@ -31,10 +31,10 @@ export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
   };
 
   const deprecatOverrides: JitiOptions = {};
-  if (userOptions.cache) {
+  if (userOptions.cache !== undefined) {
     deprecatOverrides.fsCache = userOptions.cache;
   }
-  if (userOptions.requireCache) {
+  if (userOptions.requireCache !== undefined) {
     deprecatOverrides.moduleCache = userOptions.requireCache;
   }
 
