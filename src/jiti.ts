@@ -25,13 +25,14 @@ const isWindows = platform() === "win32";
 export default function createJiti(
   filename: string,
   userOptions: JitiOptions = {},
-  _internal?: Pick<
+  parentContext?: Pick<
     Context,
     "parentModule" | "parentCache" | "nativeImport" | "onError"
   >,
+  isNested = false,
 ): Jiti {
   // Resolve options
-  const opts = resolveJitiOptions(userOptions);
+  const opts = isNested ? userOptions : resolveJitiOptions(userOptions);
 
   // Normalize aliases (and disable if non given)
   const alias =
@@ -86,14 +87,16 @@ export default function createJiti(
     isTransformRe,
     additionalExts,
     nativeRequire,
-    onError: _internal?.onError,
-    parentModule: _internal?.parentModule,
-    parentCache: _internal?.parentCache,
-    nativeImport: _internal?.nativeImport,
+    onError: parentContext?.onError,
+    parentModule: parentContext?.parentModule,
+    parentCache: parentContext?.parentCache,
+    nativeImport: parentContext?.nativeImport,
   };
 
   // Prepare cache dir
-  prepareCacheDir(ctx);
+  if (!isNested) {
+    prepareCacheDir(ctx);
+  }
 
   // Create jiti instance
   const jiti: Jiti = Object.assign(
