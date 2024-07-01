@@ -15,15 +15,15 @@ export interface Jiti extends NodeRequire {
   /**
    * Resolve with ESM import conditions.
    */
-  importResolve: (id: string) => string;
+  importResolve: (
+    id: string,
+    parentURL?: string,
+    opts?: { conditions?: string[] },
+  ) => string;
   /**
    * Transform source code
    */
   transform: (opts: TransformOptions) => string;
-  /**
-   * Register global (CommonJS) require hook
-   */
-  register: () => () => void;
   /**
    * Evaluate transformed code as a module
    */

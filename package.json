@@ -16,6 +16,9 @@
         "default": "./lib/jiti.cjs"
       }
     },
+    "./register": {
+      "import": "./lib/jiti-register.mjs"
+    },
     "./package.json": "./package.json"
   },
   "main": "./lib/jiti.cjs",
@@ -37,7 +40,8 @@
     "lint": "eslint . && prettier -c src lib test stubs",
     "lint:fix": "eslint --fix . && prettier -w src lib test stubs",
     "release": "pnpm build && pnpm test && changelogen --release --prerelease --push --publish --publishTag 2x",
-    "test": "pnpm lint && vitest run --coverage && pnpm test:bun",
+    "test": "pnpm lint && vitest run --coverage && pnpm test:register && pnpm test:bun",
+    "test:register": "node ./test/register-test.mjs",
     "test:bun": "bun --bun test test/bun"
   },
   "devDependencies": {
@@ -76,7 +80,6 @@
     "mlly": "^1.7.1",
     "object-hash": "^3.0.0",
     "pathe": "^1.1.2",
-    "pirates": "^4.0.6",
     "pkg-types": "^1.1.1",
     "prettier": "^3.3.2",
     "reflect-metadata": "^0.2.1",
