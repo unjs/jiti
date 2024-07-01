@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.0.0-beta.2
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.0.0-beta.1...v2.0.0-beta.2)
+
+### 🚀 Enhancements
+
+- Add experimental esm loader support ([#266](https://github.com/unjs/jiti/pull/266))
+
+### 🔥 Performance
+
+- Reduce overhead of sub jiti instances ([#265](https://github.com/unjs/jiti/pull/265))
+
+### 🩹 Fixes
+
+- Resolve with esm conditions in async context ([#264](https://github.com/unjs/jiti/pull/264))
+
+### 💅 Refactors
+
+- Use more clear `fsCache` and `moduleCache` options ([#263](https://github.com/unjs/jiti/pull/263))
+- Use esm imports for babel plugins ([22e259f](https://github.com/unjs/jiti/commit/22e259f))
+
+### 📦 Build
+
+- Overhaul lib exports ([#262](https://github.com/unjs/jiti/pull/262))
+- Target es2020 ([c382c2f](https://github.com/unjs/jiti/commit/c382c2f))
+- Target es2022 ([dbf0507](https://github.com/unjs/jiti/commit/dbf0507))
+
+### 🏡 Chore
+
+- Update readme ([8957f72](https://github.com/unjs/jiti/commit/8957f72))
+- Remove unused deps ([e472f95](https://github.com/unjs/jiti/commit/e472f95))
+
+### 🤖 CI
+
+- Enable loader test ([#267](https://github.com/unjs/jiti/pull/267))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v2.0.0-beta.1
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.21.3...v2.0.0-beta.1)
