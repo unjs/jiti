@@ -1,18 +1,21 @@
 # jiti
 
-[![npm version][npm-version-src]][npm-version-href]
-[![npm downloads][npm-downloads-src]][npm-downloads-href]
-[![bundle][bundle-src]][bundle-href]
-[![License][license-src]][license-href]
+<!-- automd:badges color=F0DB4F bundlephobia -->
+
+[![npm version](https://img.shields.io/npm/v/jiti?color=F0DB4F)](https://npmjs.com/package/jiti)
+[![npm downloads](https://img.shields.io/npm/dm/jiti?color=F0DB4F)](https://npmjs.com/package/jiti)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/jiti?color=F0DB4F)](https://bundlephobia.com/package/jiti)
+
+<!-- /automd -->
 
 Just-in-Time Typescript and ESM support for Node.js.
 
 > [!IMPORTANT]
 > This is the development branch for jiti v2. Check out [jiti/v1](https://github.com/unjs/jiti/tree/v1) for latest stable docs and [unjs/jiti#174](https://github.com/unjs/jiti/issues/174) for the v2 roadmap.
 
-## Features
+## ✅ Features
 
-- Seamless typescript and ESM syntax support
+- Seamless Typescript and ESM syntax support
 - Seamless interoperability between ESM and CommonJS
 - Synchronous API to replace `require()`
 - Asynchronous API to replace `import()`
@@ -22,47 +25,67 @@ Just-in-Time Typescript and ESM support for Node.js.
 - Filesystem transpile with hard disk caches
 - Custom resolve aliases
 
-## Used by
+## 🌟 Used by
 
-- [Nitro](https://nitro.unjs.io/) and [UnJS](https://unjs.io/) ecosystem
-- [Nuxt](https://nuxt.com/)
 - [Docusaurus](https://docusaurus.io/)
-- [UnoCSS](https://unocss.dev/)
-- [Tailwindcss 3.x](https://tailwindcss.com/)
-- [PostCSS loader](https://github.com/webpack-contrib/postcss-loader)
-- [Slidev](https://sli.dev/)
 - [FormKit](https://formkit.com/)
-- [Knip](https://knip.dev/)
 - [Histoire](https://histoire.dev/)
-- [...55M+ npm monthly downloads](https://www.npmjs.com/package/jiti)
-- [...5M+ public repositories](https://github.com/unjs/jiti/network/dependents)
-- [ add yours ]
+- [Knip](https://knip.dev/)
+- [Nitro](https://nitro.unjs.io/)
+- [Nuxt](https://nuxt.com/)
+- [PostCSS loader](https://github.com/webpack-contrib/postcss-loader)
+- [Rsbuild](https://rsbuild.dev/)
+- [Size Limit](https://github.com/ai/size-limit)
+- [Slidev](https://sli.dev/)
+- [Tailwindcss](https://tailwindcss.com/)
+- [Tokenami](https://github.com/tokenami/tokenami)
+- [UnoCSS](https://unocss.dev/)
+- [WXT](https://wxt.dev/)
+- [Winglang](https://www.winglang.io/)
+- [Graphql code generator](https://the-guild.dev/graphql/codegen)
+- [Lingui](https://lingui.dev/)
+- [Scaffdog](https://scaff.dog/)
+- [...UnJS ecosystem](https://unjs.io/)
+- [...58M+ npm monthly downloads](https://www.npmjs.com/package/jiti)
+- [...5.5M+ public repositories](https://github.com/unjs/jiti/network/dependents)
+- [ pr welcome add yours ]
 
-## Usage
+## 💡 Usage
+
+### CLI
+
+You can use `jiti` CLI to quickly run any script with Typescript and native ESM support!
+
+```bash
+npx jiti ./index.ts
+
+# or
+
+jiti ./index.ts
+```
 
 ### Programmatic
 
 ```js
-const jiti = require("jiti")(__filename);
+// ESM
+import { createJiti } from "jiti";
+const jiti = createJiti(import.meta.url);
 
-// CommonJS mode
-jiti("./path/to/file.ts");
+// CommonJS
+const { createJiti } = require("jiti");
+const jiti = createJiti(__filename);
 
-// ESM mode
+// jiti.import() acts like import() with Typescript support
 await jiti.import("./path/to/file.ts");
+
+// jiti() acts like require() with Typescript and (non async) ESM support
+jiti("./path/to/file.ts");
 ```
 
 You can also pass options as second argument:
 
 ```js
-const jiti = require("jiti")(__filename, { debug: true });
-```
-
-### CLI
-
-```bash
-jiti index.ts
-# or npx jiti index.ts
+const jiti = createJiti(import.meta.url, { debug: true });
 ```
 
 ### Register require hook
@@ -78,7 +101,7 @@ const jiti = require("jiti")();
 const unregister = jiti.register();
 ```
 
-## Options
+## ⚙️ Options
 
 ### `debug`
 
@@ -162,15 +185,15 @@ Enable experimental native Bun support for transformations.
 
 ## License
 
-MIT. Made with 💖
+<!-- automd:contributors license=MIT author="pi0" -->
 
-<!-- Badged -->
+Published under the [MIT](https://github.com/unjs/jiti/blob/main/LICENSE) license.
+Made by [@pi0](https://github.com/pi0) and [community](https://github.com/unjs/jiti/graphs/contributors) 💛
+<br><br>
+<a href="https://github.com/unjs/jiti/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=unjs/jiti" />
+</a>
 
-[npm-version-src]: https://img.shields.io/npm/v/jiti?style=flat&colorA=18181B&colorB=F0DB4F
-[npm-version-href]: https://npmjs.com/package/jiti
-[npm-downloads-src]: https://img.shields.io/npm/dm/jiti?style=flat&colorA=18181B&colorB=F0DB4F
-[npm-downloads-href]: https://npmjs.com/package/jiti
-[bundle-src]: https://img.shields.io/bundlephobia/minzip/jiti?style=flat&colorA=18181B&colorB=F0DB4F
-[bundle-href]: https://bundlephobia.com/result?p=jiti
-[license-src]: https://img.shields.io/github/license/unjs/jiti.svg?style=flat&colorA=18181B&colorB=F0DB4F
-[license-href]: https://github.com/unjs/jiti/blob/main/LICENSE
+<!-- /automd -->
+
+<!-- automd:with-automd -->
