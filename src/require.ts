@@ -27,7 +27,7 @@ export function jitiRequire(ctx: Context, id: string, async: boolean) {
   if (ctx.opts.experimentalBun && !ctx.opts.transformOptions) {
     try {
       debug(ctx, `[bun] [native] ${id}`);
-      id = jitiResolve(ctx, id);
+      id = jitiResolve(ctx, id, { async });
       if (async && ctx.nativeImport) {
         return ctx.nativeImport(id).then((m: any) => {
           if (ctx.opts.moduleCache === false) {
@@ -48,7 +48,7 @@ export function jitiRequire(ctx: Context, id: string, async: boolean) {
   }
 
   // Resolve path
-  const filename = jitiResolve(ctx, id);
+  const filename = jitiResolve(ctx, id, { async });
   const ext = extname(filename);
 
   // Check for .json modules

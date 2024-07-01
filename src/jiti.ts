@@ -106,7 +106,7 @@ export default function createJiti(
       main: nativeRequire.main,
       resolve: Object.assign(
         function resolve(path: string) {
-          return jitiResolve(ctx, path);
+          return jitiResolve(ctx, path, { async: false });
         },
         {
           paths: nativeRequire.resolve.paths,
@@ -132,6 +132,9 @@ export default function createJiti(
       },
       async import(id: string) {
         return await jitiRequire(ctx, id, true /* async */);
+      },
+      importResolve(id: string) {
+        return jitiResolve(ctx, id, { async: true });
       },
     },
   );

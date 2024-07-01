@@ -13,6 +13,10 @@ export interface Jiti extends NodeRequire {
    */
   import: (id: string) => Promise<unknown>;
   /**
+   * Resolve with ESM import conditions.
+   */
+  importResolve: (id: string) => string;
+  /**
    * Transform source code
    */
   transform: (opts: TransformOptions) => string;

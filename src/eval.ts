@@ -25,8 +25,9 @@ export function evalModule(
     evalOptions.id ||
     (evalOptions.filename
       ? basename(evalOptions.filename)
-      : `_jitiEval.${evalOptions.ext || ".js"}`);
-  const filename = evalOptions.filename || jitiResolve(ctx, id);
+      : `_jitiEval.${evalOptions.ext || (evalOptions.async ? "mjs" : "js")}`);
+  const filename =
+    evalOptions.filename || jitiResolve(ctx, id, { async: evalOptions.async });
   const ext = evalOptions.ext || extname(filename);
   const cache = (evalOptions.cache || ctx.parentCache || {}) as ModuleCache;
 

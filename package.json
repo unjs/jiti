@@ -33,7 +33,7 @@
     "build": "pnpm clean && NODE_ENV=production pnpm webpack",
     "clean": "rm -rf dist",
     "dev": "pnpm clean && pnpm webpack --watch",
-    "jiti": "JITI_DEBUG=1 JITI_CACHE=false JITI_REQUIRE_CACHE=false ./lib/jiti-cli.mjs",
+    "jiti": "JITI_DEBUG=1 ./lib/jiti-cli.mjs",
     "lint": "eslint . && prettier -c src lib test stubs",
     "lint:fix": "eslint --fix . && prettier -w src lib test stubs",
     "release": "pnpm build && pnpm test && changelogen --release --prerelease --push --publish --publishTag 2x",
