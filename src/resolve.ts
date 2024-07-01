@@ -8,8 +8,7 @@ const TS_EXT_RE = /\.(c|m)?t(sx?)$/;
 export function jitiResolve(
   ctx: Context,
   id: string,
-  options?: { paths?: string[] },
-  async?: boolean,
+  options?: { paths?: string[]; async?: boolean },
 ) {
   let resolved, err;
 
@@ -19,7 +18,7 @@ export function jitiResolve(
   }
 
   // Try resolving with ESM compatible Node.js resolution in async context
-  const conditionSets = async
+  const conditionSets = options?.async
     ? [
         ["node", "import"],
         ["node", "require"],
