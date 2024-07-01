@@ -41,6 +41,8 @@ jobs:
         if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 20 }}
       - run: pnpm build
       - run: pnpm vitest run --coverage
+      - run: pnpm test:register
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 20 }}
       - run: pnpm test:bun --coverage
         if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 20 }}
       - name: nightly release
