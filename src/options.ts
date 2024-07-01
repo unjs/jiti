@@ -30,17 +30,17 @@ export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
     experimentalBun: _ExpBun === undefined ? !!process.versions.bun : !!_ExpBun,
   };
 
-  const deprecateOvverides: JitiOptions = {};
+  const deprecatOverrides: JitiOptions = {};
   if (userOptions.cache) {
-    deprecateOvverides.fsCache = userOptions.cache;
+    deprecatOverrides.fsCache = userOptions.cache;
   }
   if (userOptions.requireCache) {
-    deprecateOvverides.requireCache = userOptions.requireCache;
+    deprecatOverrides.moduleCache = userOptions.requireCache;
   }
 
   const opts: JitiOptions = {
     ...jitiDefaults,
-    ...deprecateOvverides,
+    ...deprecatOverrides,
     ...userOptions,
   };
 
