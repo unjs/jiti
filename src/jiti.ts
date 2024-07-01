@@ -101,7 +101,7 @@ export default function createJiti(
       return jitiRequire(ctx, id, false /* no async */);
     },
     {
-      cache: opts.requireCache ? nativeRequire.cache : {},
+      cache: opts.moduleCache ? nativeRequire.cache : Object.create(null),
       extensions: nativeRequire.extensions,
       main: nativeRequire.main,
       resolve: Object.assign(

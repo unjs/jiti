@@ -30,14 +30,14 @@ export function jitiRequire(ctx: Context, id: string, async: boolean) {
       id = jitiResolve(ctx, id);
       if (async && ctx.nativeImport) {
         return ctx.nativeImport(id).then((m: any) => {
-          if (ctx.opts.requireCache === false) {
+          if (ctx.opts.moduleCache === false) {
             delete ctx.nativeRequire.cache[id];
           }
           return jitiInteropDefault(ctx, m);
         });
       } else {
         const _mod = ctx.nativeRequire(id);
-        if (ctx.opts.requireCache === false) {
+        if (ctx.opts.moduleCache === false) {
           delete ctx.nativeRequire.cache[id];
         }
         return jitiInteropDefault(ctx, _mod);
@@ -76,11 +76,11 @@ export function jitiRequire(ctx: Context, id: string, async: boolean) {
     return nativeImportOrRequire(ctx, id, async);
   }
 
-  // Check for CJS cache
+  // Check for runtime cache
   if (cache[filename]) {
     return jitiInteropDefault(ctx, cache[filename]?.exports);
   }
-  if (ctx.opts.requireCache && ctx.nativeRequire.cache[filename]) {
+  if (ctx.opts.moduleCache && ctx.nativeRequire.cache[filename]) {
     return jitiInteropDefault(ctx, ctx.nativeRequire.cache[filename]?.exports);
   }
 

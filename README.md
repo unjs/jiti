@@ -111,15 +111,29 @@ const unregister = jiti.register();
 
 Enable debug to see which files are transpiled
 
-### `cache`
+### `fsCache`
 
 - Type: Boolean | String
 - Default: `true`
-- Environment Variable: `JITI_CACHE`
+- Environment Variable: `JITI_FS_CACHE`
 
-Use transpile cache
+Filesystem source cache (enabled by default)
 
-If set to `true` will use `node_modules/.cache/jiti` (if exists) or `{TMP_DIR}/node-jiti`
+By default (when is `true`), jiti uses `node_modules/.cache/jiti` (if exists) or `{TMP_DIR}/node-jiti`.
+
+**Note:** It is recommended to keep this option enabled for better performance.
+
+### `moduleCache`
+
+- Type: String
+- Default: `true`
+- Environment Variable: `JITI_MODULE_CACHE`
+
+Runtime module cache (enabled by default).
+
+Disabling allows editing code and importing same module multiple times.
+
+When enabled, jiti integrates with Node.js native CommonJS cache store.
 
 ### `transform`
 

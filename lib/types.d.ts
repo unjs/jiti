@@ -31,6 +31,36 @@ export interface Jiti extends NodeRequire {
  */
 export interface JitiOptions {
   /**
+   * Filesystem source cache (enabled by default)
+   *
+   * An string can be passed to set the custom cache directory.
+   *
+   * By default (when is `true`), jiti uses  `node_modules/.cache/jiti` (if exists) or `{TMP_DIR}/node-jiti`.
+   *
+   * This option can also be disabled using `JITI_FS_CACHE=false` environment variable.
+   *
+   * **Note:** It is recommended to keep this option enabled for better performance.
+   */
+  fsCache?: boolean | string;
+
+  /** @deprecated Use `fsCache` option. */
+  cache?: boolean | string;
+
+  /**
+   * Runtime module cache (enabled by default)
+   *
+   * Disabling allows editing code and importing same module multiple times.
+   *
+   * When enabled, jiti integrates with Node.js native CommonJS cache store.
+   *
+   * This option can also be disabled using `JITI_MODULE_CACHE=false` environment variable.
+   */
+  moduleCache?: boolean;
+
+  /** @deprecated Use `moduleCache` option.  */
+  requireCache?: boolean;
+
+  /**
    * Custom transform function
    */
   transform?: (opts: TransformOptions) => TransformResult;
@@ -43,33 +73,11 @@ export interface JitiOptions {
   debug?: boolean;
 
   /**
-   * Enable hard-source caching with HMR support (enabled by default).
-   *
-   * An string can be passed to set the custom cache directory.
-   *
-   * By default (when is `true`), jiti uses  `node_modules/.cache/jiti` (if exists) or `{TMP_DIR}/node-jiti`
-   *
-   * Can also be disabled using `JITI_CACHE=0` environment variable.
-   *
-   * **Note:** It is recommended to keep this option enabled for performance.
-   */
-  cache?: boolean | string;
-
-  /**
    * Enable sourcemaps (enabled by default)
    *
    * Can also be disabled using `JITI_SOURCE_MAPS=0` environment variable.
    */
   sourceMaps?: boolean;
-
-  /**
-   * Enable CommonJS require cache integration (enabled by default)
-   *
-   * Disabling allows requiring same module multiple times.
-   *
-   * Can also be disabled using `JITI_REQUIRE_CACHE=0` environment variable.
-   */
-  requireCache?: boolean;
 
   /**
    * Interop default export (disabled by default)
