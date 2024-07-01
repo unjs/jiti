@@ -1,2 +1,1 @@
-// @ts-expect-error
-process.addListener(null);
+throw "test error";

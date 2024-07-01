@@ -4,7 +4,7 @@ import { describe, it, expect } from "vitest";
 import fg from "fast-glob";
 
 describe("fixtures", async () => {
-  const jitiPath = resolve(__dirname, "../bin/jiti.js");
+  const jitiPath = resolve(__dirname, "../lib/jiti-cli.mjs");
 
   const root = dirname(__dirname);
   const dir = join(__dirname, "fixtures");
@@ -51,7 +51,6 @@ describe("fixtures", async () => {
         reject: false,
         env: {
           JITI_CACHE: "false",
-          JITI_ESM_RESOLVE: "true",
         },
       });
 

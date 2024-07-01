@@ -1,7 +1,7 @@
 import type {
-  JITI,
+  Jiti,
   TransformOptions,
-  JITIOptions,
+  JitiOptions,
   Context,
   EvalModuleOptions,
 } from "./types";
@@ -20,18 +20,16 @@ import { transform } from "./transform";
 import { jitiRequire } from "./require";
 import { prepareCacheDir } from "./cache";
 
-export type { JITI, JITIOptions, TransformOptions } from "./types";
-
 const isWindows = platform() === "win32";
 
-export default function createJITI(
+export default function createJiti(
   filename: string,
-  userOptions: JITIOptions = {},
+  userOptions: JitiOptions = {},
   _internal?: Pick<
     Context,
     "parentModule" | "parentCache" | "nativeImport" | "onError"
   >,
-): JITI {
+): Jiti {
   // Resolve options
   const opts = resolveJitiOptions(userOptions);
 
@@ -80,7 +78,6 @@ export default function createJITI(
   const ctx: Context = {
     filename,
     url,
-    userOptions,
     opts,
     alias,
     nativeModules,
@@ -99,7 +96,7 @@ export default function createJITI(
   prepareCacheDir(ctx);
 
   // Create jiti instance
-  const jiti: JITI = Object.assign(
+  const jiti: Jiti = Object.assign(
     function jiti(id: string) {
       return jitiRequire(ctx, id, false /* no async */);
     },

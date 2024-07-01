@@ -12,7 +12,7 @@ import {
 import type { ModuleCache, Context, EvalModuleOptions } from "./types";
 import { jitiResolve } from "./resolve";
 import { jitiRequire, nativeImportOrRequire } from "./require";
-import createJITI from "./jiti";
+import createJiti from "./jiti";
 import { transform } from "./transform";
 
 export function evalModule(
@@ -91,7 +91,7 @@ export function evalModule(
     }
   }
 
-  const _jiti = createJITI(filename, ctx.opts, {
+  const _jiti = createJiti(filename, ctx.opts, {
     nativeImport: ctx.nativeImport,
     onError: ctx.onError,
     parentModule: mod,

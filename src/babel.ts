@@ -3,12 +3,12 @@ import type {
   TransformOptions as BabelTransformOptions,
   PluginItem,
 } from "@babel/core";
-import { TransformOptions, TRANSFORM_RESULT } from "./types";
+import { TransformOptions, TransformResult } from "./types";
 import { TransformImportMetaPlugin } from "./plugins/babel-plugin-transform-import-meta";
 import { importMetaEnvPlugin } from "./plugins/import-meta-env";
 import transformModulesPlugin from "./plugins/transform-module";
 
-export default function transform(opts: TransformOptions): TRANSFORM_RESULT {
+export default function transform(opts: TransformOptions): TransformResult {
   const _opts: BabelTransformOptions & { plugins: PluginItem[] } = {
     babelrc: false,
     configFile: false,

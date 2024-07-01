@@ -1,12 +1,10 @@
-const path = require("node:path");
-const fsp = require("node:fs/promises");
-
-const TerserPlugin = require("terser-webpack-plugin");
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+import { fileURLToPath } from 'node:url';
+import TerserPlugin from 'terser-webpack-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
 const isProd = process.env.NODE_ENV === "production";
 
-module.exports = {
+export default {
   target: "node",
   mode: isProd ? "production" : "development",
   entry: {
@@ -15,18 +13,18 @@ module.exports = {
   },
   devtool: false,
   output: {
-    filename: "[name].js",
-    path: path.resolve(__dirname, "dist"),
+    filename: "[name].cjs",
+    path: fileURLToPath(import.meta.resolve('./dist')),
     libraryTarget: "commonjs2",
     libraryExport: "default",
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
+    extensions: [".tsx", ".ts", ".js", ".cjs", ".mjs", ".json"],
     alias: {
-      "@babel/code-frame": require.resolve("./stubs/babel-codeframe"),
-      "@babel/helper-compilation-targets": require.resolve(
-        "./stubs/helper-compilation-targets",
-      ),
+      "@babel/code-frame": fileURLToPath(import.meta.resolve("./stubs/babel-codeframe.mjs")),
+      "@babel/helper-compilation-targets": fileURLToPath(import.meta.resolve(
+        "./stubs/helper-compilation-targets.mjs",
+      )),
     },
   },
   plugins: [
