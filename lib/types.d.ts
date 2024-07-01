@@ -45,6 +45,10 @@ export interface JitiOptions {
   /**
    * Enable hard-source caching with HMR support (enabled by default).
    *
+   * An string can be passed to set the custom cache directory.
+   *
+   * By default (when is `true`), jiti uses  `node_modules/.cache/jiti` (if exists) or `{TMP_DIR}/node-jiti`
+   *
    * Can also be disabled using `JITI_CACHE=0` environment variable.
    *
    * **Note:** It is recommended to keep this option enabled for performance.
@@ -91,12 +95,29 @@ export interface JitiOptions {
 
   /**
    * Resolve aliases
+   *
+   * You can use `JITI_ALIAS` environment variable to set aliases as a JSON string.
    */
   alias?: Record<string, string>;
 
+  /**
+   * List of modules (within `node_modules`) to always use native require/import for them.
+   *
+   * You can use `JITI_NATIVE_MODULES` environment variable to set native modules as a JSON string.
+   *
+   */
   nativeModules?: string[];
 
+  /**
+   * List of modules (within `node_modules`) to transform them regardless of syntax.
+   *
+   * You can use `JITI_TRANSFORM_MODULES` environment variable to set transform modules as a JSON string.
+   */
   transformModules?: string[];
+
+  /**
+   * Enable experimental native Bun support for transformations.
+   */
   experimentalBun?: boolean;
 }
 
