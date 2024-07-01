@@ -7,6 +7,19 @@ import { TransformOptions, TransformResult } from "./types";
 import { TransformImportMetaPlugin } from "./plugins/babel-plugin-transform-import-meta";
 import { importMetaEnvPlugin } from "./plugins/import-meta-env";
 import transformModulesPlugin from "./plugins/transform-module";
+import tansformTypescriptMetaPlugin from "babel-plugin-transform-typescript-metadata";
+// @ts-ignore
+import syntaxClassPropertiesPlugin from "@babel/plugin-syntax-class-properties";
+// @ts-ignore
+import transformExportNamespaceFromPlugin from "@babel/plugin-transform-export-namespace-from";
+// @ts-ignore
+import tansformTypescriptPlugin from "@babel/plugin-transform-typescript";
+// @ts-ignore
+import proposalDecoratorsPlugin from "@babel/plugin-proposal-decorators";
+// @ts-ignore
+import parameterDecoratorPlugin from "babel-plugin-parameter-decorator";
+// @ts-ignore
+import syntaxImportAssertionsPlugin from "@babel/plugin-syntax-import-assertions";
 
 export default function transform(opts: TransformOptions): TransformResult {
   const _opts: BabelTransformOptions & { plugins: PluginItem[] } = {
@@ -21,24 +34,24 @@ export default function transform(opts: TransformOptions): TransformResult {
     plugins: [
       [transformModulesPlugin, { allowTopLevelThis: true, async: opts.async }],
       [TransformImportMetaPlugin, { filename: opts.filename }],
-      [require("@babel/plugin-syntax-class-properties")],
-      [require("@babel/plugin-transform-export-namespace-from")],
+      [syntaxClassPropertiesPlugin],
+      [transformExportNamespaceFromPlugin],
       [importMetaEnvPlugin],
     ],
   };
 
   if (opts.ts) {
     _opts.plugins.push([
-      require("@babel/plugin-transform-typescript"),
+      tansformTypescriptPlugin,
       { allowDeclareFields: true },
     ]);
     // `unshift` because these plugin must come before `@babel/plugin-syntax-class-properties`
     _opts.plugins.unshift(
-      [require("babel-plugin-transform-typescript-metadata")],
-      [require("@babel/plugin-proposal-decorators"), { legacy: true }],
+      [tansformTypescriptMetaPlugin],
+      [proposalDecoratorsPlugin, { legacy: true }],
     );
-    _opts.plugins.push(require("babel-plugin-parameter-decorator"));
-    _opts.plugins.push(require("@babel/plugin-syntax-import-assertions"));
+    _opts.plugins.push(parameterDecoratorPlugin);
+    _opts.plugins.push(syntaxImportAssertionsPlugin);
   }
 
   if (opts.babel && Array.isArray(opts.babel.plugins)) {
