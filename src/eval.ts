@@ -92,12 +92,17 @@ export function evalModule(
     }
   }
 
-  const _jiti = createJiti(filename, ctx.opts, {
-    nativeImport: ctx.nativeImport,
-    onError: ctx.onError,
-    parentModule: mod,
-    parentCache: cache,
-  });
+  const _jiti = createJiti(
+    filename,
+    ctx.opts,
+    {
+      nativeImport: ctx.nativeImport,
+      onError: ctx.onError,
+      parentModule: mod,
+      parentCache: cache,
+    },
+    true /* isNested */,
+  );
 
   mod.require = _jiti;
 
