@@ -26,21 +26,18 @@ exports[`fixtures > error-runtime > stderr 1`] = `
     at _addListener (events)
     at process.addListener (events)
     at <cwd>/index.ts
-    at evalModule (<root>/dist/jiti)
-    at jitiRequire (<root>/dist/jiti)
-    at Function.<anonymous> (<root>/dist/jiti)
+    at evalModule (<root>/dist/jiti.cjs)
+    at jitiRequire (<root>/dist/jiti.cjs)
+    at Function.<anonymous> (<root>/dist/jiti.cjs)
     at Generator.next (<anonymous>)
-    at <root>/dist/jiti.js
+    at <root>/dist/jiti.cjs
     at new Promise (<anonymous>)
-    at __awaiter (<root>/dist/jiti)
-    at Function.import (<root>/dist/jiti)
-    at Object.<anonymous> (<root>/bin/jiti)
-    at Module._compile (internal/modules/cjs/loader)
-    at Module._extensions..js (internal/modules/cjs/loader)
-    at Module.load (internal/modules/cjs/loader)
-    at Module._load (internal/modules/cjs/loader)
-    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)
-    at internal/main/run_main_module {
+    at __awaiter (<root>/dist/jiti.cjs)
+    at Function.import (<root>/dist/jiti.cjs)
+    at file://<root>/lib/jiti-cli.mjs
+    at ModuleJob.run (internal/modules/esm/module_job)
+    at async ModuleLoader.import (internal/modules/esm/loader)
+    at async asyncRunEntryPointWithESMLoader (internal/modules/run_main) {
   code: 'ERR_INVALID_ARG_TYPE'
 }"
 `;

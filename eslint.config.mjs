@@ -6,6 +6,7 @@ export default unjs({
   ],
   rules: {
     "unicorn/no-null": 0,
-    "unicorn/prefer-top-level-await": 0
+    "unicorn/prefer-top-level-await": 0,
+    "unicorn/prefer-export-from": 0
   },
 });

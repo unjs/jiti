@@ -5,10 +5,9 @@
     "moduleResolution": "Node",
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "declarationDir": "dist",
-    "declaration": true,
+    "declaration": false,
     "experimentalDecorators": true,
     "types": ["node"]
   },
-  "include": ["src"]
+  "include": ["src", "lib"]
 }
