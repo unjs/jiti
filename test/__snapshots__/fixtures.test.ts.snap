@@ -37,7 +37,7 @@ exports[`fixtures > error-runtime > stderr 1`] = `
     at file://<root>/lib/jiti-cli.mjs
     at ModuleJob.run (internal/modules/esm/module_job)
     at async ModuleLoader.import (internal/modules/esm/loader)
-    at async asyncRunEntryPointWithESMLoader (internal/modules/run_main) {
+    
   code: 'ERR_INVALID_ARG_TYPE'
 }"
 `;
