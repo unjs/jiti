@@ -18,7 +18,6 @@ export function jitiResolve(
   let resolved, err;
 
   if (ctx.isNativeRe.test(id)) {
-    console.log("$$$$$", id);
     return id;
   }
 
