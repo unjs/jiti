@@ -17,6 +17,7 @@
       }
     },
     "./register": {
+      "types": "./lib/jiti-register.d.mts",
       "import": "./lib/jiti-register.mjs"
     },
     "./package.json": "./package.json"
