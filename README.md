@@ -123,7 +123,7 @@ node --import jiti/register index.ts
 
 - Type: Boolean
 - Default: `false`
-- Environment Variable: `JITI_DEBUG`
+- Environment variable: `JITI_DEBUG`
 
 Enable verbose logging. You can use `JITI_DEBUG=1 <your command>` to enable it.
 
@@ -131,7 +131,7 @@ Enable verbose logging. You can use `JITI_DEBUG=1 <your command>` to enable it.
 
 - Type: Boolean | String
 - Default: `true`
-- Environment Variable: `JITI_FS_CACHE`
+- Environment variable: `JITI_FS_CACHE`
 
 Filesystem source cache (enabled by default)
 
@@ -143,7 +143,7 @@ By default (when is `true`), jiti uses `node_modules/.cache/jiti` (if exists) or
 
 - Type: String
 - Default: `true`
-- Environment Variable: `JITI_MODULE_CACHE`
+- Environment variable: `JITI_MODULE_CACHE`
 
 Runtime module cache (enabled by default).
 
@@ -162,7 +162,7 @@ Transform function. See [src/babel](./src/babel.ts) for more details
 
 - Type: Boolean
 - Default `false`
-- Environment Variable: `JITI_SOURCE_MAPS`
+- Environment variable: `JITI_SOURCE_MAPS`
 
 Add inline source map to transformed source for better debugging.
 
@@ -170,6 +170,7 @@ Add inline source map to transformed source for better debugging.
 
 - Type: Boolean
 - Default: `false`
+- Environment variable: `JITI_INTEROP_DEFAULT`
 
 Return the `.default` export of a module at the top-level.
 
@@ -177,7 +178,7 @@ Return the `.default` export of a module at the top-level.
 
 - Type: Object
 - Default: -
-- Environment Variable: `JITI_ALIAS`
+- Environment variable: `JITI_ALIAS`
 
 Custom alias map used to resolve ids.
 
@@ -185,7 +186,7 @@ Custom alias map used to resolve ids.
 
 - Type: Array
 - Default: ['typescript`]
-- Environment Variable: `JITI_NATIVE_MODULES`
+- Environment variable: `JITI_NATIVE_MODULES`
 
 List of modules (within `node_modules`) to always use native require for them.
 
@@ -193,7 +194,7 @@ List of modules (within `node_modules`) to always use native require for them.
 
 - Type: Array
 - Default: []
-- Environment Variable: `JITI_TRANSFORM_MODULES`
+- Environment variable: `JITI_TRANSFORM_MODULES`
 
 List of modules (within `node_modules`) to transform them regardless of syntax.
 
@@ -201,7 +202,7 @@ List of modules (within `node_modules`) to transform them regardless of syntax.
 
 - Type: Boolean
 - Default: Enabled if `process.versions.bun` exists (Bun runtime)
-- Environment Variable: `JITI_EXPERIMENTAL_BUN`
+- Environment variable: `JITI_EXPERIMENTAL_BUN`
 
 Enable experimental native Bun support for transformations.
 

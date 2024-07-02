@@ -16,13 +16,14 @@ export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
   const _EnvTransform = destr<string[]>(process.env.JITI_TRANSFORM_MODULES);
   const _EnvNative = destr<string[]>(process.env.JITI_NATIVE_MODULES);
   const _ExpBun = destr<string[]>(process.env.JITI_EXPERIMENTAL_BUN);
+  const _EnvInteropDefault = destr<boolean>(process.env.JITI_INTEROP_DEFAULT);
 
   const jitiDefaults: JitiOptions = {
     fsCache: _EnvFSCache ?? true,
     moduleCache: _EnvModuleCache ?? true,
     debug: _EnvDebug,
     sourceMaps: _EnvSourceMaps ?? false,
-    interopDefault: false,
+    interopDefault: _EnvInteropDefault ?? false,
     extensions: [".js", ".mjs", ".cjs", ".ts", ".mts", ".cts", ".json"],
     alias: _EnvAlias,
     nativeModules: _EnvNative || [],

@@ -87,6 +87,8 @@ export interface JitiOptions {
 
   /**
    * Interop default export (disabled by default)
+   *
+   * Can be enabled using `JITI_INTEROP_DEFAULT=1` environment variable.
    */
   interopDefault?: boolean;
 
