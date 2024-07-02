@@ -32,6 +32,9 @@ export function jitiRequire(
     try {
       debug(ctx, "[bun]", "[native]", id);
       id = jitiResolve(ctx, id, opts);
+      if (!id && opts.try) {
+        return undefined;
+      }
       if (opts.async && ctx.nativeImport) {
         return ctx.nativeImport(id).then((m: any) => {
           if (ctx.opts.moduleCache === false) {
@@ -53,6 +56,9 @@ export function jitiRequire(
 
   // Resolve path
   const filename = jitiResolve(ctx, id, opts);
+  if (!filename && opts.try) {
+    return undefined;
+  }
   const ext = extname(filename);
 
   // Check for .json modules
