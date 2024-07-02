@@ -1,4 +1,4 @@
-import type { Context } from "./types";
+import type { Context, TransformOptions } from "./types";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, basename, resolve } from "pathe";
@@ -8,43 +8,39 @@ const CACHE_VERSION = "8";
 
 export function getCache(
   ctx: Context,
-  filename: string | undefined,
-  source: string,
-  async: boolean,
+  topts: TransformOptions,
   get: () => string,
 ): string {
-  if (!ctx.opts.fsCache || !filename) {
+  if (!ctx.opts.fsCache || !topts.filename) {
     return get();
   }
 
   // Compute inline hash for source
-  const sourceHash = ` /* v${CACHE_VERSION}-${md5(source, 16)} */`;
+  const sourceHash = ` /* v${CACHE_VERSION}-${md5(topts.source, 16)} */\n`;
 
   // Compute cache file path
   const cacheName =
-    basename(dirname(filename)) +
-    "-" +
-    basename(filename) +
-    "." +
-    md5(filename) +
-    (async ? ".mjs" : ".cjs");
+    `${basename(dirname(topts.filename))}-${basename(topts.filename)}` +
+    (topts.interopDefault ? ".i" : "") +
+    `.${md5(topts.filename)}` +
+    (topts.async ? ".mjs" : ".cjs");
   const cacheDir = ctx.opts.fsCache as string;
   const cacheFilePath = join(cacheDir, cacheName);
 
   if (existsSync(cacheFilePath)) {
     const cacheSource = readFileSync(cacheFilePath, "utf8");
     if (cacheSource.endsWith(sourceHash)) {
-      debug(ctx, "[cache]", "[hit]", filename, "~>", cacheFilePath);
+      debug(ctx, "[cache]", "[hit]", topts.filename, "~>", cacheFilePath);
       return cacheSource;
     }
   }
 
-  debug(ctx, "[cache]", "[miss]", filename);
+  debug(ctx, "[cache]", "[miss]", topts.filename);
   const result = get();
 
   if (!result.includes("__JITI_ERROR__")) {
     writeFileSync(cacheFilePath, result + sourceHash, "utf8");
-    debug(ctx, "[cache]", "[store]", filename, "~>", cacheFilePath);
+    debug(ctx, "[cache]", "[store]", topts.filename, "~>", cacheFilePath);
   }
 
   return result;
