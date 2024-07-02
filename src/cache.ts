@@ -2,6 +2,7 @@ import type { Context, TransformOptions } from "./types";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, basename, resolve } from "pathe";
+import { filename } from "pathe/utils";
 import { debug, isWritable, md5 } from "./utils";
 
 const CACHE_VERSION = "8";
@@ -20,7 +21,7 @@ export function getCache(
 
   // Compute cache file path
   const cacheName =
-    `${basename(dirname(topts.filename))}-${basename(topts.filename)}` +
+    `${basename(dirname(topts.filename))}-${filename(topts.filename)}` +
     (topts.interopDefault ? ".i" : "") +
     `.${md5(topts.filename)}` +
     (topts.async ? ".mjs" : ".cjs");
