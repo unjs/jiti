@@ -24,7 +24,7 @@ export function jitiRequire(
 
   // Check for builtin node module like fs
   if (builtinModules.includes(id) || id === ".pnp.js" /* #24 */) {
-    return ctx.nativeRequire(id);
+    return nativeImportOrRequire(ctx, id, opts.async);
   }
 
   // Experimental Bun support
