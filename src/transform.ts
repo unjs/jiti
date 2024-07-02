@@ -3,7 +3,7 @@ import { getCache } from "./cache";
 import { debug } from "./utils";
 
 export function transform(ctx: Context, topts: TransformOptions): string {
-  let code = getCache(ctx, topts.filename, topts.source, topts.async, () => {
+  let code = getCache(ctx, topts, () => {
     const res = ctx.opts.transform!({
       ...ctx.opts.transformOptions,
       babel: {
@@ -15,6 +15,7 @@ export function transform(ctx: Context, topts: TransformOptions): string {
           : {}),
         ...ctx.opts.transformOptions?.babel,
       },
+      interopDefault: ctx.opts.interopDefault,
       ...topts,
     });
     if (res.error && ctx.opts.debug) {

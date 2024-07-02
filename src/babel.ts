@@ -32,7 +32,14 @@ export default function transform(opts: TransformOptions): TransformResult {
     cwd: "/",
     ...opts.babel,
     plugins: [
-      [transformModulesPlugin, { allowTopLevelThis: true, async: opts.async }],
+      [
+        transformModulesPlugin,
+        {
+          allowTopLevelThis: true,
+          noInterop: !opts.interopDefault,
+          async: opts.async,
+        },
+      ],
       [TransformImportMetaPlugin, { filename: opts.filename }],
       [syntaxClassPropertiesPlugin],
       [transformExportNamespaceFromPlugin],

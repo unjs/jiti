@@ -152,6 +152,7 @@ export interface TransformOptions {
   filename?: string;
   ts?: boolean;
   retainLines?: boolean;
+  interopDefault?: boolean;
   async: boolean;
   [key: string]: any;
 }
