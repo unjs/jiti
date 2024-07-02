@@ -9,7 +9,6 @@ import { platform } from "node:os";
 import { pathToFileURL } from "node:url";
 import { join } from "pathe";
 import escapeStringRegexp from "escape-string-regexp";
-import createRequire from "create-require";
 import { normalizeAliases } from "pathe/utils";
 import { debug, isDir } from "./utils";
 import { resolveJitiOptions } from "./options";
@@ -25,9 +24,13 @@ const isWindows = platform() === "win32";
 export default function createJiti(
   filename: string,
   userOptions: JitiOptions = {},
-  parentContext?: Pick<
+  parentContext: Pick<
     Context,
-    "parentModule" | "parentCache" | "nativeImport" | "onError"
+    | "parentModule"
+    | "parentCache"
+    | "nativeImport"
+    | "onError"
+    | "createRequire"
   >,
   isNested = false,
 ): Jiti {
@@ -59,7 +62,7 @@ export default function createJiti(
   if (!filename) {
     filename = process.cwd();
   }
-  if (isDir(filename)) {
+  if (!isNested && isDir(filename)) {
     filename = join(filename, "index.js");
   }
 
@@ -69,7 +72,7 @@ export default function createJiti(
     (ext) => ext !== ".js",
   );
 
-  const nativeRequire = createRequire(
+  const nativeRequire = parentContext.createRequire(
     isWindows
       ? filename.replace(/\//g, "\\") // Import maps does not work with normalized paths!
       : filename,
@@ -87,10 +90,11 @@ export default function createJiti(
     isTransformRe,
     additionalExts,
     nativeRequire,
-    onError: parentContext?.onError,
-    parentModule: parentContext?.parentModule,
-    parentCache: parentContext?.parentCache,
-    nativeImport: parentContext?.nativeImport,
+    onError: parentContext.onError,
+    parentModule: parentContext.parentModule,
+    parentCache: parentContext.parentCache,
+    nativeImport: parentContext.nativeImport,
+    createRequire: parentContext.createRequire,
   };
 
   // Debug

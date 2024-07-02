@@ -93,10 +93,11 @@ export function evalModule(
     filename,
     ctx.opts,
     {
-      nativeImport: ctx.nativeImport,
-      onError: ctx.onError,
       parentModule: mod,
       parentCache: cache,
+      nativeImport: ctx.nativeImport,
+      onError: ctx.onError,
+      createRequire: ctx.createRequire,
     },
     true /* isNested */,
   );

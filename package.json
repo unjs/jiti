@@ -67,7 +67,6 @@
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "changelogen": "^0.5.5",
     "config": "^3.3.12",
-    "create-require": "^1.1.1",
     "destr": "^2.0.3",
     "escape-string-regexp": "^5.0.0",
     "eslint": "^9.5.0",

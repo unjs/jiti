@@ -23,4 +23,5 @@ export interface Context {
   alias?: Record<string, string>;
   additionalExts: string[];
   nativeRequire: NodeRequire;
+  createRequire: (typeof import("node:module"))["createRequire"];
 }
