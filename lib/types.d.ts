@@ -39,7 +39,7 @@ export interface JitiOptions {
    *
    * An string can be passed to set the custom cache directory.
    *
-   * By default (when is `true`), jiti uses  `node_modules/.cache/jiti` (if exists) or `{TMP_DIR}/node-jiti`.
+   * By default (when is `true`), jiti uses  `node_modules/.cache/jiti` (if exists) or `{TMP_DIR}/jiti`.
    *
    * This option can also be disabled using `JITI_FS_CACHE=false` environment variable.
    *

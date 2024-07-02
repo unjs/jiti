@@ -1,7 +1,7 @@
 import type { Context } from "./types";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join, basename } from "pathe";
+import { dirname, join, basename, resolve } from "pathe";
 import { debug, isWritable, md5 } from "./utils";
 
 const CACHE_VERSION = "8";
@@ -52,7 +52,7 @@ export function getCache(
 
 export function prepareCacheDir(ctx: Context) {
   if (ctx.opts.fsCache === true) {
-    ctx.opts.fsCache = getCacheDir();
+    ctx.opts.fsCache = getCacheDir(ctx);
   }
   if (ctx.opts.fsCache) {
     try {
@@ -67,7 +67,12 @@ export function prepareCacheDir(ctx: Context) {
   }
 }
 
-export function getCacheDir() {
+export function getCacheDir(ctx: Context) {
+  const nmDir = ctx.filename && resolve(ctx.filename, "../node_modules");
+  if (nmDir && existsSync(nmDir)) {
+    return join(nmDir, ".cache/jiti");
+  }
+
   let _tmpDir = tmpdir();
 
   // Workaround for pnpm setting an incorrect `TMPDIR`.
@@ -85,5 +90,5 @@ export function getCacheDir() {
     process.env.TMPDIR = _env;
   }
 
-  return join(_tmpDir, "node-jiti");
+  return join(_tmpDir, "jiti");
 }

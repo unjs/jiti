@@ -123,7 +123,7 @@ Enable verbose logging. You can use `JITI_DEBUG=1 <your command>` to enable it.
 
 Filesystem source cache (enabled by default)
 
-By default (when is `true`), jiti uses `node_modules/.cache/jiti` (if exists) or `{TMP_DIR}/node-jiti`.
+By default (when is `true`), jiti uses `node_modules/.cache/jiti` (if exists) or `{TMP_DIR}/jiti`.
 
 **Note:** It is recommended to keep this option enabled for better performance.
 
