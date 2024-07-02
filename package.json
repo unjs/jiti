@@ -23,7 +23,7 @@
   },
   "main": "./lib/jiti.cjs",
   "module": "./lib/jiti.mjs",
-  "types": "./lib/jiti.d.mts",
+  "types": "./lib/jiti.d.cts",
   "bin": {
     "jiti": "./lib/jiti-cli.mjs"
   },
