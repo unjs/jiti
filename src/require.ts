@@ -30,11 +30,17 @@ export function jitiRequire(
   // Experimental Bun support
   if (ctx.opts.experimentalBun && !ctx.opts.transformOptions) {
     try {
-      debug(ctx, "[bun]", "[native]", id);
       id = jitiResolve(ctx, id, opts);
       if (!id && opts.try) {
         return undefined;
       }
+      debug(
+        ctx,
+        "[bun]",
+        "[native]",
+        opts.async && ctx.nativeImport ? "[import]" : "[require]",
+        id,
+      );
       if (opts.async && ctx.nativeImport) {
         return ctx.nativeImport(id).then((m: any) => {
           if (ctx.opts.moduleCache === false) {
@@ -82,7 +88,7 @@ export function jitiRequire(
 
   // Force native modules
   if (ctx.isNativeRe.test(filename)) {
-    debug(ctx, "[native]", opts.async ? "[esm]" : "[cjs]", filename);
+    debug(ctx, "[native]", opts.async ? "[import]" : "[require]", filename);
     return nativeImportOrRequire(ctx, id, opts.async);
   }
 

@@ -60,6 +60,8 @@ const debugMap = {
   false: yellow("false"),
   "[esm]": blue("[esm]"),
   "[cjs]": green("[cjs]"),
+  "[import]": blue("[import]"),
+  "[require]": green("[require]"),
   "[native]": cyan("[native]"),
   "[transpile]": yellow("[transpile]"),
   "[fallback]": red("[fallback]"),

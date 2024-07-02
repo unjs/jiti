@@ -62,7 +62,12 @@ export function evalModule(
     );
   } else {
     try {
-      debug(ctx, "[native]", evalOptions.async ? "[esm]" : "[cjs]", filename);
+      debug(
+        ctx,
+        "[native]",
+        evalOptions.async ? "[import]" : "[require]",
+        filename,
+      );
       return nativeImportOrRequire(ctx, filename, evalOptions.async);
     } catch (error: any) {
       debug(ctx, "Native require error:", error);
