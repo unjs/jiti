@@ -1,34 +1,29 @@
-import { destr } from "destr";
-
 import type { JitiOptions } from "./types";
 
 export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
-  const _EnvFSCache =
-    destr<boolean>(process.env.JITI_FS_CACHE) ??
-    destr<boolean>(process.env.JITI_CACHE); // Backward compatibility
-  const _EnvModuleCache =
-    destr<boolean>(process.env.JITI_MODULE_CACHE) ??
-    destr<boolean>(process.env.JITI_REQUIRE_CACHE); // Backward compatibility
-
-  const _EnvDebug = destr<boolean>(process.env.JITI_DEBUG);
-  const _EnvSourceMaps = destr<boolean>(process.env.JITI_SOURCE_MAPS);
-  const _EnvAlias = destr<Record<string, string>>(process.env.JITI_ALIAS);
-  const _EnvTransform = destr<string[]>(process.env.JITI_TRANSFORM_MODULES);
-  const _EnvNative = destr<string[]>(process.env.JITI_NATIVE_MODULES);
-  const _ExpBun = destr<string[]>(process.env.JITI_EXPERIMENTAL_BUN);
-  const _EnvInteropDefault = destr<boolean>(process.env.JITI_INTEROP_DEFAULT);
-
   const jitiDefaults: JitiOptions = {
-    fsCache: _EnvFSCache ?? true,
-    moduleCache: _EnvModuleCache ?? true,
-    debug: _EnvDebug,
-    sourceMaps: _EnvSourceMaps ?? false,
-    interopDefault: _EnvInteropDefault ?? false,
-    extensions: [".js", ".mjs", ".cjs", ".ts", ".mts", ".cts", ".json"],
-    alias: _EnvAlias,
-    nativeModules: _EnvNative || [],
-    transformModules: _EnvTransform || [],
-    experimentalBun: _ExpBun === undefined ? !!process.versions.bun : !!_ExpBun,
+    fsCache: _booleanEnv("JITI_FS_CACHE", _booleanEnv("JITI_CACHE", true)),
+    moduleCache: _booleanEnv(
+      "JITI_MODULE_CACHE",
+      _booleanEnv("JITI_REQUIRE_CACHE", true),
+    ),
+    debug: _booleanEnv("JITI_DEBUG", false),
+    sourceMaps: _booleanEnv("JITI_SOURCE_MAPS", false),
+    interopDefault: _booleanEnv("JITI_INTEROP_DEFAULT", false),
+    extensions: _jsonEnv<string[]>("JITI_EXTENSIONS", [
+      ".js",
+      ".mjs",
+      ".cjs",
+      ".ts",
+      ".tsx",
+    ]),
+    alias: _jsonEnv<Record<string, string>>("JITI_ALIAS", {}),
+    nativeModules: _jsonEnv<string[]>("JITI_NATIVE_MODULES", []),
+    transformModules: _jsonEnv<string[]>("JITI_TRANSFORM_MODULES", []),
+    experimentalBun: _jsonEnv<boolean>(
+      "JITI_EXPERIMENTAL_BUN",
+      !!process.versions.bun,
+    ),
   };
 
   const deprecatOverrides: JitiOptions = {};
@@ -46,4 +41,21 @@ export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
   };
 
   return opts;
+}
+
+function _booleanEnv(name: string, defaultValue: boolean): boolean {
+  const val = _jsonEnv<boolean>(name, defaultValue);
+  return Boolean(val);
+}
+
+function _jsonEnv<T>(name: string, defaultValue?: T): T | undefined {
+  const envValue = process.env[name];
+  if (!(name in process.env)) {
+    return defaultValue;
+  }
+  try {
+    return JSON.parse(envValue!) as T;
+  } catch {
+    return defaultValue;
+  }
 }
