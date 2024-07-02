@@ -4,12 +4,14 @@ import type {
   JitiOptions,
   Context,
   EvalModuleOptions,
+  JitiResolveOptions,
 } from "./types";
 import { platform } from "node:os";
 import { pathToFileURL } from "node:url";
 import { join } from "pathe";
 import escapeStringRegexp from "escape-string-regexp";
 import { normalizeAliases } from "pathe/utils";
+import pkg from "../package.json";
 import { debug, isDir } from "./utils";
 import { resolveJitiOptions } from "./options";
 import { jitiResolve } from "./resolve";
@@ -17,7 +19,6 @@ import { evalModule } from "./eval";
 import { transform } from "./transform";
 import { jitiRequire } from "./require";
 import { prepareCacheDir } from "./cache";
-import { version as jitiVersion } from "../package.json";
 
 const isWindows = platform() === "win32";
 
@@ -103,7 +104,7 @@ export default function createJiti(
       ctx,
       "[init]",
       ...[
-        ["version:", jitiVersion],
+        ["version:", pkg.version],
         ["module-cache:", opts.moduleCache],
         ["fs-cache:", opts.fsCache],
         ["interop-defaults:", opts.interopDefault],
@@ -119,7 +120,7 @@ export default function createJiti(
   // Create jiti instance
   const jiti: Jiti = Object.assign(
     function jiti(id: string) {
-      return jitiRequire(ctx, id, false /* no async */);
+      return jitiRequire(ctx, id, { async: false });
     },
     {
       cache: opts.moduleCache ? nativeRequire.cache : Object.create(null),
@@ -139,15 +140,11 @@ export default function createJiti(
       evalModule(source: string, options?: EvalModuleOptions) {
         return evalModule(ctx, source, options);
       },
-      async import(id: string) {
-        return await jitiRequire(ctx, id, true /* async */);
+      async import(id: string, opts?: JitiResolveOptions) {
+        return await jitiRequire(ctx, id, { ...opts, async: true });
       },
-      esmResolve(
-        id: string,
-        parentURL?: string,
-        opts?: { conditions?: string[] },
-      ) {
-        return jitiResolve(ctx, id, { ...opts, async: true, parentURL });
+      esmResolve(id: string, opts?: JitiResolveOptions) {
+        return jitiResolve(ctx, id, { ...opts, async: true });
       },
     },
   );

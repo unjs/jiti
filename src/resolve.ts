@@ -1,6 +1,6 @@
 import { resolveAlias } from "pathe/utils";
 import { resolvePathSync } from "mlly";
-import type { Context } from "./types";
+import type { Context, JitiResolveOptions } from "./types";
 
 const JS_EXT_RE = /\.(c|m)?j(sx?)$/;
 const TS_EXT_RE = /\.(c|m)?t(sx?)$/;
@@ -8,12 +8,7 @@ const TS_EXT_RE = /\.(c|m)?t(sx?)$/;
 export function jitiResolve(
   ctx: Context,
   id: string,
-  options?: {
-    paths?: string[];
-    async?: boolean;
-    parentURL?: string;
-    conditions?: string[];
-  },
+  options: JitiResolveOptions & { async?: boolean; paths?: string[] },
 ) {
   let resolved, err;
 
@@ -71,6 +66,11 @@ export function jitiResolve(
         return resolved;
       }
     }
+  }
+
+  if (options?.try) {
+    // Well-typed in types.d.ts
+    return undefined as unknown as string;
   }
 
   throw err;

@@ -11,19 +11,21 @@ export interface Jiti extends NodeRequire {
   /**
    * ESM import a module with additional Typescript and ESM compatibility.
    */
-  import: (id: string) => Promise<unknown>;
+  import(id: string, opts?: JitiResolveOptions): Promise<unknown>;
+
   /**
    * Resolve with ESM import conditions.
    */
-  esmResolve: (
+  esmResolve<T extends JitiResolveOptions = JitiResolveOptions>(
     id: string,
-    parentURL?: string,
-    opts?: { conditions?: string[] },
-  ) => string;
+    opts?: T,
+  ): T["try"] extends true ? string | undefined : string;
+
   /**
    * Transform source code
    */
   transform: (opts: TransformOptions) => string;
+
   /**
    * Evaluate transformed code as a module
    */
@@ -155,4 +157,10 @@ export interface TransformOptions {
 export interface TransformResult {
   code: string;
   error?: any;
+}
+
+export interface JitiResolveOptions {
+  conditions?: string[];
+  parentURL?: string;
+  try?: boolean;
 }
