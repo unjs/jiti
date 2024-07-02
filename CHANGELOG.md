@@ -2,6 +2,49 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.0.0-beta.3
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.0.0-beta.2...v2.0.0-beta.3)
+
+### 🚀 Enhancements
+
+- Allow `try` and other resolve options for `import`/`esmResolve` ([#268](https://github.com/unjs/jiti/pull/268))
+- Allow set `interopDefault` using `JITI_INTEROP_DEFAULT` env ([1c080a1](https://github.com/unjs/jiti/commit/1c080a1))
+
+### 🔥 Performance
+
+- Use native `createRequire` ([69da3c5](https://github.com/unjs/jiti/commit/69da3c5))
+
+### 🩹 Fixes
+
+- **cache:** Prefer `node_modules/.cache` if exists ([832f206](https://github.com/unjs/jiti/commit/832f206))
+- Use native esm import for built-ins ([54d6b4a](https://github.com/unjs/jiti/commit/54d6b4a))
+- Respect  `interopDefault` in babel transform ([485b4e9](https://github.com/unjs/jiti/commit/485b4e9))
+- Split cache based on `interopDefault` ([f820a15](https://github.com/unjs/jiti/commit/f820a15))
+- Remove ext from cache path ([50b1b3a](https://github.com/unjs/jiti/commit/50b1b3a))
+- Proprly resolve `.mts`/`.cts` with `.mjs`/`.cjs` imports ([a5aefad](https://github.com/unjs/jiti/commit/a5aefad))
+- **resolve:** Make sure parentURL is a dir ([d224e84](https://github.com/unjs/jiti/commit/d224e84))
+
+### 💅 Refactors
+
+- Improve debug logging ([463a8a3](https://github.com/unjs/jiti/commit/463a8a3))
+- Rename `importResolve to `esmResolve` ([aac88e6](https://github.com/unjs/jiti/commit/aac88e6))
+- Improve env handling ([ee4489d](https://github.com/unjs/jiti/commit/ee4489d))
+- Use imporr/require in debug logs ([934a5bb](https://github.com/unjs/jiti/commit/934a5bb))
+
+### 🏡 Chore
+
+- Remove extra log ([483ced3](https://github.com/unjs/jiti/commit/483ced3))
+- Update fixture ([e530242](https://github.com/unjs/jiti/commit/e530242))
+
+### ✅ Tests
+
+- Update snapshot ([3298489](https://github.com/unjs/jiti/commit/3298489))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v2.0.0-beta.2
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.0.0-beta.1...v2.0.0-beta.2)
