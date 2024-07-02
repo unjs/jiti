@@ -70,7 +70,7 @@ export function jitiRequire(
   // Check for .json modules
   if (ext === ".json") {
     debug(ctx, "[json]", filename);
-    const jsonModule = ctx.nativeRequire(id);
+    const jsonModule = ctx.nativeRequire(filename);
     if (jsonModule && !("default" in jsonModule)) {
       Object.defineProperty(jsonModule, "default", {
         value: jsonModule,
@@ -89,13 +89,13 @@ export function jitiRequire(
       opts.async ? "[import]" : "[require]",
       filename,
     );
-    return nativeImportOrRequire(ctx, id, opts.async);
+    return nativeImportOrRequire(ctx, filename, opts.async);
   }
 
   // Force native modules
   if (ctx.isNativeRe.test(filename)) {
     debug(ctx, "[native]", opts.async ? "[import]" : "[require]", filename);
-    return nativeImportOrRequire(ctx, id, opts.async);
+    return nativeImportOrRequire(ctx, filename, opts.async);
   }
 
   // Check for runtime cache

@@ -164,6 +164,6 @@ export interface TransformResult {
 
 export interface JitiResolveOptions {
   conditions?: string[];
-  parentURL?: string;
+  parentURL?: string | URL;
   try?: boolean;
 }

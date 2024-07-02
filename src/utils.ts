@@ -7,7 +7,10 @@ import { isWindows } from "std-env";
 import { Context } from "./types";
 import { gray, green, blue, yellow, cyan, red } from "yoctocolors";
 
-export function isDir(filename: string): boolean {
+export function isDir(filename: string | URL): boolean {
+  if (filename instanceof URL || filename.startsWith("file://")) {
+    return false;
+  }
   try {
     const stat = lstatSync(filename);
     return stat.isDirectory();
@@ -68,6 +71,7 @@ const debugMap = {
   "[unknown]": red("[unknown]"),
   "[hit]": green("[hit]"),
   "[miss]": yellow("[miss]"),
+  "[json]": green("[json]"),
 };
 
 export function debug(ctx: Context, ...args: unknown[]) {

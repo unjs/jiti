@@ -64,7 +64,7 @@ export default function createJiti(
     filename = process.cwd();
   }
   if (!isNested && isDir(filename)) {
-    filename = join(filename, "index.js");
+    filename = join(filename, "_index.js");
   }
 
   const url = pathToFileURL(filename);
