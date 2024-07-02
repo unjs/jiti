@@ -89,7 +89,7 @@ Decorator called with 1 arguments.
   file: '<cwd>/test.ts',
   dir: '<cwd>',
   resolve: '<cwd>/test.ts'
-} undefined [class DecoratedClass]
+} [class DecoratedClass]
 {
   satisfiesTest: {
     firstTest: { name: 'first', avatar: 'https://example.com/first.png' },

@@ -4,7 +4,7 @@ import { isAbsolute, join } from "pathe";
 import type { PackageJson } from "pkg-types";
 import { interopDefault as mllyInteropDefault, pathToFileURL } from "mlly";
 import { isWindows } from "std-env";
-import { Context } from "./types";
+import type { Context } from "./types";
 import { gray, green, blue, yellow, cyan, red } from "yoctocolors";
 
 export function isDir(filename: string | URL): boolean {

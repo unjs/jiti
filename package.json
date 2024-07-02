@@ -42,7 +42,8 @@
     "lint:fix": "eslint --fix . && prettier -w src lib test stubs",
     "prepack": "pnpm build",
     "release": "pnpm build && pnpm test && changelogen --release --prerelease --push --publish --publishTag 2x",
-    "test": "pnpm lint && vitest run --coverage && pnpm test:register && pnpm test:bun",
+    "test": "pnpm lint && pnpm test:types && vitest run --coverage && pnpm test:register && pnpm test:bun",
+    "test:types": "tsc --noEmit",
     "test:register": "node ./test/register-test.mjs",
     "test:bun": "bun --bun test test/bun"
   },

@@ -3,7 +3,7 @@ import type {
   TransformOptions as BabelTransformOptions,
   PluginItem,
 } from "@babel/core";
-import { TransformOptions, TransformResult } from "./types";
+import type { TransformOptions, TransformResult } from "./types";
 import { TransformImportMetaPlugin } from "./plugins/babel-plugin-transform-import-meta";
 import { importMetaEnvPlugin } from "./plugins/import-meta-env";
 import transformModulesPlugin from "./plugins/transform-module";
