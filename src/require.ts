@@ -8,7 +8,11 @@ import type { Context } from "./types";
 import { jitiResolve } from "./resolve";
 import { evalModule } from "./eval";
 
-export function jitiRequire(ctx: Context, id: string, async: boolean) {
+export function jitiRequire(
+  ctx: Context,
+  id: string,
+  opts: { async: boolean; try?: boolean },
+) {
   const cache = ctx.parentCache || {};
 
   // Check for node: and file: protocol
@@ -27,8 +31,8 @@ export function jitiRequire(ctx: Context, id: string, async: boolean) {
   if (ctx.opts.experimentalBun && !ctx.opts.transformOptions) {
     try {
       debug(ctx, "[bun]", "[native]", id);
-      id = jitiResolve(ctx, id, { async });
-      if (async && ctx.nativeImport) {
+      id = jitiResolve(ctx, id, opts);
+      if (opts.async && ctx.nativeImport) {
         return ctx.nativeImport(id).then((m: any) => {
           if (ctx.opts.moduleCache === false) {
             delete ctx.nativeRequire.cache[id];
@@ -48,7 +52,7 @@ export function jitiRequire(ctx: Context, id: string, async: boolean) {
   }
 
   // Resolve path
-  const filename = jitiResolve(ctx, id, { async });
+  const filename = jitiResolve(ctx, id, opts);
   const ext = extname(filename);
 
   // Check for .json modules
@@ -67,13 +71,13 @@ export function jitiRequire(ctx: Context, id: string, async: boolean) {
   // Unknown format
   if (ext && !ctx.opts.extensions!.includes(ext)) {
     debug(ctx, "[unknown]", filename);
-    return nativeImportOrRequire(ctx, id, async);
+    return nativeImportOrRequire(ctx, id, opts.async);
   }
 
   // Force native modules
   if (ctx.isNativeRe.test(filename)) {
-    debug(ctx, "[native]", async ? "[esm]" : "[cjs]", filename);
-    return nativeImportOrRequire(ctx, id, async);
+    debug(ctx, "[native]", opts.async ? "[esm]" : "[cjs]", filename);
+    return nativeImportOrRequire(ctx, id, opts.async);
   }
 
   // Check for runtime cache
@@ -93,7 +97,7 @@ export function jitiRequire(ctx: Context, id: string, async: boolean) {
     filename,
     ext,
     cache,
-    async,
+    async: opts.async,
   });
 }
 

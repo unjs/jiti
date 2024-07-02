@@ -6,6 +6,7 @@ export type {
   Jiti,
   TransformOptions,
   TransformResult,
+  JitiResolveOptions,
 } from "../lib/types";
 
 export interface Context {
