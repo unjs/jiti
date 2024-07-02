@@ -15,7 +15,7 @@ export interface Jiti extends NodeRequire {
   /**
    * Resolve with ESM import conditions.
    */
-  importResolve: (
+  esmResolve: (
     id: string,
     parentURL?: string,
     opts?: { conditions?: string[] },

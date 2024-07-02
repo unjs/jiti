@@ -142,7 +142,7 @@ export default function createJiti(
       async import(id: string) {
         return await jitiRequire(ctx, id, true /* async */);
       },
-      importResolve(
+      esmResolve(
         id: string,
         parentURL?: string,
         opts?: { conditions?: string[] },

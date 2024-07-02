@@ -68,6 +68,8 @@ jiti ./index.ts
 ### Programmatic
 
 ```js
+// --- Initialize ---
+
 // ESM
 import { createJiti } from "jiti";
 const jiti = createJiti(import.meta.url);
@@ -76,11 +78,21 @@ const jiti = createJiti(import.meta.url);
 const { createJiti } = require("jiti");
 const jiti = createJiti(__filename);
 
+// --- ESM Compatible APIs ---
+
 // jiti.import() acts like import() with Typescript support
 await jiti.import("./path/to/file.ts");
 
+// jiti.esmResolve() acts like import.meta.resolve() with additional features
+const resolvedPath = jiti.esmResolve("./src");
+
+// --- CJS Compatible APIs ---
+
 // jiti() acts like require() with Typescript and (non async) ESM support
 jiti("./path/to/file.ts");
+
+// jiti.resolve() acts like require.resolve() with additional features
+const resolvedPath = jiti.resolve("./src");
 ```
 
 You can also pass options as second argument:
