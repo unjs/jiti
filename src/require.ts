@@ -82,7 +82,13 @@ export function jitiRequire(
 
   // Unknown format
   if (ext && !ctx.opts.extensions!.includes(ext)) {
-    debug(ctx, "[unknown]", filename);
+    debug(
+      ctx,
+      "[native]",
+      "[unknown]",
+      opts.async ? "[import]" : "[require]",
+      filename,
+    );
     return nativeImportOrRequire(ctx, id, opts.async);
   }
 

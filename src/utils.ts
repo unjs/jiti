@@ -65,6 +65,7 @@ const debugMap = {
   "[native]": cyan("[native]"),
   "[transpile]": yellow("[transpile]"),
   "[fallback]": red("[fallback]"),
+  "[unknown]": red("[unknown]"),
   "[hit]": green("[hit]"),
   "[miss]": yellow("[miss]"),
 };

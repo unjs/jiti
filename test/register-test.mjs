@@ -9,9 +9,6 @@ const fixturesDir = fileURLToPath(new URL("fixtures", import.meta.url));
 const fixtures = await readdir(fixturesDir);
 
 for (const fixture of fixtures) {
-  if (fixture === "typescript") {
-    continue; // .mts support
-  }
   test("fixtures/" + fixture + " (ESM)", async () => {
     const promise = import(`./fixtures/${fixture}`);
     const shouldReject =
