@@ -1,17 +1,17 @@
+import type { Context, JitiResolveOptions } from "./types";
 import { readFileSync } from "node:fs";
 import { builtinModules } from "node:module";
 import { fileURLToPath } from "node:url";
 import { extname } from "pathe";
 import { jitiInteropDefault, normalizeWindowsImportId } from "./utils";
 import { debug } from "./utils";
-import type { Context } from "./types";
 import { jitiResolve } from "./resolve";
 import { evalModule } from "./eval";
 
 export function jitiRequire(
   ctx: Context,
   id: string,
-  opts: { async: boolean; try?: boolean },
+  opts: JitiResolveOptions & { async: boolean },
 ) {
   const cache = ctx.parentCache || {};
 
