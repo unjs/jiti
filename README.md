@@ -113,7 +113,7 @@ node --import jiti/register index.ts
 - Default: `false`
 - Environment Variable: `JITI_DEBUG`
 
-Enable debug to see which files are transpiled
+Enable verbose logging. You can use `JITI_DEBUG=1 <your command>` to enable it.
 
 ### `fsCache`
 

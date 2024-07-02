@@ -39,6 +39,7 @@
     "jiti": "JITI_DEBUG=1 ./lib/jiti-cli.mjs",
     "lint": "eslint . && prettier -c src lib test stubs",
     "lint:fix": "eslint --fix . && prettier -w src lib test stubs",
+    "prepack": "pnpm build",
     "release": "pnpm build && pnpm test && changelogen --release --prerelease --push --publish --publishTag 2x",
     "test": "pnpm lint && vitest run --coverage && pnpm test:register && pnpm test:bun",
     "test:register": "node ./test/register-test.mjs",
@@ -87,7 +88,8 @@
     "webpack": "^5.92.1",
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^5.1.4",
-    "webpack-license-plugin": "^4.4.2"
+    "webpack-license-plugin": "^4.4.2",
+    "yoctocolors": "^2.1.0"
   },
   "packageManager": "pnpm@9.4.0"
 }

@@ -26,7 +26,7 @@ export function jitiRequire(ctx: Context, id: string, async: boolean) {
   // Experimental Bun support
   if (ctx.opts.experimentalBun && !ctx.opts.transformOptions) {
     try {
-      debug(ctx, `[bun] [native] ${id}`);
+      debug(ctx, "[bun]", "[native]", id);
       id = jitiResolve(ctx, id, { async });
       if (async && ctx.nativeImport) {
         return ctx.nativeImport(id).then((m: any) => {
@@ -72,7 +72,7 @@ export function jitiRequire(ctx: Context, id: string, async: boolean) {
 
   // Force native modules
   if (ctx.isNativeRe.test(filename)) {
-    debug(ctx, `[native] ${async ? " [esm]" : ": [cjs]"}`, filename);
+    debug(ctx, "[native]", async ? "[esm]" : "[cjs]", filename);
     return nativeImportOrRequire(ctx, id, async);
   }
 

@@ -137,6 +137,9 @@ importers:
       webpack-license-plugin:
         specifier: ^4.4.2
         version: 4.4.2(webpack@5.92.1(webpack-cli@5.1.4))
+      yoctocolors:
+        specifier: ^2.1.0
+        version: 2.1.0
 
 packages:
 

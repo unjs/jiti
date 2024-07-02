@@ -55,17 +55,14 @@ export function evalModule(
     const time = Math.round((performance.now() - start) * 1000) / 1000;
     debug(
       ctx,
-      `[transpile]${evalOptions.async ? " [esm]" : " [cjs]"}`,
+      "[transpile]",
+      evalOptions.async ? "[esm]" : "[cjs]",
       filename,
       `(${time}ms)`,
     );
   } else {
     try {
-      debug(
-        ctx,
-        `[native]${evalOptions.async ? " [esm]" : " [cjs]"}`,
-        filename,
-      );
+      debug(ctx, "[native]", evalOptions.async ? "[esm]" : "[cjs]", filename);
       return nativeImportOrRequire(ctx, filename, evalOptions.async);
     } catch (error: any) {
       debug(ctx, "Native require error:", error);

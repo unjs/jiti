@@ -11,13 +11,14 @@ import { join } from "pathe";
 import escapeStringRegexp from "escape-string-regexp";
 import createRequire from "create-require";
 import { normalizeAliases } from "pathe/utils";
-import { isDir } from "./utils";
+import { debug, isDir } from "./utils";
 import { resolveJitiOptions } from "./options";
 import { jitiResolve } from "./resolve";
 import { evalModule } from "./eval";
 import { transform } from "./transform";
 import { jitiRequire } from "./require";
 import { prepareCacheDir } from "./cache";
+import { version as jitiVersion } from "../package.json";
 
 const isWindows = platform() === "win32";
 
@@ -91,6 +92,20 @@ export default function createJiti(
     parentCache: parentContext?.parentCache,
     nativeImport: parentContext?.nativeImport,
   };
+
+  // Debug
+  if (!isNested) {
+    debug(
+      ctx,
+      "[init]",
+      ...[
+        ["version:", jitiVersion],
+        ["module-cache:", opts.moduleCache],
+        ["fs-cache:", opts.fsCache],
+        ["interop-defaults:", opts.interopDefault],
+      ].flat(),
+    );
+  }
 
   // Prepare cache dir
   if (!isNested) {

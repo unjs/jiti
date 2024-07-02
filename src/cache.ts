@@ -34,16 +34,17 @@ export function getCache(
   if (existsSync(cacheFilePath)) {
     const cacheSource = readFileSync(cacheFilePath, "utf8");
     if (cacheSource.endsWith(sourceHash)) {
-      debug(ctx, "[cache hit]", filename, "~>", cacheFilePath);
+      debug(ctx, "[cache]", "[hit]", filename, "~>", cacheFilePath);
       return cacheSource;
     }
   }
 
-  debug(ctx, "[cache miss]", filename);
+  debug(ctx, "[cache]", "[miss]", filename);
   const result = get();
 
   if (!result.includes("__JITI_ERROR__")) {
     writeFileSync(cacheFilePath, result + sourceHash, "utf8");
+    debug(ctx, "[cache]", "[store]", filename, "~>", cacheFilePath);
   }
 
   return result;

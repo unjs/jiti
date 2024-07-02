@@ -7,6 +7,7 @@
     "strict": true,
     "declaration": false,
     "experimentalDecorators": true,
+    "resolveJsonModule": true,
     "types": ["node"]
   },
   "include": ["src", "lib"]
