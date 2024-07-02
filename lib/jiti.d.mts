@@ -1,6 +1,6 @@
-import type { createJiti } from "./types";
+import { createJiti } from "./types.js";
 
-export * from "./types";
+export * from "./types.js";
 
 /**
  * @deprecated Please use `import { createJiti } from "jiti"`
