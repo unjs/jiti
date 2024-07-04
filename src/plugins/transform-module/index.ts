@@ -177,9 +177,9 @@ export default declare((api: PluginAPI, options: Options) => {
     name: "transform-modules-commonjs",
 
     pre() {
-      this.set("@babel/plugin-transform-modules-*", "commonjs");
+      this.file.set("@babel/plugin-transform-modules-*", "commonjs");
 
-      if (lazy) defineCommonJSHook(this, lazyImportsHook(lazy));
+      if (lazy) defineCommonJSHook(this.file, lazyImportsHook(lazy));
     },
 
     visitor: {
@@ -229,7 +229,7 @@ export default declare((api: PluginAPI, options: Options) => {
           // @ts-expect-error
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
-          const hooks = makeInvokers(this);
+          const hooks = makeInvokers(this.file);
 
           const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
             path,

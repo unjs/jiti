@@ -21,7 +21,7 @@ const requireInterop = (
   return t.callExpression(t.memberExpression(exp, t.identifier("then")), [
     t.arrowFunctionExpression(
       [t.identifier("m")],
-      t.callExpression(file.hub.addHelper("interopRequireWildcard"), [
+      t.callExpression(file.addHelper("interopRequireWildcard"), [
         t.identifier("m"),
       ]),
     ),
