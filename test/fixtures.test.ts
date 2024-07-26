@@ -41,6 +41,8 @@ describe("fixtures", async () => {
             )
             .replace("internal/errors:496", "events:276")
             .replace("    ^", "  ^")
+            // eslint-disable-next-line no-control-regex
+            .replace(/\u001B\[[\d;]*m/gu, "")
             .trim()
         );
       }

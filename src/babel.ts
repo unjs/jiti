@@ -1,25 +1,19 @@
-import { transformSync } from "@babel/core";
 import type {
   TransformOptions as BabelTransformOptions,
   PluginItem,
 } from "@babel/core";
-import type { TransformOptions, TransformResult } from "./types";
+import { transformSync } from "@babel/core";
+import proposalDecoratorsPlugin from "@babel/plugin-proposal-decorators";
+import syntaxClassPropertiesPlugin from "@babel/plugin-syntax-class-properties";
+import syntaxImportAssertionsPlugin from "@babel/plugin-syntax-import-assertions";
+import transformExportNamespaceFromPlugin from "@babel/plugin-transform-export-namespace-from";
+import transformTypeScriptPlugin from "@babel/plugin-transform-typescript";
+import parameterDecoratorPlugin from "babel-plugin-parameter-decorator";
+import transformTypeScriptMetaPlugin from "babel-plugin-transform-typescript-metadata";
 import { TransformImportMetaPlugin } from "./plugins/babel-plugin-transform-import-meta";
 import { importMetaEnvPlugin } from "./plugins/import-meta-env";
 import transformModulesPlugin from "./plugins/transform-module";
-import tansformTypescriptMetaPlugin from "babel-plugin-transform-typescript-metadata";
-// @ts-ignore
-import syntaxClassPropertiesPlugin from "@babel/plugin-syntax-class-properties";
-// @ts-ignore
-import transformExportNamespaceFromPlugin from "@babel/plugin-transform-export-namespace-from";
-// @ts-ignore
-import tansformTypescriptPlugin from "@babel/plugin-transform-typescript";
-// @ts-ignore
-import proposalDecoratorsPlugin from "@babel/plugin-proposal-decorators";
-// @ts-ignore
-import parameterDecoratorPlugin from "babel-plugin-parameter-decorator";
-// @ts-ignore
-import syntaxImportAssertionsPlugin from "@babel/plugin-syntax-import-assertions";
+import type { TransformOptions, TransformResult } from "./types";
 
 export default function transform(opts: TransformOptions): TransformResult {
   const _opts: BabelTransformOptions & { plugins: PluginItem[] } = {
@@ -49,12 +43,12 @@ export default function transform(opts: TransformOptions): TransformResult {
 
   if (opts.ts) {
     _opts.plugins.push([
-      tansformTypescriptPlugin,
+      transformTypeScriptPlugin,
       { allowDeclareFields: true },
     ]);
     // `unshift` because these plugin must come before `@babel/plugin-syntax-class-properties`
     _opts.plugins.unshift(
-      [tansformTypescriptMetaPlugin],
+      [transformTypeScriptMetaPlugin],
       [proposalDecoratorsPlugin, { legacy: true }],
     );
     _opts.plugins.push(parameterDecoratorPlugin);

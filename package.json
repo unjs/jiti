@@ -48,6 +48,7 @@
     "test:bun": "bun --bun test test/bun"
   },
   "devDependencies": {
+    "@babel/helper-module-imports": "^7.24.7",
     "@babel/core": "^7.24.9",
     "@babel/helper-module-transforms": "^7.24.9",
     "@babel/helper-plugin-utils": "^7.24.8",
@@ -59,9 +60,13 @@
     "@babel/plugin-transform-typescript": "^7.24.8",
     "@babel/preset-typescript": "^7.24.7",
     "@babel/template": "^7.24.7",
+    "@babel/traverse": "^7.24.7",
     "@babel/types": "^7.24.9",
     "@types/babel__core": "^7.20.5",
+    "@types/babel__helper-module-imports": "^7.18.3",
+    "@types/babel__helper-plugin-utils": "^7.10.3",
     "@types/babel__template": "^7.4.4",
+    "@types/babel__traverse": "^7.20.6",
     "@types/node": "^20.14.12",
     "@vitest/coverage-v8": "^2.0.4",
     "acorn": "^8.12.1",
