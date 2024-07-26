@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "declarationDir": "dist",
+    "declaration": true,
+    "experimentalDecorators": true,
+    "types": ["node"]
+  },
+  "include": ["src"]
+}
