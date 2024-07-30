@@ -19,25 +19,25 @@ describe("utils", () => {
     it("returns the system's TMPDIR when TMPDIR is not set", () => {
       const originalTmpdir = process.env.TMPDIR;
       delete process.env.TMPDIR;
-      expect(getCacheDir({} as any)).toBe("/tmp/jiti");
+      expect(getCacheDir({} as any)).toBe("/tmp/jiti-v2");
       process.env.TMPDIR = originalTmpdir;
     });
 
     it("returns TMPDIR when TMPDIR is not CWD", () => {
       vi.stubEnv("TMPDIR", notCwd);
-      expect(getCacheDir({} as any)).toBe("/cwd__NOT__/jiti");
+      expect(getCacheDir({} as any)).toBe("/cwd__NOT__/jiti-v2");
     });
 
     it("returns the system's TMPDIR when TMPDIR is CWD", () => {
       vi.stubEnv("TMPDIR", cwd);
-      expect(getCacheDir({} as any)).toBe("/tmp/jiti");
+      expect(getCacheDir({} as any)).toBe("/tmp/jiti-v2");
     });
 
     it("returns TMPDIR when TMPDIR is CWD and TMPDIR is kept", () => {
       vi.stubEnv("TMPDIR", cwd);
       vi.stubEnv("JITI_RESPECT_TMPDIR_ENV", "true");
 
-      expect(getCacheDir({} as any)).toBe("/cwd/jiti");
+      expect(getCacheDir({} as any)).toBe("/cwd/jiti-v2");
     });
   });
 });
