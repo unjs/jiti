@@ -67,7 +67,7 @@ export function prepareCacheDir(ctx: Context) {
 export function getCacheDir(ctx: Context) {
   const nmDir = ctx.filename && resolve(ctx.filename, "../node_modules");
   if (nmDir && existsSync(nmDir)) {
-    return join(nmDir, ".cache/jiti");
+    return join(nmDir, ".cache/jiti-v2");
   }
 
   let _tmpDir = tmpdir();
@@ -87,5 +87,5 @@ export function getCacheDir(ctx: Context) {
     process.env.TMPDIR = _env;
   }
 
-  return join(_tmpDir, "jiti");
+  return join(_tmpDir, "jiti-v2");
 }
