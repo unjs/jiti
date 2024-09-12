@@ -5,7 +5,7 @@ export default defineConfig({
     exclude: [
       "**/test.{ts,mjs,cjs,js}",
       "node_modules/**/*",
-      "test/bun.test.ts",
+      "test/bun*.test.ts",
     ],
   },
 });
