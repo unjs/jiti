@@ -48,8 +48,8 @@
     "test:bun": "bun --bun test test/bun"
   },
   "devDependencies": {
-    "@babel/helper-module-imports": "^7.24.7",
     "@babel/core": "^7.24.9",
+    "@babel/helper-module-imports": "^7.24.7",
     "@babel/helper-module-transforms": "^7.24.9",
     "@babel/helper-plugin-utils": "^7.24.8",
     "@babel/helper-simple-access": "^7.24.7",
@@ -79,7 +79,6 @@
     "eslint": "^9.7.0",
     "eslint-config-unjs": "^0.3.2",
     "estree-walker": "^3.0.3",
-    "execa": "^9.3.0",
     "fast-glob": "^3.3.2",
     "mlly": "^1.7.1",
     "pathe": "^1.1.2",
@@ -88,6 +87,7 @@
     "reflect-metadata": "^0.2.2",
     "std-env": "^3.7.0",
     "terser-webpack-plugin": "^5.3.10",
+    "tinyexec": "^0.2.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.5.4",
     "vitest": "^2.0.4",
