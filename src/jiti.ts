@@ -82,7 +82,7 @@ export default function createJiti(
   // Create shared context
   const ctx: Context = {
     filename,
-    url,
+    url: url as URL,
     opts,
     alias,
     nativeModules,
