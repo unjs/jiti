@@ -4,17 +4,17 @@ import { join } from "node:path";
 // @ts-ignore
 import { test, expect } from "bun:test";
 
-import jiti from "../lib/index.js";
+import { createJiti } from "..";
 
 const fixturesDir = fileURLToPath(new URL("fixtures", import.meta.url));
 
 const fixtures = await readdir(fixturesDir);
 
-const _jiti = jiti(fixturesDir, {
+const _jiti = createJiti(fixturesDir, {
   debug: true,
   interopDefault: true,
-  requireCache: false,
-  cache: false,
+  fsCache: false,
+  moduleCache: false,
 });
 
 for (const fixture of fixtures) {

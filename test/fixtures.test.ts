@@ -1,10 +1,10 @@
 import { join, resolve, dirname } from "node:path";
-import { execa } from "execa";
+import { x } from "tinyexec";
 import { describe, it, expect } from "vitest";
 import fg from "fast-glob";
 
 describe("fixtures", async () => {
-  const jitiPath = resolve(__dirname, "../bin/jiti.js");
+  const jitiPath = resolve(__dirname, "../lib/jiti-cli.mjs");
 
   const root = dirname(__dirname);
   const dir = join(__dirname, "fixtures");
@@ -41,17 +41,19 @@ describe("fixtures", async () => {
             )
             .replace("internal/errors:496", "events:276")
             .replace("    ^", "  ^")
+            // eslint-disable-next-line no-control-regex
+            .replace(/\u001B\[[\d;]*m/gu, "")
             .trim()
         );
       }
 
-      const { stdout, stderr } = await execa("node", [jitiPath, fixtureEntry], {
-        cwd,
-        stdio: "pipe",
-        reject: false,
-        env: {
-          JITI_CACHE: "false",
-          JITI_ESM_RESOLVE: "true",
+      const { stdout, stderr } = await x("node", [jitiPath, fixtureEntry], {
+        nodeOptions: {
+          cwd,
+          stdio: "pipe",
+          env: {
+            JITI_CACHE: "false",
+          },
         },
       });
 

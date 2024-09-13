@@ -1,65 +1,75 @@
+import type { Context, TransformOptions } from "./types";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join, basename } from "pathe";
-import { debug, isWritable, md5 } from "./utils";
 import { tmpdir } from "node:os";
-import type { Context } from "./types";
+import { dirname, join, basename, resolve } from "pathe";
+import { filename } from "pathe/utils";
+import { debug, isWritable, md5 } from "./utils";
+
+const CACHE_VERSION = "8";
 
 export function getCache(
   ctx: Context,
-  filename: string | undefined,
-  source: string,
+  topts: TransformOptions,
   get: () => string,
 ): string {
-  if (!ctx.opts.cache || !filename) {
+  if (!ctx.opts.fsCache || !topts.filename) {
     return get();
   }
 
-  // Calculate source hash
-  const sourceHash = ` /* v${ctx.opts.cacheVersion}-${md5(source, 16)} */`;
+  // Compute inline hash for source
+  const sourceHash = ` /* v${CACHE_VERSION}-${md5(topts.source, 16)} */\n`;
 
-  // Check cache file
-  const filebase = basename(dirname(filename)) + "-" + basename(filename);
-  const cacheFile = join(
-    ctx.opts.cache as string,
-    filebase + "." + md5(filename) + ".js",
-  );
+  // Compute cache file path
+  const cacheName =
+    `${basename(dirname(topts.filename))}-${filename(topts.filename)}` +
+    (topts.interopDefault ? ".i" : "") +
+    `.${md5(topts.filename)}` +
+    (topts.async ? ".mjs" : ".cjs");
+  const cacheDir = ctx.opts.fsCache as string;
+  const cacheFilePath = join(cacheDir, cacheName);
 
-  if (existsSync(cacheFile)) {
-    const cacheSource = readFileSync(cacheFile, "utf8");
+  if (existsSync(cacheFilePath)) {
+    const cacheSource = readFileSync(cacheFilePath, "utf8");
     if (cacheSource.endsWith(sourceHash)) {
-      debug(ctx, "[cache hit]", filename, "~>", cacheFile);
+      debug(ctx, "[cache]", "[hit]", topts.filename, "~>", cacheFilePath);
       return cacheSource;
     }
   }
 
-  debug(ctx, "[cache miss]", filename);
+  debug(ctx, "[cache]", "[miss]", topts.filename);
   const result = get();
 
   if (!result.includes("__JITI_ERROR__")) {
-    writeFileSync(cacheFile, result + sourceHash, "utf8");
+    writeFileSync(cacheFilePath, result + sourceHash, "utf8");
+    debug(ctx, "[cache]", "[store]", topts.filename, "~>", cacheFilePath);
   }
 
   return result;
 }
 
 export function prepareCacheDir(ctx: Context) {
-  if (ctx.opts.cache === true) {
-    ctx.opts.cache = getCacheDir();
+  if (ctx.opts.fsCache === true) {
+    ctx.opts.fsCache = getCacheDir(ctx);
   }
-  if (ctx.opts.cache) {
+  if (ctx.opts.fsCache) {
     try {
-      mkdirSync(ctx.opts.cache as string, { recursive: true });
-      if (!isWritable(ctx.opts.cache)) {
+      mkdirSync(ctx.opts.fsCache as string, { recursive: true });
+      if (!isWritable(ctx.opts.fsCache)) {
         throw new Error("directory is not writable!");
       }
     } catch (error: any) {
-      debug(ctx, "Error creating cache directory at ", ctx.opts.cache, error);
-      ctx.opts.cache = false;
+      debug(ctx, "Error creating cache directory at ", ctx.opts.fsCache, error);
+      ctx.opts.fsCache = false;
     }
   }
 }
 
-export function getCacheDir() {
+export function getCacheDir(ctx: Context) {
+  const nmDir = ctx.filename && resolve(ctx.filename, "../node_modules");
+  if (nmDir && existsSync(nmDir)) {
+    return join(nmDir, ".cache/jiti");
+  }
+
   let _tmpDir = tmpdir();
 
   // Workaround for pnpm setting an incorrect `TMPDIR`.
@@ -77,5 +87,5 @@ export function getCacheDir() {
     process.env.TMPDIR = _env;
   }
 
-  return join(_tmpDir, "node-jiti");
+  return join(_tmpDir, "jiti");
 }

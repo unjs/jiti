@@ -20,30 +20,7 @@ exports[`fixtures > error-parse > stderr 1`] = `
 
 exports[`fixtures > error-parse > stdout 1`] = `""`;
 
-exports[`fixtures > error-runtime > stderr 1`] = `
-"TypeError: The "listener" argument must be of type function. Received undefined
-    at checkListener (events)
-    at _addListener (events)
-    at process.addListener (events)
-    at <cwd>/index.ts
-    at evalModule (<root>/dist/jiti)
-    at jitiRequire (<root>/dist/jiti)
-    at Function.<anonymous> (<root>/dist/jiti)
-    at Generator.next (<anonymous>)
-    at <root>/dist/jiti.js
-    at new Promise (<anonymous>)
-    at __awaiter (<root>/dist/jiti)
-    at Function.import (<root>/dist/jiti)
-    at Object.<anonymous> (<root>/bin/jiti)
-    at Module._compile (internal/modules/cjs/loader)
-    at Module._extensions..js (internal/modules/cjs/loader)
-    at Module.load (internal/modules/cjs/loader)
-    at Module._load (internal/modules/cjs/loader)
-    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)
-    at internal/main/run_main_module {
-  code: 'ERR_INVALID_ARG_TYPE'
-}"
-`;
+exports[`fixtures > error-runtime > stderr 1`] = `"test error"`;
 
 exports[`fixtures > error-runtime > stdout 1`] = `""`;
 
@@ -57,7 +34,8 @@ exports[`fixtures > esm > stdout 1`] = `
   stack: [
     'at getStack (<cwd>/test)',
     'at test (<cwd>/test)',
-    'at async <cwd>/index.js'
+    'at async <cwd>/index.js',
+    'at async Function.import (<root>/dist/jiti.cjs)'
   ]
 }"
 `;
@@ -75,7 +53,7 @@ exports[`fixtures > json > stdout 1`] = `
 "Imported : { test: 123 } .default: { test: 123 }
 Imported with assertion : { test: 123 } .default: { test: 123 }
 Required : { test: 123 } .default: { test: 123 }
-Dynamic Imported : [Object: null prototype] { test: 123, default: { test: 123 } } .default: { test: 123 }"
+Dynamic Imported : { test: 123 } .default: { test: 123 }"
 `;
 
 exports[`fixtures > mixed > stdout 1`] = `"Mixed works for: <cwd>"`;
@@ -111,7 +89,7 @@ Decorator called with 1 arguments.
   file: '<cwd>/test.ts',
   dir: '<cwd>',
   resolve: '<cwd>/test.ts'
-} undefined [class DecoratedClass]
+} [class DecoratedClass]
 {
   satisfiesTest: {
     firstTest: { name: 'first', avatar: 'https://example.com/first.png' },

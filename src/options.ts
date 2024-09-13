@@ -1,39 +1,63 @@
-import { destr } from "destr";
-import { lt } from "semver";
-import objectHash from "object-hash";
+import type { JitiOptions } from "./types";
 
-import type { JITIOptions } from "./types";
+export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
+  const jitiDefaults: JitiOptions = {
+    fsCache: _booleanEnv("JITI_FS_CACHE", _booleanEnv("JITI_CACHE", true)),
+    moduleCache: _booleanEnv(
+      "JITI_MODULE_CACHE",
+      _booleanEnv("JITI_REQUIRE_CACHE", true),
+    ),
+    debug: _booleanEnv("JITI_DEBUG", false),
+    sourceMaps: _booleanEnv("JITI_SOURCE_MAPS", false),
+    interopDefault: _booleanEnv("JITI_INTEROP_DEFAULT", false),
+    extensions: _jsonEnv<string[]>("JITI_EXTENSIONS", [
+      ".js",
+      ".mjs",
+      ".cjs",
+      ".ts",
+      ".tsx",
+      ".mts",
+      ".cts",
+    ]),
+    alias: _jsonEnv<Record<string, string>>("JITI_ALIAS", {}),
+    nativeModules: _jsonEnv<string[]>("JITI_NATIVE_MODULES", []),
+    transformModules: _jsonEnv<string[]>("JITI_TRANSFORM_MODULES", []),
+    experimentalBun: _jsonEnv<boolean>(
+      "JITI_EXPERIMENTAL_BUN",
+      !!process.versions.bun,
+    ),
+  };
 
-const _EnvDebug = destr<boolean>(process.env.JITI_DEBUG);
-const _EnvCache = destr<boolean>(process.env.JITI_CACHE);
-const _EnvRequireCache = destr<boolean>(process.env.JITI_REQUIRE_CACHE);
-const _EnvSourceMaps = destr<boolean>(process.env.JITI_SOURCE_MAPS);
-const _EnvAlias = destr<Record<string, string>>(process.env.JITI_ALIAS);
-const _EnvTransform = destr<string[]>(process.env.JITI_TRANSFORM_MODULES);
-const _EnvNative = destr<string[]>(process.env.JITI_NATIVE_MODULES);
-const _ExpBun = destr<string[]>(process.env.JITI_EXPERIMENTAL_BUN);
-
-const jitiDefaults: JITIOptions = {
-  debug: _EnvDebug,
-  cache: _EnvCache === undefined ? true : !!_EnvCache,
-  requireCache: _EnvRequireCache === undefined ? true : !!_EnvRequireCache,
-  sourceMaps: _EnvSourceMaps === undefined ? false : !!_EnvSourceMaps,
-  interopDefault: false,
-  cacheVersion: "7",
-  extensions: [".js", ".mjs", ".cjs", ".ts", ".mts", ".cts", ".json"],
-  alias: _EnvAlias,
-  nativeModules: _EnvNative || [],
-  transformModules: _EnvTransform || [],
-  experimentalBun: _ExpBun === undefined ? !!process.versions.bun : !!_ExpBun,
-};
-
-export function resolveJitiOptions(userOptions: JITIOptions): JITIOptions {
-  const opts: JITIOptions = { ...jitiDefaults, ...userOptions };
-
-  // Cache dependencies
-  if (opts.transformOptions) {
-    opts.cacheVersion += "-" + objectHash(opts.transformOptions);
+  const deprecatOverrides: JitiOptions = {};
+  if (userOptions.cache !== undefined) {
+    deprecatOverrides.fsCache = userOptions.cache;
+  }
+  if (userOptions.requireCache !== undefined) {
+    deprecatOverrides.moduleCache = userOptions.requireCache;
   }
 
+  const opts: JitiOptions = {
+    ...jitiDefaults,
+    ...deprecatOverrides,
+    ...userOptions,
+  };
+
   return opts;
+}
+
+function _booleanEnv(name: string, defaultValue: boolean): boolean {
+  const val = _jsonEnv<boolean>(name, defaultValue);
+  return Boolean(val);
+}
+
+function _jsonEnv<T>(name: string, defaultValue?: T): T | undefined {
+  const envValue = process.env[name];
+  if (!(name in process.env)) {
+    return defaultValue;
+  }
+  try {
+    return JSON.parse(envValue!) as T;
+  } catch {
+    return defaultValue;
+  }
 }

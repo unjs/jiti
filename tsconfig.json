@@ -1,14 +1,21 @@
 {
   "compilerOptions": {
-    "target": "ES6",
-    "module": "ESNext",
-    "moduleResolution": "Node",
+    "target": "ESNext",
+    "module": "Preserve",
+    "resolveJsonModule": true,
+    "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "allowJs": true,
+    "checkJs": false,
     "strict": true,
-    "declarationDir": "dist",
-    "declaration": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitOverride": true,
     "experimentalDecorators": true,
-    "types": ["node"]
+    "declaration": false
   },
-  "include": ["src"]
+  "include": ["src", "lib", "test"],
+  "exclude": ["test/fixtures/error-parse/index.ts"]
 }

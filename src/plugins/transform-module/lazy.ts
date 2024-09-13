@@ -1,8 +1,7 @@
-// Basd on babel-plugin-transform-modules-commonjs v7.24.7
+// Based on babel-plugin-transform-modules-commonjs v7.24.7
 // MIT - Copyright (c) 2014-present Sebastian McKenzie and other contributors
 // https://github.com/babel/babel/tree/c7bb6e0f/packages/babel-plugin-transform-modules-commonjs/src
 import { template, types as t } from "@babel/core";
-// @ts-ignore
 import { isSideEffectImport } from "@babel/helper-module-transforms";
 import type { CommonJSHook } from "./hooks.ts";
 

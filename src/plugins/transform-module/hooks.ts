@@ -1,10 +1,8 @@
-// Basd on babel-plugin-transform-modules-commonjs v7.24.7
+// Based on babel-plugin-transform-modules-commonjs v7.24.7
 // MIT - Copyright (c) 2014-present Sebastian McKenzie and other contributors
 // https://github.com/babel/babel/tree/c7bb6e0f/packages/babel-plugin-transform-modules-commonjs/src
 
-// @ts-expect-error
-import type { types as t, File } from "@babel/core";
-// @ts-expect-error
+import type { BabelFile, types as t } from "@babel/core";
 import type { isSideEffectImport } from "@babel/helper-module-transforms";
 
 const commonJSHooksKey =
@@ -37,7 +35,7 @@ export interface CommonJSHook {
   ): string | null | undefined;
 }
 
-export function defineCommonJSHook(file: File, hook: CommonJSHook) {
+export function defineCommonJSHook(file: BabelFile, hook: CommonJSHook) {
   let hooks = file.get(commonJSHooksKey);
   if (!hooks) file.set(commonJSHooksKey, (hooks = []));
   hooks.push(hook);
@@ -56,7 +54,7 @@ function findMap<T, U>(
 }
 
 export function makeInvokers(
-  file: File,
+  file: BabelFile,
 ): Pick<
   CommonJSHook,
   "wrapReference" | "getWrapperPayload" | "buildRequireWrapper"

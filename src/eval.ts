@@ -12,7 +12,7 @@ import {
 import type { ModuleCache, Context, EvalModuleOptions } from "./types";
 import { jitiResolve } from "./resolve";
 import { jitiRequire, nativeImportOrRequire } from "./require";
-import createJITI from "./jiti";
+import createJiti from "./jiti";
 import { transform } from "./transform";
 
 export function evalModule(
@@ -25,8 +25,9 @@ export function evalModule(
     evalOptions.id ||
     (evalOptions.filename
       ? basename(evalOptions.filename)
-      : `_jitiEval.${evalOptions.ext || ".js"}`);
-  const filename = evalOptions.filename || jitiResolve(ctx, id);
+      : `_jitiEval.${evalOptions.ext || (evalOptions.async ? "mjs" : "js")}`);
+  const filename =
+    evalOptions.filename || jitiResolve(ctx, id, { async: evalOptions.async });
   const ext = evalOptions.ext || extname(filename);
   const cache = (evalOptions.cache || ctx.parentCache || {}) as ModuleCache;
 
@@ -49,12 +50,13 @@ export function evalModule(
       filename,
       source,
       ts: isTypescript,
-      async: evalOptions.async,
+      async: evalOptions.async ?? false,
     });
     const time = Math.round((performance.now() - start) * 1000) / 1000;
     debug(
       ctx,
-      `[transpile]${evalOptions.async ? " [esm]" : " [cjs]"}`,
+      "[transpile]",
+      evalOptions.async ? "[esm]" : "[cjs]",
       filename,
       `(${time}ms)`,
     );
@@ -62,14 +64,20 @@ export function evalModule(
     try {
       debug(
         ctx,
-        `[native]${evalOptions.async ? " [esm]" : " [cjs]"}`,
+        "[native]",
+        evalOptions.async ? "[import]" : "[require]",
         filename,
       );
       return nativeImportOrRequire(ctx, filename, evalOptions.async);
     } catch (error: any) {
       debug(ctx, "Native require error:", error);
       debug(ctx, "[fallback]", filename);
-      source = transform(ctx, { filename, source, ts: isTypescript });
+      source = transform(ctx, {
+        filename,
+        source,
+        ts: isTypescript,
+        async: evalOptions.async ?? false,
+      });
     }
   }
 
@@ -86,12 +94,18 @@ export function evalModule(
     }
   }
 
-  const _jiti = createJITI(filename, ctx.opts, {
-    nativeImport: ctx.nativeImport,
-    onError: ctx.onError,
-    parentModule: mod,
-    parentCache: cache,
-  });
+  const _jiti = createJiti(
+    filename,
+    ctx.opts,
+    {
+      parentModule: mod,
+      parentCache: cache,
+      nativeImport: ctx.nativeImport,
+      onError: ctx.onError,
+      createRequire: ctx.createRequire,
+    },
+    true /* isNested */,
+  );
 
   mod.require = _jiti;
 
@@ -103,7 +117,7 @@ export function evalModule(
 
   // Set CJS cache before eval
   cache[filename] = mod;
-  if (ctx.opts.requireCache) {
+  if (ctx.opts.moduleCache) {
     ctx.nativeRequire.cache[filename] = mod;
   }
 
@@ -119,7 +133,7 @@ export function evalModule(
       },
     );
   } catch (error: any) {
-    if (ctx.opts.requireCache) {
+    if (ctx.opts.moduleCache) {
       delete ctx.nativeRequire.cache[filename];
     }
     ctx.onError!(error);
@@ -137,7 +151,7 @@ export function evalModule(
       _jiti.import,
     );
   } catch (error: any) {
-    if (ctx.opts.requireCache) {
+    if (ctx.opts.moduleCache) {
       delete ctx.nativeRequire.cache[filename];
     }
     ctx.onError!(error);

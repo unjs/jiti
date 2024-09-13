@@ -1,6 +1,8 @@
 import { resolveAlias } from "pathe/utils";
-import { resolvePathSync } from "mlly";
-import type { Context } from "./types";
+import { fileURLToPath, resolvePathSync } from "mlly";
+import { join, dirname } from "pathe";
+import type { Context, JitiResolveOptions } from "./types";
+import { isDir } from "./utils";
 
 const JS_EXT_RE = /\.(c|m)?j(sx?)$/;
 const TS_EXT_RE = /\.(c|m)?t(sx?)$/;
@@ -8,35 +10,40 @@ const TS_EXT_RE = /\.(c|m)?t(sx?)$/;
 export function jitiResolve(
   ctx: Context,
   id: string,
-  options?: { paths?: string[] },
-  async?: boolean,
+  options: JitiResolveOptions & { async?: boolean; paths?: string[] },
 ) {
-  let resolved, err;
+  let resolved, lastError;
+
+  if (ctx.isNativeRe.test(id)) {
+    return id;
+  }
 
   // Resolve alias
   if (ctx.alias) {
     id = resolveAlias(id, ctx.alias);
   }
 
+  // Resolve parent URL
+  let parentURL = options?.parentURL || ctx.url;
+  if (isDir(parentURL)) {
+    parentURL = join(parentURL as string, "_index.js");
+  }
+
   // Try resolving with ESM compatible Node.js resolution in async context
-  const conditionSets = async
-    ? [
-        ["node", "import"],
-        ["node", "require"],
-      ]
-    : [
-        ["node", "require"],
-        ["node", "import"],
-      ];
+  const conditionSets = (
+    options?.async
+      ? [options?.conditions, ["node", "import"], ["node", "require"]]
+      : [options?.conditions, ["node", "require"], ["node", "import"]]
+  ).filter(Boolean);
   for (const conditions of conditionSets) {
     try {
       resolved = resolvePathSync(id, {
-        url: ctx.url,
+        url: parentURL,
         conditions,
         extensions: ctx.opts.extensions,
       });
     } catch (error) {
-      err = error;
+      lastError = error;
     }
     if (resolved) {
       return resolved;
@@ -47,20 +54,24 @@ export function jitiResolve(
   try {
     return ctx.nativeRequire.resolve(id, options);
   } catch (error) {
-    err = error;
+    lastError = error;
   }
   for (const ext of ctx.additionalExts) {
     resolved =
-      tryNativeRequireResolve(ctx, id + ext, options) ||
-      tryNativeRequireResolve(ctx, id + "/index" + ext, options);
+      tryNativeRequireResolve(ctx, id + ext, parentURL, options) ||
+      tryNativeRequireResolve(ctx, id + "/index" + ext, parentURL, options);
     if (resolved) {
       return resolved;
     }
     // Try resolving .ts files with .js extension
-    if (TS_EXT_RE.test(ctx.parentModule?.filename || "")) {
+    if (
+      TS_EXT_RE.test(ctx.filename) ||
+      TS_EXT_RE.test(ctx.parentModule?.filename || "")
+    ) {
       resolved = tryNativeRequireResolve(
         ctx,
         id.replace(JS_EXT_RE, ".$1t$2"),
+        parentURL,
         options,
       );
       if (resolved) {
@@ -69,16 +80,25 @@ export function jitiResolve(
     }
   }
 
-  throw err;
+  if (options?.try) {
+    // Well-typed in types.d.ts
+    return undefined as unknown as string;
+  }
+
+  throw lastError;
 }
 
 export function tryNativeRequireResolve(
   ctx: Context,
   id: string,
+  parentURL: URL | string,
   options?: { paths?: string[] },
 ) {
   try {
-    return ctx.nativeRequire.resolve(id, options);
+    return ctx.nativeRequire.resolve(id, {
+      ...options,
+      paths: [dirname(fileURLToPath(parentURL)), ...(options?.paths || [])],
+    });
   } catch {
     // Ignore errors
   }

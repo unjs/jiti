@@ -1,9 +1,9 @@
+import type { Context, TransformOptions } from "./types";
 import { getCache } from "./cache";
-import { Context } from "./types";
 import { debug } from "./utils";
 
-export function transform(ctx: Context, topts: any): string {
-  let code = getCache(ctx, topts.filename, topts.source, () => {
+export function transform(ctx: Context, topts: TransformOptions): string {
+  let code = getCache(ctx, topts, () => {
     const res = ctx.opts.transform!({
       ...ctx.opts.transformOptions,
       babel: {
@@ -15,6 +15,7 @@ export function transform(ctx: Context, topts: any): string {
           : {}),
         ...ctx.opts.transformOptions?.babel,
       },
+      interopDefault: ctx.opts.interopDefault,
       ...topts,
     });
     if (res.error && ctx.opts.debug) {

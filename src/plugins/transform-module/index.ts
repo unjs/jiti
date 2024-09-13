@@ -1,30 +1,29 @@
-// Basd on babel-plugin-transform-modules-commonjs v7.24.7
+// Based on babel-plugin-transform-modules-commonjs v7.24.7
 // MIT - Copyright (c) 2014-present Sebastian McKenzie and other contributors
 // https://github.com/babel/babel/tree/c7bb6e0f/packages/babel-plugin-transform-modules-commonjs/src
 
-// @ts-expect-error
-import { declare } from "@babel/helper-plugin-utils";
+import type { NodePath, PluginPass, Visitor } from "@babel/core";
+import { types as t, template } from "@babel/core";
+import { isModule } from "@babel/helper-module-imports";
+import type {
+  PluginOptions,
+  RewriteModuleStatementsAndPrepareHeaderOptions,
+} from "@babel/helper-module-transforms";
 import {
-  isModule,
-  rewriteModuleStatementsAndPrepareHeader,
-  type RewriteModuleStatementsAndPrepareHeaderOptions,
-  isSideEffectImport,
   buildNamespaceInitStatements,
   ensureStatementsHoisted,
-  wrapInterop,
   getModuleName,
-  // @ts-expect-error
+  isSideEffectImport,
+  rewriteModuleStatementsAndPrepareHeader,
+  wrapInterop,
 } from "@babel/helper-module-transforms";
-// @ts-expect-error
+import type { PluginAPI } from "@babel/helper-plugin-utils";
+import { declare } from "@babel/helper-plugin-utils";
 import simplifyAccess from "@babel/helper-simple-access";
-import { template, types as t } from "@babel/core";
-// @ts-expect-error
-import type { PluginPass, Visitor, Scope, NodePath } from "@babel/core";
-// @ts-expect-error
-import type { PluginOptions } from "@babel/helper-module-transforms";
+import type { Scope } from "@babel/traverse";
 import { transformDynamicImport } from "./dynamic-import";
-import { lazyImportsHook } from "./lazy";
 import { defineCommonJSHook, makeInvokers } from "./hooks";
+import { lazyImportsHook } from "./lazy";
 
 export interface Options extends PluginOptions {
   allowCommonJSExports?: boolean;
@@ -40,14 +39,15 @@ export interface Options extends PluginOptions {
   async: boolean;
 }
 
-export default declare((api: any, options: Options) => {
+// @ts-expect-error
+export default declare((api: PluginAPI, options: Options) => {
   // api.assertVersion(REQUIRED_VERSION(7));
 
   const {
     // 'true' for imports to strictly have .default, instead of having
     // destructuring-like behavior for their properties. This matches the behavior
     // of the initial Node.js (v12) behavior when importing a CommonJS without
-    // the __esMoule property.
+    // the __esModule property.
     // .strictNamespace is for non-mjs files, mjsStrictNamespace if for mjs files.
     strictNamespace = false,
     mjsStrictNamespace = strictNamespace,
@@ -177,15 +177,14 @@ export default declare((api: any, options: Options) => {
     name: "transform-modules-commonjs",
 
     pre() {
-      // @ts-expect-error
       this.file.set("@babel/plugin-transform-modules-*", "commonjs");
 
-      // @ts-expect-error
       if (lazy) defineCommonJSHook(this.file, lazyImportsHook(lazy));
     },
 
     visitor: {
       ["CallExpression" +
+        // @ts-expect-error
         (api.types.importExpression ? "|ImportExpression" : "")](
         this: PluginPass,
         path: NodePath<t.CallExpression | t.ImportExpression>,
@@ -201,7 +200,7 @@ export default declare((api: any, options: Options) => {
       },
 
       Program: {
-        exit(path: NodePath, state: any) {
+        exit(path, state) {
           if (!isModule(path)) return;
 
           // Rename the bindings auto-injected into the scope so there is no
@@ -219,7 +218,6 @@ export default declare((api: any, options: Options) => {
             if (process.env.BABEL_8_BREAKING) {
               simplifyAccess(path, new Set(["module", "exports"]));
             } else {
-              // @ts-ignore(Babel 7 vs Babel 8) The third param has been removed in Babel 8.
               simplifyAccess(path, new Set(["module", "exports"]), false);
             }
             path.traverse(moduleExportsVisitor, {
@@ -227,11 +225,10 @@ export default declare((api: any, options: Options) => {
             });
           }
 
-          // @ts-expect-error
           let moduleName = getModuleName(this.file.opts, options);
+          // @ts-expect-error
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
-          // @ts-expect-error
           const hooks = makeInvokers(this.file);
 
           const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
@@ -253,7 +250,6 @@ export default declare((api: any, options: Options) => {
                   ? mjsStrictNamespace
                   : strictNamespace,
               noIncompleteNsImportDetection,
-              // @ts-expect-error
               filename: this.file.opts.filename,
             },
           );
@@ -310,10 +306,9 @@ export default declare((api: any, options: Options) => {
           }
 
           ensureStatementsHoisted(headers);
-          // @ts-expect-error
           path.unshiftContainer("body", headers);
           // eslint-disable-next-line unicorn/no-array-for-each
-          (path.get("body") as any[]).forEach((path) => {
+          path.get("body").forEach((path) => {
             if (!headers.includes(path.node)) return;
             if (path.isVariableDeclaration()) {
               path.scope.registerDeclaration(path);

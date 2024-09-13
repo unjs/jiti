@@ -1,18 +1,18 @@
 import type {
-  JITI,
+  Jiti,
   TransformOptions,
-  JITIOptions,
+  JitiOptions,
   Context,
   EvalModuleOptions,
+  JitiResolveOptions,
 } from "./types";
 import { platform } from "node:os";
 import { pathToFileURL } from "node:url";
 import { join } from "pathe";
 import escapeStringRegexp from "escape-string-regexp";
-import createRequire from "create-require";
 import { normalizeAliases } from "pathe/utils";
-import { addHook } from "pirates";
-import { isDir } from "./utils";
+import pkg from "../package.json";
+import { debug, isDir } from "./utils";
 import { resolveJitiOptions } from "./options";
 import { jitiResolve } from "./resolve";
 import { evalModule } from "./eval";
@@ -20,20 +20,23 @@ import { transform } from "./transform";
 import { jitiRequire } from "./require";
 import { prepareCacheDir } from "./cache";
 
-export type { JITI, JITIOptions, TransformOptions } from "./types";
-
 const isWindows = platform() === "win32";
 
-export default function createJITI(
+export default function createJiti(
   filename: string,
-  userOptions: JITIOptions = {},
-  _internal: Pick<
+  userOptions: JitiOptions = {},
+  parentContext: Pick<
     Context,
-    "parentModule" | "parentCache" | "nativeImport" | "onError"
+    | "parentModule"
+    | "parentCache"
+    | "nativeImport"
+    | "onError"
+    | "createRequire"
   >,
-): JITI {
+  isNested = false,
+): Jiti {
   // Resolve options
-  const opts = resolveJitiOptions(userOptions);
+  const opts = isNested ? userOptions : resolveJitiOptions(userOptions);
 
   // Normalize aliases (and disable if non given)
   const alias =
@@ -60,8 +63,8 @@ export default function createJITI(
   if (!filename) {
     filename = process.cwd();
   }
-  if (isDir(filename)) {
-    filename = join(filename, "index.js");
+  if (!isNested && isDir(filename)) {
+    filename = join(filename, "_index.js");
   }
 
   const url = pathToFileURL(filename);
@@ -70,7 +73,7 @@ export default function createJITI(
     (ext) => ext !== ".js",
   );
 
-  const nativeRequire = createRequire(
+  const nativeRequire = parentContext.createRequire(
     isWindows
       ? filename.replace(/\//g, "\\") // Import maps does not work with normalized paths!
       : filename,
@@ -79,8 +82,7 @@ export default function createJITI(
   // Create shared context
   const ctx: Context = {
     filename,
-    url,
-    userOptions,
+    url: url as URL,
     opts,
     alias,
     nativeModules,
@@ -89,27 +91,44 @@ export default function createJITI(
     isTransformRe,
     additionalExts,
     nativeRequire,
-    onError: _internal.onError,
-    parentModule: _internal.parentModule,
-    parentCache: _internal.parentCache,
-    nativeImport: _internal.nativeImport,
+    onError: parentContext.onError,
+    parentModule: parentContext.parentModule,
+    parentCache: parentContext.parentCache,
+    nativeImport: parentContext.nativeImport,
+    createRequire: parentContext.createRequire,
   };
 
+  // Debug
+  if (!isNested) {
+    debug(
+      ctx,
+      "[init]",
+      ...[
+        ["version:", pkg.version],
+        ["module-cache:", opts.moduleCache],
+        ["fs-cache:", opts.fsCache],
+        ["interop-defaults:", opts.interopDefault],
+      ].flat(),
+    );
+  }
+
   // Prepare cache dir
-  prepareCacheDir(ctx);
+  if (!isNested) {
+    prepareCacheDir(ctx);
+  }
 
   // Create jiti instance
-  const jiti: JITI = Object.assign(
+  const jiti: Jiti = Object.assign(
     function jiti(id: string) {
-      return jitiRequire(ctx, id, false /* no async */);
+      return jitiRequire(ctx, id, { async: false });
     },
     {
-      cache: opts.requireCache ? nativeRequire.cache : {},
+      cache: opts.moduleCache ? nativeRequire.cache : Object.create(null),
       extensions: nativeRequire.extensions,
       main: nativeRequire.main,
       resolve: Object.assign(
         function resolve(path: string) {
-          return jitiResolve(ctx, path);
+          return jitiResolve(ctx, path, { async: false });
         },
         {
           paths: nativeRequire.resolve.paths,
@@ -118,22 +137,14 @@ export default function createJITI(
       transform(opts: TransformOptions) {
         return transform(ctx, opts);
       },
-      register() {
-        return addHook(
-          (source: string, filename: string) =>
-            transform(ctx, {
-              source,
-              filename,
-              ts: !!/\.[cm]?ts$/.test(filename),
-            }),
-          { exts: ctx.opts.extensions },
-        );
-      },
       evalModule(source: string, options?: EvalModuleOptions) {
         return evalModule(ctx, source, options);
       },
-      async import(id: string) {
-        return await jitiRequire(ctx, id, true /* async */);
+      async import(id: string, opts?: JitiResolveOptions) {
+        return await jitiRequire(ctx, id, { ...opts, async: true });
+      },
+      esmResolve(id: string, opts?: JitiResolveOptions) {
+        return jitiResolve(ctx, id, { ...opts, async: true });
       },
     },
   );

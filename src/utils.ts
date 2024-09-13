@@ -4,9 +4,13 @@ import { isAbsolute, join } from "pathe";
 import type { PackageJson } from "pkg-types";
 import { interopDefault as mllyInteropDefault, pathToFileURL } from "mlly";
 import { isWindows } from "std-env";
-import { Context } from "./types";
+import type { Context } from "./types";
+import { gray, green, blue, yellow, cyan, red } from "yoctocolors";
 
-export function isDir(filename: string): boolean {
+export function isDir(filename: string | URL): boolean {
+  if (filename instanceof URL || filename.startsWith("file://")) {
+    return false;
+  }
   try {
     const stat = lstatSync(filename);
     return stat.isDirectory();
@@ -54,10 +58,43 @@ export function wrapModule(source: string, opts?: { async?: boolean }) {
   return `(${opts?.async ? "async " : ""}function (exports, require, module, __filename, __dirname, jitiImport) { ${source}\n});`;
 }
 
-export function debug(ctx: Context, ...args: string[]) {
-  if (ctx.opts.debug) {
-    console.log("[jiti]", ...args);
+const debugMap = {
+  true: green("true"),
+  false: yellow("false"),
+  "[esm]": blue("[esm]"),
+  "[cjs]": green("[cjs]"),
+  "[import]": blue("[import]"),
+  "[require]": green("[require]"),
+  "[native]": cyan("[native]"),
+  "[transpile]": yellow("[transpile]"),
+  "[fallback]": red("[fallback]"),
+  "[unknown]": red("[unknown]"),
+  "[hit]": green("[hit]"),
+  "[miss]": yellow("[miss]"),
+  "[json]": green("[json]"),
+};
+
+export function debug(ctx: Context, ...args: unknown[]) {
+  if (!ctx.opts.debug) {
+    return;
   }
+  const cwd = process.cwd();
+  console.log(
+    gray(
+      [
+        "[jiti]",
+        ...args.map((arg) => {
+          if ((arg as string) in debugMap) {
+            return debugMap[arg as keyof typeof debugMap];
+          }
+          if (typeof arg !== "string") {
+            return JSON.stringify(arg);
+          }
+          return arg.replace(cwd, ".");
+        }),
+      ].join(" "),
+    ),
+  );
 }
 
 export function jitiInteropDefault(ctx: Context, mod: any) {
