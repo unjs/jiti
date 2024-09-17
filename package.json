@@ -57,7 +57,7 @@
     "eslint-config-unjs": "^0.3.2",
     "esm": "^3.2.25",
     "estree-walker": "^3.0.3",
-    "execa": "^9.3.1",
+    "execa": "^9.4.0",
     "fast-glob": "^3.3.2",
     "mlly": "^1.7.1",
     "object-hash": "^3.0.0",
@@ -72,7 +72,7 @@
     "ts-loader": "^9.5.1",
     "tslib": "^2.7.0",
     "typescript": "^5.6.2",
-    "vite": "^5.4.5",
+    "vite": "^5.4.6",
     "vitest": "^2.1.1",
     "webpack": "^5.94.0",
     "webpack-cli": "^5.1.4"
