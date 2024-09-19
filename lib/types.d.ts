@@ -132,6 +132,11 @@ export interface JitiOptions {
   transformModules?: string[];
 
   /**
+   * Parent module's import.meta context to use for ESM resolution.
+   */
+  importMeta?: ImportMeta;
+
+  /**
    * Enable experimental native Bun support for transformations.
    */
   experimentalBun?: boolean;

@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - main
-      - v1
   pull_request:
     branches:
       - main
-      - v1
 
 permissions:
   id-token: write
@@ -20,7 +18,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node: [18, 20]
+        node: [18, 20, 22]
       fail-fast: false
 
     steps:
@@ -33,18 +31,24 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: "pnpm"
       - uses: oven-sh/setup-bun@v2
-        if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 20 }}
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 22 }}
         with:
           bun-version: latest
+      - uses: denoland/setup-deno@v1
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 22 }}
+        with:
+          deno-version: v1.x
       - run: pnpm install
       - run: pnpm lint
-        if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 20 }}
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 22 }}
       - run: pnpm build
       - run: pnpm vitest run --coverage
-      - run: pnpm test:register
-        if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 20 }}
+      - run: pnpm test:node-register
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 22 }}
       - run: pnpm test:bun --coverage
-        if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 20 }}
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 22 }}
+      - run: pnpm test:native
+        if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 22 }}
       - name: nightly release
         if: |
           github.event_name == 'push' &&
