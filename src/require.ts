@@ -28,7 +28,7 @@ export function jitiRequire(
   }
 
   // Experimental Bun support
-  if (ctx.opts.experimentalBun && !ctx.opts.transformOptions) {
+  if (ctx.opts.tryNative && !ctx.opts.transformOptions) {
     try {
       id = jitiResolve(ctx, id, opts);
       if (!id && opts.try) {
@@ -36,8 +36,7 @@ export function jitiRequire(
       }
       debug(
         ctx,
-        "[bun]",
-        "[native]",
+        "[try-native]",
         opts.async && ctx.nativeImport ? "[import]" : "[require]",
         id,
       );
@@ -56,7 +55,11 @@ export function jitiRequire(
         return jitiInteropDefault(ctx, _mod);
       }
     } catch (error: any) {
-      debug(ctx, `[bun] Using fallback for ${id} because of an error:`, error);
+      debug(
+        ctx,
+        `[try-native] Using fallback for ${id} because of an error:`,
+        error,
+      );
     }
   }
 

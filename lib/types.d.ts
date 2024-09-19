@@ -139,9 +139,11 @@ export interface JitiOptions {
   importMeta?: ImportMeta;
 
   /**
-   * Enable experimental native Bun support for transformations.
+   * Try to use native require and import without jiti transformations first.
+   *
+   * Enabled if Bun is detected.
    */
-  experimentalBun?: boolean;
+  tryNative?: boolean;
 }
 
 export type ModuleCache = Record<string, NodeModule>;
