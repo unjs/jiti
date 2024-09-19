@@ -201,7 +201,7 @@ List of modules (within `node_modules`) to transform them regardless of syntax.
 
 ### `importMeta`
 
-Parent module's [`import.meta`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta) context to use for ESM resolution.
+Parent module's [`import.meta`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta) context to use for ESM resolution. (only used for `jiti/native` import).
 
 ### `experimentalBun`
 

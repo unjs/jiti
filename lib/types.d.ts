@@ -133,6 +133,8 @@ export interface JitiOptions {
 
   /**
    * Parent module's import.meta context to use for ESM resolution.
+   *
+   * (Only used for `jiti/native` import)
    */
   importMeta?: ImportMeta;
 
