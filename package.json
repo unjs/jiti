@@ -21,19 +21,8 @@
       "import": "./lib/jiti-register.mjs"
     },
     "./native": {
-      "bun": "./lib/jiti-native.mjs",
-      "deno": "./lib/jiti-native.mjs",
-      "node": {
-        "import": {
-          "types": "./lib/jiti.d.mts",
-          "default": "./lib/jiti.mjs"
-        },
-        "require": {
-          "types": "./lib/jiti.d.cts",
-          "default": "./lib/jiti.cjs"
-        }
-      },
-      "default": "./lib/jiti-native.mjs"
+      "types": "./lib/jiti.d.mts",
+      "import": "./lib/jiti-native.mjs"
     },
     "./package.json": "./package.json"
   },
