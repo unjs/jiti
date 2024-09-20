@@ -8,7 +8,7 @@ import type { Context } from "./types";
 import { gray, green, blue, yellow, cyan, red } from "yoctocolors";
 
 export function isDir(filename: string | URL): boolean {
-  if (filename instanceof URL || filename.startsWith("file://")) {
+  if (typeof filename !== 'string' || filename.startsWith("file://")) {
     return false;
   }
   try {
