@@ -15,11 +15,14 @@ export function jitiRequire(
 ) {
   const cache = ctx.parentCache || {};
 
-  // Check for node: and file: protocol
+  // Check for node:, file:, and data: protocols
   if (id.startsWith("node:")) {
     id = id.slice(5);
   } else if (id.startsWith("file:")) {
     id = fileURLToPath(id);
+  } else if (id.startsWith("data:")) {
+    debug(ctx, "[native]", "[data]", opts.async ? "[import]" : "[require]", id);
+    return nativeImportOrRequire(ctx, id, opts.async);
   }
 
   // Check for builtin node module like fs

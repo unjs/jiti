@@ -72,6 +72,7 @@ const debugMap = {
   "[hit]": green("[hit]"),
   "[miss]": yellow("[miss]"),
   "[json]": green("[json]"),
+  "[data]": green("[data]"),
 };
 
 export function debug(ctx: Context, ...args: unknown[]) {
