@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.0.0-rc.1
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.0.0-beta.3...v2.0.0-rc.1)
+
+### 🚀 Enhancements
+
+- `jiti/native` export ([#289](https://github.com/unjs/jiti/pull/289))
+- Improve `jiti/native` compatibility with node and deno ([#294](https://github.com/unjs/jiti/pull/294))
+
+### 💅 Refactors
+
+- Improve internal babel types ([#271](https://github.com/unjs/jiti/pull/271))
+- Always use native impl for `jiti/native` ([#293](https://github.com/unjs/jiti/pull/293))
+- Rename `experimentalBun` to `tryNative` ([#295](https://github.com/unjs/jiti/pull/295))
+
+### 📦 Build
+
+- Fix type resolution issue ([#269](https://github.com/unjs/jiti/pull/269))
+
+### 🏡 Chore
+
+- Stricter typechecks ([64dda9f](https://github.com/unjs/jiti/commit/64dda9f))
+- Fix build ([e78daeb](https://github.com/unjs/jiti/commit/e78daeb))
+- Update dependencies ([05b7bd4](https://github.com/unjs/jiti/commit/05b7bd4))
+- Replace exec logic in test fixtures ([#286](https://github.com/unjs/jiti/pull/286))
+- Add storybook to used by list ([#284](https://github.com/unjs/jiti/pull/284))
+- Update jiti-native ([8b76742](https://github.com/unjs/jiti/commit/8b76742))
+- Update lockfile ([3b8222b](https://github.com/unjs/jiti/commit/3b8222b))
+- Prepare for rc ([ed32e11](https://github.com/unjs/jiti/commit/ed32e11))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Norbert De Langen <ndelangen@me.com>
+- James Garbutt ([@43081j](http://github.com/43081j))
+- Arya Emami ([@aryaemami59](http://github.com/aryaemami59))
+
 ## v2.0.0-beta.3
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.0.0-beta.2...v2.0.0-beta.3)

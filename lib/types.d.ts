@@ -132,9 +132,18 @@ export interface JitiOptions {
   transformModules?: string[];
 
   /**
-   * Enable experimental native Bun support for transformations.
+   * Parent module's import.meta context to use for ESM resolution.
+   *
+   * (Only used for `jiti/native` import)
    */
-  experimentalBun?: boolean;
+  importMeta?: ImportMeta;
+
+  /**
+   * Try to use native require and import without jiti transformations first.
+   *
+   * Enabled if Bun is detected.
+   */
+  tryNative?: boolean;
 }
 
 export type ModuleCache = Record<string, NodeModule>;

@@ -4,3 +4,4 @@ dist
 *.log*
 coverage
 .tmp
+deno.lock

@@ -22,10 +22,7 @@ export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
     alias: _jsonEnv<Record<string, string>>("JITI_ALIAS", {}),
     nativeModules: _jsonEnv<string[]>("JITI_NATIVE_MODULES", []),
     transformModules: _jsonEnv<string[]>("JITI_TRANSFORM_MODULES", []),
-    experimentalBun: _jsonEnv<boolean>(
-      "JITI_EXPERIMENTAL_BUN",
-      !!process.versions.bun,
-    ),
+    tryNative: _jsonEnv<boolean>("JITI_TRY_NATIVE", "Bun" in globalThis),
   };
 
   const deprecatOverrides: JitiOptions = {};

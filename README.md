@@ -199,13 +199,17 @@ List of modules (within `node_modules`) to always use native require for them.
 
 List of modules (within `node_modules`) to transform them regardless of syntax.
 
-### `experimentalBun`
+### `importMeta`
+
+Parent module's [`import.meta`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta) context to use for ESM resolution. (only used for `jiti/native` import).
+
+### `tryNative`
 
 - Type: Boolean
-- Default: Enabled if `process.versions.bun` exists (Bun runtime)
-- Environment variable: `JITI_EXPERIMENTAL_BUN`
+- Default: Enabled if bun is detected
+- Environment variable: `JITI_TRY_NATIVE`
 
-Enable experimental native Bun support for transformations.
+Try to use native require and import without jiti transformations first.
 
 ## Development
 
