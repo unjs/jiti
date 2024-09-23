@@ -11,4 +11,4 @@ try {
     "Expected an error message for sync import of data URL",
   );
 }
-import(uri);
+await import(uri);
