@@ -21,8 +21,14 @@ export function jitiRequire(
   } else if (id.startsWith("file:")) {
     id = fileURLToPath(id);
   } else if (id.startsWith("data:")) {
-    debug(ctx, "[native]", "[data]", opts.async ? "[import]" : "[require]", id);
-    return nativeImportOrRequire(ctx, id, opts.async);
+    if (opts.async === false) {
+      throw new Error(
+        "data: URLs are not supported by CJS. Use import/jiti.import instead.",
+      );
+    } else {
+      debug(ctx, "[native]", "[data]", "[import]", id);
+      return nativeImportOrRequire(ctx, id, true);
+    }
   }
 
   // Check for builtin node module like fs
