@@ -25,10 +25,9 @@ export function jitiRequire(
       throw new Error(
         "\`data:\` URLs are only supported in ESM context. Use `import` or `jiti.import` instead.",
       );
-    } else {
-      debug(ctx, "[native]", "[data]", "[import]", id);
-      return nativeImportOrRequire(ctx, id, true);
     }
+    debug(ctx, "[native]", "[data]", "[import]", id);
+    return nativeImportOrRequire(ctx, id, true);
   }
 
   // Check for builtin node module like fs
