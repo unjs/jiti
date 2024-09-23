@@ -21,7 +21,7 @@ export function jitiRequire(
   } else if (id.startsWith("file:")) {
     id = fileURLToPath(id);
   } else if (id.startsWith("data:")) {
-    if (opts.async === false) {
+    if (!opts.async) {
       throw new Error(
         "\`data:\` URLs are only supported in ESM context. Use `import` or `jiti.import` instead.",
       );
