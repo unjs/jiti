@@ -23,7 +23,7 @@ export function jitiRequire(
   } else if (id.startsWith("data:")) {
     if (!opts.async) {
       throw new Error(
-        "\`data:\` URLs are only supported in ESM context. Use `import` or `jiti.import` instead.",
+        "`data:` URLs are only supported in ESM context. Use `import` or `jiti.import` instead.",
       );
     }
     debug(ctx, "[native]", "[data]", "[import]", id);
