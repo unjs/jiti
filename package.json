@@ -98,7 +98,7 @@
     "tinyexec": "^0.3.0",
     "ts-loader": "^9.5.1",
     "typescript": "^5.6.2",
-    "unplugin-purge-polyfills": "^0.0.5",
+    "unplugin-purge-polyfills": "^0.0.7",
     "vitest": "^2.1.1",
     "webpack": "^5.94.0",
     "webpack-bundle-analyzer": "^4.10.2",

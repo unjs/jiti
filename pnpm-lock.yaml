@@ -135,8 +135,8 @@ importers:
         specifier: ^5.6.2
         version: 5.6.2
       unplugin-purge-polyfills:
-        specifier: ^0.0.5
-        version: 0.0.5(rollup@4.22.0)(webpack-sources@3.2.3)
+        specifier: ^0.0.7
+        version: 0.0.7(rollup@4.22.0)(webpack-sources@3.2.3)
       vitest:
         specifier: ^2.1.1
         version: 2.1.1(@types/node@22.5.5)(terser@5.33.0)
@@ -2263,8 +2263,8 @@ packages:
   unist-util-stringify-position@2.0.3:
     resolution: {integrity: sha512-3faScn5I+hy9VleOq/qNbAd6pAx7iH5jYBMS9I1HgQVijz/4mv5Bvw5iw1sC/90CODiKo81G/ps8AJrISn687g==}
 
-  unplugin-purge-polyfills@0.0.5:
-    resolution: {integrity: sha512-G168zVFDOmM5Np7k9Ds3A47JEu2qBCCxgtKLkNTMlzVnUpM7Yg+IJZcwYKZGKtINOVFzAvfaBQRU6Wez874Hyg==}
+  unplugin-purge-polyfills@0.0.7:
+    resolution: {integrity: sha512-l5rxmu+CR6SIQWOcat8RW/2/VUyc4u4s5mBIOSinxP1m7jzAQlgPYzJXTJRPAOW4jfGfqUP+9oB4Q2Zno8SRBA==}
 
   unplugin@1.14.1:
     resolution: {integrity: sha512-lBlHbfSFPToDYp9pjXlUEFVxYLaue9f9T1HC+4OHlmj+HnMDdz9oZY+erXfoCe/5V/7gKUSY2jpXPb9S7f0f/w==}
@@ -4580,7 +4580,7 @@ snapshots:
     dependencies:
       '@types/unist': 2.0.11
 
-  unplugin-purge-polyfills@0.0.5(rollup@4.22.0)(webpack-sources@3.2.3):
+  unplugin-purge-polyfills@0.0.7(rollup@4.22.0)(webpack-sources@3.2.3):
     dependencies:
       '@rollup/pluginutils': 5.1.0(rollup@4.22.0)
       defu: 6.1.4
