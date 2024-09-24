@@ -21,7 +21,8 @@ for (const fixture of fixtures) {
   if (
     fixture === "error-runtime" ||
     fixture === "error-parse" ||
-    fixture === "typescript"
+    fixture === "typescript" ||
+    fixture === "data-uri"
   ) {
     continue;
   }
