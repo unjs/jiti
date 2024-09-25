@@ -52,7 +52,7 @@
     "test:native:bun": "bun --bun test test/native/bun.test.ts",
     "test:native:deno": "deno test -A test/native/deno.test.ts",
     "test:native:node": "node --test --experimental-strip-types test/native/node.test.ts",
-    "test:node-register": "node --test test/node-register.test.mjs",
+    "test:node-register": "JITI_JSX=1 node --test test/node-register.test.mjs",
     "test:types": "tsc --noEmit"
   },
   "devDependencies": {

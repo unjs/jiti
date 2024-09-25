@@ -126,6 +126,7 @@ export default function createJiti(
       cache: opts.moduleCache ? nativeRequire.cache : Object.create(null),
       extensions: nativeRequire.extensions,
       main: nativeRequire.main,
+      options: opts,
       resolve: Object.assign(
         function resolve(path: string) {
           return jitiResolve(ctx, path, { async: false });

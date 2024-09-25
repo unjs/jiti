@@ -9,6 +9,11 @@ export declare function createJiti(id: string, userOptions?: JitiOptions): Jiti;
  */
 export interface Jiti extends NodeRequire {
   /**
+   * Resolved options
+   */
+  options: JitiOptions;
+
+  /**
    * ESM import a module with additional Typescript and ESM compatibility.
    */
   import(id: string, opts?: JitiResolveOptions): Promise<unknown>;
