@@ -2,6 +2,45 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.0.0
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.0.0-rc.1...v2.0.0)
+
+### 🚀 Enhancements
+
+- Handle `data:` imports (non-native only) ([#299](https://github.com/unjs/jiti/pull/299))
+- Support jsx ([#200](https://github.com/unjs/jiti/pull/200))
+- Eval esm modules with fallback loader ([#300](https://github.com/unjs/jiti/pull/300))
+- Support `import.meta.resolve` ([#301](https://github.com/unjs/jiti/pull/301))
+
+### 🩹 Fixes
+
+- Handle global url instance mismatch ([#298](https://github.com/unjs/jiti/pull/298))
+- Optional access to `Reflect.metadata` ([#165](https://github.com/unjs/jiti/pull/165))
+- Add only `paths` option to native `require.resolve` ([50e4280](https://github.com/unjs/jiti/commit/50e4280))
+
+### 💅 Refactors
+
+- Make `jiti.esmResolve` consistent with `import.meta.resolve` ([#303](https://github.com/unjs/jiti/pull/303))
+
+### 📖 Documentation
+
+- Add example for inline `JITI_ALIAS` ([a53715a](https://github.com/unjs/jiti/commit/a53715a))
+
+### 🏡 Chore
+
+- Update readme ([4e60353](https://github.com/unjs/jiti/commit/4e60353))
+- Update lockfile ([10d8aab](https://github.com/unjs/jiti/commit/10d8aab))
+- Update release script ([f0ed3cf](https://github.com/unjs/jiti/commit/f0ed3cf))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Vlad Sirenko ([@sirenkovladd](http://github.com/sirenkovladd))
+- Ethan ([@yuusheng](http://github.com/yuusheng))
+- Jakub Boháček <gh-noreply@bohacek.dev>
+- Daniel Roe ([@danielroe](http://github.com/danielroe))
+
 ## v2.0.0-rc.1
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.0.0-beta.3...v2.0.0-rc.1)
