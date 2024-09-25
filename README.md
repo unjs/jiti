@@ -25,6 +25,7 @@ Just-in-Time Typescript and ESM support for Node.js.
 - Node.js native require cache integration
 - Filesystem transpile with hard disk caches
 - Custom resolve aliases
+- JSX support (opt-in)
 
 ## 🌟 Used by
 
@@ -210,6 +211,16 @@ Parent module's [`import.meta`](https://developer.mozilla.org/en-US/docs/Web/Jav
 - Environment variable: `JITI_TRY_NATIVE`
 
 Try to use native require and import without jiti transformations first.
+
+### `jsx`
+
+- Type: Boolean | {options}
+- Default: `false`
+- Environment Variable: `JITI_JSX`
+
+Enable JSX support using [`@babel/plugin-transform-react-jsx`](https://babeljs.io/docs/babel-plugin-transform-react-jsx).
+
+See [`test/fixtures/jsx`](./test/fixtures/jsx) for framework integration examples.
 
 ## Development
 

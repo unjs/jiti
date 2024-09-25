@@ -23,7 +23,12 @@ export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
     nativeModules: _jsonEnv<string[]>("JITI_NATIVE_MODULES", []),
     transformModules: _jsonEnv<string[]>("JITI_TRANSFORM_MODULES", []),
     tryNative: _jsonEnv<boolean>("JITI_TRY_NATIVE", "Bun" in globalThis),
+    jsx: _booleanEnv("JITI_JSX", false),
   };
+
+  if (jitiDefaults.jsx) {
+    jitiDefaults.extensions!.push(".jsx", ".tsx");
+  }
 
   const deprecatOverrides: JitiOptions = {};
   if (userOptions.cache !== undefined) {

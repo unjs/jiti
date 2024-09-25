@@ -9,6 +9,11 @@ export declare function createJiti(id: string, userOptions?: JitiOptions): Jiti;
  */
 export interface Jiti extends NodeRequire {
   /**
+   * Resolved options
+   */
+  options: JitiOptions;
+
+  /**
    * ESM import a module with additional Typescript and ESM compatibility.
    */
   import(id: string, opts?: JitiResolveOptions): Promise<unknown>;
@@ -144,6 +149,15 @@ export interface JitiOptions {
    * Enabled if Bun is detected.
    */
   tryNative?: boolean;
+
+  /**
+   * Enable JSX support Enable JSX support using [`@babel/plugin-transform-react-jsx`](https://babeljs.io/docs/babel-plugin-transform-react-jsx).
+   *
+   * @default false
+   *
+   * You can also use `JITI_JSX=1` environment variable to enable JSX support.
+   */
+  jsx?: boolean | JSXOptions;
 }
 
 export type ModuleCache = Record<string, NodeModule>;
@@ -163,6 +177,7 @@ export interface TransformOptions {
   retainLines?: boolean;
   interopDefault?: boolean;
   async: boolean;
+  jsx?: boolean | JSXOptions;
   [key: string]: any;
 }
 
@@ -175,4 +190,15 @@ export interface JitiResolveOptions {
   conditions?: string[];
   parentURL?: string | URL;
   try?: boolean;
+}
+
+/** Reference: https://babeljs.io/docs/babel-plugin-transform-react-jsx#options */
+export interface JSXOptions {
+  throwIfNamespace?: boolean;
+  runtime?: "classic" | "automatic";
+  importSource?: string;
+  pragma?: string;
+  pragmaFrag?: string;
+  useBuiltIns?: boolean;
+  useSpread?: boolean;
 }

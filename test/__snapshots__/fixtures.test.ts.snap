@@ -4,6 +4,8 @@ exports[`fixtures > async > stdout 1`] = `"works"`;
 
 exports[`fixtures > circular > stdout 1`] = `"a b c"`;
 
+exports[`fixtures > data-uri > stdout 1`] = `""`;
+
 exports[`fixtures > env > stdout 1`] = `
 "process.env true
 process.env.TEST true
@@ -54,6 +56,13 @@ exports[`fixtures > json > stdout 1`] = `
 Imported with assertion : { test: 123 } .default: { test: 123 }
 Required : { test: 123 } .default: { test: 123 }
 Dynamic Imported : { test: 123 } .default: { test: 123 }"
+`;
+
+exports[`fixtures > jsx > stdout 1`] = `
+"<h1>Hello, nano-jsx!</h1>
+<h1>Hello, preact!</h1>
+<h1>Hello, react!</h1>
+<h1>Hello, vue!</h1>"
 `;
 
 exports[`fixtures > mixed > stdout 1`] = `"Mixed works for: <cwd>"`;

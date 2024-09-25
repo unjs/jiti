@@ -45,12 +45,13 @@ export function evalModule(
       ctx.isTransformRe.test(filename) ||
       hasESMSyntax(source));
   const start = performance.now();
-  if (needsTranspile) {
+  if (needsTranspile || (ctx.opts.jsx && (ext === ".jsx" || ext === ".tsx"))) {
     source = transform(ctx, {
       filename,
       source,
       ts: isTypescript,
       async: evalOptions.async ?? false,
+      jsx: ctx.opts.jsx,
     });
     const time = Math.round((performance.now() - start) * 1000) / 1000;
     debug(
@@ -77,6 +78,7 @@ export function evalModule(
         source,
         ts: isTypescript,
         async: evalOptions.async ?? false,
+        jsx: ctx.opts.jsx,
       });
     }
   }
