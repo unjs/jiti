@@ -11,7 +11,7 @@ export type {
 
 export interface Context {
   filename: string;
-  url: URL;
+  url: string;
   parentModule?: NodeModule;
   parentCache?: ModuleCache;
   nativeImport?: (id: string) => Promise<any>;

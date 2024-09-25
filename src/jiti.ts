@@ -7,7 +7,7 @@ import type {
   JitiResolveOptions,
 } from "./types";
 import { platform } from "node:os";
-import { pathToFileURL } from "node:url";
+import { pathToFileURL } from "mlly";
 import { join } from "pathe";
 import escapeStringRegexp from "escape-string-regexp";
 import { normalizeAliases } from "pathe/utils";
@@ -82,7 +82,7 @@ export default function createJiti(
   // Create shared context
   const ctx: Context = {
     filename,
-    url: url as URL,
+    url,
     opts,
     alias,
     nativeModules,
@@ -144,8 +144,23 @@ export default function createJiti(
       async import(id: string, opts?: JitiResolveOptions) {
         return await jitiRequire(ctx, id, { ...opts, async: true });
       },
-      esmResolve(id: string, opts?: JitiResolveOptions) {
-        return jitiResolve(ctx, id, { ...opts, async: true });
+      esmResolve(id: string, opts?: string | JitiResolveOptions): string {
+        if (typeof opts === "string") {
+          opts = { parentURL: opts };
+        }
+        const resolved = jitiResolve(ctx, id, {
+          parentURL: url as any,
+          ...opts,
+          async: true,
+        });
+        if (
+          !resolved ||
+          typeof resolved !== "string" ||
+          resolved.startsWith("file://")
+        ) {
+          return resolved;
+        }
+        return pathToFileURL(resolved);
       },
     },
   );

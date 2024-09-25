@@ -21,6 +21,7 @@ export interface Jiti extends NodeRequire {
   /**
    * Resolve with ESM import conditions.
    */
+  esmResolve(id: string, parentURL?: string): string;
   esmResolve<T extends JitiResolveOptions = JitiResolveOptions>(
     id: string,
     opts?: T,
