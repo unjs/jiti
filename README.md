@@ -182,6 +182,8 @@ Return the `.default` export of a module at the top-level.
 - Default: -
 - Environment variable: `JITI_ALIAS`
 
+You can also pass an object to the environment variable for inline config. Example: `JITI_ALIAS='{"~/*": "./src/*"}' jiti ...`.
+
 Custom alias map used to resolve ids.
 
 ### `nativeModules`
