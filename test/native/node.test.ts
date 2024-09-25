@@ -22,6 +22,7 @@ const ignore = new Set(
     "exotic",
     "circular",
     "data-uri",
+    "jsx",
   ].filter(Boolean),
 );
 
