@@ -3,14 +3,9 @@ import { smart } from "@babel/template";
 import type { NodePath, PluginObj } from "@babel/core";
 import type { Statement, MemberExpression } from "@babel/types";
 
-// Based on https://github.com/javiertury/babel-plugin-transform-import-meta/blob/master/src/index.ts v2.1.1 (MIT License)
-// Modification: Inlines resolved filename into the code when possible instead of injecting a require
-export function TransformImportMetaPlugin(
-  _ctx: any,
-  opts: { filename?: string },
-) {
+export default function importMetaResolvePlugin(_ctx: any) {
   return <PluginObj>{
-    name: "transform-import-meta",
+    name: "import-meta-resolve",
     visitor: {
       Program(path) {
         const metas: Array<NodePath<MemberExpression>> = [];
@@ -24,7 +19,7 @@ export function TransformImportMetaPlugin(
               node.object.meta.name === "import" &&
               node.object.property.name === "meta" &&
               node.property.type === "Identifier" &&
-              node.property.name === "url"
+              node.property.name === "resolve"
             ) {
               metas.push(memberExpPath);
             }
@@ -36,13 +31,10 @@ export function TransformImportMetaPlugin(
         }
 
         for (const meta of metas) {
-          meta.replaceWith(
-            smart.ast`${
-              opts.filename
-                ? JSON.stringify(pathToFileURL(opts.filename))
-                : "require('url').pathToFileURL(__filename).toString()"
-            }` as Statement,
-          );
+          meta.replaceWith({
+            type: "ExpressionStatement",
+            expression: { type: "Identifier", name: "jitiESMResolve" },
+          });
         }
       },
     },
