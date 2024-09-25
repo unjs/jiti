@@ -2,6 +2,243 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.0.0-rc.1
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.0.0-beta.3...v2.0.0-rc.1)
+
+### 🚀 Enhancements
+
+- `jiti/native` export ([#289](https://github.com/unjs/jiti/pull/289))
+- Improve `jiti/native` compatibility with node and deno ([#294](https://github.com/unjs/jiti/pull/294))
+
+### 💅 Refactors
+
+- Improve internal babel types ([#271](https://github.com/unjs/jiti/pull/271))
+- Always use native impl for `jiti/native` ([#293](https://github.com/unjs/jiti/pull/293))
+- Rename `experimentalBun` to `tryNative` ([#295](https://github.com/unjs/jiti/pull/295))
+
+### 📦 Build
+
+- Fix type resolution issue ([#269](https://github.com/unjs/jiti/pull/269))
+
+### 🏡 Chore
+
+- Stricter typechecks ([64dda9f](https://github.com/unjs/jiti/commit/64dda9f))
+- Fix build ([e78daeb](https://github.com/unjs/jiti/commit/e78daeb))
+- Update dependencies ([05b7bd4](https://github.com/unjs/jiti/commit/05b7bd4))
+- Replace exec logic in test fixtures ([#286](https://github.com/unjs/jiti/pull/286))
+- Add storybook to used by list ([#284](https://github.com/unjs/jiti/pull/284))
+- Update jiti-native ([8b76742](https://github.com/unjs/jiti/commit/8b76742))
+- Update lockfile ([3b8222b](https://github.com/unjs/jiti/commit/3b8222b))
+- Prepare for rc ([ed32e11](https://github.com/unjs/jiti/commit/ed32e11))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Norbert De Langen <ndelangen@me.com>
+- James Garbutt ([@43081j](http://github.com/43081j))
+- Arya Emami ([@aryaemami59](http://github.com/aryaemami59))
+
+## v2.0.0-beta.3
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.0.0-beta.2...v2.0.0-beta.3)
+
+### 🚀 Enhancements
+
+- Allow `try` and other resolve options for `import`/`esmResolve` ([#268](https://github.com/unjs/jiti/pull/268))
+- Allow set `interopDefault` using `JITI_INTEROP_DEFAULT` env ([1c080a1](https://github.com/unjs/jiti/commit/1c080a1))
+
+### 🔥 Performance
+
+- Use native `createRequire` ([69da3c5](https://github.com/unjs/jiti/commit/69da3c5))
+
+### 🩹 Fixes
+
+- **cache:** Prefer `node_modules/.cache` if exists ([832f206](https://github.com/unjs/jiti/commit/832f206))
+- Use native esm import for built-ins ([54d6b4a](https://github.com/unjs/jiti/commit/54d6b4a))
+- Respect  `interopDefault` in babel transform ([485b4e9](https://github.com/unjs/jiti/commit/485b4e9))
+- Split cache based on `interopDefault` ([f820a15](https://github.com/unjs/jiti/commit/f820a15))
+- Remove ext from cache path ([50b1b3a](https://github.com/unjs/jiti/commit/50b1b3a))
+- Proprly resolve `.mts`/`.cts` with `.mjs`/`.cjs` imports ([a5aefad](https://github.com/unjs/jiti/commit/a5aefad))
+- **resolve:** Make sure parentURL is a dir ([d224e84](https://github.com/unjs/jiti/commit/d224e84))
+
+### 💅 Refactors
+
+- Improve debug logging ([463a8a3](https://github.com/unjs/jiti/commit/463a8a3))
+- Rename `importResolve to `esmResolve` ([aac88e6](https://github.com/unjs/jiti/commit/aac88e6))
+- Improve env handling ([ee4489d](https://github.com/unjs/jiti/commit/ee4489d))
+- Use imporr/require in debug logs ([934a5bb](https://github.com/unjs/jiti/commit/934a5bb))
+
+### 🏡 Chore
+
+- Remove extra log ([483ced3](https://github.com/unjs/jiti/commit/483ced3))
+- Update fixture ([e530242](https://github.com/unjs/jiti/commit/e530242))
+
+### ✅ Tests
+
+- Update snapshot ([3298489](https://github.com/unjs/jiti/commit/3298489))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
+## v2.0.0-beta.2
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.0.0-beta.1...v2.0.0-beta.2)
+
+### 🚀 Enhancements
+
+- Add experimental esm loader support ([#266](https://github.com/unjs/jiti/pull/266))
+
+### 🔥 Performance
+
+- Reduce overhead of sub jiti instances ([#265](https://github.com/unjs/jiti/pull/265))
+
+### 🩹 Fixes
+
+- Resolve with esm conditions in async context ([#264](https://github.com/unjs/jiti/pull/264))
+
+### 💅 Refactors
+
+- Use more clear `fsCache` and `moduleCache` options ([#263](https://github.com/unjs/jiti/pull/263))
+- Use esm imports for babel plugins ([22e259f](https://github.com/unjs/jiti/commit/22e259f))
+
+### 📦 Build
+
+- Overhaul lib exports ([#262](https://github.com/unjs/jiti/pull/262))
+- Target es2020 ([c382c2f](https://github.com/unjs/jiti/commit/c382c2f))
+- Target es2022 ([dbf0507](https://github.com/unjs/jiti/commit/dbf0507))
+
+### 🏡 Chore
+
+- Update readme ([8957f72](https://github.com/unjs/jiti/commit/8957f72))
+- Remove unused deps ([e472f95](https://github.com/unjs/jiti/commit/e472f95))
+
+### 🤖 CI
+
+- Enable loader test ([#267](https://github.com/unjs/jiti/pull/267))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
+## v2.0.0-beta.1
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.21.3...v2.0.0-beta.1)
+
+### 🚀 Enhancements
+
+- Basic top-level await support ([#239](https://github.com/unjs/jiti/pull/239))
+- Native esm support ([#259](https://github.com/unjs/jiti/pull/259))
+
+### 🩹 Fixes
+
+- Use distinct cache paths for async mode ([6e8ec7a](https://github.com/unjs/jiti/commit/6e8ec7a))
+
+### 💅 Refactors
+
+- Split option normalization ([#172](https://github.com/unjs/jiti/pull/172))
+- Split logic ([#240](https://github.com/unjs/jiti/pull/240))
+- Remove legacy node syntax polyfills ([#260](https://github.com/unjs/jiti/pull/260))
+- 3rd arg to createJiti is optional ([60a23e3](https://github.com/unjs/jiti/commit/60a23e3))
+- Upgrade cache version to `8` ([99224ae](https://github.com/unjs/jiti/commit/99224ae))
+
+### 📖 Documentation
+
+- Update bundlephobia link ([#179](https://github.com/unjs/jiti/pull/179))
+
+### 🏡 Chore
+
+- Add v2 banner ([61a49a9](https://github.com/unjs/jiti/commit/61a49a9))
+- Add `v1` to renovate branches ([38c38d2](https://github.com/unjs/jiti/commit/38c38d2))
+- Update dependencies ([bd6b14b](https://github.com/unjs/jiti/commit/bd6b14b))
+- Update to eslint v9 ([3c7740f](https://github.com/unjs/jiti/commit/3c7740f))
+- Update deps and lockfile ([18fd99a](https://github.com/unjs/jiti/commit/18fd99a))
+- Fix readme ([7746080](https://github.com/unjs/jiti/commit/7746080))
+- Update docs ([73b29bb](https://github.com/unjs/jiti/commit/73b29bb))
+- Update docs ([a1049a1](https://github.com/unjs/jiti/commit/a1049a1))
+- Update docs ([0e0c70e](https://github.com/unjs/jiti/commit/0e0c70e))
+- Update release script  prepare for v2 ([cdd61d9](https://github.com/unjs/jiti/commit/cdd61d9))
+- Update package.json ([420f1fb](https://github.com/unjs/jiti/commit/420f1fb))
+- Add webpack bundle analyzer ([a05dcdc](https://github.com/unjs/jiti/commit/a05dcdc))
+- Fix type issue ([9a36d0e](https://github.com/unjs/jiti/commit/9a36d0e))
+
+### 🤖 CI
+
+- Enable nightly channel ([bfd4f46](https://github.com/unjs/jiti/commit/bfd4f46))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Lehoczky Zoltán ([@Lehoczky](http://github.com/Lehoczky))
+
+## v1.21.3
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.21.2...v1.21.3)
+
+### 🩹 Fixes
+
+- Update mlly to ^1.7.1 ([9adbcb3](https://github.com/unjs/jiti/commit/9adbcb3))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
+## v1.21.2
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.21.1...v1.21.2)
+
+### 🩹 Fixes
+
+- Pin mlly to 1.4.2 ([#237](https://github.com/unjs/jiti/pull/237))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
+## v1.21.1
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.21.0...v1.21.1)
+
+### 🏡 Chore
+
+- Update dependencies ([0bd991b](https://github.com/unjs/jiti/commit/0bd991b))
+- Update dependencies ([cfb106c](https://github.com/unjs/jiti/commit/cfb106c))
+- Update to eslint v9 ([c11d953](https://github.com/unjs/jiti/commit/c11d953))
+- Update deps and lockfile ([95aa249](https://github.com/unjs/jiti/commit/95aa249))
+- Run ci against 18 and 22 ([65b4067](https://github.com/unjs/jiti/commit/65b4067))
+- Lint ([6f3bd76](https://github.com/unjs/jiti/commit/6f3bd76))
+
+### 🤖 CI
+
+- Skip extra checks ([8fe6417](https://github.com/unjs/jiti/commit/8fe6417))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
+## v1.21.0
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.20.0...v1.21.0)
+
+### 🚀 Enhancements
+
+- Add `jiti.import` function for async import ([#170](https://github.com/unjs/jiti/pull/170))
+- Add forward compatible (stub) types for `jiti.import` ([#175](https://github.com/unjs/jiti/pull/175))
+
+### 🏡 Chore
+
+- Enable ci for `v1` branch ([0200f63](https://github.com/unjs/jiti/commit/0200f63))
+- Add banner about v1 ([cc742cb](https://github.com/unjs/jiti/commit/cc742cb))
+- Add `v1` to renovate branches ([2358645](https://github.com/unjs/jiti/commit/2358645))
+- Update dependencies ([fe8b267](https://github.com/unjs/jiti/commit/fe8b267))
+- Fix eslint warning ([c5c7220](https://github.com/unjs/jiti/commit/c5c7220))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Anthony Fu <anthonyfu117@hotmail.com>
+
 ## v1.20.0
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.19.3...v1.20.0)

@@ -1,33 +1,28 @@
-export type TransformOptions = {
-  source: string;
-  filename?: string;
-  ts?: boolean;
-  retainLines?: boolean;
-  legacy?: boolean;
-  [key: string]: any;
-};
+import type { JitiOptions, ModuleCache } from "../lib/types";
+export type {
+  JitiOptions,
+  ModuleCache,
+  EvalModuleOptions,
+  Jiti,
+  TransformOptions,
+  TransformResult,
+  JitiResolveOptions,
+} from "../lib/types";
 
-export type TRANSFORM_RESULT = {
-  code: string;
-  error?: any;
-};
-
-export type JITIOptions = {
-  transform?: (opts: TransformOptions) => TRANSFORM_RESULT;
-  debug?: boolean;
-  cache?: boolean | string;
-  sourceMaps?: boolean;
-  requireCache?: boolean;
-  v8cache?: boolean;
-  interopDefault?: boolean;
-  esmResolve?: boolean;
-  cacheVersion?: string;
+export interface Context {
+  filename: string;
+  url: URL;
+  parentModule?: NodeModule;
+  parentCache?: ModuleCache;
+  nativeImport?: (id: string) => Promise<any>;
   onError?: (error: Error) => void;
-  legacy?: boolean;
-  extensions?: string[];
-  transformOptions?: Omit<TransformOptions, "source">;
+  opts: JitiOptions;
+  nativeModules: string[];
+  transformModules: string[];
+  isNativeRe: RegExp;
+  isTransformRe: RegExp;
   alias?: Record<string, string>;
-  nativeModules?: string[];
-  transformModules?: string[];
-  experimentalBun?: boolean;
-};
+  additionalExts: string[];
+  nativeRequire: NodeRequire;
+  createRequire: (typeof import("node:module"))["createRequire"];
+}

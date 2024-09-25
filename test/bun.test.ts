@@ -4,25 +4,39 @@ import { join } from "node:path";
 // @ts-ignore
 import { test, expect } from "bun:test";
 
-import jiti from "../lib/index.js";
+import { createJiti } from "..";
 
 const fixturesDir = fileURLToPath(new URL("fixtures", import.meta.url));
 
 const fixtures = await readdir(fixturesDir);
 
-const _jiti = jiti(fixturesDir, {
+const _jiti = createJiti(fixturesDir, {
   debug: true,
   interopDefault: true,
-  requireCache: false,
-  cache: false,
+  fsCache: false,
+  moduleCache: false,
 });
 
 for (const fixture of fixtures) {
-  if (fixture.startsWith("error-")) {
+  if (
+    fixture === "error-runtime" ||
+    fixture === "error-parse" ||
+    fixture === "typescript" ||
+    fixture === "data-uri"
+  ) {
     continue;
   }
-  test("fixtures/" + fixture, () => {
-    _jiti("./" + fixture);
+  if (
+    fixture !== "esm" &&
+    fixture !== "top-level-await" &&
+    fixture !== "json"
+  ) {
+    test("fixtures/" + fixture + " (CJS)", () => {
+      _jiti("./" + fixture);
+    });
+  }
+  test("fixtures/" + fixture + " (ESM)", async () => {
+    await _jiti.import("./" + fixture);
   });
 }
 

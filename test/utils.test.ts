@@ -1,6 +1,6 @@
 import { afterEach, describe, beforeEach, it, expect, vi } from "vitest";
 import { isWindows } from "std-env";
-import { getCacheDir } from "../src/utils";
+import { getCacheDir } from "../src/cache";
 
 describe("utils", () => {
   describe.skipIf(isWindows)("getCacheDir", () => {
@@ -19,25 +19,25 @@ describe("utils", () => {
     it("returns the system's TMPDIR when TMPDIR is not set", () => {
       const originalTmpdir = process.env.TMPDIR;
       delete process.env.TMPDIR;
-      expect(getCacheDir()).toBe("/tmp/node-jiti");
+      expect(getCacheDir({} as any)).toBe("/tmp/jiti");
       process.env.TMPDIR = originalTmpdir;
     });
 
     it("returns TMPDIR when TMPDIR is not CWD", () => {
       vi.stubEnv("TMPDIR", notCwd);
-      expect(getCacheDir()).toBe("/cwd__NOT__/node-jiti");
+      expect(getCacheDir({} as any)).toBe("/cwd__NOT__/jiti");
     });
 
     it("returns the system's TMPDIR when TMPDIR is CWD", () => {
       vi.stubEnv("TMPDIR", cwd);
-      expect(getCacheDir()).toBe("/tmp/node-jiti");
+      expect(getCacheDir({} as any)).toBe("/tmp/jiti");
     });
 
     it("returns TMPDIR when TMPDIR is CWD and TMPDIR is kept", () => {
       vi.stubEnv("TMPDIR", cwd);
       vi.stubEnv("JITI_RESPECT_TMPDIR_ENV", "true");
 
-      expect(getCacheDir()).toBe("/cwd/node-jiti");
+      expect(getCacheDir({} as any)).toBe("/cwd/jiti");
     });
   });
 });

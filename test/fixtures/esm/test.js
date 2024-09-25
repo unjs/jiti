@@ -1,6 +1,10 @@
 const getStack = () => new Error("Boo").stack;
 
-export default function test() {
+require("./utils.mjs");
+
+export default async function test() {
+  const utils = await import("./utils.mjs");
+  console.log({ utils });
   return {
     file: __filename,
     dir: __dirname,

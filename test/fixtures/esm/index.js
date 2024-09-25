@@ -4,4 +4,4 @@ import * as utilsLib from "./utils-lib";
 
 console.log({ utilsLib });
 
-console.log(test());
+console.log(await test());

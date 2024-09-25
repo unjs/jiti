@@ -1,87 +1,157 @@
 # jiti
 
-[![npm version][npm-version-src]][npm-version-href]
-[![npm downloads][npm-downloads-src]][npm-downloads-href]
-[![bundle][bundle-src]][bundle-href]
-[![License][license-src]][license-href]
+<!-- automd:badges color=F0DB4F bundlephobia -->
 
-Runtime Typescript and ESM support for Node.js
+[![npm version](https://img.shields.io/npm/v/jiti?color=F0DB4F)](https://npmjs.com/package/jiti)
+[![npm downloads](https://img.shields.io/npm/dm/jiti?color=F0DB4F)](https://npmjs.com/package/jiti)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/jiti?color=F0DB4F)](https://bundlephobia.com/package/jiti)
 
-## Features
+<!-- /automd -->
 
-- Seamless typescript and ESM syntax support
+Just-in-Time Typescript and ESM support for Node.js.
+
+> [!IMPORTANT]
+> This is the development branch for jiti v2. Check out [jiti/v1](https://github.com/unjs/jiti/tree/v1) for latest stable docs and [unjs/jiti#174](https://github.com/unjs/jiti/issues/174) for the v2 roadmap.
+
+## ✅ Features
+
+- Seamless Typescript and ESM syntax support
 - Seamless interoperability between ESM and CommonJS
-- Synchronous API to replace `require`
+- Synchronous API to replace `require()`
+- Asynchronous API to replace `import()`
+- ESM Loader support
 - Super slim and zero dependency
 - Smart syntax detection to avoid extra transforms
-- CommonJS cache integration
-- Filesystem transpile hard cache
-- V8 compile cache
-- Custom resolve alias
+- Node.js native require cache integration
+- Filesystem transpile with hard disk caches
+- Custom resolve aliases
+- JSX support (opt-in)
 
-## Usage
+## 🌟 Used by
+
+- [Docusaurus](https://docusaurus.io/)
+- [FormKit](https://formkit.com/)
+- [Histoire](https://histoire.dev/)
+- [Knip](https://knip.dev/)
+- [Nitro](https://nitro.unjs.io/)
+- [Nuxt](https://nuxt.com/)
+- [PostCSS loader](https://github.com/webpack-contrib/postcss-loader)
+- [Rsbuild](https://rsbuild.dev/)
+- [Size Limit](https://github.com/ai/size-limit)
+- [Slidev](https://sli.dev/)
+- [Tailwindcss](https://tailwindcss.com/)
+- [Tokenami](https://github.com/tokenami/tokenami)
+- [UnoCSS](https://unocss.dev/)
+- [WXT](https://wxt.dev/)
+- [Winglang](https://www.winglang.io/)
+- [Graphql code generator](https://the-guild.dev/graphql/codegen)
+- [Lingui](https://lingui.dev/)
+- [Scaffdog](https://scaff.dog/)
+- [Storybook](https://storybook.js.org)
+- [...UnJS ecosystem](https://unjs.io/)
+- [...58M+ npm monthly downloads](https://www.npmjs.com/package/jiti)
+- [...5.5M+ public repositories](https://github.com/unjs/jiti/network/dependents)
+- [ pr welcome add yours ]
+
+## 💡 Usage
+
+### CLI
+
+You can use `jiti` CLI to quickly run any script with Typescript and native ESM support!
+
+```bash
+npx jiti ./index.ts
+
+# or
+
+jiti ./index.ts
+```
 
 ### Programmatic
 
 ```js
-const jiti = require("jiti")(__filename);
+// --- Initialize ---
 
+// ESM
+import { createJiti } from "jiti";
+const jiti = createJiti(import.meta.url);
+
+// CommonJS
+const { createJiti } = require("jiti");
+const jiti = createJiti(__filename);
+
+// --- ESM Compatible APIs ---
+
+// jiti.import() acts like import() with Typescript support
+await jiti.import("./path/to/file.ts");
+
+// jiti.esmResolve() acts like import.meta.resolve() with additional features
+const resolvedPath = jiti.esmResolve("./src");
+
+// --- CJS Compatible APIs ---
+
+// jiti() acts like require() with Typescript and (non async) ESM support
 jiti("./path/to/file.ts");
+
+// jiti.resolve() acts like require.resolve() with additional features
+const resolvedPath = jiti.resolve("./src");
 ```
 
 You can also pass options as second argument:
 
 ```js
-const jiti = require("jiti")(__filename, { debug: true });
+const jiti = createJiti(import.meta.url, { debug: true });
 ```
 
-### CLI
+### Register global ESM loader
 
-```bash
-jiti index.ts
-# or npx jiti index.ts
-```
+You can globally register jiti using [global hooks](https://nodejs.org/api/module.html#initialize).
 
-### Register require hook
-
-```bash
-node -r jiti/register index.ts
-```
-
-Alternatively, you can register `jiti` as a require hook programmatically:
+**Note:** This is an experimental approach and only tested to work on Node.js > 20. I don't recommend it and unless you have to, please prefer explicit method.
 
 ```js
-const jiti = require("jiti")();
-const unregister = jiti.register();
+import "jiti/register";
 ```
 
-## Options
+Or:
+
+```bash
+node --import jiti/register index.ts
+```
+
+## ⚙️ Options
 
 ### `debug`
 
 - Type: Boolean
 - Default: `false`
-- Environment Variable: `JITI_DEBUG`
+- Environment variable: `JITI_DEBUG`
 
-Enable debug to see which files are transpiled
+Enable verbose logging. You can use `JITI_DEBUG=1 <your command>` to enable it.
 
-### `cache`
+### `fsCache`
 
 - Type: Boolean | String
 - Default: `true`
-- Environment Variable: `JITI_CACHE`
+- Environment variable: `JITI_FS_CACHE`
 
-Use transpile cache
+Filesystem source cache (enabled by default)
 
-If set to `true` will use `node_modules/.cache/jiti` (if exists) or `{TMP_DIR}/node-jiti`
+By default (when is `true`), jiti uses `node_modules/.cache/jiti` (if exists) or `{TMP_DIR}/jiti`.
 
-### `esmResolve`
+**Note:** It is recommended to keep this option enabled for better performance.
 
-- Type: Boolean | String
-- Default: `false`
-- Environment Variable: `JITI_ESM_RESOLVE`
+### `moduleCache`
 
-Using esm resolution algorithm to support `import` condition.
+- Type: String
+- Default: `true`
+- Environment variable: `JITI_MODULE_CACHE`
+
+Runtime module cache (enabled by default).
+
+Disabling allows editing code and importing same module multiple times.
+
+When enabled, jiti integrates with Node.js native CommonJS cache store.
 
 ### `transform`
 
@@ -94,7 +164,7 @@ Transform function. See [src/babel](./src/babel.ts) for more details
 
 - Type: Boolean
 - Default `false`
-- Environment Variable: `JITI_SOURCE_MAPS`
+- Environment variable: `JITI_SOURCE_MAPS`
 
 Add inline source map to transformed source for better debugging.
 
@@ -102,6 +172,7 @@ Add inline source map to transformed source for better debugging.
 
 - Type: Boolean
 - Default: `false`
+- Environment variable: `JITI_INTEROP_DEFAULT`
 
 Return the `.default` export of a module at the top-level.
 
@@ -109,7 +180,7 @@ Return the `.default` export of a module at the top-level.
 
 - Type: Object
 - Default: -
-- Environment Variable: `JITI_ALIAS`
+- Environment variable: `JITI_ALIAS`
 
 Custom alias map used to resolve ids.
 
@@ -117,7 +188,7 @@ Custom alias map used to resolve ids.
 
 - Type: Array
 - Default: ['typescript`]
-- Environment Variable: `JITI_NATIVE_MODULES`
+- Environment variable: `JITI_NATIVE_MODULES`
 
 List of modules (within `node_modules`) to always use native require for them.
 
@@ -125,17 +196,31 @@ List of modules (within `node_modules`) to always use native require for them.
 
 - Type: Array
 - Default: []
-- Environment Variable: `JITI_TRANSFORM_MODULES`
+- Environment variable: `JITI_TRANSFORM_MODULES`
 
 List of modules (within `node_modules`) to transform them regardless of syntax.
 
-### `experimentalBun`
+### `importMeta`
+
+Parent module's [`import.meta`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta) context to use for ESM resolution. (only used for `jiti/native` import).
+
+### `tryNative`
 
 - Type: Boolean
-- Default: Enabled if `process.versions.bun` exists (Bun runtime)
-- Environment Variable: `JITI_EXPERIMENTAL_BUN`
+- Default: Enabled if bun is detected
+- Environment variable: `JITI_TRY_NATIVE`
 
-Enable experimental native Bun support for transformations.
+Try to use native require and import without jiti transformations first.
+
+### `jsx`
+
+- Type: Boolean | {options}
+- Default: `false`
+- Environment Variable: `JITI_JSX`
+
+Enable JSX support using [`@babel/plugin-transform-react-jsx`](https://babeljs.io/docs/babel-plugin-transform-react-jsx).
+
+See [`test/fixtures/jsx`](./test/fixtures/jsx) for framework integration examples.
 
 ## Development
 
@@ -147,15 +232,15 @@ Enable experimental native Bun support for transformations.
 
 ## License
 
-MIT. Made with 💖
+<!-- automd:contributors license=MIT author="pi0" -->
 
-<!-- Badged -->
+Published under the [MIT](https://github.com/unjs/jiti/blob/main/LICENSE) license.
+Made by [@pi0](https://github.com/pi0) and [community](https://github.com/unjs/jiti/graphs/contributors) 💛
+<br><br>
+<a href="https://github.com/unjs/jiti/graphs/contributors">
+<img src="https://contrib.rocks/image?repo=unjs/jiti" />
+</a>
 
-[npm-version-src]: https://img.shields.io/npm/v/jiti?style=flat&colorA=18181B&colorB=F0DB4F
-[npm-version-href]: https://npmjs.com/package/jiti
-[npm-downloads-src]: https://img.shields.io/npm/dm/jiti?style=flat&colorA=18181B&colorB=F0DB4F
-[npm-downloads-href]: https://npmjs.com/package/jiti
-[bundle-src]: https://img.shields.io/bundlephobia/minzip/jiti?style=flat&colorA=18181B&colorB=F0DB4F
-[bundle-href]: https://bundlephobia.com/result?p=h3
-[license-src]: https://img.shields.io/github/license/unjs/jiti.svg?style=flat&colorA=18181B&colorB=F0DB4F
-[license-href]: https://github.com/unjs/jiti/blob/main/LICENSE
+<!-- /automd -->
+
+<!-- automd:with-automd -->

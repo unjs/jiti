@@ -2,6 +2,8 @@
 console.log("Optional chaining:", ({} as any)?.foo?.bar);
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator
+// @ts-ignore
+// eslint-disable-next-line no-constant-binary-expression
 console.log("Nullish coalescing:", 0 ?? 42);
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_OR_assignment
