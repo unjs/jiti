@@ -5,7 +5,7 @@
 import type { PluginObj } from "@babel/core";
 import type { Identifier, MemberExpression, MetaProperty } from "@babel/types";
 
-export function importMetaEnvPlugin({ template, types }: any) {
+export default function importMetaEnvPlugin({ template, types }: any) {
   return <PluginObj>{
     name: "@import-meta-env/babel",
     visitor: {

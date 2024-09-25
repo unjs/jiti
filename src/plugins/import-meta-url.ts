@@ -5,12 +5,13 @@ import type { Statement, MemberExpression } from "@babel/types";
 
 // Based on https://github.com/javiertury/babel-plugin-transform-import-meta/blob/master/src/index.ts v2.1.1 (MIT License)
 // Modification: Inlines resolved filename into the code when possible instead of injecting a require
-export function TransformImportMetaPlugin(
+
+export default function importMetaUrlPlugin(
   _ctx: any,
   opts: { filename?: string },
 ) {
   return <PluginObj>{
-    name: "transform-import-meta",
+    name: "import-meta-url",
     visitor: {
       Program(path) {
         const metas: Array<NodePath<MemberExpression>> = [];
