@@ -218,7 +218,9 @@ Try to use native require and import without jiti transformations first.
 - Default: `false`
 - Environment Variable: `JITI_JSX`
 
-Enable JSX support.
+Enable JSX support using [`@babel/plugin-transform-react-jsx`](https://babeljs.io/docs/babel-plugin-transform-react-jsx).
+
+See [`test/fixtures/jsx`](./test/fixtures/jsx) for framework integration examples.
 
 ## Development
 

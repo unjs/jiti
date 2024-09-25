@@ -146,9 +146,11 @@ export interface JitiOptions {
   tryNative?: boolean;
 
   /**
-   * Enable JSX support.
+   * Enable JSX support Enable JSX support using [`@babel/plugin-transform-react-jsx`](https://babeljs.io/docs/babel-plugin-transform-react-jsx).
    *
-   * @experimental
+   * @default false
+   *
+   * You can also use `JITI_JSX=1` environment variable to enable JSX support.
    */
   jsx?: boolean | JSXOptions;
 }
