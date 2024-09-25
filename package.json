@@ -45,7 +45,7 @@
     "lint": "eslint . && prettier -c src lib test stubs",
     "lint:fix": "eslint --fix . && prettier -w src lib test stubs",
     "prepack": "pnpm build",
-    "release": "pnpm build && pnpm test && changelogen --release --prerelease --push --publish --publishTag 2x",
+    "release": "pnpm build && pnpm test && changelogen --release --push --publish",
     "test": "pnpm lint && pnpm test:types && vitest run --coverage && pnpm test:node-register && pnpm test:bun && pnpm test:native",
     "test:bun": "bun --bun test test/bun",
     "test:native": "pnpm test:native:bun && pnpm test:native:node && pnpm test:native:deno",
