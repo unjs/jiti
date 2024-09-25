@@ -52,7 +52,7 @@ export function jitiResolve(
 
   // Try native require resolve with additional extensions and /index as fallback
   try {
-    return ctx.nativeRequire.resolve(id, options);
+    return ctx.nativeRequire.resolve(id, { paths: options.paths });
   } catch (error) {
     lastError = error;
   }
