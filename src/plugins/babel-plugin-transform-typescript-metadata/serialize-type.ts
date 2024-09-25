@@ -1,54 +1,74 @@
-import { NodePath, types as t } from '@babel/core';
+/**
+ * Based on https://github.com/leonardfactory/babel-plugin-transform-typescript-metadata
+ * Copyright (c) 2019 Leonardo Ascione [MIT]
+ */
+
+import { NodePath, types as t } from "@babel/core";
 
 type InferArray<T> = T extends Array<infer A> ? A : never;
 
-type Parameter = InferArray<t.ClassMethod['params']> | t.ClassProperty;
+type Parameter = InferArray<t.ClassMethod["params"]> | t.ClassProperty;
 
 function createVoidZero() {
-  return t.unaryExpression('void', t.numericLiteral(0));
+  return t.unaryExpression("void", t.numericLiteral(0));
 }
 
 /**
- * Given a paramater (or class property) node it returns the first identifier
+ * Given a parameter (or class property) node it returns the first identifier
  * containing the TS Type Annotation.
  *
  * @todo Array and Objects spread are not supported.
  * @todo Rest parameters are not supported.
  */
-function getTypedNode(param: Parameter): t.Identifier | t.ClassProperty | t.ObjectPattern | null {
-  if (param == null) { return null; }
+function getTypedNode(
+  param: Parameter,
+): t.Identifier | t.ClassProperty | t.ObjectPattern | null {
+  if (param == null) {
+    return null;
+  }
 
-  if (param.type === 'ClassProperty') { return param; }
-  if (param.type === 'Identifier') { return param; }
-  if (param.type === 'ObjectPattern') { return param; }
+  if (param.type === "ClassProperty") {
+    return param;
+  }
+  if (param.type === "Identifier") {
+    return param;
+  }
+  if (param.type === "ObjectPattern") {
+    return param;
+  }
 
-  if (param.type === 'AssignmentPattern' && param.left.type === 'Identifier')
-    { return param.left; }
+  if (param.type === "AssignmentPattern" && param.left.type === "Identifier") {
+    return param.left;
+  }
 
-  if (param.type === 'TSParameterProperty')
-    { return getTypedNode(param.parameter); }
+  if (param.type === "TSParameterProperty") {
+    return getTypedNode(param.parameter);
+  }
 
   return null;
 }
 
 export function serializeType(
   classPath: NodePath<t.ClassDeclaration>,
-  param: Parameter
+  param: Parameter,
 ) {
   const node = getTypedNode(param);
-  if (node == null) { return createVoidZero(); }
+  if (node == null) {
+    return createVoidZero();
+  }
 
-  if (!node.typeAnnotation || node.typeAnnotation.type !== 'TSTypeAnnotation')
-    { return createVoidZero(); }
+  if (!node.typeAnnotation || node.typeAnnotation.type !== "TSTypeAnnotation") {
+    return createVoidZero();
+  }
 
   const annotation = node.typeAnnotation.typeAnnotation;
-  const className = classPath.node.id ? classPath.node.id.name : '';
+  const className = classPath.node.id ? classPath.node.id.name : "";
   return serializeTypeNode(className, annotation);
 }
 
 function serializeTypeReferenceNode(
   className: string,
-  node: t.TSTypeReference
+  node: t.TSTypeReference,
 ) {
   /**
    * We need to save references to this type since it is going
@@ -64,7 +84,7 @@ function serializeTypeReferenceNode(
    * ReferenceError at runtime due to babel transpile output.
    */
   if (isClassType(className, reference)) {
-    return t.identifier('Object');
+    return t.identifier("Object");
   }
 
   /**
@@ -75,12 +95,12 @@ function serializeTypeReferenceNode(
    */
   return t.conditionalExpression(
     t.binaryExpression(
-      '===',
-      t.unaryExpression('typeof', reference),
-      t.stringLiteral('undefined')
+      "===",
+      t.unaryExpression("typeof", reference),
+      t.stringLiteral("undefined"),
     ),
-    t.identifier('Object'),
-    t.cloneDeep(reference)
+    t.identifier("Object"),
+    t.cloneDeep(reference),
   );
 }
 
@@ -91,24 +111,24 @@ function serializeTypeReferenceNode(
  */
 export function isClassType(className: string, node: t.Expression): boolean {
   switch (node.type) {
-    case 'Identifier': {
+    case "Identifier": {
       return node.name === className;
     }
-    case 'MemberExpression': {
+    case "MemberExpression": {
       return isClassType(className, node.object);
     }
     default: {
       throw new Error(
-        `The property expression at ${node.start} is not valid as a Type to be used in Reflect.metadata`
+        `The property expression at ${node.start} is not valid as a Type to be used in Reflect.metadata`,
       );
     }
   }
 }
 
 function serializeReference(
-  typeName: t.Identifier | t.TSQualifiedName
+  typeName: t.Identifier | t.TSQualifiedName,
 ): t.Identifier | t.MemberExpression {
-  if (typeName.type === 'Identifier') {
+  if (typeName.type === "Identifier") {
     return t.identifier(typeName.name);
   }
   return t.memberExpression(serializeReference(typeName.left), typeName.right);
@@ -129,107 +149,108 @@ type SerializedType =
  */
 function serializeTypeNode(className: string, node: t.TSType): SerializedType {
   if (node === undefined) {
-    return t.identifier('Object');
+    return t.identifier("Object");
   }
 
   switch (node.type) {
-    case 'TSVoidKeyword':
-    case 'TSUndefinedKeyword':
-    case 'TSNullKeyword':
-    case 'TSNeverKeyword': {
+    case "TSVoidKeyword":
+    case "TSUndefinedKeyword":
+    case "TSNullKeyword":
+    case "TSNeverKeyword": {
       return createVoidZero();
     }
 
-    case 'TSParenthesizedType': {
+    case "TSParenthesizedType": {
       return serializeTypeNode(className, node.typeAnnotation);
     }
 
-    case 'TSFunctionType':
-    case 'TSConstructorType': {
-      return t.identifier('Function');
+    case "TSFunctionType":
+    case "TSConstructorType": {
+      return t.identifier("Function");
     }
 
-    case 'TSArrayType':
-    case 'TSTupleType': {
-      return t.identifier('Array');
+    case "TSArrayType":
+    case "TSTupleType": {
+      return t.identifier("Array");
     }
 
-    case 'TSTypePredicate':
-    case 'TSBooleanKeyword': {
-      return t.identifier('Boolean');
+    case "TSTypePredicate":
+    case "TSBooleanKeyword": {
+      return t.identifier("Boolean");
     }
 
-    case 'TSStringKeyword': {
-      return t.identifier('String');
+    case "TSStringKeyword": {
+      return t.identifier("String");
     }
 
-    case 'TSObjectKeyword': {
-      return t.identifier('Object');
+    case "TSObjectKeyword": {
+      return t.identifier("Object");
     }
 
-    case 'TSLiteralType': {
+    case "TSLiteralType": {
       switch (node.literal.type) {
-        case 'StringLiteral': {
-          return t.identifier('String');
+        case "StringLiteral": {
+          return t.identifier("String");
         }
 
-        case 'NumericLiteral': {
-          return t.identifier('Number');
+        case "NumericLiteral": {
+          return t.identifier("Number");
         }
 
-        case 'BooleanLiteral': {
-          return t.identifier('Boolean');
+        case "BooleanLiteral": {
+          return t.identifier("Boolean");
         }
 
         default: {
           /**
            * @todo Use `path` error building method.
            */
-          throw new Error('Bad type for decorator' + node.literal);
+          throw new Error("Bad type for decorator" + node.literal);
         }
       }
     }
 
-    case 'TSNumberKeyword':
-    case 'TSBigIntKeyword' as any: { // Still not in ``@babel/core` typings
-      return t.identifier('Number');
+    case "TSNumberKeyword":
+    case "TSBigIntKeyword" as any: {
+      // Still not in ``@babel/core` typings
+      return t.identifier("Number");
     }
 
-    case 'TSSymbolKeyword': {
-      return t.identifier('Symbol');
+    case "TSSymbolKeyword": {
+      return t.identifier("Symbol");
     }
 
-    case 'TSTypeReference': {
+    case "TSTypeReference": {
       return serializeTypeReferenceNode(className, node);
     }
 
-    case 'TSIntersectionType':
-    case 'TSUnionType': {
+    case "TSIntersectionType":
+    case "TSUnionType": {
       return serializeTypeList(className, node.types);
     }
 
-    case 'TSConditionalType': {
+    case "TSConditionalType": {
       return serializeTypeList(className, [node.trueType, node.falseType]);
     }
 
-    case 'TSTypeQuery':
-    case 'TSTypeOperator':
-    case 'TSIndexedAccessType':
-    case 'TSMappedType':
-    case 'TSTypeLiteral':
-    case 'TSAnyKeyword':
-    case 'TSUnknownKeyword':
-    case 'TSThisType': {
+    case "TSTypeQuery":
+    case "TSTypeOperator":
+    case "TSIndexedAccessType":
+    case "TSMappedType":
+    case "TSTypeLiteral":
+    case "TSAnyKeyword":
+    case "TSUnknownKeyword":
+    case "TSThisType": {
       // case SyntaxKind.ImportType:
       break;
     }
 
     default: {
-      throw new Error('Bad type for decorator');
+      throw new Error("Bad type for decorator");
     }
   }
 
-  return t.identifier('Object');
+  return t.identifier("Object");
 }
 
 /**
@@ -240,20 +261,20 @@ function serializeTypeNode(className: string, node: t.TSType): SerializedType {
  */
 function serializeTypeList(
   className: string,
-  types: ReadonlyArray<t.TSType>
+  types: ReadonlyArray<t.TSType>,
 ): SerializedType {
   let serializedUnion: SerializedType | undefined;
 
   for (let typeNode of types) {
-    while (typeNode.type === 'TSParenthesizedType') {
+    while (typeNode.type === "TSParenthesizedType") {
       typeNode = typeNode.typeAnnotation; // Skip parens if need be
     }
-    if (typeNode.type === 'TSNeverKeyword') {
+    if (typeNode.type === "TSNeverKeyword") {
       continue; // Always elide `never` from the union/intersection if possible
     }
     if (
-      typeNode.type === 'TSNullKeyword' ||
-      typeNode.type === 'TSUndefinedKeyword'
+      typeNode.type === "TSNullKeyword" ||
+      typeNode.type === "TSUndefinedKeyword"
     ) {
       continue; // Elide null and undefined from unions for metadata, just like what we did prior to the implementation of strict null checks
     }
@@ -261,7 +282,7 @@ function serializeTypeList(
 
     if (
       t.isIdentifier(serializedIndividual) &&
-      serializedIndividual.name === 'Object'
+      serializedIndividual.name === "Object"
     ) {
       // One of the individual is global object, return immediately
       return serializedIndividual;
@@ -275,7 +296,7 @@ function serializeTypeList(
         !t.isIdentifier(serializedIndividual) ||
         serializedUnion.name !== serializedIndividual.name
       ) {
-        return t.identifier('Object');
+        return t.identifier("Object");
       }
     } else {
       // Initialize the union type
