@@ -20,11 +20,14 @@ export function getCache(
   const sourceHash = ` /* v${CACHE_VERSION}-${md5(topts.source, 16)} */\n`;
 
   // Compute cache file path
-  const cacheName =
+  let cacheName =
     `${basename(dirname(topts.filename))}-${filename(topts.filename)}` +
     (topts.interopDefault ? ".i" : "") +
     `.${md5(topts.filename)}` +
     (topts.async ? ".mjs" : ".cjs");
+  if (topts.jsx && topts.filename.endsWith("x") /* jsx */) {
+    cacheName += "x";
+  }
   const cacheDir = ctx.opts.fsCache as string;
   const cacheFilePath = join(cacheDir, cacheName);
 

@@ -53,6 +53,7 @@ describe("fixtures", async () => {
           stdio: "pipe",
           env: {
             JITI_CACHE: "false",
+            JITI_JSX: "true",
           },
         },
       });

@@ -144,6 +144,13 @@ export interface JitiOptions {
    * Enabled if Bun is detected.
    */
   tryNative?: boolean;
+
+  /**
+   * Enable JSX support.
+   *
+   * @experimental
+   */
+  jsx?: boolean | JSXOptions;
 }
 
 export type ModuleCache = Record<string, NodeModule>;
@@ -163,6 +170,7 @@ export interface TransformOptions {
   retainLines?: boolean;
   interopDefault?: boolean;
   async: boolean;
+  jsx?: boolean | JSXOptions;
   [key: string]: any;
 }
 
@@ -175,4 +183,15 @@ export interface JitiResolveOptions {
   conditions?: string[];
   parentURL?: string | URL;
   try?: boolean;
+}
+
+/** Reference: https://babeljs.io/docs/babel-plugin-transform-react-jsx#options */
+export interface JSXOptions {
+  throwIfNamespace?: boolean;
+  runtime?: "classic" | "automatic";
+  importSource?: string;
+  pragma?: string;
+  pragmaFrag?: string;
+  useBuiltIns?: boolean;
+  useSpread?: boolean;
 }
