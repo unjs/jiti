@@ -8,50 +8,25 @@
 
 <!-- /automd -->
 
-Just-in-Time Typescript and ESM support for Node.js.
+> This is the active development branch. Check out [jiti/v1](https://github.com/unjs/jiti/tree/v1) for legacy v1 docs and code.
 
-> [!IMPORTANT]
-> This is the development branch for jiti v2. Check out [jiti/v1](https://github.com/unjs/jiti/tree/v1) for latest stable docs and [unjs/jiti#174](https://github.com/unjs/jiti/issues/174) for the v2 roadmap.
+## 🌟 Used in
+
+[Docusaurus](https://docusaurus.io/), [ESLint](https://github.com/eslint/eslint), [FormKit](https://formkit.com/), [Histoire](https://histoire.dev/), [Knip](https://knip.dev/), [Nitro](https://nitro.unjs.io/), [Nuxt](https://nuxt.com/), [PostCSS loader](https://github.com/webpack-contrib/postcss-loader), [Rsbuild](https://rsbuild.dev/), [Size Limit](https://github.com/ai/size-limit), [Slidev](https://sli.dev/), [Tailwindcss](https://tailwindcss.com/), [Tokenami](https://github.com/tokenami/tokenami), [UnoCSS](https://unocss.dev/), [WXT](https://wxt.dev/), [Winglang](https://www.winglang.io/), [Graphql code generator](https://the-guild.dev/graphql/codegen), [Lingui](https://lingui.dev/), [Scaffdog](https://scaff.dog/), [Storybook](https://storybook.js.org), [...UnJS ecosystem](https://unjs.io/), [...60M+ npm monthly downloads](https://npm.chart.dev/jiti), [...6M+ public repositories](https://github.com/unjs/jiti/network/dependents).
 
 ## ✅ Features
 
-- Seamless Typescript and ESM syntax support
+- Seamless Typescript and ESM syntax support for Node.js
 - Seamless interoperability between ESM and CommonJS
 - Synchronous API to replace `require()`
 - Asynchronous API to replace `import()`
-- ESM Loader support
 - Super slim and zero dependency
+- Custom resolve aliases
 - Smart syntax detection to avoid extra transforms
 - Node.js native require cache integration
 - Filesystem transpile with hard disk caches
-- Custom resolve aliases
+- ESM Loader support
 - JSX support (opt-in)
-
-## 🌟 Used by
-
-- [Docusaurus](https://docusaurus.io/)
-- [FormKit](https://formkit.com/)
-- [Histoire](https://histoire.dev/)
-- [Knip](https://knip.dev/)
-- [Nitro](https://nitro.unjs.io/)
-- [Nuxt](https://nuxt.com/)
-- [PostCSS loader](https://github.com/webpack-contrib/postcss-loader)
-- [Rsbuild](https://rsbuild.dev/)
-- [Size Limit](https://github.com/ai/size-limit)
-- [Slidev](https://sli.dev/)
-- [Tailwindcss](https://tailwindcss.com/)
-- [Tokenami](https://github.com/tokenami/tokenami)
-- [UnoCSS](https://unocss.dev/)
-- [WXT](https://wxt.dev/)
-- [Winglang](https://www.winglang.io/)
-- [Graphql code generator](https://the-guild.dev/graphql/codegen)
-- [Lingui](https://lingui.dev/)
-- [Scaffdog](https://scaff.dog/)
-- [Storybook](https://storybook.js.org)
-- [...UnJS ecosystem](https://unjs.io/)
-- [...58M+ npm monthly downloads](https://www.npmjs.com/package/jiti)
-- [...5.5M+ public repositories](https://github.com/unjs/jiti/network/dependents)
-- [ pr welcome add yours ]
 
 ## 💡 Usage
 
@@ -61,17 +36,13 @@ You can use `jiti` CLI to quickly run any script with Typescript and native ESM 
 
 ```bash
 npx jiti ./index.ts
-
-# or
-
-jiti ./index.ts
 ```
 
 ### Programmatic
 
-```js
-// --- Initialize ---
+Initialize a jiti instance:
 
+```js
 // ESM
 import { createJiti } from "jiti";
 const jiti = createJiti(import.meta.url);
@@ -79,17 +50,21 @@ const jiti = createJiti(import.meta.url);
 // CommonJS
 const { createJiti } = require("jiti");
 const jiti = createJiti(__filename);
+```
 
-// --- ESM Compatible APIs ---
+Import (async) and resolve with ESM compatibility:
 
+```js
 // jiti.import() acts like import() with Typescript support
 await jiti.import("./path/to/file.ts");
 
 // jiti.esmResolve() acts like import.meta.resolve() with additional features
 const resolvedPath = jiti.esmResolve("./src");
+```
 
-// --- CJS Compatible APIs ---
+CommonJS (sync - legacy):
 
+```js
 // jiti() acts like require() with Typescript and (non async) ESM support
 jiti("./path/to/file.ts");
 
@@ -105,9 +80,7 @@ const jiti = createJiti(import.meta.url, { debug: true });
 
 ### Register global ESM loader
 
-You can globally register jiti using [global hooks](https://nodejs.org/api/module.html#initialize).
-
-**Note:** This is an experimental approach and only tested to work on Node.js > 20. I don't recommend it and unless you have to, please prefer explicit method.
+You can globally register jiti using [global hooks](https://nodejs.org/api/module.html#initialize). (important: Requires Node.js > 20)
 
 ```js
 import "jiti/register";
@@ -118,6 +91,10 @@ Or:
 ```bash
 node --import jiti/register index.ts
 ```
+
+## 🎈 `jiti/native` 
+
+You can alias `jiti` to `jiti/native` to directly depend on runtime's [`import.meta.resolve`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta/resolve) and dynamic [`import()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import) support. This allows easing up the ecosystem transition to runtime native support by giving the same API of jiti.
 
 ## ⚙️ Options
 
@@ -149,9 +126,9 @@ By default (when is `true`), jiti uses `node_modules/.cache/jiti` (if exists) or
 
 Runtime module cache (enabled by default).
 
-Disabling allows editing code and importing same module multiple times.
+Disabling allows editing code and importing the same module multiple times.
 
-When enabled, jiti integrates with Node.js native CommonJS cache store.
+When enabled, jiti integrates with Node.js native CommonJS cache-store.
 
 ### `transform`
 
@@ -174,7 +151,7 @@ Add inline source map to transformed source for better debugging.
 - Default: `false`
 - Environment variable: `JITI_INTEROP_DEFAULT`
 
-Return the `.default` export of a module at the top-level.
+Return the `.default` export of a module at the top level.
 
 ### `alias`
 
@@ -184,7 +161,7 @@ Return the `.default` export of a module at the top-level.
 
 You can also pass an object to the environment variable for inline config. Example: `JITI_ALIAS='{"~/*": "./src/*"}' jiti ...`.
 
-Custom alias map used to resolve ids.
+Custom alias map used to resolve IDs.
 
 ### `nativeModules`
 
@@ -192,7 +169,7 @@ Custom alias map used to resolve ids.
 - Default: ['typescript`]
 - Environment variable: `JITI_NATIVE_MODULES`
 
-List of modules (within `node_modules`) to always use native require for them.
+List of modules (within `node_modules`) to always use native `require()` for them.
 
 ### `transformModules`
 
