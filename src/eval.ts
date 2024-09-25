@@ -1,7 +1,6 @@
 import { Module } from "node:module";
 import { performance } from "node:perf_hooks";
 import vm from "node:vm";
-import { pathToFileURL } from "node:url";
 import { dirname, basename, extname } from "pathe";
 import { hasESMSyntax } from "mlly";
 import {
@@ -10,12 +9,7 @@ import {
   readNearestPackageJSON,
   wrapModule,
 } from "./utils";
-import type {
-  ModuleCache,
-  Context,
-  EvalModuleOptions,
-  JitiResolveOptions,
-} from "./types";
+import type { ModuleCache, Context, EvalModuleOptions } from "./types";
 import { jitiResolve } from "./resolve";
 import { jitiRequire, nativeImportOrRequire } from "./require";
 import createJiti from "./jiti";
@@ -151,18 +145,6 @@ export function evalModule(
     }
   }
 
-  // import.meta.resolve polyfill
-  // TODO: Make esmResolve more consistent with this
-  const importMetaResolve = (id: string, opts?: string | JitiResolveOptions) =>
-    pathToFileURL(
-      _jiti.esmResolve(
-        id,
-        typeof opts === "string"
-          ? { parentURL: opts }
-          : { parentURL: mod.filename, ...opts },
-      ),
-    ).href;
-
   // Evaluate module
   let evalResult;
   try {
@@ -173,7 +155,7 @@ export function evalModule(
       mod.filename,
       dirname(mod.filename),
       _jiti.import,
-      importMetaResolve,
+      _jiti.esmResolve,
     );
   } catch (error: any) {
     if (ctx.opts.moduleCache) {
