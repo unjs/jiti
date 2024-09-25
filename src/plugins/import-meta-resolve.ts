@@ -1,7 +1,5 @@
-import { pathToFileURL } from "node:url";
-import { smart } from "@babel/template";
 import type { NodePath, PluginObj } from "@babel/core";
-import type { Statement, MemberExpression } from "@babel/types";
+import type { MemberExpression } from "@babel/types";
 
 export default function importMetaResolvePlugin(_ctx: any) {
   return <PluginObj>{

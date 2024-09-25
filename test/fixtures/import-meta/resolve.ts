@@ -1,1 +1,1 @@
-console.log("r:", await import.meta.resolve!("./resolve.ts"));
+console.log(import.meta.resolve!("./resolve.ts"));
