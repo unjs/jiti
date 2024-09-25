@@ -51,6 +51,8 @@ exports[`fixtures > hashbang > stdout 1`] = `"1"`;
 
 exports[`fixtures > import-map > stdout 1`] = `"{ alias: 'alias' }"`;
 
+exports[`fixtures > import-meta > stdout 1`] = `"hello! { hello: 'world' }"`;
+
 exports[`fixtures > json > stdout 1`] = `
 "Imported : { test: 123 } .default: { test: 123 }
 Imported with assertion : { test: 123 } .default: { test: 123 }
