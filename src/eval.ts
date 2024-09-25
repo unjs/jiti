@@ -45,7 +45,7 @@ export function evalModule(
       ctx.isTransformRe.test(filename) ||
       hasESMSyntax(source));
   const start = performance.now();
-  if (needsTranspile || (ctx.opts.jsx && ext === ".jsx") || ext === ".tsx") {
+  if (needsTranspile || (ctx.opts.jsx && (ext === ".jsx" || ext === ".tsx"))) {
     source = transform(ctx, {
       filename,
       source,
