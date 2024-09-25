@@ -1,4 +1,5 @@
 import "reflect-metadata";
+
 function decorator(...args: any) {
   console.log("Decorator called with " + args.length + " arguments.");
 }
@@ -7,7 +8,7 @@ function anotherDecorator() {
   return function (object: any, propertyName: any) {
     console.log(
       "Decorator metadata keys: " +
-        Reflect.getMetadataKeys(object, propertyName),
+        Reflect.getMetadataKeys?.(object, propertyName),
     );
   };
 }

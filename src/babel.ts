@@ -9,7 +9,7 @@ import syntaxImportAssertionsPlugin from "@babel/plugin-syntax-import-assertions
 import transformExportNamespaceFromPlugin from "@babel/plugin-transform-export-namespace-from";
 import transformTypeScriptPlugin from "@babel/plugin-transform-typescript";
 import parameterDecoratorPlugin from "babel-plugin-parameter-decorator";
-import transformTypeScriptMetaPlugin from "babel-plugin-transform-typescript-metadata";
+import transformTypeScriptMetaPlugin from "./plugins/babel-plugin-transform-typescript-metadata";
 import syntaxJSXPlugin from "@babel/plugin-syntax-jsx";
 import transformReactJSX from "@babel/plugin-transform-react-jsx";
 import { TransformImportMetaPlugin } from "./plugins/babel-plugin-transform-import-meta";

@@ -83,9 +83,6 @@ importers:
       babel-plugin-parameter-decorator:
         specifier: ^1.0.16
         version: 1.0.16
-      babel-plugin-transform-typescript-metadata:
-        specifier: ^0.3.2
-        version: 0.3.2(@babel/core@7.25.2)(@babel/traverse@7.25.6)
       changelogen:
         specifier: ^0.5.7
         version: 0.5.7(magicast@0.3.5)
@@ -979,15 +976,6 @@ packages:
 
   babel-plugin-parameter-decorator@1.0.16:
     resolution: {integrity: sha512-yUT2WPTUg1JaPmRGRSF557m1HJ9vdFQInRWOkiOyO5a9HhqlXffJu+fQ2xd5+qU/35ICMrrk9eWKsHCairKA9w==}
-
-  babel-plugin-transform-typescript-metadata@0.3.2:
-    resolution: {integrity: sha512-mWEvCQTgXQf48yDqgN7CH50waTyYBeP2Lpqx4nNWab9sxEpdXVeKgfj1qYI2/TgUPQtNFZ85i3PemRtnXVYYJg==}
-    peerDependencies:
-      '@babel/core': ^7
-      '@babel/traverse': ^7
-    peerDependenciesMeta:
-      '@babel/traverse':
-        optional: true
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -3345,13 +3333,6 @@ snapshots:
   assertion-error@2.0.1: {}
 
   babel-plugin-parameter-decorator@1.0.16: {}
-
-  babel-plugin-transform-typescript-metadata@0.3.2(@babel/core@7.25.2)(@babel/traverse@7.25.6):
-    dependencies:
-      '@babel/core': 7.25.2
-      '@babel/helper-plugin-utils': 7.24.8
-    optionalDependencies:
-      '@babel/traverse': 7.25.6
 
   balanced-match@1.0.2: {}
 
