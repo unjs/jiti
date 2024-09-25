@@ -15,11 +15,19 @@ export function jitiRequire(
 ) {
   const cache = ctx.parentCache || {};
 
-  // Check for node: and file: protocol
+  // Check for node:, file:, and data: protocols
   if (id.startsWith("node:")) {
     id = id.slice(5);
   } else if (id.startsWith("file:")) {
     id = fileURLToPath(id);
+  } else if (id.startsWith("data:")) {
+    if (!opts.async) {
+      throw new Error(
+        "`data:` URLs are only supported in ESM context. Use `import` or `jiti.import` instead.",
+      );
+    }
+    debug(ctx, "[native]", "[data]", "[import]", id);
+    return nativeImportOrRequire(ctx, id, true);
   }
 
   // Check for builtin node module like fs

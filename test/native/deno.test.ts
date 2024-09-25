@@ -21,6 +21,7 @@ const ignore = new Set(
     "top-level-await",
     "exotic",
     "circular",
+    "data-uri",
     "import-map",
   ].filter(Boolean),
 );
