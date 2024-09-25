@@ -125,20 +125,24 @@ export function evalModule(
 
   // Compile wrapped script
   let compiled;
+  const wrapped = wrapModule(source, { async: evalOptions.async });
   try {
-    compiled = vm.runInThisContext(
-      wrapModule(source, { async: evalOptions.async }),
-      {
-        filename,
-        lineOffset: 0,
-        displayErrors: false,
-      },
-    );
+    compiled = vm.runInThisContext(wrapped, {
+      filename,
+      lineOffset: 0,
+      displayErrors: false,
+    });
   } catch (error: any) {
-    if (ctx.opts.moduleCache) {
-      delete ctx.nativeRequire.cache[filename];
+    if (error.name === "SyntaxError" && evalOptions.async && ctx.nativeImport) {
+      // Support cases such as import.meta.[custom]
+      debug(ctx, "[esm]", "[import]", "[fallback]", filename);
+      compiled = esmEval(wrapped, ctx.nativeImport!);
+    } else {
+      if (ctx.opts.moduleCache) {
+        delete ctx.nativeRequire.cache[filename];
+      }
+      ctx.onError!(error);
     }
-    ctx.onError!(error);
   }
 
   // Evaluate module
@@ -181,4 +185,10 @@ export function evalModule(
   }
 
   return evalOptions.async ? Promise.resolve(evalResult).then(next) : next();
+}
+
+function esmEval(code: string, nativeImport: (id: string) => Promise<any>) {
+  const uri = `data:text/javascript;base64,${Buffer.from(`export default ${code}`).toString("base64")}`;
+  return (...args: any[]) =>
+    nativeImport(uri).then((mod) => mod.default(...args));
 }
