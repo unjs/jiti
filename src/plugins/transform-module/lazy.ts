@@ -3,7 +3,7 @@
 // https://github.com/babel/babel/tree/c7bb6e0f/packages/babel-plugin-transform-modules-commonjs/src
 import { template, types as t } from "@babel/core";
 import { isSideEffectImport } from "@babel/helper-module-transforms";
-import type { CommonJSHook } from "./hooks.ts";
+import type { CommonJSHook } from "./hooks.js";
 
 type Lazy = boolean | string[] | ((source: string) => boolean);
 
