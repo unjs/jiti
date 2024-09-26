@@ -177,9 +177,9 @@ export interface TransformOptions {
   ts?: boolean;
   retainLines?: boolean;
   interopDefault?: boolean;
-  async: boolean;
+  async?: boolean;
   jsx?: boolean | JSXOptions;
-  [key: string]: any;
+  babel?: Record<string, any>;
 }
 
 export interface TransformResult {
