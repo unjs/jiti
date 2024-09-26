@@ -6,15 +6,16 @@ import { transformSync } from "@babel/core";
 import proposalDecoratorsPlugin from "@babel/plugin-proposal-decorators";
 import syntaxClassPropertiesPlugin from "@babel/plugin-syntax-class-properties";
 import syntaxImportAssertionsPlugin from "@babel/plugin-syntax-import-assertions";
+import syntaxJSXPlugin from "@babel/plugin-syntax-jsx";
 import transformExportNamespaceFromPlugin from "@babel/plugin-transform-export-namespace-from";
+import transformReactJSX from "@babel/plugin-transform-react-jsx";
 import transformTypeScriptPlugin from "@babel/plugin-transform-typescript";
 import parameterDecoratorPlugin from "babel-plugin-parameter-decorator";
 import transformTypeScriptMetaPlugin from "./plugins/babel-plugin-transform-typescript-metadata";
-import syntaxJSXPlugin from "@babel/plugin-syntax-jsx";
-import transformReactJSX from "@babel/plugin-transform-react-jsx";
-import importMetaURLPlugin from "./plugins/import-meta-url";
+import importMetaDirnamePlugin from "./plugins/import-meta-dirname";
 import importMetaEnvPlugin from "./plugins/import-meta-env";
 import importMetaResolvePlugin from "./plugins/import-meta-resolve";
+import importMetaURLPlugin from "./plugins/import-meta-url";
 import transformModulesPlugin from "./plugins/transform-module";
 import type { TransformOptions, TransformResult } from "./types";
 
@@ -37,6 +38,7 @@ export default function transform(opts: TransformOptions): TransformResult {
           async: opts.async,
         },
       ],
+      [importMetaDirnamePlugin, { filename: opts.filename }],
       [importMetaURLPlugin, { filename: opts.filename }],
       [importMetaEnvPlugin],
       [importMetaResolvePlugin],
