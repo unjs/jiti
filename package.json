@@ -29,6 +29,16 @@
   "main": "./lib/jiti.cjs",
   "module": "./lib/jiti.mjs",
   "types": "./lib/jiti.d.cts",
+  "typesVersions": {
+    "*": {
+      "register": [
+        "./lib/jiti-register.d.mts"
+      ],
+      "native": [
+        "./lib/jiti.d.mts"
+      ]
+    }
+  },
   "bin": {
     "jiti": "./lib/jiti-cli.mjs"
   },
