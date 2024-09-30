@@ -12,10 +12,9 @@ import transformReactJSX from "@babel/plugin-transform-react-jsx";
 import transformTypeScriptPlugin from "@babel/plugin-transform-typescript";
 import parameterDecoratorPlugin from "babel-plugin-parameter-decorator";
 import transformTypeScriptMetaPlugin from "./plugins/babel-plugin-transform-typescript-metadata";
-import importMetaDirnamePlugin from "./plugins/import-meta-dirname";
 import importMetaEnvPlugin from "./plugins/import-meta-env";
 import importMetaResolvePlugin from "./plugins/import-meta-resolve";
-import importMetaURLPlugin from "./plugins/import-meta-url";
+import importMetaPathsPlugin from "./plugins/import-meta-paths";
 import transformModulesPlugin from "./plugins/transform-module";
 import type { TransformOptions, TransformResult } from "./types";
 
@@ -38,8 +37,7 @@ export default function transform(opts: TransformOptions): TransformResult {
           async: opts.async,
         },
       ],
-      [importMetaDirnamePlugin, { filename: opts.filename }],
-      [importMetaURLPlugin, { filename: opts.filename }],
+      [importMetaPathsPlugin, { filename: opts.filename }],
       [importMetaEnvPlugin],
       [importMetaResolvePlugin],
       [syntaxClassPropertiesPlugin],
