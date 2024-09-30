@@ -32,7 +32,7 @@ export function evalModule(
   const cache = (evalOptions.cache || ctx.parentCache || {}) as ModuleCache;
 
   // Transpile
-  const isTypescript = ext === ".ts" || ext === ".mts" || ext === ".cts";
+  const isTypescript = /\.[cm]?tsx?$/.test(ext);
   const isESM =
     ext === ".mjs" ||
     (ext === ".js" && readNearestPackageJSON(filename)?.type === "module");
@@ -45,7 +45,7 @@ export function evalModule(
       ctx.isTransformRe.test(filename) ||
       hasESMSyntax(source));
   const start = performance.now();
-  if (needsTranspile || (ctx.opts.jsx && (ext === ".jsx" || ext === ".tsx"))) {
+  if (needsTranspile) {
     source = transform(ctx, {
       filename,
       source,

@@ -55,7 +55,10 @@ export default function transform(opts: TransformOptions): TransformResult {
   if (opts.ts) {
     _opts.plugins.push([
       transformTypeScriptPlugin,
-      { allowDeclareFields: true },
+      {
+        allowDeclareFields: true,
+        isTSX: opts.jsx && /\.[cm]?tsx$/.test(opts.filename || ""),
+      },
     ]);
     // `unshift` because these plugin must come before `@babel/plugin-syntax-class-properties`
     _opts.plugins.unshift(
