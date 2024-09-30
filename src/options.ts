@@ -9,7 +9,7 @@ export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
     ),
     debug: _booleanEnv("JITI_DEBUG", false),
     sourceMaps: _booleanEnv("JITI_SOURCE_MAPS", false),
-    interopDefault: _booleanEnv("JITI_INTEROP_DEFAULT", !false),
+    interopDefault: _booleanEnv("JITI_INTEROP_DEFAULT", true),
     extensions: _jsonEnv<string[]>("JITI_EXTENSIONS", [
       ".js",
       ".mjs",

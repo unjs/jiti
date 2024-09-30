@@ -92,7 +92,7 @@ Or:
 node --import jiti/register index.ts
 ```
 
-## 🎈 `jiti/native` 
+## 🎈 `jiti/native`
 
 You can alias `jiti` to `jiti/native` to directly depend on runtime's [`import.meta.resolve`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta/resolve) and dynamic [`import()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import) support. This allows easing up the ecosystem transition to runtime native support by giving the same API of jiti.
 
@@ -148,10 +148,12 @@ Add inline source map to transformed source for better debugging.
 ### `interopDefault`
 
 - Type: Boolean
-- Default: `false`
+- Default: `true`
 - Environment variable: `JITI_INTEROP_DEFAULT`
 
-Return the `.default` export of a module at the top level.
+Return the default export of a module at the top-level, alongside any other named exports.
+
+See [`mlly.interopDefault`](https://github.com/unjs/mlly#interopdefault) and the [implementation](https://github.com/unjs/mlly/blob/2348417d25522b98ed60ccc10eb030abb2f65744/src/cjs.ts#L59) for more info.
 
 ### `alias`
 
