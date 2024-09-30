@@ -18,8 +18,8 @@
 
 - Seamless Typescript and ESM syntax support for Node.js
 - Seamless interoperability between ESM and CommonJS
-- Synchronous API to replace `require()`
 - Asynchronous API to replace `import()`
+- Synchronous API to replace `require()` (deprecated)
 - Super slim and zero dependency
 - Custom resolve aliases
 - Smart syntax detection to avoid extra transforms
@@ -47,7 +47,7 @@ Initialize a jiti instance:
 import { createJiti } from "jiti";
 const jiti = createJiti(import.meta.url);
 
-// CommonJS
+// CommonJS (deprecated)
 const { createJiti } = require("jiti");
 const jiti = createJiti(__filename);
 ```
@@ -62,7 +62,7 @@ await jiti.import("./path/to/file.ts");
 const resolvedPath = jiti.esmResolve("./src");
 ```
 
-CommonJS (sync - legacy):
+CommonJS (sync & deprecated):
 
 ```js
 // jiti() acts like require() with Typescript and (non async) ESM support

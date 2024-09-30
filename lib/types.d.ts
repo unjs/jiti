@@ -7,7 +7,21 @@ export declare function createJiti(id: string, userOptions?: JitiOptions): Jiti;
  *
  * **Note:**It is recommended to use `await jiti.import` instead
  */
-export interface Jiti extends NodeRequire {
+export interface Jiti {
+  /** @deprecated Prefer `await jiti.import()` for better compatibility. */
+  (id: string): any;
+
+  /** @deprecated Prefer `jiti.esmResolve` for better compatibility. */
+  resolve: RequireResolve;
+
+  /** @deprecated */
+  extensions: RequireExtensions;
+
+  /** @deprecated CommonJS API */
+  main: Module | undefined;
+
+  cache: Dict<NodeModule>;
+
   /**
    * Resolved options
    */
