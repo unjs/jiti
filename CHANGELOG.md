@@ -2,6 +2,44 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.1.0
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.0.0...v2.1.0)
+
+### 🚀 Enhancements
+
+- Enable `interopDefault` by default ([#310](https://github.com/unjs/jiti/pull/310))
+- Support `import.meta.dirname` and `import.meta.filename` ([#308](https://github.com/unjs/jiti/pull/308))
+
+### 🔥 Performance
+
+- **cli:** Enable node 22 compile cache ([#312](https://github.com/unjs/jiti/pull/312))
+
+### 🩹 Fixes
+
+- Make `TransformOptions` type strict to allow auto-complete ([#305](https://github.com/unjs/jiti/pull/305))
+- Properly handle tsx ([#311](https://github.com/unjs/jiti/pull/311))
+
+### 💅 Refactors
+
+- Deprecate commonjs api ([#313](https://github.com/unjs/jiti/pull/313))
+
+### 📦 Build
+
+- Fix `/register` and `/native` subpath types for `Node10` module resolution ([#304](https://github.com/unjs/jiti/pull/304))
+
+### 🏡 Chore
+
+- Remove ext for consistency ([e4a9bae](https://github.com/unjs/jiti/commit/e4a9bae))
+- Add jsx field ([6a4e13a](https://github.com/unjs/jiti/commit/6a4e13a))
+- Update dependencies ([ee90eca](https://github.com/unjs/jiti/commit/ee90eca))
+- Lint ([85d7c41](https://github.com/unjs/jiti/commit/85d7c41))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Arya Emami ([@aryaemami59](http://github.com/aryaemami59))
+
 ## v2.0.0
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.0.0-rc.1...v2.0.0)
