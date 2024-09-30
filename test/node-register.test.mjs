@@ -13,8 +13,10 @@ for (const fixture of fixtures) {
     const promise = import(`./fixtures/${fixture}`);
     const shouldReject =
       fixture === "error-parse" || fixture === "error-runtime";
-    (await shouldReject)
-      ? assert.rejects(promise)
-      : assert.doesNotReject(promise);
+    if (await shouldReject) {
+      assert.rejects(promise);
+    } else {
+      assert.doesNotReject(promise);
+    }
   });
 }
