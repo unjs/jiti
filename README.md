@@ -151,7 +151,7 @@ Add inline source map to transformed source for better debugging.
 - Default: `true`
 - Environment variable: `JITI_INTEROP_DEFAULT`
 
-Return the default export of a module at the top-level, alongside any other named exports.
+Uses the default export of a modules (if exists), alongside any other named exports combined.
 
 See [`mlly.interopDefault`](https://github.com/unjs/mlly#interopdefault) and the [implementation](https://github.com/unjs/mlly/blob/2348417d25522b98ed60ccc10eb030abb2f65744/src/cjs.ts#L59) for more info.
 
