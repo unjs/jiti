@@ -18,6 +18,8 @@ export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
       ".tsx",
       ".mts",
       ".cts",
+      ".mtsx",
+      ".ctsx",
     ]),
     alias: _jsonEnv<Record<string, string>>("JITI_ALIAS", {}),
     nativeModules: _jsonEnv<string[]>("JITI_NATIVE_MODULES", []),
