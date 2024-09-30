@@ -37,7 +37,8 @@ exports[`fixtures > esm > stdout 1`] = `
     'at getStack (<cwd>/test)',
     'at test (<cwd>/test)',
     'at async <cwd>/index.js',
-    'at async Function.import (<root>/dist/jiti.cjs)'
+    'at async Function.import (<root>/dist/jiti.cjs)',
+    'at async file://<root>/lib/jiti-cli.mjs'
   ]
 }"
 `;
