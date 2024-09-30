@@ -92,9 +92,9 @@ export interface JitiOptions {
   sourceMaps?: boolean;
 
   /**
-   * Interop default export (disabled by default)
+   * Uses the default export of modules (if exists), alongside any other named exports combined.
    *
-   * Can be enabled using `JITI_INTEROP_DEFAULT=1` environment variable.
+   * Can be disabled using `JITI_INTEROP_DEFAULT=0` environment variable.
    */
   interopDefault?: boolean;
 
