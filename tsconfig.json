@@ -8,6 +8,7 @@
     "skipLibCheck": true,
     "allowJs": true,
     "checkJs": false,
+    "jsx": "react",
     "strict": true,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
