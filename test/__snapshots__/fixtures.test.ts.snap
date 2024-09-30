@@ -55,7 +55,9 @@ exports[`fixtures > import-meta > stdout 1`] = `
 "hello! { hello: 'world' }
 file://<cwd>/resolve.ts
 hello! custom
-file://<cwd>/resolve+custom.ts"
+file://<cwd>/resolve+custom.ts
+import.meta.dirname: <cwd>
+import.meta.filename: <cwd>/dirname.ts"
 `;
 
 exports[`fixtures > json > stdout 1`] = `
