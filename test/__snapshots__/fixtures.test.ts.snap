@@ -6,6 +6,14 @@ exports[`fixtures > circular > stdout 1`] = `"a b c"`;
 
 exports[`fixtures > data-uri > stdout 1`] = `""`;
 
+exports[`fixtures > deps > stdout 1`] = `
+"npm:config: true
+npm:etag: true
+npm:mime: true
+npm:typescript: true
+npm:moment-timezone true"
+`;
+
 exports[`fixtures > env > stdout 1`] = `
 "process.env true
 process.env.TEST true
@@ -41,11 +49,6 @@ exports[`fixtures > esm > stdout 1`] = `
     'at async file://<root>/lib/jiti-cli.mjs'
   ]
 }"
-`;
-
-exports[`fixtures > exotic > stdout 1`] = `
-"Typescript: true
-Config: true"
 `;
 
 exports[`fixtures > hashbang > stdout 1`] = `"1"`;

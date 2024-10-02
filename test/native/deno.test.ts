@@ -19,7 +19,7 @@ const ignore = new Set(
     "env",
     "typescript",
     "top-level-await",
-    "exotic",
+    "deps",
     "circular",
     "data-uri",
     "import-map",
