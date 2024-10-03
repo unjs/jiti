@@ -118,7 +118,7 @@ export function evalModule(
   mod.paths = Module._nodeModulePaths(mod.path);
 
   // Set CJS cache before eval
-  cache[filename] = mod;
+  cache[filename] = mod as ModuleCache[string];
   if (ctx.opts.moduleCache) {
     ctx.nativeRequire.cache[filename] = mod;
   }
