@@ -7,12 +7,7 @@ export declare function createJiti(id: string, userOptions?: JitiOptions): Jiti;
  *
  * **Note:**It is recommended to use `await jiti.import` instead
  */
-export interface Jiti {
-  /**
-   * Module cache
-   */
-  cache: ModuleCache;
-
+export interface Jiti extends CJSRequire {
   /**
    * Resolved options
    */
@@ -41,24 +36,6 @@ export interface Jiti {
    * Evaluate transformed code as a module
    */
   evalModule: (source: string, options?: EvalModuleOptions) => unknown;
-
-  // --- CJS ---
-  /** @deprecated Prefer `await jiti.import()` for better compatibility. */
-  (id: string): any;
-
-  /** @deprecated Prefer `jiti.esmResolve` for better compatibility. */
-  resolve: {
-    /** @deprecated */
-    (id: string, options?: { paths?: string[] | undefined }): string;
-    /** @deprecated */
-    paths(request: string): string[] | null;
-  };
-
-  /** @deprecated */
-  extensions: Record<string, (m: Module, filename: string) => any>;
-
-  /** @deprecated CommonJS API */
-  main: Module | undefined;
 }
 
 /**
@@ -184,13 +161,40 @@ export interface JitiOptions {
   jsx?: boolean | JSXOptions;
 }
 
-interface NodeModule {
+interface CJSRequire {
+  /**
+   * Module cache
+   */
+  cache: ModuleCache;
+
+  /** @deprecated Prefer `await jiti.import()` for better compatibility. */
+  (id: string): any;
+
+  /** @deprecated Prefer `jiti.esmResolve` for better compatibility. */
+  resolve: {
+    /** @deprecated */
+    (id: string, options?: { paths?: string[] | undefined }): string;
+    /** @deprecated */
+    paths(request: string): string[] | null;
+  };
+
+  /** @deprecated CommonJS API */
+  extensions: Record<
+    ".js" | ".json" | ".node",
+    (m: Module, filename: string) => any | undefined
+  >;
+
+  /** @deprecated CommonJS API */
+  main: Module | undefined;
+}
+
+export interface NodeModule {
   /**
    * `true` if the module is running during the Node.js preload
    */
   isPreloading: boolean;
   exports: any;
-  require: (id: string) => any;
+  require: CJSRequire;
   id: string;
   filename: string;
   loaded: boolean;
