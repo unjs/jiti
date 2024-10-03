@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.1.1
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.1.0...v2.1.1)
+
+### 🩹 Fixes
+
+- **types:** Add standalone types for node require ([#316](https://github.com/unjs/jiti/pull/316))
+
+### 🏡 Chore
+
+- Updarte deps ([5998e3c](https://github.com/unjs/jiti/commit/5998e3c))
+
+### ✅ Tests
+
+- Add dependency tests ([1d86ca3](https://github.com/unjs/jiti/commit/1d86ca3))
+- Ignore deps for node native register ([e7ffe04](https://github.com/unjs/jiti/commit/e7ffe04))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v2.1.0
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.0.0...v2.1.0)
