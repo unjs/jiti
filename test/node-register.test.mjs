@@ -8,7 +8,17 @@ const fixturesDir = fileURLToPath(new URL("fixtures", import.meta.url));
 
 const fixtures = await readdir(fixturesDir);
 
+const ignore = new Set(
+  [
+    // moment-timezone issue with JSON imports
+    "deps",
+  ].filter(Boolean),
+);
+
 for (const fixture of fixtures) {
+  if (ignore.has(fixture)) {
+    continue;
+  }
   test("fixtures/" + fixture + " (ESM)", async () => {
     const promise = import(`./fixtures/${fixture}`);
     const shouldReject =
