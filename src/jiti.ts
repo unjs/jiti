@@ -163,7 +163,7 @@ export default function createJiti(
         return pathToFileURL(resolved);
       },
     },
-  );
+  ) as Jiti;
 
   return jiti;
 }

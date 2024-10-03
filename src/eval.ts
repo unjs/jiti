@@ -109,7 +109,7 @@ export function evalModule(
     true /* isNested */,
   );
 
-  mod.require = _jiti;
+  mod.require = _jiti as typeof mod.require;
 
   // @ts-ignore
   mod.path = dirname(filename);

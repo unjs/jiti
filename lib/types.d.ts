@@ -181,11 +181,11 @@ interface NodeRequire {
   /** @deprecated CommonJS API */
   extensions: Record<
     ".js" | ".json" | ".node",
-    (m: Module, filename: string) => any | undefined
+    (m: NodeModule, filename: string) => any | undefined
   >;
 
   /** @deprecated CommonJS API */
-  main: Module | undefined;
+  main: NodeModule | undefined;
 }
 
 export interface NodeModule {
