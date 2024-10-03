@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.1.2
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.1.1...v2.1.2)
+
+### 🌊 Types
+
+- Use local `NodeModule` type ([718bea2](https://github.com/unjs/jiti/commit/718bea2))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v2.1.1
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.1.0...v2.1.1)
