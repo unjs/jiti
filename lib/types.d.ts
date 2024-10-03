@@ -7,7 +7,7 @@ export declare function createJiti(id: string, userOptions?: JitiOptions): Jiti;
  *
  * **Note:**It is recommended to use `await jiti.import` instead
  */
-export interface Jiti extends CJSRequire {
+export interface Jiti extends NodeRequire {
   /**
    * Resolved options
    */
@@ -161,7 +161,7 @@ export interface JitiOptions {
   jsx?: boolean | JSXOptions;
 }
 
-interface CJSRequire {
+interface NodeRequire {
   /**
    * Module cache
    */
@@ -194,7 +194,7 @@ export interface NodeModule {
    */
   isPreloading: boolean;
   exports: any;
-  require: CJSRequire;
+  require: NodeRequire;
   id: string;
   filename: string;
   loaded: boolean;
