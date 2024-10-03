@@ -8,19 +8,10 @@ export declare function createJiti(id: string, userOptions?: JitiOptions): Jiti;
  * **Note:**It is recommended to use `await jiti.import` instead
  */
 export interface Jiti {
-  /** @deprecated Prefer `await jiti.import()` for better compatibility. */
-  (id: string): any;
-
-  /** @deprecated Prefer `jiti.esmResolve` for better compatibility. */
-  resolve: RequireResolve;
-
-  /** @deprecated */
-  extensions: RequireExtensions;
-
-  /** @deprecated CommonJS API */
-  main: Module | undefined;
-
-  cache: Dict<NodeModule>;
+  /**
+   * Module cache
+   */
+  cache: ModuleCache;
 
   /**
    * Resolved options
@@ -50,6 +41,24 @@ export interface Jiti {
    * Evaluate transformed code as a module
    */
   evalModule: (source: string, options?: EvalModuleOptions) => unknown;
+
+  // --- CJS ---
+  /** @deprecated Prefer `await jiti.import()` for better compatibility. */
+  (id: string): any;
+
+  /** @deprecated Prefer `jiti.esmResolve` for better compatibility. */
+  resolve: {
+    /** @deprecated */
+    (id: string, options?: { paths?: string[] | undefined }): string;
+    /** @deprecated */
+    paths(request: string): string[] | null;
+  };
+
+  /** @deprecated */
+  extensions: Record<string, (m: Module, filename: string) => any>;
+
+  /** @deprecated CommonJS API */
+  main: Module | undefined;
 }
 
 /**
@@ -173,6 +182,28 @@ export interface JitiOptions {
    * You can also use `JITI_JSX=1` environment variable to enable JSX support.
    */
   jsx?: boolean | JSXOptions;
+}
+
+interface NodeModule {
+  /**
+   * `true` if the module is running during the Node.js preload
+   */
+  isPreloading: boolean;
+  exports: any;
+  require: (id: string) => any;
+  id: string;
+  filename: string;
+  loaded: boolean;
+  /** @deprecated since v14.6.0 Please use `require.main` and `module.children` instead. */
+  parent: NodeModule | null | undefined;
+  children: NodeModule[];
+  /**
+   * @since v11.14.0
+   *
+   * The directory name of the module. This is usually the same as the path.dirname() of the module.id.
+   */
+  path: string;
+  paths: string[];
 }
 
 export type ModuleCache = Record<string, NodeModule>;
