@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.2.0
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.1.2...v2.2.0)
+
+### 🚀 Enhancements
+
+- Use smarter proxy for `interopDefault` ([#318](https://github.com/unjs/jiti/pull/318))
+
+### 💅 Refactors
+
+- Inline interopDefault from mlly ([8826047](https://github.com/unjs/jiti/commit/8826047))
+
+### 🤖 CI
+
+- Run nightly release once ([4f9d67d](https://github.com/unjs/jiti/commit/4f9d67d))
+- Correct condition ([1384010](https://github.com/unjs/jiti/commit/1384010))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v2.1.2
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.1.1...v2.1.2)
