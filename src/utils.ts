@@ -111,7 +111,11 @@ function interopDefault(
     return sourceModule;
   }
   const defaultValue = sourceModule.default;
-  if (defaultValue === undefined || defaultValue === null) {
+  if (
+    defaultValue === undefined ||
+    defaultValue === null ||
+    !Object.isExtensible(defaultValue)
+  ) {
     return sourceModule;
   }
   const _defaultType = typeof defaultValue;
@@ -132,8 +136,8 @@ function interopDefault(
           },
         });
       }
-    } catch {
-      // Ignore error
+    } catch (error_) {
+      console.log(error_);
     }
   }
   return defaultValue;

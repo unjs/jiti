@@ -4,3 +4,4 @@ import "./etag";
 import "./mime";
 import "./typescript";
 import "./moment";
+import "./zod";
