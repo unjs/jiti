@@ -51,6 +51,7 @@ jobs:
         if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 22 }}
       - name: nightly release
         if: |
+          ${{ matrix.os == 'ubuntu-latest' && matrix.node == 22 }} &&
           github.event_name == 'push' &&
           !contains(github.event.head_commit.message, '[skip-release]') &&
           !startsWith(github.event.head_commit.message, 'docs')
