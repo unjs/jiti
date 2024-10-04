@@ -112,14 +112,14 @@ function interopDefault(mod: any): any {
     return mod;
   }
 
+  const modKeys = Object.getOwnPropertyNames(mod);
+  if (modKeys.length === 1 || (modKeys.length === 2 && "__esModule" in mod)) {
+    return defaultExport;
+  }
+
   const defaultExportType = typeof defaultExport;
   if (defaultExportType !== "object" && defaultExportType !== "function") {
     return mod;
-  }
-
-  const modKeys = Object.getOwnPropertyNames(mod);
-  if (modKeys.length === 1) {
-    return defaultExport;
   }
 
   return new Proxy(mod, {
