@@ -2,7 +2,7 @@ import { lstatSync, accessSync, constants, readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { isAbsolute, join } from "pathe";
 import type { PackageJson } from "pkg-types";
-import { interopDefault as mllyInteropDefault, pathToFileURL } from "mlly";
+import { pathToFileURL } from "mlly";
 import { isWindows } from "std-env";
 import type { Context } from "./types";
 import { gray, green, blue, yellow, cyan, red } from "yoctocolors";
@@ -99,7 +99,44 @@ export function debug(ctx: Context, ...args: unknown[]) {
 }
 
 export function jitiInteropDefault(ctx: Context, mod: any) {
-  return ctx.opts.interopDefault ? mllyInteropDefault(mod) : mod;
+  return ctx.opts.interopDefault ? interopDefault(mod) : mod;
+}
+
+// Source: https://github.com/unjs/mlly/blob/2348417d25522b98ed60ccc10eb030abb2f65744/src/cjs.ts#L59C1-L93C2
+function interopDefault(
+  sourceModule: any,
+  opts: { preferNamespace?: boolean } = {},
+): any {
+  if (!isObject(sourceModule) || !("default" in sourceModule)) {
+    return sourceModule;
+  }
+  const defaultValue = sourceModule.default;
+  if (defaultValue === undefined || defaultValue === null) {
+    return sourceModule;
+  }
+  const _defaultType = typeof defaultValue;
+  if (
+    _defaultType !== "object" &&
+    !(_defaultType === "function" && !opts.preferNamespace)
+  ) {
+    return opts.preferNamespace ? sourceModule : defaultValue;
+  }
+  for (const key in sourceModule) {
+    try {
+      if (!(key in defaultValue)) {
+        Object.defineProperty(defaultValue, key, {
+          enumerable: key !== "default",
+          configurable: key !== "default",
+          get() {
+            return sourceModule[key];
+          },
+        });
+      }
+    } catch {
+      // Ignore error
+    }
+  }
+  return defaultValue;
 }
 
 export function normalizeWindowsImportId(id: string) {
