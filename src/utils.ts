@@ -125,15 +125,15 @@ function interopDefault(mod: any): any {
   return new Proxy(mod, {
     get(target, prop, receiver) {
       if (prop === "__esModule") {
-        return true; // Bypass other interops
+        return true;
+      }
+      if (prop === "default") {
+        return defaultExport;
       }
       if (Reflect.has(target, prop)) {
         return Reflect.get(target, prop, receiver);
       }
-      let fallback =
-        prop === "default"
-          ? defaultExport
-          : Reflect.get(defaultExport, prop, receiver);
+      let fallback = Reflect.get(defaultExport, prop, receiver);
       if (typeof fallback === "function") {
         fallback = fallback.bind(defaultExport);
       }
