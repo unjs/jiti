@@ -102,45 +102,52 @@ export function jitiInteropDefault(ctx: Context, mod: any) {
   return ctx.opts.interopDefault ? interopDefault(mod) : mod;
 }
 
-// Source: https://github.com/unjs/mlly/blob/2348417d25522b98ed60ccc10eb030abb2f65744/src/cjs.ts#L59C1-L93C2
-function interopDefault(
-  sourceModule: any,
-  opts: { preferNamespace?: boolean } = {},
-): any {
-  if (!isObject(sourceModule) || !("default" in sourceModule)) {
-    return sourceModule;
+function interopDefault(mod: any): any {
+  if (!mod || !("default" in mod)) {
+    return mod;
   }
-  const defaultValue = sourceModule.default;
-  if (
-    defaultValue === undefined ||
-    defaultValue === null ||
-    !Object.isExtensible(defaultValue)
-  ) {
-    return sourceModule;
+
+  const defaultExport = mod.default;
+  if (defaultExport === undefined || defaultExport === null) {
+    return mod;
   }
-  const _defaultType = typeof defaultValue;
-  if (
-    _defaultType !== "object" &&
-    !(_defaultType === "function" && !opts.preferNamespace)
-  ) {
-    return opts.preferNamespace ? sourceModule : defaultValue;
+
+  const defaultExportType = typeof defaultExport;
+  if (defaultExportType !== "object" && defaultExportType !== "function") {
+    return mod;
   }
-  for (const key in sourceModule) {
-    try {
-      if (!(key in defaultValue)) {
-        Object.defineProperty(defaultValue, key, {
-          enumerable: key !== "default",
-          configurable: key !== "default",
-          get() {
-            return sourceModule[key];
-          },
-        });
+
+  const modKeys = Object.getOwnPropertyNames(mod);
+  if (modKeys.length === 1) {
+    return defaultExport;
+  }
+
+  return new Proxy(mod, {
+    get(target, prop, receiver) {
+      if (prop === "__esModule") {
+        return true; // Bypass other interops
       }
-    } catch (error_) {
-      console.log(error_);
-    }
-  }
-  return defaultValue;
+      if (Reflect.has(target, prop)) {
+        return Reflect.get(target, prop, receiver);
+      }
+      let fallback =
+        prop === "default"
+          ? defaultExport
+          : Reflect.get(defaultExport, prop, receiver);
+      if (typeof fallback === "function") {
+        fallback = fallback.bind(defaultExport);
+      }
+      return fallback;
+    },
+    apply(target, thisArg, args) {
+      if (typeof target === "function") {
+        return Reflect.apply(target, thisArg, args);
+      }
+      if (defaultExportType === "function") {
+        return Reflect.apply(defaultExport, thisArg, args);
+      }
+    },
+  });
 }
 
 export function normalizeWindowsImportId(id: string) {

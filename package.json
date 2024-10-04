@@ -94,6 +94,7 @@
     "changelogen": "^0.5.7",
     "config": "^3.3.12",
     "consola": "^3.2.3",
+    "defu": "^6.1.4",
     "destr": "^2.0.3",
     "escape-string-regexp": "^5.0.0",
     "eslint": "^9.11.1",

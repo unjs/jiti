@@ -8,10 +8,13 @@ exports[`fixtures > data-uri > stdout 1`] = `""`;
 
 exports[`fixtures > deps > stdout 1`] = `
 "npm:config: true
+npm:defu {}
+npm:destr true
 npm:etag: true
 npm:mime: true
 npm:typescript: true
-npm:moment-timezone true"
+npm:moment-timezone true
+npm:zod: true"
 `;
 
 exports[`fixtures > env > stdout 1`] = `
@@ -35,8 +38,8 @@ exports[`fixtures > error-runtime > stderr 1`] = `"test error"`;
 exports[`fixtures > error-runtime > stdout 1`] = `""`;
 
 exports[`fixtures > esm > stdout 1`] = `
-"{ utilsLib: { utils: { default: 'default' }, version: '123' } }
-{ utils: { default: 'default' } }
+"{ utilsLib: { utils: { a: 'a', default: 'default' }, version: '123' } }
+{ utils: { a: 'a', default: 'default' } }
 {
   file: '<cwd>/test.js',
   dir: '<cwd>',
