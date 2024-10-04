@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.2.1
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.2.0...v2.2.1)
+
+### 🩹 Fixes
+
+- Bump cache version ([3acd097](https://github.com/unjs/jiti/commit/3acd097))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v2.2.0
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.1.2...v2.2.0)
