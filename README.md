@@ -29,7 +29,7 @@
 - JSX support (opt-in)
 
 > [!IMPORTANT]
-> To enhance npm compatibility with the introduction of native ESM, jiti `>=2.1` enabled [`interopdefault`](https://github.com/unjs/jiti#interopdefault) using a new Proxy. This may cause behavior changes, especially if you migrated to `2.0.0` earlier, you might need to explicitly use the `.default` value of `jiti()`/`jiti.import()`.
+> To enhance npm compatibility with the introduction of native ESM, jiti `>=2.1` enabled [`interopdefault`](#interopdefault) using a new Proxy. This may cause behavior changes, especially if you migrated to `2.0.0` earlier.
 
 ## 💡 Usage
 
@@ -58,20 +58,27 @@ const jiti = createJiti(__filename);
 Import (async) and resolve with ESM compatibility:
 
 ```js
-// jiti.import() acts like import() with TypeScript support
-await jiti.import("./path/to/file.ts");
+// jiti.import(id) is similar to import(id)
+const mod = await jiti.import("./path/to/file.ts");
 
-// jiti.esmResolve() acts like import.meta.resolve() with additional features
+// jiti.esmResolve(id) is similar to import.meta.resolve(id)
 const resolvedPath = jiti.esmResolve("./src");
+```
+
+If you need the default export of module, you can use `jiti.import(id, { default: true })` as shortcut to `mod.default ?? mod`.
+
+```js
+// shortcut to mod.default ?? mod
+const modDefault = await jiti.import("./path/to/file.ts", { default: true });
 ```
 
 CommonJS (sync & deprecated):
 
 ```js
-// jiti() acts like require() with TypeScript and (non async) ESM support
-jiti("./path/to/file.ts");
+// jiti() is similar to require(id)
+const mod = jiti("./path/to/file.ts");
 
-// jiti.resolve() acts like require.resolve() with additional features
+// jiti.resolve() is similar to require.resolve(id)
 const resolvedPath = jiti.resolve("./src");
 ```
 

@@ -15,8 +15,13 @@ export interface Jiti extends NodeRequire {
 
   /**
    * ESM import a module with additional Typescript and ESM compatibility.
+   *
+   * If you need the default export of module, you can use `jiti.import(id, { default: true })` as shortcut to `mod.default ?? mod`.
    */
-  import(id: string, opts?: JitiResolveOptions): Promise<unknown>;
+  import(
+    id: string,
+    opts?: JitiResolveOptions & { default?: true },
+  ): Promise<unknown>;
 
   /**
    * Resolve with ESM import conditions.
