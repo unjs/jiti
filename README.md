@@ -23,10 +23,13 @@
 - Super slim and zero dependency
 - Custom resolve aliases
 - Smart syntax detection to avoid extra transforms
-- Node.js native require cache integration
+- Node.js native `require.cache` integration
 - Filesystem transpile with hard disk caches
 - ESM Loader support
 - JSX support (opt-in)
+
+> [!IMPORTANT]
+> To enhance npm compatibility with the introduction of native ESM, jiti `>=2.1` enabled [`interopdefault`](https://github.com/unjs/jiti#interopdefault) using a new Proxy. This may cause behavior changes, especially if you migrated to `2.0.0` earlier, you might need to explicitly use the `.default` value of `jiti()`/`jiti.import()`.
 
 ## 💡 Usage
 
@@ -72,7 +75,7 @@ jiti("./path/to/file.ts");
 const resolvedPath = jiti.resolve("./src");
 ```
 
-You can also pass options as second argument:
+You can also pass options as the second argument:
 
 ```js
 const jiti = createJiti(import.meta.url, { debug: true });
@@ -80,7 +83,7 @@ const jiti = createJiti(import.meta.url, { debug: true });
 
 ### Register global ESM loader
 
-You can globally register jiti using [global hooks](https://nodejs.org/api/module.html#initialize). (important: Requires Node.js > 20)
+You can globally register jiti using [global hooks](https://nodejs.org/api/module.html#initialize). (Important: Requires Node.js > 20)
 
 ```js
 import "jiti/register";
@@ -116,7 +119,7 @@ Filesystem source cache (enabled by default)
 
 By default (when is `true`), jiti uses `node_modules/.cache/jiti` (if exists) or `{TMP_DIR}/jiti`.
 
-**Note:** It is recommended to keep this option enabled for better performance.
+**Note:** It is recommended that this option be enabled for better performance.
 
 ### `moduleCache`
 
