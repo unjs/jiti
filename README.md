@@ -16,7 +16,7 @@
 
 ## ✅ Features
 
-- Seamless Typescript and ESM syntax support for Node.js
+- Seamless TypeScript and ESM syntax support for Node.js
 - Seamless interoperability between ESM and CommonJS
 - Asynchronous API to replace `import()`
 - Synchronous API to replace `require()` (deprecated)
@@ -32,7 +32,7 @@
 
 ### CLI
 
-You can use `jiti` CLI to quickly run any script with Typescript and native ESM support!
+You can use `jiti` CLI to quickly run any script with TypeScript and native ESM support!
 
 ```bash
 npx jiti ./index.ts
@@ -55,7 +55,7 @@ const jiti = createJiti(__filename);
 Import (async) and resolve with ESM compatibility:
 
 ```js
-// jiti.import() acts like import() with Typescript support
+// jiti.import() acts like import() with TypeScript support
 await jiti.import("./path/to/file.ts");
 
 // jiti.esmResolve() acts like import.meta.resolve() with additional features
@@ -65,7 +65,7 @@ const resolvedPath = jiti.esmResolve("./src");
 CommonJS (sync & deprecated):
 
 ```js
-// jiti() acts like require() with Typescript and (non async) ESM support
+// jiti() acts like require() with TypeScript and (non async) ESM support
 jiti("./path/to/file.ts");
 
 // jiti.resolve() acts like require.resolve() with additional features
@@ -168,7 +168,7 @@ Custom alias map used to resolve IDs.
 ### `nativeModules`
 
 - Type: Array
-- Default: ['typescript`]
+- Default: ['typescript']
 - Environment variable: `JITI_NATIVE_MODULES`
 
 List of modules (within `node_modules`) to always use native `require()` for them.
