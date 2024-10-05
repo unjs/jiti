@@ -65,10 +65,10 @@ const mod = await jiti.import("./path/to/file.ts");
 const resolvedPath = jiti.esmResolve("./src");
 ```
 
-If you need the default export of module, you can use `jiti.import(id, { default: true })` as shortcut to `mod.default ?? mod`.
+If you need the default export of module, you can use `jiti.import(id, { default: true })` as shortcut to `mod?.default ?? mod`.
 
 ```js
-// shortcut to mod.default ?? mod
+// shortcut to mod?.default ?? mod
 const modDefault = await jiti.import("./path/to/file.ts", { default: true });
 ```
 
