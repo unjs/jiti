@@ -29,7 +29,7 @@
 - JSX support (opt-in)
 
 > [!IMPORTANT]
-> To enhance npm compatibility with the introduction of native ESM, jiti `>=2.1` enabled [`interopdefault`](https://github.com/unjs/jiti#interopdefault) using a new Proxy. This may cause behavior changes, especially if you migrated to `2.0.0` earlier.
+> To enhance npm compatibility with the introduction of native ESM, jiti `>=2.1` enabled [`interopdefault`](#interopdefault) using a new Proxy. This may cause behavior changes, especially if you migrated to `2.0.0` earlier.
 
 ## 💡 Usage
 
