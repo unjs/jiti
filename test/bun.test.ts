@@ -47,10 +47,10 @@ test("hmr", async () => {
   let value;
 
   await writeFile(tmpFile, "export default 1");
-  value = (await _jiti.import(tmpFile)) as any;
-  expect(value.default).toBe(1);
+  value = (await _jiti.import(tmpFile, { default: true })) as any;
+  expect(value).toBe(1);
 
   await writeFile(tmpFile, "export default 2");
-  value = (await _jiti.import(tmpFile)) as any;
-  expect(value.default).toBe(2);
+  value = (await _jiti.import(tmpFile, { default: true })) as any;
+  expect(value).toBe(2);
 });
