@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.3.1
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.3.0...v2.3.1)
+
+### 🩹 Fixes
+
+- Conditional access to `mod.default` ([8c30a94](https://github.com/unjs/jiti/commit/8c30a94))
+
+### 🏡 Chore
+
+- Update note ([f67ed60](https://github.com/unjs/jiti/commit/f67ed60))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v2.3.0
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.2.1...v2.3.0)
