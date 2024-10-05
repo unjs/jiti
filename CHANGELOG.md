@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.3.0
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.2.1...v2.3.0)
+
+### 🚀 Enhancements
+
+- Support `jiti.import(id, {default: true})` ([#323](https://github.com/unjs/jiti/pull/323))
+
+### 🩹 Fixes
+
+- **interopDefault:** Avoid `in` operator for primitive inputs ([#321](https://github.com/unjs/jiti/pull/321))
+
+### 💅 Refactors
+
+- **interopDefault:** Simplify logic for default export checks ([#322](https://github.com/unjs/jiti/pull/322))
+
+### 📖 Documentation
+
+- Fix format ([#320](https://github.com/unjs/jiti/pull/320))
+- Update interopDefault description and reference ([61891a0](https://github.com/unjs/jiti/commit/61891a0))
+- Add note about interop default ([537fa39](https://github.com/unjs/jiti/commit/537fa39))
+
+### 🏡 Chore
+
+- Update lockfile ([c1325e9](https://github.com/unjs/jiti/commit/c1325e9))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- @beer ([@iiio2](http://github.com/iiio2))
+
 ## v2.2.1
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.2.0...v2.2.1)
