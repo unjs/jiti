@@ -103,7 +103,8 @@ export function jitiInteropDefault(ctx: Context, mod: any) {
 }
 
 function interopDefault(mod: any): any {
-  if (!mod || !("default" in mod)) {
+  const modType = typeof mod;
+  if (mod === null || (modType !== "object" && modType !== "function")) {
     return mod;
   }
 
