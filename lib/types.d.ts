@@ -16,7 +16,10 @@ export interface Jiti extends NodeRequire {
   /**
    * ESM import a module with additional Typescript and ESM compatibility.
    */
-  import(id: string, opts?: JitiResolveOptions): Promise<unknown>;
+  import(
+    id: string,
+    opts?: JitiResolveOptions & { default?: true },
+  ): Promise<unknown>;
 
   /**
    * Resolve with ESM import conditions.
