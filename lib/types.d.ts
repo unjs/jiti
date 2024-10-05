@@ -92,7 +92,7 @@ export interface JitiOptions {
   sourceMaps?: boolean;
 
   /**
-   * Uses the default export of modules (if exists), alongside any other named exports combined.
+   * Jiti combines module exports with the `default` export using an internal Proxy to improve compatibility with mixed CJS/ESM usage. You can check the current implementation [here](https://github.com/unjs/jiti/blob/main/src/utils.ts#L105).
    *
    * Can be disabled using `JITI_INTEROP_DEFAULT=0` environment variable.
    */
