@@ -108,18 +108,9 @@ function interopDefault(mod: any): any {
     return mod;
   }
 
-  const defaultExport = mod.default;
-  if (defaultExport === undefined || defaultExport === null) {
-    return mod;
-  }
-
-  const modKeys = Object.getOwnPropertyNames(mod);
-  if (modKeys.length === 1 || (modKeys.length === 2 && "__esModule" in mod)) {
-    return defaultExport;
-  }
-
-  const defaultExportType = typeof defaultExport;
-  if (defaultExportType !== "object" && defaultExportType !== "function") {
+  const def = mod.default;
+  const defType = typeof def;
+  if (def === null || (defType !== "object" && defType !== "function")) {
     return mod;
   }
 
@@ -129,14 +120,14 @@ function interopDefault(mod: any): any {
         return true;
       }
       if (prop === "default") {
-        return defaultExport;
+        return def;
       }
       if (Reflect.has(target, prop)) {
         return Reflect.get(target, prop, receiver);
       }
-      let fallback = Reflect.get(defaultExport, prop, receiver);
+      let fallback = Reflect.get(def, prop, receiver);
       if (typeof fallback === "function") {
-        fallback = fallback.bind(defaultExport);
+        fallback = fallback.bind(def);
       }
       return fallback;
     },
@@ -144,8 +135,8 @@ function interopDefault(mod: any): any {
       if (typeof target === "function") {
         return Reflect.apply(target, thisArg, args);
       }
-      if (defaultExportType === "function") {
-        return Reflect.apply(defaultExport, thisArg, args);
+      if (defType === "function") {
+        return Reflect.apply(def, thisArg, args);
       }
     },
   });
