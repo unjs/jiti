@@ -223,6 +223,7 @@ export type EvalModuleOptions = Partial<{
   ext: string;
   cache: ModuleCache;
   async: boolean;
+  forceTranspile: boolean;
 }>;
 
 export interface TransformOptions {

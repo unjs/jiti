@@ -38,12 +38,11 @@ export function evalModule(
     (ext === ".js" && readNearestPackageJSON(filename)?.type === "module");
   const isCommonJS = ext === ".cjs";
   const needsTranspile =
-    !isCommonJS && // CommonJS skips transpile
-    !(isESM && evalOptions.async) && // In async mode, we can skip native ESM as well
-    (isTypescript ||
-      isESM ||
-      ctx.isTransformRe.test(filename) ||
-      hasESMSyntax(source));
+    evalOptions.forceTranspile ??
+    (!isCommonJS && // CommonJS skips transpile
+      !(isESM && evalOptions.async) && // In async mode, we can skip native ESM as well
+      // prettier-ignore
+      (isTypescript || isESM || ctx.isTransformRe.test(filename) || hasESMSyntax(source)));
   const start = performance.now();
   if (needsTranspile) {
     source = transform(ctx, {
@@ -62,24 +61,35 @@ export function evalModule(
       `(${time}ms)`,
     );
   } else {
-    try {
-      debug(
-        ctx,
-        "[native]",
-        evalOptions.async ? "[import]" : "[require]",
-        filename,
-      );
-      return nativeImportOrRequire(ctx, filename, evalOptions.async);
-    } catch (error: any) {
-      debug(ctx, "Native require error:", error);
-      debug(ctx, "[fallback]", filename);
-      source = transform(ctx, {
-        filename,
-        source,
-        ts: isTypescript,
-        async: evalOptions.async ?? false,
-        jsx: ctx.opts.jsx,
+    debug(
+      ctx,
+      "[native]",
+      evalOptions.async ? "[import]" : "[require]",
+      filename,
+    );
+
+    if (evalOptions.async) {
+      return Promise.resolve(
+        nativeImportOrRequire(ctx, filename, evalOptions.async),
+      ).catch((error: any) => {
+        debug(ctx, "Native import error:", error);
+        debug(ctx, "[fallback]", filename);
+        evalModule(ctx, source, { ...evalOptions, forceTranspile: true });
       });
+    } else {
+      try {
+        return nativeImportOrRequire(ctx, filename, evalOptions.async);
+      } catch (error: any) {
+        debug(ctx, "Native require error:", error);
+        debug(ctx, "[fallback]", filename);
+        source = transform(ctx, {
+          filename,
+          source,
+          ts: isTypescript,
+          async: evalOptions.async ?? false,
+          jsx: ctx.opts.jsx,
+        });
+      }
     }
   }
 
