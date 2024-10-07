@@ -88,7 +88,7 @@ export function jitiResolve(
   throw lastError;
 }
 
-export function tryNativeRequireResolve(
+function tryNativeRequireResolve(
   ctx: Context,
   id: string,
   parentURL: URL | string,

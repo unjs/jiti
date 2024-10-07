@@ -109,7 +109,7 @@ function serializeTypeReferenceNode(
  * expression or identifier is a reference to self (class name).
  * In this case, we just emit `Object` in order to avoid ReferenceError.
  */
-export function isClassType(className: string, node: t.Expression): boolean {
+function isClassType(className: string, node: t.Expression): boolean {
   switch (node.type) {
     case "Identifier": {
       return node.name === className;

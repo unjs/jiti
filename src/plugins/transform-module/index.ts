@@ -25,7 +25,7 @@ import { transformDynamicImport } from "./dynamic-import";
 import { defineCommonJSHook, makeInvokers } from "./hooks";
 import { lazyImportsHook } from "./lazy";
 
-export interface Options extends PluginOptions {
+interface Options extends PluginOptions {
   allowCommonJSExports?: boolean;
   allowTopLevelThis?: boolean;
   importInterop?: RewriteModuleStatementsAndPrepareHeaderOptions["importInterop"];
