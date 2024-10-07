@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.3.3
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.3.2...v2.3.3)
+
+### 🩹 Fixes
+
+- **eval:** Return fallback value ([#326](https://github.com/unjs/jiti/pull/326))
+
+### 💅 Refactors
+
+- Remove some unused exports ([#327](https://github.com/unjs/jiti/pull/327))
+
+### ❤️ Contributors
+
+- Lars Kappert ([@webpro](http://github.com/webpro))
+
 ## v2.3.2
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.3.1...v2.3.2)
