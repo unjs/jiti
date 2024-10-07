@@ -69,13 +69,13 @@ export function evalModule(
     );
 
     if (evalOptions.async) {
-      return nativeImportOrRequire(ctx, filename, evalOptions.async).catch(
-        (error: any) => {
-          debug(ctx, "Native import error:", error);
-          debug(ctx, "[fallback]", filename);
-          evalModule(ctx, source, { ...evalOptions, forceTranspile: true });
-        },
-      );
+      return Promise.resolve(
+        nativeImportOrRequire(ctx, filename, evalOptions.async),
+      ).catch((error: any) => {
+        debug(ctx, "Native import error:", error);
+        debug(ctx, "[fallback]", filename);
+        evalModule(ctx, source, { ...evalOptions, forceTranspile: true });
+      });
     } else {
       try {
         return nativeImportOrRequire(ctx, filename, evalOptions.async);
