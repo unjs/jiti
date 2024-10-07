@@ -19,7 +19,7 @@ export function evalModule(
   ctx: Context,
   source: string,
   evalOptions: EvalModuleOptions = {},
-) {
+): any {
   // Resolve options
   const id =
     evalOptions.id ||
@@ -74,7 +74,10 @@ export function evalModule(
       ).catch((error: any) => {
         debug(ctx, "Native import error:", error);
         debug(ctx, "[fallback]", filename);
-        evalModule(ctx, source, { ...evalOptions, forceTranspile: true });
+        return evalModule(ctx, source, {
+          ...evalOptions,
+          forceTranspile: true,
+        });
       });
     } else {
       try {
