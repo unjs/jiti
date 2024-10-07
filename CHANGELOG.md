@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.3.2
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.3.1...v2.3.2)
+
+### 🩹 Fixes
+
+- **eval:** Fallback in async mode ([#325](https://github.com/unjs/jiti/pull/325))
+
+### 🏡 Chore
+
+- Update lockfile ([3627a56](https://github.com/unjs/jiti/commit/3627a56))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v2.3.1
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.3.0...v2.3.1)
