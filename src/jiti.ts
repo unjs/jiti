@@ -141,7 +141,10 @@ export default function createJiti(
       evalModule(source: string, options?: EvalModuleOptions) {
         return evalModule(ctx, source, options);
       },
-      async import(id: string, opts?: JitiResolveOptions & { default?: true }) {
+      async import<T = unknown>(
+        id: string,
+        opts?: JitiResolveOptions & { default?: true },
+      ): Promise<T> {
         const mod = await jitiRequire(ctx, id, { ...opts, async: true });
         return opts?.default ? (mod?.default ?? mod) : mod;
       },

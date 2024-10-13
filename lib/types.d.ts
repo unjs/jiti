@@ -18,10 +18,10 @@ export interface Jiti extends NodeRequire {
    *
    * If you need the default export of module, you can use `jiti.import(id, { default: true })` as shortcut to `mod?.default ?? mod`.
    */
-  import(
+  import<T = unknown>(
     id: string,
     opts?: JitiResolveOptions & { default?: true },
-  ): Promise<unknown>;
+  ): Promise<T>;
 
   /**
    * Resolve with ESM import conditions.
