@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.4.0
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.3.3...v2.4.0)
+
+### 🚀 Enhancements
+
+- Support generic type for `jiti.import<T>` ([#331](https://github.com/unjs/jiti/pull/331))
+
+### 🩹 Fixes
+
+- Try to resolve `.ts` files with `.js` extension from js files ([#337](https://github.com/unjs/jiti/pull/337))
+
+### 🏡 Chore
+
+- Update renovate.json ([86f11b3](https://github.com/unjs/jiti/commit/86f11b3))
+- Update deps and lockfile ([5dfb0ec](https://github.com/unjs/jiti/commit/5dfb0ec))
+- Add nvmrc ([899a782](https://github.com/unjs/jiti/commit/899a782))
+
+### 🤖 CI
+
+- Deno v2 compat ([f4d0062](https://github.com/unjs/jiti/commit/f4d0062))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+- Lars Kappert ([@webpro](http://github.com/webpro))
+- Alexander <a.hywax@gmail.com>
+
 ## v2.3.3
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.3.2...v2.3.3)
