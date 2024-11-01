@@ -34,10 +34,10 @@ jobs:
         if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 22 }}
         with:
           bun-version: latest
-      - uses: denoland/setup-deno@v1
+      - uses: denoland/setup-deno@v2
         if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 22 }}
         with:
-          deno-version: v1.x
+          deno-version: v2.x
       - run: pnpm install
       - run: pnpm lint
         if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 22 }}

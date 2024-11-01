@@ -60,7 +60,7 @@
     "test:bun": "bun --bun test test/bun",
     "test:native": "pnpm test:native:bun && pnpm test:native:node && pnpm test:native:deno",
     "test:native:bun": "bun --bun test test/native/bun.test.ts",
-    "test:native:deno": "deno test -A test/native/deno.test.ts",
+    "test:native:deno": "deno test -A --no-check test/native/deno.test.ts",
     "test:native:node": "node --test --experimental-strip-types test/native/node.test.ts",
     "test:node-register": "JITI_JSX=1 node --test test/node-register.test.mjs",
     "test:types": "tsc --noEmit"
