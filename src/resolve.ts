@@ -66,7 +66,8 @@ export function jitiResolve(
     // Try resolving .ts files with .js extension
     if (
       TS_EXT_RE.test(ctx.filename) ||
-      TS_EXT_RE.test(ctx.parentModule?.filename || "")
+      TS_EXT_RE.test(ctx.parentModule?.filename || "") ||
+      JS_EXT_RE.test(id)
     ) {
       resolved = tryNativeRequireResolve(
         ctx,
