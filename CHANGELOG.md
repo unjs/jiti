@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.4.1
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.4.0...v2.4.1)
+
+### 🩹 Fixes
+
+- Interop modules with primitive default export ([#343](https://github.com/unjs/jiti/pull/343))
+
+### 🏡 Chore
+
+- Update deps ([58d3f5f](https://github.com/unjs/jiti/commit/58d3f5f))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v2.4.0
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.3.3...v2.4.0)
