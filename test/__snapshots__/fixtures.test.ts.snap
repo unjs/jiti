@@ -11,6 +11,7 @@ exports[`fixtures > deps > stdout 1`] = `
 npm:defu {}
 npm:destr true
 npm:etag: true
+npm:is-installed-globally false
 npm:mime: true
 npm:typescript: true
 npm:moment-timezone true

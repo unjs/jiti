@@ -106,9 +106,10 @@ function interopDefault(mod: any): any {
 
   const def = mod.default;
   const defType = typeof def;
-  if (def === null || (defType !== "object" && defType !== "function")) {
+  if (def === null || def === undefined) {
     return mod;
   }
+  const defIsObj = defType === "object" || defType === "function";
 
   return new Proxy(mod, {
     get(target, prop, receiver) {
@@ -121,11 +122,13 @@ function interopDefault(mod: any): any {
       if (Reflect.has(target, prop)) {
         return Reflect.get(target, prop, receiver);
       }
-      let fallback = Reflect.get(def, prop, receiver);
-      if (typeof fallback === "function") {
-        fallback = fallback.bind(def);
+      if (defIsObj) {
+        let fallback = Reflect.get(def, prop, receiver);
+        if (typeof fallback === "function") {
+          fallback = fallback.bind(def);
+        }
+        return fallback;
       }
-      return fallback;
     },
     apply(target, thisArg, args) {
       if (typeof target === "function") {
