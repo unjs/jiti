@@ -3,6 +3,8 @@ import { execa } from "execa";
 import { describe, it, expect } from "vitest";
 import fg from "fast-glob";
 
+const nodeMajor = parseInt(process.version.slice(1), 10);
+
 describe("fixtures", async () => {
   const jitiPath = resolve(__dirname, "../bin/jiti.js");
 
@@ -47,7 +49,7 @@ describe("fixtures", async () => {
 
       if (name.includes("error")) {
         expect(cleanUpSnap(stderr)).toMatchSnapshot("stderr");
-      } else if (name === "mixed") {
+      } else if (name === "mixed" && nodeMajor >= 22) {
         expect(cleanUpSnap(stderr)).toMatchSnapshot("mixed-stderr");
       } else {
         // expect no error
