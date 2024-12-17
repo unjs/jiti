@@ -1,5 +1,3 @@
-const getStack = () => new Error("Boo").stack;
-
 require("./utils.mjs");
 
 export default async function test() {
