@@ -54,7 +54,11 @@ Required : { test: 123 } .default: { test: 123 }
 Dynamic Imported : { test: 123 } .default: { test: 123 }"
 `;
 
-exports[`fixtures > mixed > stderr 1`] = `[]`;
+exports[`fixtures > mixed > stderr 1`] = `
+[
+  "ExperimentalWarning: CommonJS module <cwd>/index.js is loading ES Module <cwd>/esm.js using require().",
+]
+`;
 
 exports[`fixtures > mixed > stdout 1`] = `"Mixed works for: <cwd>"`;
 
