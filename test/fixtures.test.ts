@@ -47,6 +47,8 @@ describe("fixtures", async () => {
 
       if (name.includes("error")) {
         expect(cleanUpSnap(stderr)).toMatchSnapshot("stderr");
+      } else if (name === "mixed") {
+        expect(cleanUpSnap(stderr)).toMatchSnapshot("mixed-stderr");
       } else {
         // expect no error
         expect(stderr).toBe("");
