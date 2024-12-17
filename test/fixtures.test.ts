@@ -56,9 +56,9 @@ describe("fixtures", async () => {
       });
 
       if (name.includes("error")) {
-        expect(extractErrors(cleanUpSnap(stderr))).toMatchSnapshot("errors");
+        expect(extractErrors(cleanUpSnap(stderr))).toMatchSnapshot("stderr");
       } else if (name === "mixed" && nodeMajor >= 22) {
-        expect(extractErrors(cleanUpSnap(stderr))).toMatchSnapshot("errors");
+        expect(extractErrors(cleanUpSnap(stderr))).toMatchSnapshot("stderr");
       } else {
         // Expect no error by default
         expect(stderr).toBe("");

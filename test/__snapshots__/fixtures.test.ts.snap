@@ -13,7 +13,7 @@ import.meta.env.TEST true
 import.meta.env?.TEST true"
 `;
 
-exports[`fixtures > error-parse > errors 1`] = `
+exports[`fixtures > error-parse > stderr 1`] = `
 [
   "Error: ParseError: \`import\` can only be used in \`import ",
 ]
@@ -21,7 +21,7 @@ exports[`fixtures > error-parse > errors 1`] = `
 
 exports[`fixtures > error-parse > stdout 1`] = `""`;
 
-exports[`fixtures > error-runtime > errors 1`] = `
+exports[`fixtures > error-runtime > stderr 1`] = `
 [
   "TypeError: The "listener" argument must be of type function. Received undefined",
 ]
@@ -34,21 +34,7 @@ exports[`fixtures > esm > stdout 1`] = `
 {
   file: '<cwd>/test.js',
   dir: '<cwd>',
-  'import.meta.url': 'file://<cwd>/test.js',
-  stack: [
-    'at getStack (<cwd>/test)',
-    'at test (<cwd>/test)',
-    'at <cwd>/index.js',
-    'at evalModule (<root>/dist/jiti)',
-    'at jiti (<root>/dist/jiti)',
-    'at Object.<anonymous> (<root>/bin/jiti)',
-    'at Module._compile (internal/modules/cjs/loader)',
-    'at Module._extensions..js (internal/modules/cjs/loader)',
-    'at Module.load (internal/modules/cjs/loader)',
-    'at Module._load (internal/modules/cjs/loader)',
-    'at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)',
-    'at internal/main/run_main_module'
-  ]
+  'import.meta.url': 'file://<cwd>/test.js'
 }"
 `;
 
