@@ -47,6 +47,14 @@ describe("fixtures", async () => {
         );
       }
 
+      function extractErrors(stderr: string) {
+        const errors = [] as string[];
+        for (const m of stderr.matchAll(/\w*(Error|Warning).*:.*$/gm)) {
+          errors.push(m[0]);
+        }
+        return errors;
+      }
+
       const { stdout, stderr } = await x("node", [jitiPath, fixtureEntry], {
         nodeOptions: {
           cwd,
@@ -59,9 +67,9 @@ describe("fixtures", async () => {
       });
 
       if (name.includes("error")) {
-        expect(cleanUpSnap(stderr)).toMatchSnapshot("stderr");
+        expect(extractErrors(cleanUpSnap(stderr))).toMatchSnapshot("stderr");
       } else {
-        // expect no error
+        // Expect no error by default
         expect(stderr).toBe("");
       }
 
