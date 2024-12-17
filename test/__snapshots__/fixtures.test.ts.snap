@@ -97,7 +97,7 @@ Enter Literal"
 `;
 
 exports[`fixtures > require-esm > require-esm-stderr 1`] = `
-"(node:36740) ExperimentalWarning: CommonJS module <cwd>/index.cjs is loading ES Module <cwd>/_dist/esm.js using require().
+"(node) ExperimentalWarning: CommonJS module <cwd>/index.cjs is loading ES Module <cwd>/_dist/esm.js using require().
 Support for loading ES Module in require() is an experimental feature and might change at any time
 (Use \`node --trace-warnings ...\` to show where the warning was created)"
 `;
