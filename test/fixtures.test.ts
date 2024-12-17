@@ -3,6 +3,11 @@ import { x } from "tinyexec";
 import { describe, it, expect } from "vitest";
 import fg from "fast-glob";
 
+const nodeMajorVersion = Number.parseInt(
+  process.versions.node.split(".")[0],
+  10,
+);
+
 describe("fixtures", async () => {
   const jitiPath = resolve(__dirname, "../lib/jiti-cli.mjs");
 
@@ -34,6 +39,7 @@ describe("fixtures", async () => {
             .replace(/ParseError: \w:\/:\s+/, "ParseError: ") // Unknown chars in Windows
             .replace("TypeError [ERR_INVALID_ARG_TYPE]:", "TypeError:")
             .replace("eval_evalModule", "evalModule")
+            .replace(/\(node:\d+\)/g, "(node)")
             // Node 18
             .replace(
               "  ErrorCaptureStackTrace(err);",
@@ -66,7 +72,10 @@ describe("fixtures", async () => {
         },
       });
 
-      if (name.includes("error")) {
+      if (
+        name.includes("error") ||
+        (nodeMajorVersion >= 22 && name === "require-esm")
+      ) {
         expect(extractErrors(cleanUpSnap(stderr))).toMatchSnapshot("stderr");
       } else {
         // Expect no error by default
