@@ -28,13 +28,18 @@ import.meta.env?.TEST true"
 `;
 
 exports[`fixtures > error-parse > stderr 1`] = `
-"[Error: ParseError: Unexpected token  
- <cwd>/index.ts:4:0]"
+[
+  "Error: ParseError: Unexpected token  ",
+]
 `;
 
 exports[`fixtures > error-parse > stdout 1`] = `""`;
 
-exports[`fixtures > error-runtime > stderr 1`] = `"test error"`;
+exports[`fixtures > error-runtime > stderr 1`] = `
+[
+  "Error: test error",
+]
+`;
 
 exports[`fixtures > error-runtime > stdout 1`] = `""`;
 
@@ -44,14 +49,7 @@ exports[`fixtures > esm > stdout 1`] = `
 {
   file: '<cwd>/test.js',
   dir: '<cwd>',
-  'import.meta.url': 'file://<cwd>/test.js',
-  stack: [
-    'at getStack (<cwd>/test)',
-    'at test (<cwd>/test)',
-    'at async <cwd>/index.js',
-    'at async Function.import (<root>/dist/jiti.cjs)',
-    'at async file://<root>/lib/jiti-cli.mjs'
-  ]
+  'import.meta.url': 'file://<cwd>/test.js'
 }"
 `;
 
@@ -96,10 +94,10 @@ Enter Identifier
 Enter Literal"
 `;
 
-exports[`fixtures > require-esm > require-esm-stderr 1`] = `
-"(node) ExperimentalWarning: CommonJS module <cwd>/index.cjs is loading ES Module <cwd>/_dist/esm.js using require().
-Support for loading ES Module in require() is an experimental feature and might change at any time
-(Use \`node --trace-warnings ...\` to show where the warning was created)"
+exports[`fixtures > require-esm > stderr 1`] = `
+[
+  "ExperimentalWarning: CommonJS module <cwd>/index.cjs is loading ES Module <cwd>/_dist/esm.js using require().",
+]
 `;
 
 exports[`fixtures > require-esm > stdout 1`] = `"Works!"`;
