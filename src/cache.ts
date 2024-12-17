@@ -22,6 +22,7 @@ export function getCache(
   // Compute cache file path
   let cacheName =
     `${basename(dirname(topts.filename))}-${filename(topts.filename)}` +
+    (ctx.opts.sourceMaps ? "+map" : "") +
     (topts.interopDefault ? ".i" : "") +
     `.${md5(topts.filename)}` +
     (topts.async ? ".mjs" : ".cjs");
