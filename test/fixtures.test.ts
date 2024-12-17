@@ -37,9 +37,9 @@ describe("fixtures", async () => {
           .trim();
       }
 
-      function extractErrors(message: string) {
+      function extractErrors(stderr: string) {
         const errors = [] as string[];
-        for (const m of message.matchAll(/\w*(Error|Warning).*:.*$/gm)) {
+        for (const m of stderr.matchAll(/\w*(Error|Warning).*:.*$/gm)) {
           errors.push(m[0]);
         }
         return errors;
@@ -58,7 +58,6 @@ describe("fixtures", async () => {
       if (name.includes("error")) {
         expect(extractErrors(cleanUpSnap(stderr))).toMatchSnapshot("stderr");
       } else if (name === "mixed" && nodeMajor >= 22) {
-        console.log(stderr);
         expect(extractErrors(cleanUpSnap(stderr))).toMatchSnapshot("stderr");
       } else {
         // Expect no error by default
