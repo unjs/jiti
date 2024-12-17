@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.4.2
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.4.1...v2.4.2)
+
+### 🩹 Fixes
+
+- **cache:** Add `+map` suffix to fs entries when `sourceMaps` enabled ([#352](https://github.com/unjs/jiti/pull/352))
+- Use native require cache of loaded entries only ([#348](https://github.com/unjs/jiti/pull/348))
+
+### 🏡 Chore
+
+- Update deps ([7b7ffef](https://github.com/unjs/jiti/commit/7b7ffef))
+
+### ✅ Tests
+
+- Simplify snapshot tests ([#351](https://github.com/unjs/jiti/pull/351))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v2.4.1
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.4.0...v2.4.1)
