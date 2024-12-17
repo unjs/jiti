@@ -1,5 +1,3 @@
-const getStack = () => new Error("Boo").stack;
-
 export default function test() {
   return {
     file: __filename,
