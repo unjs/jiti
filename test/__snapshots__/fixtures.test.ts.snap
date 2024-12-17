@@ -28,13 +28,18 @@ import.meta.env?.TEST true"
 `;
 
 exports[`fixtures > error-parse > stderr 1`] = `
-"[Error: ParseError: Unexpected token  
- <cwd>/index.ts:4:0]"
+[
+  "Error: ParseError: Unexpected token  ",
+]
 `;
 
 exports[`fixtures > error-parse > stdout 1`] = `""`;
 
-exports[`fixtures > error-runtime > stderr 1`] = `"test error"`;
+exports[`fixtures > error-runtime > stderr 1`] = `
+[
+  "Error: test error",
+]
+`;
 
 exports[`fixtures > error-runtime > stdout 1`] = `""`;
 
@@ -44,14 +49,7 @@ exports[`fixtures > esm > stdout 1`] = `
 {
   file: '<cwd>/test.js',
   dir: '<cwd>',
-  'import.meta.url': 'file://<cwd>/test.js',
-  stack: [
-    'at getStack (<cwd>/test)',
-    'at test (<cwd>/test)',
-    'at async <cwd>/index.js',
-    'at async Function.import (<root>/dist/jiti.cjs)',
-    'at async file://<root>/lib/jiti-cli.mjs'
-  ]
+  'import.meta.url': 'file://<cwd>/test.js'
 }"
 `;
 
