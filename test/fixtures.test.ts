@@ -3,7 +3,7 @@ import { execa } from "execa";
 import { describe, it, expect } from "vitest";
 import fg from "fast-glob";
 
-const nodeMajor = parseInt(process.version.slice(1), 10);
+const nodeMajor = Number.parseInt(process.version.slice(1), 10);
 
 describe("fixtures", async () => {
   const jitiPath = resolve(__dirname, "../bin/jiti.js");
