@@ -344,7 +344,10 @@ export default function createJITI(
       return _interopDefault(cache[filename]?.exports);
     }
     if (opts.requireCache && nativeRequire.cache[filename]) {
-      return _interopDefault(nativeRequire.cache[filename]?.exports);
+      const cacheEntry = nativeRequire.cache[filename];
+      if (cacheEntry?.loaded) {
+        return _interopDefault(cacheEntry.exports);
+      }
     }
 
     // Read source

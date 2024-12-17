@@ -22,9 +22,11 @@ Error: ParseError: \`import\` can only be used in \`import
  <cwd>/index.ts
     at Object.<anonymous> (<root>/bin/jiti)
     at Module._compile (internal/modules/cjs/loader)
-    at Module._extensions..js (internal/modules/cjs/loader)
+    at Object..js (internal/modules/cjs/loader)
     at Module.load (internal/modules/cjs/loader)
-    at Module._load (internal/modules/cjs/loader)
+    at Function._load (internal/modules/cjs/loader)
+    at TracingChannel.traceSync (node:diagnostics_channel)
+    at wrapModuleLoad (internal/modules/cjs/loader)
     at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)
     at internal/main/run_main_module
 
@@ -47,9 +49,11 @@ TypeError: The "listener" argument must be of type function. Received undefined
     at jiti (<root>/dist/jiti)
     at Object.<anonymous> (<root>/bin/jiti)
     at Module._compile (internal/modules/cjs/loader)
-    at Module._extensions..js (internal/modules/cjs/loader)
+    at Object..js (internal/modules/cjs/loader)
     at Module.load (internal/modules/cjs/loader)
-    at Module._load (internal/modules/cjs/loader)
+    at Function._load (internal/modules/cjs/loader)
+    at TracingChannel.traceSync (node:diagnostics_channel)
+    at wrapModuleLoad (internal/modules/cjs/loader)
     at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)
     at internal/main/run_main_module {
   code: 'ERR_INVALID_ARG_TYPE'
@@ -74,9 +78,11 @@ exports[`fixtures > esm > stdout 1`] = `
     'at jiti (<root>/dist/jiti)',
     'at Object.<anonymous> (<root>/bin/jiti)',
     'at Module._compile (internal/modules/cjs/loader)',
-    'at Module._extensions..js (internal/modules/cjs/loader)',
+    'at Object..js (internal/modules/cjs/loader)',
     'at Module.load (internal/modules/cjs/loader)',
-    'at Module._load (internal/modules/cjs/loader)',
+    'at Function._load (internal/modules/cjs/loader)',
+    'at TracingChannel.traceSync (node:diagnostics_channel)',
+    'at wrapModuleLoad (internal/modules/cjs/loader)',
     'at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)',
     'at internal/main/run_main_module'
   ]
@@ -99,8 +105,6 @@ Required : { test: 123 } .default: { test: 123 }
 Dynamic Imported : { test: 123 } .default: { test: 123 }"
 `;
 
-exports[`fixtures > mixed > stdout 1`] = `"Mixed works for: <cwd>"`;
-
 exports[`fixtures > native > stdout 1`] = `"[Module: null prototype] { default: { hasRequire: false } }"`;
 
 exports[`fixtures > proto > stdout 1`] = `"exists: true"`;
@@ -114,13 +118,12 @@ Enter Literal"
 `;
 
 exports[`fixtures > require-esm > require-esm-stderr 1`] = `
-"(node:11558) ExperimentalWarning: CommonJS module <cwd>/index.cjs is loading ES Module <cwd>/_dist/esm.js using require().
+"(node:43074) ExperimentalWarning: CommonJS module <cwd>/index.cjs is loading ES Module <cwd>/_dist/esm.js using require().
 Support for loading ES Module in require() is an experimental feature and might change at any time
-(Use \`node --trace-warnings ...\` to show where the warning was created)
-broken! { mod: { fn: {}, file: {} } }"
+(Use \`node --trace-warnings ...\` to show where the warning was created)"
 `;
 
-exports[`fixtures > require-esm > stdout 1`] = `""`;
+exports[`fixtures > require-esm > stdout 1`] = `"Works!"`;
 
 exports[`fixtures > syntax > stdout 1`] = `
 "Optional chaining: undefined
