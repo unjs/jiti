@@ -55,10 +55,9 @@ describe("fixtures", async () => {
         },
       });
 
-      if (name.includes("error") || name === "require-esm") {
+      if (name.includes("error")) {
         expect(extractErrors(cleanUpSnap(stderr))).toMatchSnapshot("stderr");
-      } else if (name === "mixed" && nodeMajor >= 22) {
-        console.log(stderr);
+      } else if (nodeMajor >= 22 && ["mixed", "require-esm"].includes(name)) {
         expect(extractErrors(cleanUpSnap(stderr))).toMatchSnapshot("stderr");
       } else {
         // Expect no error by default
