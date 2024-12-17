@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v1.21.7
+
+[compare changes](https://github.com/unjs/jiti/compare/v1.21.6...v1.21.7)
+
+### 🩹 Fixes
+
+- Use native require cache of loaded entries only (v1) ([#349](https://github.com/unjs/jiti/pull/349))
+
+### 🏡 Chore
+
+- Update test ([716777e](https://github.com/unjs/jiti/commit/716777e))
+- Update deps ([c3d53c4](https://github.com/unjs/jiti/commit/c3d53c4))
+- Add tag to release script ([3fa9807](https://github.com/unjs/jiti/commit/3fa9807))
+
+### 🤖 CI
+
+- Test against node v22 (v1) ([#350](https://github.com/unjs/jiti/pull/350))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](http://github.com/pi0))
+
 ## v1.21.6
 
 [compare changes](https://github.com/unjs/jiti/compare/v1.21.5...v1.21.6)
