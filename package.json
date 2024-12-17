@@ -20,7 +20,7 @@
     "jiti:legacy": "JITI_DEBUG=1 npx node@12 ./bin/jiti.js",
     "lint": "eslint . && prettier -c src lib test stubs",
     "lint:fix": "eslint --fix . && prettier -w src lib test stubs",
-    "release": "pnpm build && pnpm test && changelogen --release --push && npm publish",
+    "release": "pnpm build && pnpm test && changelogen --release --push && npm publish --tag 1x",
     "test": "pnpm lint && vitest run --coverage && pnpm test:bun",
     "test:bun": "bun --bun test test/bun"
   },
