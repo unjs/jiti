@@ -47,6 +47,8 @@ describe("fixtures", async () => {
 
       if (name.includes("error")) {
         expect(cleanUpSnap(stderr)).toMatchSnapshot("stderr");
+      } else if (name === "require-esm") {
+        expect(cleanUpSnap(stderr)).toMatchSnapshot("require-esm-stderr");
       } else {
         // expect no error
         expect(stderr).toBe("");
