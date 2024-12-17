@@ -113,8 +113,11 @@ export function jitiRequire(
   if (cache[filename]) {
     return jitiInteropDefault(ctx, cache[filename]?.exports);
   }
-  if (ctx.opts.moduleCache && ctx.nativeRequire.cache[filename]) {
-    return jitiInteropDefault(ctx, ctx.nativeRequire.cache[filename]?.exports);
+  if (ctx.opts.moduleCache) {
+    const cacheEntry = ctx.nativeRequire.cache[filename];
+    if (cacheEntry?.loaded) {
+      return jitiInteropDefault(ctx, cacheEntry.exports);
+    }
   }
 
   // Read source

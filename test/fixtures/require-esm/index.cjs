@@ -4,7 +4,7 @@ async function run() {
     mod = require("./_dist/esm.js");
   } catch {
     const { createJiti } = await import("../../../lib/jiti.mjs");
-    const jiti = createJiti(__filename, { interopDefault: true });
+    const jiti = createJiti(__filename);
     mod = await jiti.import("./_dist/esm.js");
   }
   mod = mod.default;
