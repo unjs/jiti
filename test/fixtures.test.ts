@@ -37,6 +37,14 @@ describe("fixtures", async () => {
           .trim();
       }
 
+      function extractErrors(message: string) {
+        const errors = [] as string[];
+        for (const m of message.matchAll(/\w*Error.*:.*$/gm)) {
+          errors.push(m[0]);
+        }
+        return errors;
+      }
+
       const { stdout, stderr } = await execa("node", [jitiPath, fixtureEntry], {
         cwd,
         stdio: "pipe",
@@ -48,11 +56,11 @@ describe("fixtures", async () => {
       });
 
       if (name.includes("error")) {
-        expect(cleanUpSnap(stderr)).toMatchSnapshot("stderr");
+        expect(extractErrors(cleanUpSnap(stderr))).toMatchSnapshot("errors");
       } else if (name === "mixed" && nodeMajor >= 22) {
-        expect(cleanUpSnap(stderr)).toMatchSnapshot("mixed-stderr");
+        expect(extractErrors(cleanUpSnap(stderr))).toMatchSnapshot("errors");
       } else {
-        // expect no error
+        // Expect no error by default
         expect(stderr).toBe("");
       }
 

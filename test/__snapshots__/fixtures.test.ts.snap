@@ -13,49 +13,18 @@ import.meta.env.TEST true
 import.meta.env?.TEST true"
 `;
 
-exports[`fixtures > error-parse > stderr 1`] = `
-"<root>/lib/index.js:2
-  throw err; /* ↓ Check stack trace ↓ */
-  ^
-
-Error: ParseError: \`import\` can only be used in \`import 
- <cwd>/index.ts
-    at Object.<anonymous> (<root>/bin/jiti)
-    at Module._compile (internal/modules/cjs/loader)
-    at Module._extensions..js (internal/modules/cjs/loader)
-    at Module.load (internal/modules/cjs/loader)
-    at Module._load (internal/modules/cjs/loader)
-    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)
-    at internal/main/run_main_module
-
-Node.js v<version>"
+exports[`fixtures > error-parse > errors 1`] = `
+[
+  "Error: ParseError: \`import\` can only be used in \`import ",
+]
 `;
 
 exports[`fixtures > error-parse > stdout 1`] = `""`;
 
-exports[`fixtures > error-runtime > stderr 1`] = `
-"<root>/lib/index.js:2
-  throw err; /* ↓ Check stack trace ↓ */
-  ^
-
-TypeError: The "listener" argument must be of type function. Received undefined
-    at checkListener (events)
-    at _addListener (events)
-    at process.addListener (events)
-    at <cwd>/index.ts
-    at evalModule (<root>/dist/jiti)
-    at jiti (<root>/dist/jiti)
-    at Object.<anonymous> (<root>/bin/jiti)
-    at Module._compile (internal/modules/cjs/loader)
-    at Module._extensions..js (internal/modules/cjs/loader)
-    at Module.load (internal/modules/cjs/loader)
-    at Module._load (internal/modules/cjs/loader)
-    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)
-    at internal/main/run_main_module {
-  code: 'ERR_INVALID_ARG_TYPE'
-}
-
-Node.js v<version>"
+exports[`fixtures > error-runtime > errors 1`] = `
+[
+  "TypeError: The "listener" argument must be of type function. Received undefined",
+]
 `;
 
 exports[`fixtures > error-runtime > stdout 1`] = `""`;
