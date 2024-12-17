@@ -14,52 +14,17 @@ import.meta.env?.TEST true"
 `;
 
 exports[`fixtures > error-parse > stderr 1`] = `
-"<root>/lib/index.js:2
-  throw err; /* ↓ Check stack trace ↓ */
-  ^
-
-Error: ParseError: \`import\` can only be used in \`import 
- <cwd>/index.ts
-    at Object.<anonymous> (<root>/bin/jiti)
-    at Module._compile (internal/modules/cjs/loader)
-    at Object..js (internal/modules/cjs/loader)
-    at Module.load (internal/modules/cjs/loader)
-    at Function._load (internal/modules/cjs/loader)
-    at TracingChannel.traceSync (node:diagnostics_channel)
-    at wrapModuleLoad (internal/modules/cjs/loader)
-    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)
-    at internal/main/run_main_module
-
-Node.js v<version>"
+[
+  "Error: ParseError: \`import\` can only be used in \`import ",
+]
 `;
 
 exports[`fixtures > error-parse > stdout 1`] = `""`;
 
 exports[`fixtures > error-runtime > stderr 1`] = `
-"<root>/lib/index.js:2
-  throw err; /* ↓ Check stack trace ↓ */
-  ^
-
-TypeError: The "listener" argument must be of type function. Received undefined
-    at checkListener (events)
-    at _addListener (events)
-    at process.addListener (events)
-    at <cwd>/index.ts
-    at evalModule (<root>/dist/jiti)
-    at jiti (<root>/dist/jiti)
-    at Object.<anonymous> (<root>/bin/jiti)
-    at Module._compile (internal/modules/cjs/loader)
-    at Object..js (internal/modules/cjs/loader)
-    at Module.load (internal/modules/cjs/loader)
-    at Function._load (internal/modules/cjs/loader)
-    at TracingChannel.traceSync (node:diagnostics_channel)
-    at wrapModuleLoad (internal/modules/cjs/loader)
-    at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)
-    at internal/main/run_main_module {
-  code: 'ERR_INVALID_ARG_TYPE'
-}
-
-Node.js v<version>"
+[
+  "TypeError: The "listener" argument must be of type function. Received undefined",
+]
 `;
 
 exports[`fixtures > error-runtime > stdout 1`] = `""`;
@@ -69,23 +34,7 @@ exports[`fixtures > esm > stdout 1`] = `
 {
   file: '<cwd>/test.js',
   dir: '<cwd>',
-  'import.meta.url': 'file://<cwd>/test.js',
-  stack: [
-    'at getStack (<cwd>/test)',
-    'at test (<cwd>/test)',
-    'at <cwd>/index.js',
-    'at evalModule (<root>/dist/jiti)',
-    'at jiti (<root>/dist/jiti)',
-    'at Object.<anonymous> (<root>/bin/jiti)',
-    'at Module._compile (internal/modules/cjs/loader)',
-    'at Object..js (internal/modules/cjs/loader)',
-    'at Module.load (internal/modules/cjs/loader)',
-    'at Function._load (internal/modules/cjs/loader)',
-    'at TracingChannel.traceSync (node:diagnostics_channel)',
-    'at wrapModuleLoad (internal/modules/cjs/loader)',
-    'at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main)',
-    'at internal/main/run_main_module'
-  ]
+  'import.meta.url': 'file://<cwd>/test.js'
 }"
 `;
 
@@ -105,6 +54,14 @@ Required : { test: 123 } .default: { test: 123 }
 Dynamic Imported : { test: 123 } .default: { test: 123 }"
 `;
 
+exports[`fixtures > mixed > stderr 1`] = `
+[
+  "ExperimentalWarning: CommonJS module <cwd>/index.js is loading ES Module <cwd>/esm.js using require().",
+]
+`;
+
+exports[`fixtures > mixed > stdout 1`] = `"Mixed works for: <cwd>"`;
+
 exports[`fixtures > native > stdout 1`] = `"[Module: null prototype] { default: { hasRequire: false } }"`;
 
 exports[`fixtures > proto > stdout 1`] = `"exists: true"`;
@@ -117,10 +74,10 @@ Enter Identifier
 Enter Literal"
 `;
 
-exports[`fixtures > require-esm > require-esm-stderr 1`] = `
-"(node:43074) ExperimentalWarning: CommonJS module <cwd>/index.cjs is loading ES Module <cwd>/_dist/esm.js using require().
-Support for loading ES Module in require() is an experimental feature and might change at any time
-(Use \`node --trace-warnings ...\` to show where the warning was created)"
+exports[`fixtures > require-esm > stderr 1`] = `
+[
+  "ExperimentalWarning: CommonJS module <cwd>/index.cjs is loading ES Module <cwd>/_dist/esm.js using require().",
+]
 `;
 
 exports[`fixtures > require-esm > stdout 1`] = `"Works!"`;

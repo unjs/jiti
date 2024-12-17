@@ -3,6 +3,8 @@ import { execa } from "execa";
 import { describe, it, expect } from "vitest";
 import fg from "fast-glob";
 
+const nodeMajor = Number.parseInt(process.version.slice(1), 10);
+
 describe("fixtures", async () => {
   const jitiPath = resolve(__dirname, "../bin/jiti.js");
 
@@ -35,6 +37,14 @@ describe("fixtures", async () => {
           .trim();
       }
 
+      function extractErrors(message: string) {
+        const errors = [] as string[];
+        for (const m of message.matchAll(/\w*(Error|Warning).*:.*$/gm)) {
+          errors.push(m[0]);
+        }
+        return errors;
+      }
+
       const { stdout, stderr } = await execa("node", [jitiPath, fixtureEntry], {
         cwd,
         stdio: "pipe",
@@ -45,12 +55,13 @@ describe("fixtures", async () => {
         },
       });
 
-      if (name.includes("error")) {
-        expect(cleanUpSnap(stderr)).toMatchSnapshot("stderr");
-      } else if (name === "require-esm") {
-        expect(cleanUpSnap(stderr)).toMatchSnapshot("require-esm-stderr");
+      if (name.includes("error") || name === "require-esm") {
+        expect(extractErrors(cleanUpSnap(stderr))).toMatchSnapshot("stderr");
+      } else if (name === "mixed" && nodeMajor >= 22) {
+        console.log(stderr);
+        expect(extractErrors(cleanUpSnap(stderr))).toMatchSnapshot("stderr");
       } else {
-        // expect no error
+        // Expect no error by default
         expect(stderr).toBe("");
       }
 
