@@ -37,9 +37,9 @@ describe("fixtures", async () => {
           .trim();
       }
 
-      function extractErrors(message: string) {
+      function extractErrors(stderr: string) {
         const errors = [] as string[];
-        for (const m of message.matchAll(/\w*(Error|Warning).*:.*$/gm)) {
+        for (const m of stderr.matchAll(/\w*(Error|Warning).*:.*$/gm)) {
           errors.push(m[0]);
         }
         return errors;
