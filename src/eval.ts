@@ -15,11 +15,12 @@ import { jitiRequire, nativeImportOrRequire } from "./require";
 import createJiti from "./jiti";
 import { transform } from "./transform";
 
-export function evalModule(
+export async function evalModule(
   ctx: Context,
   source: string,
   evalOptions: EvalModuleOptions = {},
-): any {
+  cb?: (source: string, filename: string) => Promise<string> | string,
+): Promise<any> {
   // Resolve options
   const id =
     evalOptions.id ||
@@ -45,14 +46,15 @@ export function evalModule(
       (isTypescript || isESM || ctx.isTransformRe.test(filename) || hasESMSyntax(source)));
   const start = performance.now();
   if (needsTranspile) {
-    source = transform(ctx, {
+    source = await transform(ctx, {
       filename,
       source,
       ts: isTypescript,
       async: evalOptions.async ?? false,
       jsx: ctx.opts.jsx,
-    });
+    }, cb);
     const time = Math.round((performance.now() - start) * 1000) / 1000;
+    console.log('filename' , filename)
     debug(
       ctx,
       "[transpile]",
@@ -85,13 +87,13 @@ export function evalModule(
       } catch (error: any) {
         debug(ctx, "Native require error:", error);
         debug(ctx, "[fallback]", filename);
-        source = transform(ctx, {
+        source = await transform(ctx, {
           filename,
           source,
           ts: isTypescript,
           async: evalOptions.async ?? false,
           jsx: ctx.opts.jsx,
-        });
+        }, cb);
       }
     }
   }
@@ -118,6 +120,7 @@ export function evalModule(
       nativeImport: ctx.nativeImport,
       onError: ctx.onError,
       createRequire: ctx.createRequire,
+      callbackStore: ctx.callbackStore, // Pass the callback store
     },
     true /* isNested */,
   );

@@ -25,4 +25,13 @@ export interface Context {
   additionalExts: string[];
   nativeRequire: NodeRequire;
   createRequire: (typeof import("node:module"))["createRequire"];
+  callbackStore?: Map<string, SourceTransformer>;
+}
+
+export type SourceTransformer = (source: string, filename: string) => Promise<string> | string;
+
+export interface CacheOptions {
+  key: string;
+  invalidate?: boolean;
+  transform?: () => string | Promise<string>;
 }
