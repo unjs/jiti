@@ -19,7 +19,7 @@ export async function evalModule(
   ctx: Context,
   source: string,
   evalOptions: EvalModuleOptions = {},
-  cb?: (source: string, filename: string) => Promise<string> | string,
+  sourceTransformer?: (source: string, filename: string) => Promise<string> | string,
 ): Promise<any> {
   // Resolve options
   const id =
@@ -52,7 +52,7 @@ export async function evalModule(
       ts: isTypescript,
       async: evalOptions.async ?? false,
       jsx: ctx.opts.jsx,
-    }, cb);
+    }, sourceTransformer);
     const time = Math.round((performance.now() - start) * 1000) / 1000;
     console.log('filename' , filename)
     debug(
@@ -93,7 +93,7 @@ export async function evalModule(
           ts: isTypescript,
           async: evalOptions.async ?? false,
           jsx: ctx.opts.jsx,
-        }, cb);
+        }, sourceTransformer);
       }
     }
   }
