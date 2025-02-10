@@ -28,8 +28,8 @@ export async function transform(
     }
   }
 
-  const code = getCache(ctx, topts, () => {
-    return ctx.opts.transform!({
+  let code = getCache(ctx, topts, () => {
+    const res = ctx.opts.transform!({
       ...ctx.opts.transformOptions,
       babel: {
         ...(ctx.opts.sourceMaps
@@ -43,8 +43,14 @@ export async function transform(
       interopDefault: ctx.opts.interopDefault,
       ...topts,
       source,
-    }).code;
+    });
+    if (res.error && ctx.opts.debug) {
+      debug(ctx, res.error);
+    }
+    return res.code;
   });
-
-  return code.startsWith("#!") ? "// " + code : code;
+  if (code.startsWith("#!")) {
+    code = "// " + code;
+  }
+  return code;
 }
