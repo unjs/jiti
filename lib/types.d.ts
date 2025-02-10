@@ -35,12 +35,22 @@ export interface Jiti extends NodeRequire {
   /**
    * Transform source code
    */
-  transform: (opts: TransformOptions, sourceTransformer?: (source: string) => string) => Promise<string>;
+  transform: (
+    opts: TransformOptions,
+    sourceTransformer?: (source: string) => string,
+  ) => Promise<string>;
 
   /**
    * Evaluate transformed code as a module
    */
-  evalModule: (source: string, options?: EvalModuleOptions, sourceTransformer?: (source: string, filename: string) => Promise<string> | string) => unknown;
+  evalModule: (
+    source: string,
+    options?: EvalModuleOptions,
+    sourceTransformer?: (
+      source: string,
+      filename: string,
+    ) => Promise<string> | string,
+  ) => unknown;
 }
 
 /**

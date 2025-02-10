@@ -28,7 +28,12 @@ export default function createJiti(
   userOptions: JitiOptions = {},
   parentContext: Pick<
     Context,
-    "parentModule" | "parentCache" | "nativeImport" | "onError" | "createRequire" | "callbackStore"
+    | "parentModule"
+    | "parentCache"
+    | "nativeImport"
+    | "onError"
+    | "createRequire"
+    | "callbackStore"
   >,
   isNested = false,
 ): Jiti {
@@ -136,7 +141,11 @@ export default function createJiti(
       transform(opts: TransformOptions, sourceTransformer?: SourceTransformer) {
         return transform(ctx, opts, sourceTransformer);
       },
-      evalModule(source: string, options?: EvalModuleOptions, sourceTransformer?: SourceTransformer) {
+      evalModule(
+        source: string,
+        options?: EvalModuleOptions,
+        sourceTransformer?: SourceTransformer,
+      ) {
         return evalModule(ctx, source, options, sourceTransformer);
       },
       async import<T = unknown>(

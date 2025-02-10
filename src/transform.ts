@@ -2,7 +2,11 @@ import type { Context, TransformOptions, SourceTransformer } from "./types";
 import { getCache } from "./cache";
 import { debug } from "./utils";
 
-export async function transform(ctx: Context, topts: TransformOptions, sourceTransformer?: SourceTransformer): Promise<string> {
+export async function transform(
+  ctx: Context,
+  topts: TransformOptions,
+  sourceTransformer?: SourceTransformer,
+): Promise<string> {
   if (!topts.filename) {
     throw new Error("transform: filename is required");
   }
@@ -10,18 +14,17 @@ export async function transform(ctx: Context, topts: TransformOptions, sourceTra
   // Initialize or update callback store
   ctx.callbackStore ??= new Map();
   if (sourceTransformer) {
-    ctx.callbackStore.set('sourceTransformer', sourceTransformer);
+    ctx.callbackStore.set("sourceTransformer", sourceTransformer);
   }
 
   let source = topts.source;
-  const globalTransformer = ctx.callbackStore?.get('sourceTransformer');
-
+  const globalTransformer = ctx.callbackStore?.get("sourceTransformer");
 
   if (globalTransformer) {
     try {
       source = await globalTransformer(source, topts.filename!);
     } catch (error_) {
-      debug(ctx, 'Source transformer error:', error_);
+      debug(ctx, "Source transformer error:", error_);
     }
   }
 
@@ -29,10 +32,12 @@ export async function transform(ctx: Context, topts: TransformOptions, sourceTra
     return ctx.opts.transform!({
       ...ctx.opts.transformOptions,
       babel: {
-        ...(ctx.opts.sourceMaps ? {
-          sourceFileName: topts.filename,
-          sourceMaps: "inline",
-        } : {}),
+        ...(ctx.opts.sourceMaps
+          ? {
+              sourceFileName: topts.filename,
+              sourceMaps: "inline",
+            }
+          : {}),
         ...ctx.opts.transformOptions?.babel,
       },
       interopDefault: ctx.opts.interopDefault,
@@ -40,6 +45,6 @@ export async function transform(ctx: Context, topts: TransformOptions, sourceTra
       source,
     }).code;
   });
-  
+
   return code.startsWith("#!") ? "// " + code : code;
 }

@@ -19,7 +19,10 @@ export async function evalModule(
   ctx: Context,
   source: string,
   evalOptions: EvalModuleOptions = {},
-  sourceTransformer?: (source: string, filename: string) => Promise<string> | string,
+  sourceTransformer?: (
+    source: string,
+    filename: string,
+  ) => Promise<string> | string,
 ): Promise<any> {
   // Resolve options
   const id =
@@ -46,15 +49,19 @@ export async function evalModule(
       (isTypescript || isESM || ctx.isTransformRe.test(filename) || hasESMSyntax(source)));
   const start = performance.now();
   if (needsTranspile) {
-    source = await transform(ctx, {
-      filename,
-      source,
-      ts: isTypescript,
-      async: evalOptions.async ?? false,
-      jsx: ctx.opts.jsx,
-    }, sourceTransformer);
+    source = await transform(
+      ctx,
+      {
+        filename,
+        source,
+        ts: isTypescript,
+        async: evalOptions.async ?? false,
+        jsx: ctx.opts.jsx,
+      },
+      sourceTransformer,
+    );
     const time = Math.round((performance.now() - start) * 1000) / 1000;
-    console.log('filename' , filename)
+    console.log("filename", filename);
     debug(
       ctx,
       "[transpile]",
@@ -87,13 +94,17 @@ export async function evalModule(
       } catch (error: any) {
         debug(ctx, "Native require error:", error);
         debug(ctx, "[fallback]", filename);
-        source = await transform(ctx, {
-          filename,
-          source,
-          ts: isTypescript,
-          async: evalOptions.async ?? false,
-          jsx: ctx.opts.jsx,
-        }, sourceTransformer);
+        source = await transform(
+          ctx,
+          {
+            filename,
+            source,
+            ts: isTypescript,
+            async: evalOptions.async ?? false,
+            jsx: ctx.opts.jsx,
+          },
+          sourceTransformer,
+        );
       }
     }
   }

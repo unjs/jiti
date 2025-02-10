@@ -28,7 +28,10 @@ export interface Context {
   callbackStore?: Map<string, SourceTransformer>;
 }
 
-export type SourceTransformer = (source: string, filename: string) => Promise<string> | string;
+export type SourceTransformer = (
+  source: string,
+  filename: string,
+) => Promise<string> | string;
 
 export interface CacheOptions {
   key: string;
