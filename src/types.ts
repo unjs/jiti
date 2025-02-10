@@ -36,5 +36,5 @@ export type SourceTransformer = (
 export interface CacheOptions {
   key: string;
   invalidate?: boolean;
-  transform?: () => string | Promise<string>;
+  transform?: () => Promise<string> | string;
 }

@@ -61,7 +61,6 @@ export async function evalModule(
       sourceTransformer,
     );
     const time = Math.round((performance.now() - start) * 1000) / 1000;
-    console.log("filename", filename);
     debug(
       ctx,
       "[transpile]",
