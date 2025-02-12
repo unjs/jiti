@@ -1,12 +1,9 @@
-import { join, resolve, dirname } from "node:path";
-import { x } from "tinyexec";
-import { describe, it, expect } from "vitest";
 import fg from "fast-glob";
+import { dirname, join, resolve } from "node:path";
+import { x } from "tinyexec";
+import { describe, expect, it } from "vitest";
 
-const nodeMajorVersion = Number.parseInt(
-  process.versions.node.split(".")[0],
-  10,
-);
+const nodeMajorVersion = Number.parseFloat(process.versions.node);
 
 describe("fixtures", async () => {
   const jitiPath = resolve(__dirname, "../lib/jiti-cli.mjs");
@@ -74,7 +71,9 @@ describe("fixtures", async () => {
 
       if (
         name.includes("error") ||
-        (nodeMajorVersion >= 22 && name === "require-esm")
+        (nodeMajorVersion >= 22 &&
+          nodeMajorVersion < 22.13 &&
+          name === "require-esm")
       ) {
         expect(extractErrors(cleanUpSnap(stderr))).toMatchSnapshot("stderr");
       } else {
