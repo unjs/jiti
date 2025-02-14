@@ -125,7 +125,7 @@
     "vue": "^3.5.13",
     "webpack": "^5.97.1",
     "webpack-bundle-analyzer": "^4.10.2",
-    "webpack-cli": "^5.1.4",
+    "webpack-cli": "^6.0.1",
     "webpack-license-plugin": "^4.5.0",
     "yoctocolors": "^2.1.1",
     "zod": "^3.24.1"
