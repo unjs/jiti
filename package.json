@@ -108,7 +108,7 @@
     "moment-timezone": "^0.5.46",
     "nano-jsx": "^0.1.0",
     "pathe": "^1.1.2",
-    "pkg-types": "^1.2.1",
+    "pkg-types": "^2.1.0",
     "preact": "^10.25.2",
     "preact-render-to-string": "^6.5.12",
     "prettier": "^3.4.2",
