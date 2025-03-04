@@ -4,7 +4,7 @@ import type {
 } from "@babel/core";
 import { transformSync } from "@babel/core";
 import proposalDecoratorsPlugin from "@babel/plugin-proposal-decorators";
-import syntaxClassPropertiesPlugin from "@babel/plugin-syntax-class-properties";
+import transformClassPropertiesPlugin from "@babel/plugin-transform-class-properties";
 import syntaxImportAssertionsPlugin from "@babel/plugin-syntax-import-assertions";
 import syntaxJSXPlugin from "@babel/plugin-syntax-jsx";
 import transformExportNamespaceFromPlugin from "@babel/plugin-transform-export-namespace-from";
@@ -40,7 +40,7 @@ export default function transform(opts: TransformOptions): TransformResult {
       [importMetaPathsPlugin, { filename: opts.filename }],
       [importMetaEnvPlugin],
       [importMetaResolvePlugin],
-      [syntaxClassPropertiesPlugin],
+      [transformClassPropertiesPlugin],
       [transformExportNamespaceFromPlugin],
     ],
   };
@@ -60,7 +60,7 @@ export default function transform(opts: TransformOptions): TransformResult {
         isTSX: opts.jsx && /\.[cm]?tsx$/.test(opts.filename || ""),
       },
     ]);
-    // `unshift` because these plugin must come before `@babel/plugin-syntax-class-properties`
+    // `unshift` because these plugin must come before `@babel/plugin-transform-class-properties`
     _opts.plugins.unshift(
       [transformTypeScriptMetaPlugin],
       [proposalDecoratorsPlugin, { legacy: true }],
