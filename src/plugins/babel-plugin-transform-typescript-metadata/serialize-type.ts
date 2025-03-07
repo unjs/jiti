@@ -305,5 +305,5 @@ function serializeTypeList(
   }
 
   // If we were able to find common type, use it
-  return serializedUnion || createVoidZero(); // Fallback is only hit if all union constituients are null/undefined/never
+  return serializedUnion || createVoidZero(); // Fallback is only hit if all union constituents are null/undefined/never
 }

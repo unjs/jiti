@@ -32,17 +32,17 @@ export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
     jitiDefaults.extensions!.push(".jsx", ".tsx");
   }
 
-  const deprecatOverrides: JitiOptions = {};
+  const deprecatedOverrides: JitiOptions = {};
   if (userOptions.cache !== undefined) {
-    deprecatOverrides.fsCache = userOptions.cache;
+    deprecatedOverrides.fsCache = userOptions.cache;
   }
   if (userOptions.requireCache !== undefined) {
-    deprecatOverrides.moduleCache = userOptions.requireCache;
+    deprecatedOverrides.moduleCache = userOptions.requireCache;
   }
 
   const opts: JitiOptions = {
     ...jitiDefaults,
-    ...deprecatOverrides,
+    ...deprecatedOverrides,
     ...userOptions,
   };
 

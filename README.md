@@ -29,7 +29,7 @@
 - JSX support (opt-in)
 
 > [!IMPORTANT]
-> To enhance compatibility, jiti `>=2.1` enabled [`interopdefault`](#interopdefault) using a new Proxy method. If you migrated to `2.0.0` earlier, this might have caused behavior changes. In case of any issues during the upgrade, please [report](https://github.com/unjs/jiti/issues) so we can investigate to solve them. 🙏🏼
+> To enhance compatibility, jiti `>=2.1` enabled [`interopDefault`](#interopdefault) using a new Proxy method. If you migrated to `2.0.0` earlier, this might have caused behavior changes. In case of any issues during the upgrade, please [report](https://github.com/unjs/jiti/issues) so we can investigate to solve them. 🙏🏼
 
 ## 💡 Usage
 
