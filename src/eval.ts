@@ -124,7 +124,6 @@ export function evalModule(
 
   mod.require = _jiti as typeof mod.require;
 
-  // @ts-ignore
   mod.path = dirname(filename);
 
   // @ts-ignore
