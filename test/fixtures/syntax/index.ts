@@ -17,3 +17,16 @@ const obj2 = { duration: 50, speed: null } as any;
 obj2.duration ??= 10;
 obj2.speed ??= 20;
 console.log("Logical nullish assignment:", obj2.duration, obj2.speed);
+
+export class User {
+  #id = 0;
+
+  constructor() {
+    this.#init();
+    console.log(this.#id);
+  }
+
+  #init() {
+    this.#id = Math.random();
+  }
+}
