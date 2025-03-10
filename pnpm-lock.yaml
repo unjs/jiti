@@ -26,6 +26,9 @@ importers:
       '@babel/plugin-proposal-decorators':
         specifier: ^7.25.9
         version: 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-syntax-class-properties':
+        specifier: ^7.12.13
+        version: 7.12.13(@babel/core@7.26.9)
       '@babel/plugin-syntax-import-assertions':
         specifier: ^7.26.0
         version: 7.26.0(@babel/core@7.26.9)
@@ -36,6 +39,9 @@ importers:
         specifier: 7.25.9
         version: 7.25.9(@babel/core@7.26.9)
       '@babel/plugin-transform-export-namespace-from':
+        specifier: ^7.25.9
+        version: 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-transform-private-methods':
         specifier: ^7.25.9
         version: 7.25.9(@babel/core@7.26.9)
       '@babel/plugin-transform-react-jsx':
@@ -300,6 +306,11 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
 
+  '@babel/plugin-syntax-class-properties@7.12.13':
+    resolution: {integrity: sha512-fm4idjKla0YahUNgFNLCB0qySdsoPiZP3iQE3rky0mBUtMZ23yDJ9SJdg6dXTSDnulOVqiF3Hgr9nbXvXTQZYA==}
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+
   '@babel/plugin-syntax-decorators@7.25.9':
     resolution: {integrity: sha512-ryzI0McXUPJnRCvMo4lumIKZUzhYUO/ScI+Mz4YVaTLt04DHNSjEUjKVvbzQjZFLuod/cYEc07mJWhzl6v4DPg==}
     engines: {node: '>=6.9.0'}
@@ -338,6 +349,12 @@ packages:
 
   '@babel/plugin-transform-modules-commonjs@7.26.3':
     resolution: {integrity: sha512-MgR55l4q9KddUDITEzEFYn5ZsGDXMSsU9E+kh7fjRXTIC3RHqfCo8RPRbyReYJh44HQ/yomFkqbOFohXvDCiIQ==}
+    engines: {node: '>=6.9.0'}
+    peerDependencies:
+      '@babel/core': ^7.0.0-0
+
+  '@babel/plugin-transform-private-methods@7.25.9':
+    resolution: {integrity: sha512-D/JUozNpQLAPUVusvqMxyvjzllRaF8/nSrP1s2YGQT/W4LHK4xxsMcHjhOGTS01mp9Hda8nswb+FblLdJornQw==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
@@ -2617,6 +2634,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@babel/plugin-syntax-class-properties@7.12.13(@babel/core@7.26.9)':
+    dependencies:
+      '@babel/core': 7.26.9
+      '@babel/helper-plugin-utils': 7.26.5
+
   '@babel/plugin-syntax-decorators@7.25.9(@babel/core@7.26.9)':
     dependencies:
       '@babel/core': 7.26.9
@@ -2654,6 +2676,14 @@ snapshots:
     dependencies:
       '@babel/core': 7.26.9
       '@babel/helper-module-transforms': 7.26.0(@babel/core@7.26.9)
+      '@babel/helper-plugin-utils': 7.26.5
+    transitivePeerDependencies:
+      - supports-color
+
+  '@babel/plugin-transform-private-methods@7.25.9(@babel/core@7.26.9)':
+    dependencies:
+      '@babel/core': 7.26.9
+      '@babel/helper-create-class-features-plugin': 7.26.9(@babel/core@7.26.9)
       '@babel/helper-plugin-utils': 7.26.5
     transitivePeerDependencies:
       - supports-color
