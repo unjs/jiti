@@ -9,3 +9,4 @@ import "./typescript";
 import "./moment";
 import "./zod";
 import "./mikro-orm";
+import "./typestack";
