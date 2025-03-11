@@ -211,6 +211,14 @@ Enable JSX support using [`@babel/plugin-transform-react-jsx`](https://babeljs.i
 
 See [`test/fixtures/jsx`](./test/fixtures/jsx) for framework integration examples.
 
+### `transformClassProps`
+
+- Type: Boolean
+- Default: `false`
+- Environment Variable: `JITI_TRANSFORM_CLASS_PROPS`
+
+Enable class properties transformations.
+
 ## Development
 
 - Clone this repository

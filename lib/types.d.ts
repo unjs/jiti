@@ -235,6 +235,14 @@ export interface JitiOptions {
    * @default false
    */
   jsx?: boolean | JSXOptions;
+  /**
+   * Enable experimental transforms.
+   *
+   * You can also use `JITI_TRANSFORM_CLASS_PROPS="true"` environment variable to enable experimental transforms.
+   *
+   * @default false
+   */
+  transformClassProps?: boolean;
 }
 
 interface NodeRequire {
@@ -325,6 +333,10 @@ export interface TransformOptions {
    * @default false
    */
   jsx?: boolean | JSXOptions;
+  /**
+   * @default false
+   */
+  transformClassProps?: boolean;
   babel?: Record<string, any>;
 }
 

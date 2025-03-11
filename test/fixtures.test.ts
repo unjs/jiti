@@ -68,6 +68,7 @@ describe("fixtures", async () => {
           env: {
             JITI_CACHE: "false",
             JITI_JSX: "true",
+            JITI_TRANSFORM_CLASS_PROPS: "true",
           },
         },
       });

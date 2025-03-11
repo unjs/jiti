@@ -16,6 +16,7 @@ export function transform(ctx: Context, topts: TransformOptions): string {
         ...ctx.opts.transformOptions?.babel,
       },
       interopDefault: ctx.opts.interopDefault,
+      transformClassProps: ctx.opts.transformClassProps,
       ...topts,
     });
     if (res.error && ctx.opts.debug) {
