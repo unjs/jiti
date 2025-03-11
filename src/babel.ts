@@ -23,7 +23,7 @@ import type { TransformOptions, TransformResult } from "./types";
 export default function transform(opts: TransformOptions): TransformResult {
   const transforms = [[transformExportNamespaceFromPlugin]];
 
-  if (opts.experimentalTransforms) {
+  if (opts.transformClassProps) {
     transforms.push(
       [transformClassPropertiesPlugin],
       [transformPrivateMethodsPlugin],
