@@ -165,8 +165,8 @@ importers:
         specifier: ^5.3.14
         version: 5.3.14(webpack@5.98.0)
       tinyexec:
-        specifier: ^0.3.2
-        version: 0.3.2
+        specifier: ^1.0.1
+        version: 1.0.1
       ts-loader:
         specifier: ^9.5.2
         version: 9.5.2(typescript@5.8.2)(webpack@5.98.0)
@@ -2173,6 +2173,9 @@ packages:
 
   tinyexec@0.3.2:
     resolution: {integrity: sha512-KQQR9yN7R5+OSwaK0XQoj22pwHoTlgYqmUscPYoknOoWCWfj/5/ABTMRi69FrKU5ffPVh5QcFikpWJI/P1ocHA==}
+
+  tinyexec@1.0.1:
+    resolution: {integrity: sha512-5uC6DDlmeqiOwCPmK9jMSdOuZTh8bU39Ys6yidB+UTt5hfZUPGAypSgFRiEp+jbi9qH40BLDvy85jIU88wKSqw==}
 
   tinypool@1.0.2:
     resolution: {integrity: sha512-al6n+QEANGFOMf/dmUMsuS5/r9B06uwlyNjZZql/zv8J7ybHCgoihBNORZCY2mzUuAnomQa2JdhyHKzZxPCrFA==}
@@ -4430,6 +4433,8 @@ snapshots:
   tinybench@2.9.0: {}
 
   tinyexec@0.3.2: {}
+
+  tinyexec@1.0.1: {}
 
   tinypool@1.0.2: {}
 

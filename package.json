@@ -118,7 +118,7 @@
     "solid-js": "^1.9.5",
     "std-env": "^3.8.1",
     "terser-webpack-plugin": "^5.3.14",
-    "tinyexec": "^0.3.2",
+    "tinyexec": "^1.0.1",
     "ts-loader": "^9.5.2",
     "typescript": "^5.8.2",
     "vitest": "^3.0.8",
