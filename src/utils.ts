@@ -30,10 +30,9 @@ export function isWritable(filename: string): boolean {
 }
 
 export function md5(content: string, len = 8) {
-  const hash =
-    isFipsMode()
-      ? nodeCrypto.createHash("sha256")
-      : nodeCrypto.createHash("md5");
+  const hash = isFipsMode()
+    ? nodeCrypto.createHash("sha256")
+    : nodeCrypto.createHash("md5");
   return hash.update(content).digest("hex").slice(0, len);
 }
 
@@ -156,6 +155,6 @@ export function isFipsMode() {
   try {
     return !!nodeCrypto.getFips?.();
   } catch {
-    return false
+    return false;
   }
 }
