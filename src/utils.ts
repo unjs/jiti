@@ -151,7 +151,7 @@ export function normalizeWindowsImportId(id: string) {
   return pathToFileURL(id);
 }
 
-export function isFipsMode() {
+function isFipsMode() {
   try {
     return !!nodeCrypto.getFips?.();
   } catch {
