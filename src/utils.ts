@@ -155,6 +155,7 @@ function isFipsMode() {
   try {
     return !!nodeCrypto.getFips?.();
   } catch {
+    // Deno throws error (https://github.com/denoland/deno/issues/18455)
     return false;
   }
 }
