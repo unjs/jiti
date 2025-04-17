@@ -30,7 +30,10 @@ export function isWritable(filename: string): boolean {
 }
 
 export function md5(content: string, len = 8) {
-  const hash = getFips() ? createHash("sha256") : createHash("md5");
+  const hash =
+    "Deno" in globalThis || !getFips()
+      ? createHash("md5")
+      : createHash("sha256");
   return hash.update(content).digest("hex").slice(0, len);
 }
 
