@@ -1,5 +1,5 @@
 import { lstatSync, accessSync, constants, readFileSync } from "node:fs";
-import crypto from "node:crypto";
+import nodeCrypto from "node:crypto";
 import { isAbsolute, join } from "pathe";
 import type { PackageJson } from "pkg-types";
 import { pathToFileURL } from "mlly";
@@ -31,9 +31,9 @@ export function isWritable(filename: string): boolean {
 
 export function md5(content: string, len = 8) {
   const hash =
-    !("Deno" in globalThis) && crypto.getFips?.()
-      ? crypto.createHash("sha256")
-      : crypto.createHash("md5");
+    !("Deno" in globalThis) && nodeCrypto.getFips?.()
+      ? nodeCrypto.createHash("sha256")
+      : nodeCrypto.createHash("md5");
   return hash.update(content).digest("hex").slice(0, len);
 }
 
