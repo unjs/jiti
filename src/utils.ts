@@ -31,7 +31,7 @@ export function isWritable(filename: string): boolean {
 
 export function md5(content: string, len = 8) {
   const hash = isFipsMode()
-    ? nodeCrypto.createHash("sha256")
+    ? nodeCrypto.createHash("sha256") // #340
     : nodeCrypto.createHash("md5");
   return hash.update(content).digest("hex").slice(0, len);
 }
