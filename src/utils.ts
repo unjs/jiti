@@ -31,7 +31,7 @@ export function isWritable(filename: string): boolean {
 
 export function md5(content: string, len = 8) {
   const hash =
-    !("Deno" in globalThis) && nodeCrypto.getFips?.()
+    isFipsMode()
       ? nodeCrypto.createHash("sha256")
       : nodeCrypto.createHash("md5");
   return hash.update(content).digest("hex").slice(0, len);
@@ -150,4 +150,12 @@ export function normalizeWindowsImportId(id: string) {
     return id;
   }
   return pathToFileURL(id);
+}
+
+export function isFipsMode() {
+  try {
+    return !!nodeCrypto.getFips?.();
+  } catch {
+    return false
+  }
 }
