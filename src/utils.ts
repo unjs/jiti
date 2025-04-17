@@ -1,5 +1,5 @@
 import { lstatSync, accessSync, constants, readFileSync } from "node:fs";
-import { createHash } from "node:crypto";
+import { createHash, getFips } from "node:crypto";
 import { isAbsolute, join } from "pathe";
 import type { PackageJson } from "pkg-types";
 import { pathToFileURL } from "mlly";
@@ -30,7 +30,8 @@ export function isWritable(filename: string): boolean {
 }
 
 export function md5(content: string, len = 8) {
-  return createHash("md5").update(content).digest("hex").slice(0, len);
+  const hash = getFips() ? createHash("sha256") : createHash("md5");
+  return hash.update(content).digest("hex").slice(0, len);
 }
 
 export function readNearestPackageJSON(path: string): PackageJson | undefined {
