@@ -8,7 +8,7 @@ async function run() {
     mod = await jiti.import("./_dist/esm.js");
   }
   mod = mod.default;
-  if (typeof mod.fn === "function") {
+  if (typeof mod.fn === "function" && typeof mod.fn2 === "function") {
     console.log("Works!");
     return;
   }
