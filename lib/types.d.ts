@@ -88,19 +88,21 @@ export interface JitiOptions {
    * This option can also be disabled using
    * `JITI_FS_CACHE=false` environment variable.
    *
+   * You can also force rebuild the cache with `JITI_FS_CACHE=rebuild`.
+   *
    * **Note:** It is recommended to keep this option
    * enabled for better performance.
    *
    * @default true
    */
-  fsCache?: boolean | string;
+  fsCache?: FS_CACHE;
 
   /**
    * @deprecated Use the {@linkcode fsCache} option.
    *
    * @default true
    */
-  cache?: boolean | string;
+  cache?: FS_CACHE;
 
   /**
    * Runtime module cache
@@ -351,3 +353,5 @@ export interface JSXOptions {
   useBuiltIns?: boolean;
   useSpread?: boolean;
 }
+
+type FS_CACHE = boolean | "rebuild" | (string & {});

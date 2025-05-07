@@ -1,5 +1,11 @@
 import type { Context, TransformOptions } from "./types";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  writeFileSync,
+  rmSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, basename, resolve } from "pathe";
 import { filename } from "pathe/utils";
@@ -54,7 +60,31 @@ export function getCache(
 export function prepareCacheDir(ctx: Context) {
   if (ctx.opts.fsCache === true) {
     ctx.opts.fsCache = getCacheDir(ctx);
+  } else if (ctx.opts.fsCache === "rebuild") {
+    ctx.opts.fsCache = getCacheDir(ctx);
+
+    try {
+      rmSync(ctx.opts.fsCache, { recursive: true, force: true });
+      debug(
+        ctx,
+        "[cache]",
+        "[rebuild]",
+        "Removed cache directory at ",
+        ctx.opts.fsCache,
+      );
+    } catch (error: any) {
+      debug(
+        ctx,
+        "[cache]",
+        "[rebuild]",
+        "Error removing cache directory at ",
+        ctx.opts.fsCache,
+        error,
+      );
+      ctx.opts.fsCache = false;
+    }
   }
+
   if (ctx.opts.fsCache) {
     try {
       mkdirSync(ctx.opts.fsCache as string, { recursive: true });
