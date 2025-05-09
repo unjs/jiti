@@ -107,6 +107,7 @@ export default function createJiti(
         ["version:", pkg.version],
         ["module-cache:", opts.moduleCache],
         ["fs-cache:", opts.fsCache],
+        ["rebuild-fs-cache:", opts.rebuildFsCache],
         ["interop-defaults:", opts.interopDefault],
       ].flat(),
     );

@@ -1,13 +1,9 @@
-import type { FS_CACHE } from "../lib/types";
 import type { JitiOptions } from "./types";
 
 export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
   const jitiDefaults: JitiOptions = {
-    fsCache: _EnumOrBooleanEnv<FS_CACHE>(
-      "JITI_FS_CACHE",
-      ["rebuild"],
-      _EnumOrBooleanEnv<FS_CACHE>("JITI_CACHE", ["rebuild"], true),
-    ),
+    fsCache: _booleanEnv("JITI_FS_CACHE", _booleanEnv("JITI_CACHE", true)),
+    rebuildFsCache: _booleanEnv("JITI_REBUILD_FS_CACHE", false),
     moduleCache: _booleanEnv(
       "JITI_MODULE_CACHE",
       _booleanEnv("JITI_REQUIRE_CACHE", true),
@@ -52,21 +48,6 @@ export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
   };
 
   return opts;
-}
-
-function _EnumOrBooleanEnv<T extends string | boolean>(
-  name: string,
-  enums: string[],
-  defaultValue: T,
-): T {
-  const envValue = process.env[name];
-  if (!(name in process.env)) {
-    return defaultValue;
-  }
-  if (enums.includes(envValue!)) {
-    return envValue as T;
-  }
-  return _booleanEnv(name, Boolean(defaultValue)) as T;
 }
 
 function _booleanEnv(name: string, defaultValue: boolean): boolean {
