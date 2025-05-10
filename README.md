@@ -128,6 +128,14 @@ By default (when is `true`), jiti uses `node_modules/.cache/jiti` (if exists) or
 
 **Note:** It is recommended that this option be enabled for better performance.
 
+### `rebuildFsCache`
+
+- Type: Boolean
+- Default: `false`
+- Environment variable: `JITI_REBUILD_FS_CACHE`
+
+Rebuild filesystem source cache created by `fsCache`.
+
 ### `moduleCache`
 
 - Type: String
