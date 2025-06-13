@@ -240,15 +240,7 @@ export interface JitiOptions {
    * Enable resolution using
    * {@link https://nodejs.org/api/packages.html#resolving-user-conditions | `Node.js custom user conditions`}.
    *
-   * Use `true` to read conditions from nearest `package.json` file or pass an array of conditions.
-   *
-   * You can also use `JITI_CONDITIONS=1` environment variable.
-   *
-   * Alternatively, you may pass your config through the same environment varible.
-   * Make sure value is a valid JSON string. You may need to escape/quote depending on your shell.
-   *
-   * Examples:
-   * `JITI_CONDITIONS=["value1","value2"]`
+   * When `true` conditions config is read from the nearest `package.json` file.
    *
    * @default true
    */
