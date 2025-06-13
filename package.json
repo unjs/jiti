@@ -104,6 +104,7 @@
     "fast-glob": "^3.3.3",
     "is-installed-globally": "^1.0.0",
     "mime": "^4.0.6",
+    "minimatch": "^10.0.2",
     "mlly": "^1.7.4",
     "moment-timezone": "^0.5.47",
     "nano-jsx": "^0.1.0",

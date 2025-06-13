@@ -12,7 +12,12 @@ import { join } from "pathe";
 import escapeStringRegexp from "escape-string-regexp";
 import { normalizeAliases } from "pathe/utils";
 import pkg from "../package.json";
-import { debug, isDir } from "./utils";
+import {
+  debug,
+  getMatchingConditions,
+  isDir,
+  resolveConditionsConfig,
+} from "./utils";
 import { resolveJitiOptions } from "./options";
 import { jitiResolve } from "./resolve";
 import { evalModule } from "./eval";
@@ -117,10 +122,16 @@ export default function createJiti(
     prepareCacheDir(ctx);
   }
 
+  // Load custom user conditions
+  const conditionsConfig = resolveConditionsConfig(opts);
+
   // Create jiti instance
   const jiti: Jiti = Object.assign(
     function jiti(id: string) {
-      return jitiRequire(ctx, id, { async: false });
+      return jitiRequire(ctx, id, {
+        async: false,
+        conditions: getMatchingConditions(conditionsConfig, id),
+      });
     },
     {
       cache: opts.moduleCache ? nativeRequire.cache : Object.create(null),
@@ -129,7 +140,10 @@ export default function createJiti(
       options: opts,
       resolve: Object.assign(
         function resolve(path: string) {
-          return jitiResolve(ctx, path, { async: false });
+          return jitiResolve(ctx, path, {
+            async: false,
+            conditions: getMatchingConditions(conditionsConfig, path),
+          });
         },
         {
           paths: nativeRequire.resolve.paths,
@@ -145,7 +159,12 @@ export default function createJiti(
         id: string,
         opts?: JitiResolveOptions & { default?: true },
       ): Promise<T> {
-        const mod = await jitiRequire(ctx, id, { ...opts, async: true });
+        const mod = await jitiRequire(ctx, id, {
+          ...opts,
+          conditions:
+            opts?.conditions ?? getMatchingConditions(conditionsConfig, id),
+          async: true,
+        });
         return opts?.default ? (mod?.default ?? mod) : mod;
       },
       esmResolve(id: string, opts?: string | JitiResolveOptions): string {
@@ -155,6 +174,8 @@ export default function createJiti(
         const resolved = jitiResolve(ctx, id, {
           parentURL: url as any,
           ...opts,
+          conditions:
+            opts?.conditions ?? getMatchingConditions(conditionsConfig, id),
           async: true,
         });
         if (
@@ -165,6 +186,16 @@ export default function createJiti(
           return resolved;
         }
         return pathToFileURL(resolved);
+      },
+      getMatchingConditions(
+        specifier: string,
+        extraConditions?: string[] | null,
+      ) {
+        return getMatchingConditions(
+          conditionsConfig,
+          specifier,
+          extraConditions,
+        );
       },
     },
   ) as Jiti;
