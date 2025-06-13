@@ -167,6 +167,9 @@ importers:
       terser-webpack-plugin:
         specifier: ^5.3.14
         version: 5.3.14(webpack@5.98.0)
+      test-package-1:
+        specifier: workspace:*
+        version: link:test/packages/test-package-1
       tinyexec:
         specifier: ^0.3.2
         version: 0.3.2
@@ -200,6 +203,8 @@ importers:
       zod:
         specifier: ^3.24.2
         version: 3.24.2
+
+  test/packages/test-package-1: {}
 
 packages:
 

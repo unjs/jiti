@@ -1,0 +1,15 @@
+{
+  "name": "test-package-1",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "development": "./ts-entry.ts",
+      "import": "./esm-entry.js",
+      "require": "./cjs-entry.cjs",
+      "default": "./cjs-entry.cjs"
+    }
+  },
+  "files": []
+}

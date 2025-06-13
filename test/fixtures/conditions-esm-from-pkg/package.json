@@ -1,0 +1,14 @@
+{
+  "type": "module",
+  "conditions": [
+    {
+      "match": [
+        "test-package-1"
+      ],
+      "ignore": [],
+      "values": [
+        "development"
+      ]
+    }
+  ]
+}
