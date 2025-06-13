@@ -4,6 +4,10 @@ exports[`fixtures > async > stdout 1`] = `"works"`;
 
 exports[`fixtures > circular > stdout 1`] = `"a b c"`;
 
+exports[`fixtures > conditions-esm > stdout 1`] = `"Works!"`;
+
+exports[`fixtures > conditions-esm-from-pkg > stdout 1`] = `"Works!"`;
+
 exports[`fixtures > data-uri > stdout 1`] = `""`;
 
 exports[`fixtures > deps > stdout 1`] = `

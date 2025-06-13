@@ -1,4 +1,5 @@
-import type { JitiOptions, ModuleCache } from "../lib/types";
+import type { ConditionsConfig, JitiOptions, ModuleCache } from "../lib/types";
+import type { PackageJson } from "pkg-types";
 export type {
   JitiOptions,
   ModuleCache,
@@ -26,3 +27,15 @@ export interface Context {
   nativeRequire: NodeRequire;
   createRequire: (typeof import("node:module"))["createRequire"];
 }
+
+export interface ExtendedPackageJson extends PackageJson {
+  conditions?: ConditionsConfig;
+}
+
+export interface ConditionsConfigResolvedItem {
+  match: string[] | null;
+  ignore: string[] | null;
+  values: string[];
+}
+
+export type ConditionsConfigResolved = ConditionsConfigResolvedItem[];

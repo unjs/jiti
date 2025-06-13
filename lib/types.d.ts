@@ -235,6 +235,16 @@ export interface JitiOptions {
    * @default false
    */
   jsx?: boolean | JSXOptions;
+
+  /**
+   * Enable resolution using
+   * {@link https://nodejs.org/api/packages.html#resolving-user-conditions | `Node.js custom user conditions`}.
+   *
+   * When `true` conditions config is read from the nearest `package.json` file.
+   *
+   * @default true
+   */
+  conditions?: boolean | ConditionsConfig;
 }
 
 interface NodeRequire {
@@ -351,3 +361,14 @@ export interface JSXOptions {
   useBuiltIns?: boolean;
   useSpread?: boolean;
 }
+
+export interface ConditionsConfigItem {
+  match?: string | string[];
+  ignore?: string | string[];
+  values: string[];
+}
+
+export type ConditionsConfig =
+  | string[]
+  | Record<string, string[]>
+  | ConditionsConfigItem[];

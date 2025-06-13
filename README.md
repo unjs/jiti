@@ -27,6 +27,7 @@
 - Filesystem transpile with hard disk caches
 - ESM Loader support
 - JSX support (opt-in)
+- [Custom user conditions](https://nodejs.org/api/packages.html#resolving-user-conditions) support
 
 > [!IMPORTANT]
 > To enhance compatibility, jiti `>=2.1` enabled [`interopDefault`](#interopdefault) using a new Proxy method. If you migrated to `2.0.0` earlier, this might have caused behavior changes. In case of any issues during the upgrade, please [report](https://github.com/unjs/jiti/issues) so we can investigate to solve them. 🙏🏼
@@ -203,13 +204,95 @@ Try to use native require and import without jiti transformations first.
 
 ### `jsx`
 
-- Type: Boolean | {options}
+- Type: Boolean | JSXOptions
 - Default: `false`
 - Environment Variable: `JITI_JSX`
 
 Enable JSX support using [`@babel/plugin-transform-react-jsx`](https://babeljs.io/docs/babel-plugin-transform-react-jsx).
 
 See [`test/fixtures/jsx`](./test/fixtures/jsx) for framework integration examples.
+
+<details>
+<summary>JSXOptions</summary>
+
+```ts
+interface JSXOptions {
+  throwIfNamespace?: boolean;
+  runtime?: "classic" | "automatic";
+  importSource?: string;
+  pragma?: string;
+  pragmaFrag?: string;
+  useBuiltIns?: boolean;
+  useSpread?: boolean;
+}
+```
+
+</details>
+
+### `conditions`
+
+- Type: Boolean | ConditionsConfig
+- Default: `true`
+- Environment Variable: `JITI_CONDITIONS`
+
+Enable resolution using [Node.js custom user conditions](https://nodejs.org/api/packages.html#resolving-user-conditions).
+
+When `true` conditions config is read from the nearest `package.json` file.
+
+<details>
+<summary>ConditionsConfig</summary>
+
+```ts
+type ConditionsConfig =
+  | string[]
+  | Record<string, string[]>
+  | ConditionsConfigItem[];
+
+interface ConditionsConfigItem {
+  match?: string | string[];
+  ignore?: string | string[];
+  values: string[];
+}
+```
+
+</details>
+
+<details>
+<summary>Examples</summary>
+
+1. Add conditions to all packages:
+
+```json
+{
+  "conditions": ["development"]
+}
+```
+
+2. Add conditions to specific packages:
+
+```json
+{
+  "conditions": {
+    "@scope/**/*": ["development"]
+  }
+}
+```
+
+3. More grained control with `match`, `ignore`, and `values`:
+
+```json
+{
+  "conditions": [
+    {
+      "match": ["@scope/**/*"],
+      "ignore": ["@scope/some-specific-package"],
+      "values": ["development"]
+    }
+  ]
+}
+```
+
+</details>
 
 ## Development
 

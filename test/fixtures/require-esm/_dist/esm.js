@@ -1,3 +1,3 @@
-import fn from "./fn.js";
-import file from "./file";
+import fn from "./fn.cjs";
+import file from "./file.cjs";
 export default { fn, file };

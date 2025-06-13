@@ -1,4 +1,5 @@
 import type { JitiOptions } from "./types";
+import type { ConditionsConfig } from "../lib/types";
 
 export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
   const jitiDefaults: JitiOptions = {
@@ -26,6 +27,7 @@ export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
     transformModules: _jsonEnv<string[]>("JITI_TRANSFORM_MODULES", []),
     tryNative: _jsonEnv<boolean>("JITI_TRY_NATIVE", "Bun" in globalThis),
     jsx: _booleanEnv("JITI_JSX", false),
+    conditions: _jsonEnv<boolean | ConditionsConfig>("JITI_CONDITIONS", true),
   };
 
   if (jitiDefaults.jsx) {

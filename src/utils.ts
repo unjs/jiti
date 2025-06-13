@@ -1,11 +1,19 @@
 import { lstatSync, accessSync, constants, readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { isAbsolute, join } from "pathe";
+import { dirname, isAbsolute, join } from "pathe";
 import type { PackageJson } from "pkg-types";
 import { pathToFileURL } from "mlly";
 import { isWindows } from "std-env";
-import type { Context } from "./types";
+import type {
+  ConditionsConfigResolved,
+  ConditionsConfigResolvedItem,
+  Context,
+  ExtendedPackageJson,
+  JitiOptions,
+} from "./types";
 import { gray, green, blue, yellow, cyan, red } from "yoctocolors";
+import { minimatch } from "minimatch";
+import type { ConditionsConfig } from "../lib/types";
 
 export function isDir(filename: string | URL): boolean {
   if (typeof filename !== "string" || filename.startsWith("file://")) {
@@ -146,4 +154,104 @@ export function normalizeWindowsImportId(id: string) {
     return id;
   }
   return pathToFileURL(id);
+}
+
+export function hasAccessSync(path: string) {
+  try {
+    accessSync(path, constants.F_OK);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function findClosestPackageJsonSync(
+  dir: string,
+): ExtendedPackageJson | null {
+  if (dir === "/") return null;
+
+  const packageJsonPath = join(dir, "package.json");
+
+  if (hasAccessSync(packageJsonPath)) {
+    return JSON.parse(readFileSync(packageJsonPath, "utf8"));
+  }
+
+  return findClosestPackageJsonSync(dirname(dir));
+}
+
+export function array<T>(v: T | T[]): T[] {
+  return Array.isArray(v) ? v : [v];
+}
+
+export function resolveConditionsConfig(
+  opts: JitiOptions,
+): ConditionsConfigResolved {
+  let src: ConditionsConfig | boolean | undefined = undefined;
+
+  if (opts.conditions === true) {
+    const pkg = findClosestPackageJsonSync(process.cwd());
+
+    if (pkg && pkg.conditions) {
+      src = pkg.conditions;
+    }
+  } else {
+    src = opts.conditions;
+  }
+
+  if (src) {
+    if (Array.isArray(src)) {
+      return src.map((value): ConditionsConfigResolvedItem => {
+        return typeof value === "string"
+          ? {
+              match: null,
+              ignore: null,
+              values: [value],
+            }
+          : {
+              match: value.match ? array(value.match) : null,
+              ignore: value.ignore ? array(value.ignore) : null,
+              values: value.values,
+            };
+      });
+    } else if (typeof src === "object") {
+      return Object.entries(src).map(
+        ([key, values]): ConditionsConfigResolvedItem => {
+          return {
+            match: [key],
+            ignore: null,
+            values,
+          };
+        },
+      );
+    }
+  }
+
+  return [
+    {
+      match: null,
+      ignore: null,
+      values: [],
+    },
+  ];
+}
+
+export function getMatchingConditions(
+  config: ConditionsConfigResolved,
+  specifier: string,
+  extraConditions?: string[] | null,
+): string[] | undefined {
+  const conditions: Set<string> = new Set(extraConditions || []);
+
+  for (const { match, ignore, values } of config) {
+    if (
+      (!match || match.some((m) => minimatch(specifier, m))) &&
+      (!ignore || !ignore.some((i) => minimatch(specifier, i)))
+    ) {
+      for (const value of values) {
+        conditions.add(value);
+      }
+    }
+  }
+
+  return conditions.size > 0 ? [...conditions] : undefined;
 }
