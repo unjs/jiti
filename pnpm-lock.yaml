@@ -87,8 +87,8 @@ importers:
         specifier: ^0.6.1
         version: 0.6.1(magicast@0.3.5)
       config:
-        specifier: ^3.3.12
-        version: 3.3.12
+        specifier: ^4.0.1
+        version: 4.0.1
       consola:
         specifier: ^3.4.0
         version: 3.4.0
@@ -1136,9 +1136,9 @@ packages:
   confbox@0.2.1:
     resolution: {integrity: sha512-hkT3yDPFbs95mNCy1+7qNKC6Pro+/ibzYxtM2iqEigpf0sVw+bg4Zh9/snjsBcf990vfIsg5+1U7VyiyBb3etg==}
 
-  config@3.3.12:
-    resolution: {integrity: sha512-Vmx389R/QVM3foxqBzXO8t2tUikYZP64Q6vQxGrsMpREeJc/aWRnPRERXWsYzOHAumx/AOoILWe6nU3ZJL+6Sw==}
-    engines: {node: '>= 10.0.0'}
+  config@4.0.1:
+    resolution: {integrity: sha512-ASEWHlW28WEsaxXt8+pNQcHvJVqk5KFTGiq9s0YbnBCkEiUwvfB/dOm4jLgfylBo1GamQAS0DzhWY7T7/h8Mgg==}
+    engines: {node: '>= 20.0.0'}
 
   consola@3.4.0:
     resolution: {integrity: sha512-EiPU8G6dQG0GFHNR8ljnZFki/8a+cQwEQ+7wpxdChl02Q8HXlwEZWD5lqAF8vC2sEC3Tehr8hy7vErz88LHyUA==}
@@ -3422,7 +3422,7 @@ snapshots:
 
   confbox@0.2.1: {}
 
-  config@3.3.12:
+  config@4.0.1:
     dependencies:
       json5: 2.2.3
 
