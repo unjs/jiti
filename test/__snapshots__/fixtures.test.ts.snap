@@ -70,7 +70,7 @@ exports[`fixtures > json > stdout 1`] = `
 "Imported : { test: 123 } .default: { test: 123 }
 Imported with assertion : { test: 123 } .default: { test: 123 }
 Required : { test: 123 } .default: { test: 123 }
-Dynamic Imported : [Object: null prototype] { test: 123, default: { test: 123 } } .default: { test: 123 }"
+Dynamic Imported : [Object: null prototype] { default: { test: 123 }, test: 123 } .default: { test: 123 }"
 `;
 
 exports[`fixtures > jsx > stdout 1`] = `

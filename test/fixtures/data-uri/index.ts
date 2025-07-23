@@ -6,7 +6,7 @@ try {
   require(uri);
   throw null;
 } catch (error) {
-  assert(
+  assert.ok(
     error instanceof Error,
     "Expected an error message for sync import of data URL",
   );

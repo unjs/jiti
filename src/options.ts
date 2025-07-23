@@ -3,6 +3,7 @@ import type { JitiOptions } from "./types";
 export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
   const jitiDefaults: JitiOptions = {
     fsCache: _booleanEnv("JITI_FS_CACHE", _booleanEnv("JITI_CACHE", true)),
+    rebuildFsCache: _booleanEnv("JITI_REBUILD_FS_CACHE", false),
     moduleCache: _booleanEnv(
       "JITI_MODULE_CACHE",
       _booleanEnv("JITI_REQUIRE_CACHE", true),

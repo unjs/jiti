@@ -96,6 +96,16 @@ export interface JitiOptions {
   fsCache?: boolean | string;
 
   /**
+   * Rebuild the filesystem source cache
+   *
+   * This option can also be enabled using
+   * `JITI_REBUILD_FS_CACHE=true` environment variable.
+   *
+   * @default false
+   */
+  rebuildFsCache?: boolean;
+
+  /**
    * @deprecated Use the {@linkcode fsCache} option.
    *
    * @default true
