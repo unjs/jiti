@@ -49,6 +49,8 @@ describe("fixtures", async () => {
             .replace("    ^", "  ^")
             // eslint-disable-next-line no-control-regex
             .replace(/\u001B\[[\d;]*m/gu, "")
+            .replace(/^filename.*$/gm, "") // Remove filename lines
+            .replace(/\n+/g, "\n") // Remove extra newlines
             .trim()
         );
       }
