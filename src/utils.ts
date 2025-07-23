@@ -29,7 +29,7 @@ export function isWritable(filename: string): boolean {
   }
 }
 
-export function md5(content: string, len = 8) {
+export function hash(content: string, len = 8) {
   const hash = isFipsMode()
     ? nodeCrypto.createHash("sha256") // #340
     : nodeCrypto.createHash("md5");
@@ -151,11 +151,17 @@ export function normalizeWindowsImportId(id: string) {
   return pathToFileURL(id);
 }
 
+let _fipsMode: boolean | undefined;
+
 function isFipsMode() {
+  if (_fipsMode !== undefined) {
+    return _fipsMode;
+  }
   try {
-    return !!nodeCrypto.getFips?.();
+    _fipsMode = !!nodeCrypto.getFips?.();
+    return _fipsMode;
   } catch {
-    // Deno throws error (https://github.com/denoland/deno/issues/18455)
-    return false;
+    _fipsMode = false;
+    return _fipsMode;
   }
 }
