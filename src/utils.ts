@@ -60,6 +60,7 @@ export function wrapModule(source: string, opts?: { async?: boolean }) {
 const debugMap = {
   true: green("true"),
   false: yellow("false"),
+  "[rebuild]": yellow("[rebuild]"),
   "[esm]": blue("[esm]"),
   "[cjs]": green("[cjs]"),
   "[import]": blue("[import]"),

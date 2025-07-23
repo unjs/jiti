@@ -32,7 +32,7 @@ export function getCache(
   const cacheDir = ctx.opts.fsCache as string;
   const cacheFilePath = join(cacheDir, cacheName);
 
-  if (existsSync(cacheFilePath)) {
+  if (!ctx.opts.rebuildFsCache && existsSync(cacheFilePath)) {
     const cacheSource = readFileSync(cacheFilePath, "utf8");
     if (cacheSource.endsWith(sourceHash)) {
       debug(ctx, "[cache]", "[hit]", topts.filename, "~>", cacheFilePath);
