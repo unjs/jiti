@@ -1,5 +1,5 @@
 import { lstatSync, accessSync, constants, readFileSync } from "node:fs";
-import { createHash } from "node:crypto";
+import nodeCrypto from "node:crypto";
 import { isAbsolute, join } from "pathe";
 import type { PackageJson } from "pkg-types";
 import { pathToFileURL } from "mlly";
@@ -29,8 +29,11 @@ export function isWritable(filename: string): boolean {
   }
 }
 
-export function md5(content: string, len = 8) {
-  return createHash("md5").update(content).digest("hex").slice(0, len);
+export function hash(content: string, len = 8) {
+  const hash = isFipsMode()
+    ? nodeCrypto.createHash("sha256") // #340
+    : nodeCrypto.createHash("md5");
+  return hash.update(content).digest("hex").slice(0, len);
 }
 
 export function readNearestPackageJSON(path: string): PackageJson | undefined {
@@ -146,4 +149,19 @@ export function normalizeWindowsImportId(id: string) {
     return id;
   }
   return pathToFileURL(id);
+}
+
+let _fipsMode: boolean | undefined;
+
+function isFipsMode() {
+  if (_fipsMode !== undefined) {
+    return _fipsMode;
+  }
+  try {
+    _fipsMode = !!nodeCrypto.getFips?.();
+    return _fipsMode;
+  } catch {
+    _fipsMode = false;
+    return _fipsMode;
+  }
 }
