@@ -98,6 +98,8 @@ exports[`fixtures > require-esm > stderr 1`] = `[]`;
 
 exports[`fixtures > require-esm > stdout 1`] = `"Works!"`;
 
+exports[`fixtures > require-json > stdout 1`] = `"{ type: 'commonjs' }"`;
+
 exports[`fixtures > syntax > stdout 1`] = `
 "Optional chaining: undefined
 Nullish coalescing: 0
