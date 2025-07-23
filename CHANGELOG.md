@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.5.0
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.4.2...v2.5.0)
+
+### 🚀 Enhancements
+
+- Use `sha256` for cache entries in fips mode ([#375](https://github.com/unjs/jiti/pull/375))
+- `rebuildFsCache` ( `JITI_REBUILD_FS_CACHE`) ([#379](https://github.com/unjs/jiti/pull/379))
+
+### 🩹 Fixes
+
+- Interop modules with nil default export ([#377](https://github.com/unjs/jiti/pull/377))
+- **register:** Handle `require(<json>)` ([#374](https://github.com/unjs/jiti/pull/374))
+
+### 🏡 Chore
+
+- Update ci ([6b7fe8b](https://github.com/unjs/jiti/commit/6b7fe8b))
+- Update deps ([fb2b903](https://github.com/unjs/jiti/commit/fb2b903))
+- Add defaults in JSDocs ([#365](https://github.com/unjs/jiti/pull/365))
+- Update deps ([35a6a61](https://github.com/unjs/jiti/commit/35a6a61))
+- Lint ([dde7c82](https://github.com/unjs/jiti/commit/dde7c82))
+- Update snapshot ([c567a37](https://github.com/unjs/jiti/commit/c567a37))
+
+### ✅ Tests
+
+- Update snapshot ([c7cfeed](https://github.com/unjs/jiti/commit/c7cfeed))
+- Only include src for coverage report ([#372](https://github.com/unjs/jiti/pull/372))
+
+### ❤️ Contributors
+
+- Kricsleo ([@kricsleo](https://github.com/kricsleo))
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+- Kanon ([@ysknsid25](https://github.com/ysknsid25))
+- Arya Emami ([@aryaemami59](https://github.com/aryaemami59))
+
 ## v2.4.2
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.4.1...v2.4.2)
