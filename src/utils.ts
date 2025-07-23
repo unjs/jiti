@@ -1,5 +1,5 @@
 import { lstatSync, accessSync, constants, readFileSync } from "node:fs";
-import { createHash } from "node:crypto";
+import nodeCrypto from "node:crypto";
 import { isAbsolute, join } from "pathe";
 import type { PackageJson } from "pkg-types";
 import { pathToFileURL } from "mlly";
@@ -29,8 +29,11 @@ export function isWritable(filename: string): boolean {
   }
 }
 
-export function md5(content: string, len = 8) {
-  return createHash("md5").update(content).digest("hex").slice(0, len);
+export function hash(content: string, len = 8) {
+  const hash = isFipsMode()
+    ? nodeCrypto.createHash("sha256") // #340
+    : nodeCrypto.createHash("md5");
+  return hash.update(content).digest("hex").slice(0, len);
 }
 
 export function readNearestPackageJSON(path: string): PackageJson | undefined {
@@ -57,6 +60,7 @@ export function wrapModule(source: string, opts?: { async?: boolean }) {
 const debugMap = {
   true: green("true"),
   false: yellow("false"),
+  "[rebuild]": yellow("[rebuild]"),
   "[esm]": blue("[esm]"),
   "[cjs]": green("[cjs]"),
   "[import]": blue("[import]"),
@@ -106,9 +110,7 @@ function interopDefault(mod: any): any {
 
   const def = mod.default;
   const defType = typeof def;
-  if (def === null || def === undefined) {
-    return mod;
-  }
+  const defIsNil = def === null || def === undefined;
   const defIsObj = defType === "object" || defType === "function";
 
   return new Proxy(mod, {
@@ -117,7 +119,7 @@ function interopDefault(mod: any): any {
         return true;
       }
       if (prop === "default") {
-        return def;
+        return defIsNil ? mod : def;
       }
       if (Reflect.has(target, prop)) {
         return Reflect.get(target, prop, receiver);
@@ -146,4 +148,19 @@ export function normalizeWindowsImportId(id: string) {
     return id;
   }
   return pathToFileURL(id);
+}
+
+let _fipsMode: boolean | undefined;
+
+function isFipsMode() {
+  if (_fipsMode !== undefined) {
+    return _fipsMode;
+  }
+  try {
+    _fipsMode = !!nodeCrypto.getFips?.();
+    return _fipsMode;
+  } catch {
+    _fipsMode = false;
+    return _fipsMode;
+  }
 }

@@ -293,9 +293,8 @@ export default declare((api: PluginAPI, options: Options) => {
               `;
             }
             header.loc = metadata.loc;
-
-            headers.push(header);
             headers.push(
+              header,
               ...buildNamespaceInitStatements(
                 meta,
                 metadata,
