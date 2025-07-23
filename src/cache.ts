@@ -3,7 +3,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, basename, resolve } from "pathe";
 import { filename } from "pathe/utils";
-import { debug, isWritable, md5 } from "./utils";
+import { debug, isWritable, hash } from "./utils";
 
 const CACHE_VERSION = "9";
 
@@ -17,14 +17,14 @@ export function getCache(
   }
 
   // Compute inline hash for source
-  const sourceHash = ` /* v${CACHE_VERSION}-${md5(topts.source, 16)} */\n`;
+  const sourceHash = ` /* v${CACHE_VERSION}-${hash(topts.source, 16)} */\n`;
 
   // Compute cache file path
   let cacheName =
     `${basename(dirname(topts.filename))}-${filename(topts.filename)}` +
     (ctx.opts.sourceMaps ? "+map" : "") +
     (topts.interopDefault ? ".i" : "") +
-    `.${md5(topts.filename)}` +
+    `.${hash(topts.filename)}` +
     (topts.async ? ".mjs" : ".cjs");
   if (topts.jsx && topts.filename.endsWith("x") /* jsx */) {
     cacheName += "x";

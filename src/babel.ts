@@ -65,8 +65,7 @@ export default function transform(opts: TransformOptions): TransformResult {
       [transformTypeScriptMetaPlugin],
       [proposalDecoratorsPlugin, { legacy: true }],
     );
-    _opts.plugins.push(parameterDecoratorPlugin);
-    _opts.plugins.push(syntaxImportAssertionsPlugin);
+    _opts.plugins.push(parameterDecoratorPlugin, syntaxImportAssertionsPlugin);
   }
 
   if (opts.babel && Array.isArray(opts.babel.plugins)) {
