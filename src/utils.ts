@@ -110,9 +110,7 @@ function interopDefault(mod: any): any {
 
   const def = mod.default;
   const defType = typeof def;
-  if (def === null || def === undefined) {
-    return mod;
-  }
+  const defIsNil = def === null || def === undefined;
   const defIsObj = defType === "object" || defType === "function";
 
   return new Proxy(mod, {
@@ -121,7 +119,7 @@ function interopDefault(mod: any): any {
         return true;
       }
       if (prop === "default") {
-        return def;
+        return defIsNil ? mod : def;
       }
       if (Reflect.has(target, prop)) {
         return Reflect.get(target, prop, receiver);
