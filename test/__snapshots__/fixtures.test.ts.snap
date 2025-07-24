@@ -94,7 +94,11 @@ Enter Identifier
 Enter Literal"
 `;
 
-exports[`fixtures > require-esm > stderr 1`] = `[]`;
+exports[`fixtures > require-esm > stderr 1`] = `
+[
+  "ExperimentalWarning: CommonJS module <cwd>/index.cjs is loading ES Module <cwd>/_dist/esm.js using require().",
+]
+`;
 
 exports[`fixtures > require-esm > stdout 1`] = `"Works!"`;
 
@@ -127,5 +131,6 @@ Decorator called with 1 arguments.
     normalizeUserEntity: [Function: normalizeUserEntity]
   }
 }
-child"
+child
+promise resolved"
 `;
