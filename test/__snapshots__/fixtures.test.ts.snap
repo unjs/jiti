@@ -127,5 +127,6 @@ Decorator called with 1 arguments.
     normalizeUserEntity: [Function: normalizeUserEntity]
   }
 }
-child"
+child
+promise resolved"
 `;

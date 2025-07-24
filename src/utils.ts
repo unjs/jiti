@@ -113,6 +113,11 @@ function interopDefault(mod: any): any {
   const defIsNil = def === null || def === undefined;
   const defIsObj = defType === "object" || defType === "function";
 
+  if (defIsNil && mod instanceof Promise) {
+    // Hotfix for #388
+    return mod;
+  }
+
   return new Proxy(mod, {
     get(target, prop, receiver) {
       if (prop === "__esModule") {
