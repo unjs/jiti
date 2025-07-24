@@ -15,9 +15,7 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitOverride": true,
     "experimentalDecorators": true,
-    "declaration": false,
-    "noEmit": true,
-    "allowImportingTsExtensions": true
+    "declaration": false
   },
   "include": ["src", "lib", "test"],
   "exclude": ["test/fixtures/error-parse/index.ts"]
