@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.5.1
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.5.0...v2.5.1)
+
+### 🩹 Fixes
+
+- **interop:** Passthrough module if it is a promise ([#389](https://github.com/unjs/jiti/pull/389))
+
+### ❤️ Contributors
+
+- Pooya Parsa <pyapar@gmail.com>
+
 ## v2.5.0
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.4.2...v2.5.0)
