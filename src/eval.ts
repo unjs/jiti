@@ -38,7 +38,7 @@ export function evalModule(
   const isESM =
     (ext === ".mjs" || ext === ".mts") ||
     ((ext === ".js" || ext === ".ts") && readNearestPackageJSON(filename)?.type === "module");
-  const isCommonJS = ext === ".cjs";
+  const isCommonJS = ext === ".cjs" || ext === '.cts';
   const needsTranspile =
     evalOptions.forceTranspile ??
     (isTypescript || // TS always needs transpile
