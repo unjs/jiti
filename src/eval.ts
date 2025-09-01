@@ -14,6 +14,8 @@ import { jitiResolve } from "./resolve";
 import { jitiRequire, nativeImportOrRequire } from "./require";
 import createJiti from "./jiti";
 import { transform } from "./transform";
+import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 export function evalModule(
   ctx: Context,
@@ -34,15 +36,16 @@ export function evalModule(
   // Transpile
   const isTypescript = /\.[cm]?tsx?$/.test(ext);
   const isESM =
-    ext === ".mjs" ||
-    (ext === ".js" && readNearestPackageJSON(filename)?.type === "module");
+    (ext === ".mjs" || ext === ".mts") ||
+    ((ext === ".js" || ext === ".ts") && readNearestPackageJSON(filename)?.type === "module");
   const isCommonJS = ext === ".cjs";
   const needsTranspile =
     evalOptions.forceTranspile ??
-    (!isCommonJS && // CommonJS skips transpile
+    (isTypescript || // TS always needs transpile
+      !isCommonJS && // CommonJS skips transpile
       !(isESM && evalOptions.async) && // In async mode, we can skip native ESM as well
       // prettier-ignore
-      (isTypescript || isESM || ctx.isTransformRe.test(filename) || hasESMSyntax(source)));
+      (isESM || ctx.isTransformRe.test(filename) || hasESMSyntax(source)));
   const start = performance.now();
   if (needsTranspile) {
     source = transform(ctx, {
@@ -138,9 +141,15 @@ export function evalModule(
   // Compile wrapped script
   let compiled;
   const wrapped = wrapModule(source, { async: evalOptions.async });
+
+  const formattedFileName = (() => {
+    const resolved = path.resolve(filename);
+    return isESM ? pathToFileURL(resolved).href : resolved;
+  })();
+
   try {
     compiled = vm.runInThisContext(wrapped, {
-      filename,
+      filename: formattedFileName,
       lineOffset: 0,
       displayErrors: false,
     });
