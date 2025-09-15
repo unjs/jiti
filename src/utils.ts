@@ -125,6 +125,7 @@ function interopDefault(mod: any): any {
       }
       if (prop === "default") {
         if (
+          mod.__esModule &&
           !defIsNil &&
           typeof def === "object" &&
           typeof def.default === "function"
