@@ -7,6 +7,10 @@
   "type": "module",
   "exports": {
     ".": {
+      "deno": {
+        "types": "./lib/jiti.d.mts",
+        "import": "./lib/jiti-native.mjs"
+      },
       "import": {
         "types": "./lib/jiti.d.mts",
         "default": "./lib/jiti.mjs"
