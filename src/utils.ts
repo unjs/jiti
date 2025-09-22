@@ -124,15 +124,13 @@ function interopDefault(mod: any): any {
         return true;
       }
       if (prop === "default") {
-        if (
-          mod.__esModule &&
-          !defIsNil &&
-          typeof def === "object" &&
-          typeof def.default === "function"
-        ) {
-          return def.default;
+        if (defIsNil) {
+          return mod;
         }
-        return defIsNil ? mod : def;
+        if (typeof def?.default === "function" && mod.__esModule) {
+          return def.default; // #396
+        }
+        return def;
       }
       if (Reflect.has(target, prop)) {
         return Reflect.get(target, prop, receiver);
