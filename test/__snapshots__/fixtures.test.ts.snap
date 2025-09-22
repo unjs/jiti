@@ -4,6 +4,8 @@ exports[`fixtures > async > stdout 1`] = `"works"`;
 
 exports[`fixtures > circular > stdout 1`] = `"a b c"`;
 
+exports[`fixtures > cjs-interop > stdout 1`] = `"CJS function default interop test passed"`;
+
 exports[`fixtures > data-uri > stdout 1`] = `""`;
 
 exports[`fixtures > deps > stdout 1`] = `
