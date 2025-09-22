@@ -1,5 +1,4 @@
 import { fileURLToPath } from "node:url";
-import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 import { rspack } from "@rspack/core";
 
 export default {
@@ -27,10 +26,6 @@ export default {
       ),
     },
   },
-  plugins: [
-    process.argv.find((arg) => arg.includes("--analyze")) &&
-      new BundleAnalyzerPlugin({}),
-  ],
   ignoreWarnings: [/critical dependency:/i],
   module: {
     rules: [
