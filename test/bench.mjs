@@ -24,9 +24,9 @@ const logMemory = (label) => {
 };
 
 console.time("jiti:load");
-const createJiti = require("../lib/jiti.cjs");
+const { createJiti } = await import("jiti");
 console.timeEnd("jiti:load");
-logMemory("jiti:load:");
+logMemory("jiti:load");
 
 console.time("jiti:init");
 const jiti = createJiti(import.meta.url, {
@@ -34,9 +34,11 @@ const jiti = createJiti(import.meta.url, {
   fsCache: false,
 });
 console.timeEnd("jiti:init");
+logMemory("jiti:init");
 
 for (let i = 0; i < 4; i++) {
   console.time("jiti:import:ts");
   await jiti.import("../fixtures/typescript/test.ts");
   console.timeEnd("jiti:import:ts");
+  logMemory("jiti:import:ts");
 }
