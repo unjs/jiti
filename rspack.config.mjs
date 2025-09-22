@@ -1,7 +1,8 @@
 import { fileURLToPath } from "node:url";
 import { rspack } from "@rspack/core";
+import { defineConfig } from "@rspack/cli";
 
-export default {
+export default defineConfig({
   target: "node",
   mode: "production",
   entry: {
@@ -26,7 +27,21 @@ export default {
       ),
     },
   },
-  ignoreWarnings: [/critical dependency:/i],
+  ignoreWarnings: [
+    {
+      module: /[\\/]node_modules[\\/]mlly[\\/]/,
+      message: /the request of a dependency is an expression/,
+    },
+    {
+      module: /[\\/]node_modules[\\/]@babel.*/,
+      message: /require.extensions is not supported/,
+    },
+    {
+      module: /[\\/]node_modules[\\/]@babel.*/,
+      message:
+        /the request of a dependency is an expression|require function is used in a way in which/,
+    },
+  ],
   module: {
     rules: [
       {
@@ -42,6 +57,10 @@ export default {
     moduleIds: "named",
     chunkIds: "named",
     minimize: true,
-    minimizer: [new rspack.SwcJsMinimizerRspackPlugin({ mangle: false })],
+    minimizer: [
+      new rspack.SwcJsMinimizerRspackPlugin({
+        minimizerOptions: { mangle: false },
+      }),
+    ],
   },
-};
+});
