@@ -1,6 +1,6 @@
 import type { Context, JitiResolveOptions } from "./types";
 import { readFileSync } from "node:fs";
-import { isBuiltin } from "node:module";
+import { builtinModules } from "node:module";
 import { fileURLToPath } from "node:url";
 import { extname } from "pathe";
 import { jitiInteropDefault, normalizeWindowsImportId } from "./utils";
@@ -31,7 +31,7 @@ export function jitiRequire(
   }
 
   // Check for builtin node module like fs
-  if (isBuiltin(id) || id === ".pnp.js" /* #24 */) {
+  if (builtinModules.includes(id) || id === ".pnp.js" /* #24 */) {
     return nativeImportOrRequire(ctx, id, opts.async);
   }
 
