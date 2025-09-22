@@ -59,7 +59,12 @@ export default defineConfig({
     minimize: true,
     minimizer: [
       new rspack.SwcJsMinimizerRspackPlugin({
-        minimizerOptions: { mangle: false },
+        minimizerOptions: {
+          mangle: {
+            keep_fnames: true,
+            keep_classnames: true,
+          },
+        },
       }),
     ],
   },
