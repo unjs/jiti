@@ -86,6 +86,8 @@ exports[`fixtures > mixed > stdout 1`] = `"Mixed works for: <cwd>"`;
 
 exports[`fixtures > native > stdout 1`] = `"[Module: null prototype] { default: { hasRequire: false } }"`;
 
+exports[`fixtures > node > stdout 1`] = `"node:test true"`;
+
 exports[`fixtures > proto > stdout 1`] = `"exists: true"`;
 
 exports[`fixtures > pure-esm-dep > stdout 1`] = `

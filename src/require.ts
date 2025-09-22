@@ -17,7 +17,7 @@ export function jitiRequire(
 
   // Check for node:, file:, and data: protocols
   if (id.startsWith("node:")) {
-    id = id.slice(5);
+    return nativeImportOrRequire(ctx, id, opts.async);
   } else if (id.startsWith("file:")) {
     id = fileURLToPath(id);
   } else if (id.startsWith("data:")) {
