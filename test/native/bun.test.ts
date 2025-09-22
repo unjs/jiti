@@ -13,7 +13,6 @@ const ignore = new Set([
   "error-parse",
   "typescript",
   "data-uri",
-  "jsx",
 ]);
 
 for (const fixture of fixtures) {

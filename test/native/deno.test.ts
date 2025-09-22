@@ -10,19 +10,13 @@ const jiti = createJiti(import.meta.url, { importMeta: import.meta });
 // Mostly broken because default type is set to commonjs in fixtures root
 const ignore = new Set(
   [
-    "error-runtime",
     "error-parse",
-    "pure-esm-dep",
+    "error-runtime",
+    "typescript",
+    "env",
+    "esm",
     "proto",
     "json",
-    "esm",
-    "env",
-    "typescript",
-    "top-level-await",
-    "deps",
-    "circular",
-    "data-uri",
-    "import-map",
   ].filter(Boolean),
 );
 
