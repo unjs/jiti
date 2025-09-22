@@ -48,6 +48,7 @@
     "register.cjs"
   ],
   "scripts": {
+    "bench": "node test/bench.mjs && deno -A test/bench.mjs && bun --bun test/bench.mjs",
     "build": "pnpm clean && NODE_ENV=production pnpm webpack",
     "clean": "rm -rf dist",
     "dev": "pnpm clean && pnpm webpack --watch",
