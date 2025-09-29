@@ -4,6 +4,8 @@ exports[`fixtures > async > stdout 1`] = `"works"`;
 
 exports[`fixtures > circular > stdout 1`] = `"a b c"`;
 
+exports[`fixtures > cjs-interop > stdout 1`] = `"CJS function default interop test passed"`;
+
 exports[`fixtures > data-uri > stdout 1`] = `""`;
 
 exports[`fixtures > deps > stdout 1`] = `
@@ -83,6 +85,8 @@ exports[`fixtures > jsx > stdout 1`] = `
 exports[`fixtures > mixed > stdout 1`] = `"Mixed works for: <cwd>"`;
 
 exports[`fixtures > native > stdout 1`] = `"[Module: null prototype] { default: { hasRequire: false } }"`;
+
+exports[`fixtures > node > stdout 1`] = `"node:test true"`;
 
 exports[`fixtures > proto > stdout 1`] = `"exists: true"`;
 

@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.6.0
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.5.1...v2.6.0)
+
+### 🔥 Performance
+
+- Lazy load babel transform ([#405](https://github.com/unjs/jiti/pull/405))
+
+### 🩹 Fixes
+
+- **cjs-interop:** Handle function default exports ([#396](https://github.com/unjs/jiti/pull/396))
+- Always use native for `node:` specifiers ([#392](https://github.com/unjs/jiti/pull/392))
+
+### 📦 Build
+
+- Migrate to rspack ([#404](https://github.com/unjs/jiti/pull/404))
+
+### 🏡 Chore
+
+- Update deps ([5123334](https://github.com/unjs/jiti/commit/5123334))
+
+### ✅ Tests
+
+- Update deno and bun native test ignores ([df844f8](https://github.com/unjs/jiti/commit/df844f8))
+- New bench script ([6404427](https://github.com/unjs/jiti/commit/6404427))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+- Volodymyr Kolesnykov ([@sjinks](https://github.com/sjinks))
+- Jungwoo LEE <jungwoo3490@naver.com>
+
 ## v2.5.1
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.5.0...v2.5.1)
