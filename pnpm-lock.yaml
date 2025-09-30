@@ -167,6 +167,9 @@ importers:
       std-env:
         specifier: ^3.9.0
         version: 3.9.0
+      terser-webpack-plugin:
+        specifier: ^5.3.14
+        version: 5.3.14(webpack@5.101.3)
       tinyexec:
         specifier: ^1.0.1
         version: 1.0.1

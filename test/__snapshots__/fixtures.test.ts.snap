@@ -119,6 +119,7 @@ Decorator called with 3 arguments.
 Decorator called with 3 arguments.
 Decorator called with 3 arguments.
 Decorator called with 1 arguments.
+foo
 {
   file: '<cwd>/test.ts',
   dir: '<cwd>',

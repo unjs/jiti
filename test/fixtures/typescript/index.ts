@@ -4,6 +4,7 @@ import { test as satisfiesTest } from "./satisfies";
 import { child } from "./parent.mjs";
 // @ts-expect-error (needs allowImportingTsExtensions)
 import defPromise from "./def-promise.cts";
+import "./namespace";
 
 export type { Test } from "./types";
 

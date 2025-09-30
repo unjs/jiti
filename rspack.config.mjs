@@ -1,5 +1,5 @@
 import { fileURLToPath } from "node:url";
-import { rspack } from "@rspack/core";
+import TerserPlugin from 'terser-webpack-plugin'
 import { defineConfig } from "@rspack/cli";
 
 export default defineConfig({
@@ -58,8 +58,8 @@ export default defineConfig({
     chunkIds: "named",
     minimize: true,
     minimizer: [
-      new rspack.SwcJsMinimizerRspackPlugin({
-        minimizerOptions: {
+      new TerserPlugin({
+        terserOptions: {
           mangle: {
             keep_fnames: true,
             keep_classnames: true,
