@@ -135,7 +135,7 @@ function interopDefault(mod: any): any {
       if (Reflect.has(target, prop)) {
         return Reflect.get(target, prop, receiver);
       }
-      if (defIsObj) {
+      if (defIsObj && !((def instanceof Promise) /** issue: #400 */)) {
         let fallback = Reflect.get(def, prop, receiver);
         if (typeof fallback === "function") {
           fallback = fallback.bind(def);
