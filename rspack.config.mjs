@@ -58,6 +58,8 @@ export default defineConfig({
     chunkIds: "named",
     minimize: true,
     minimizer: [
+      // TODO: Migrate to rspack.SwcJsMinimizerRspackPlugin
+      // https://github.com/unjs/jiti/pull/407
       new TerserPlugin({
         terserOptions: {
           mangle: {
