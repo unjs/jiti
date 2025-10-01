@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.6.1
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.6.0...v2.6.1)
+
+### 🩹 Fixes
+
+- **interop:** Only passthrough default if it is not a promise ([#408](https://github.com/unjs/jiti/pull/408))
+
+### 📦 Build
+
+- Revert to `terser-webpack-plugin` ([#407](https://github.com/unjs/jiti/pull/407))
+
+### 🏡 Chore
+
+- Update bench ([037c646](https://github.com/unjs/jiti/commit/037c646))
+- Update deps ([974ca40](https://github.com/unjs/jiti/commit/974ca40))
+- Remove unused code ([8b41497](https://github.com/unjs/jiti/commit/8b41497))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+- Kricsleo ([@kricsleo](https://github.com/kricsleo))
+
 ## v2.6.0
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.5.1...v2.6.0)
