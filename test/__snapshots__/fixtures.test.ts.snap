@@ -55,6 +55,15 @@ exports[`fixtures > esm > stdout 1`] = `
 }"
 `;
 
+exports[`fixtures > export-promise > stdout 1`] = `
+"module: [Module: null prototype] {
+  bar: 'bar',
+  default: Promise { 'foo' },
+  foo: [AsyncFunction: foo]
+}
+default module: foo"
+`;
+
 exports[`fixtures > hashbang > stdout 1`] = `"1"`;
 
 exports[`fixtures > import-map > stdout 1`] = `"{ alias: 'alias' }"`;
@@ -119,6 +128,7 @@ Decorator called with 3 arguments.
 Decorator called with 3 arguments.
 Decorator called with 3 arguments.
 Decorator called with 1 arguments.
+foo
 {
   file: '<cwd>/test.ts',
   dir: '<cwd>',
