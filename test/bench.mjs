@@ -1,5 +1,3 @@
-import { createRequire } from "node:module";
-
 const runtime =
   // eslint-disable-next-line unicorn/no-nested-ternary
   "Bun" in globalThis ? "bun" : "Deno" in globalThis ? "deno" : "node";
@@ -9,8 +7,6 @@ console.log("--------------------------------");
 console.log(
   `> ${runtime} ${globalThis.Deno?.version.deno || globalThis.Bun?.version || process.version}`,
 );
-
-const require = createRequire(import.meta.url);
 
 const initialMem = process.memoryUsage().heapUsed;
 let lastMem = initialMem;
