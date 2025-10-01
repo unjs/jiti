@@ -36,16 +36,18 @@ export function evalModule(
   // Transpile
   const isTypescript = /\.[cm]?tsx?$/.test(ext);
   const isESM =
-    (ext === ".mjs" || ext === ".mts") ||
-    ((ext === ".js" || ext === ".ts") && readNearestPackageJSON(filename)?.type === "module");
-  const isCommonJS = ext === ".cjs" || ext === '.cts';
+    ext === ".mjs" ||
+    ext === ".mts" ||
+    ((ext === ".js" || ext === ".ts") &&
+      readNearestPackageJSON(filename)?.type === "module");
+  const isCommonJS = ext === ".cjs" || ext === ".cts";
   const needsTranspile =
     evalOptions.forceTranspile ??
     (isTypescript || // TS always needs transpile
-      !isCommonJS && // CommonJS skips transpile
-      !(isESM && evalOptions.async) && // In async mode, we can skip native ESM as well
-      // prettier-ignore
-      (isESM || ctx.isTransformRe.test(filename) || hasESMSyntax(source)));
+      (!isCommonJS && // CommonJS skips transpile
+        !(isESM && evalOptions.async) && // In async mode, we can skip native ESM as well
+        // prettier-ignore
+        (isESM || ctx.isTransformRe.test(filename) || hasESMSyntax(source))));
   const start = performance.now();
   if (needsTranspile) {
     source = transform(ctx, {
