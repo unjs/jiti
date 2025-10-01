@@ -69,18 +69,27 @@ exports[`fixtures > filename > stdout 1`] = `
 CJS filename in stack: <cwd>/cjs-module.cjs
 These are equal? true
 CJS filename in stack is resolved on current platform? true
+
+--------------------------------
+
 CTS __filename: <cwd>/cts-module.cts
 CTS filename in stack: <cwd>/cts-module.cts
 These are equal? true
 CTS filename in stack is resolved on current platform? true
+
+--------------------------------
+
 ESM URL: file://<cwd>/esm-module.mjs
 ESM filename in stack: file://<cwd>/esm-module.mjs
 These are equal? true
 ESM URL as path in stack is resolved on current platform? true
+
+--------------------------------
+
 MTS URL: file://<cwd>/mts-module.mts
 MTS URL in stack: file://<cwd>/mts-module.mts
 These are equal? true
-MTS filename in stack is resolved on current platform? true"
+MTS URL as path in stack is resolved on current platform? true"
 `;
 
 exports[`fixtures > hashbang > stdout 1`] = `"1"`;

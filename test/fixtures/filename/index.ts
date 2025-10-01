@@ -17,6 +17,10 @@ const require = createRequire(import.meta.url);
   );
 }
 
+console.log("");
+console.log("--------------------------------");
+console.log("");
+
 {
   // Test CTS module
   const cts = require("./cts-module.cts");
@@ -30,6 +34,10 @@ const require = createRequire(import.meta.url);
   );
 }
 
+console.log("");
+console.log("--------------------------------");
+console.log("");
+
 {
   // Test ESM module
   const esm = await import("./esm-module.mjs");
@@ -37,12 +45,24 @@ const require = createRequire(import.meta.url);
   console.log("ESM URL:", esm.url);
   console.log("ESM filename in stack:", esmStackUrl);
   console.log("These are equal?", esm.url === esmStackUrl);
-  const esmStackUrlAsPath = fileURLToPath(esmStackUrl);
-  console.log(
-    "ESM URL as path in stack is resolved on current platform?",
-    path.resolve(esmStackUrlAsPath) === esmStackUrlAsPath,
-  );
+  let esmStackUrlAsPath = null;
+  try {
+    esmStackUrlAsPath = fileURLToPath(esmStackUrl);
+  } catch {
+    console.log("ESM URL in stack was not a valid file URL!");
+  }
+
+  if (esmStackUrlAsPath != null) {
+    console.log(
+      "ESM URL as path in stack is resolved on current platform?",
+      path.resolve(esmStackUrlAsPath) === esmStackUrlAsPath,
+    );
+  }
 }
+
+console.log("");
+console.log("--------------------------------");
+console.log("");
 
 {
   // Test MTS module
@@ -52,9 +72,16 @@ const require = createRequire(import.meta.url);
   console.log("MTS URL:", mts.url);
   console.log("MTS URL in stack:", mtsStackUrl);
   console.log("These are equal?", mts.url === mtsStackUrl);
-  const mtsStackUrlAsPath = fileURLToPath(mtsStackUrl);
-  console.log(
-    "MTS filename in stack is resolved on current platform?",
-    path.resolve(mtsStackUrlAsPath) === mtsStackUrlAsPath,
-  );
+  let mtsStackUrlAsPath = null;
+  try {
+    mtsStackUrlAsPath = fileURLToPath(mtsStackUrl);
+  } catch {
+    console.log("MTS URL in stack was not a valid file URL!");
+  }
+  if (mtsStackUrlAsPath != null) {
+    console.log(
+      "MTS URL as path in stack is resolved on current platform?",
+      path.resolve(mtsStackUrlAsPath) === mtsStackUrlAsPath,
+    );
+  }
 }
