@@ -129,8 +129,8 @@ export default function createJiti(
       main: nativeRequire.main,
       options: opts,
       resolve: Object.assign(
-        function resolve(path: string) {
-          return jitiResolve(ctx, path, { async: false });
+        function resolve(path: string, options?: NodeJS.RequireResolveOptions) {
+          return jitiResolve(ctx, path, { ...options, async: false });
         },
         {
           paths: nativeRequire.resolve.paths,
