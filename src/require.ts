@@ -49,12 +49,27 @@ export function jitiRequire(
         id,
       );
       if (opts.async && ctx.nativeImport) {
-        return ctx.nativeImport(id).then((m: any) => {
-          if (ctx.opts.moduleCache === false) {
-            delete ctx.nativeRequire.cache[id];
-          }
-          return jitiInteropDefault(ctx, m);
-        });
+        return ctx
+          .nativeImport(id)
+          .then((m: any) => {
+            if (ctx.opts.moduleCache === false) {
+              delete ctx.nativeRequire.cache[id];
+            }
+            return jitiInteropDefault(ctx, m);
+          })
+          .catch((error) => {
+            debug(
+              ctx,
+              `[try-native] Using fallback for ${id} because of an error:`,
+              error,
+            );
+            return (jitiRequire as any)(
+              // Try again without native
+              { ...ctx, opts: { ...ctx.opts, tryNative: false } },
+              id,
+              opts,
+            );
+          });
       } else {
         const _mod = ctx.nativeRequire(id);
         if (ctx.opts.moduleCache === false) {
