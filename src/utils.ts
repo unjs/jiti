@@ -118,39 +118,49 @@ function interopDefault(mod: any): any {
     return mod;
   }
 
+  // Check if we need the apply trap (default is callable but mod isn't)
+  const needsApplyTrap = defType === "function" && modType !== "function";
+
+  // Check if we need fallback to default export properties
+  // If default is not an object/function or is a Promise, no fallback needed
+  const needsDefaultFallback =
+    defIsObj && !(def instanceof Promise); /** issue: #400 */
+
+  // Use Proxy with caching - cache eliminates repeated lookup overhead
+  const cache = new Map<string | symbol, any>();
+
   return new Proxy(mod, {
-    get(target, prop, receiver) {
+    get(target, prop) {
+      if (cache.has(prop)) {
+        return cache.get(prop);
+      }
+
+      let value: any;
       if (prop === "__esModule") {
-        return true;
-      }
-      if (prop === "default") {
+        value = true;
+      } else if (prop === "default") {
         if (defIsNil) {
-          return mod;
+          value = mod;
+        } else if (typeof def?.default === "function" && mod.__esModule) {
+          value = def.default; // #396
+        } else {
+          value = def;
         }
-        if (typeof def?.default === "function" && mod.__esModule) {
-          return def.default; // #396
+      } else if (prop in target) {
+        value = target[prop];
+      } else if (needsDefaultFallback) {
+        value = def[prop];
+        if (typeof value === "function") {
+          value = value.bind(def);
         }
-        return def;
       }
-      if (Reflect.has(target, prop)) {
-        return Reflect.get(target, prop, receiver);
-      }
-      if (defIsObj && !((def instanceof Promise) /** issue: #400 */)) {
-        let fallback = Reflect.get(def, prop, receiver);
-        if (typeof fallback === "function") {
-          fallback = fallback.bind(def);
-        }
-        return fallback;
-      }
+
+      cache.set(prop, value);
+      return value;
     },
-    apply(target, thisArg, args) {
-      if (typeof target === "function") {
-        return Reflect.apply(target, thisArg, args);
-      }
-      if (defType === "function") {
-        return Reflect.apply(def, thisArg, args);
-      }
-    },
+    apply: needsApplyTrap
+      ? (_target, thisArg, args) => Reflect.apply(def, thisArg, args)
+      : undefined,
   });
 }
 
