@@ -159,6 +159,8 @@ unlinkSync(testModulePath);
 unlinkSync(propModulePath);
 
 console.log("\n=== Summary ===");
-console.log("The Proxy wrapper has inherent overhead that cannot be fully eliminated.");
+console.log(
+  "The Proxy wrapper has inherent overhead that cannot be fully eliminated.",
+);
 console.log("With caching optimization: ~2x improvement over original.");
 console.log("With interopDefault=false: performance matches native.");
