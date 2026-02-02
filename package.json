@@ -76,6 +76,7 @@
     "@babel/plugin-syntax-class-properties": "^7.12.13",
     "@babel/plugin-syntax-import-assertions": "^7.27.1",
     "@babel/plugin-syntax-jsx": "^7.27.1",
+    "@babel/plugin-transform-explicit-resource-management": "^7.28.6",
     "@babel/plugin-transform-export-namespace-from": "^7.27.1",
     "@babel/plugin-transform-react-jsx": "^7.27.1",
     "@babel/plugin-transform-typescript": "^7.28.0",
