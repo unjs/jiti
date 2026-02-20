@@ -105,6 +105,7 @@
     "estree-walker": "^3.0.3",
     "etag": "^1.8.1",
     "fast-glob": "^3.3.3",
+    "get-tsconfig": "^4.13.6",
     "is-installed-globally": "^1.0.0",
     "mime": "^4.1.0",
     "mlly": "^1.8.0",

@@ -8,9 +8,10 @@ import type {
 } from "./types";
 import { platform } from "node:os";
 import { pathToFileURL } from "mlly";
-import { join } from "pathe";
+import { join, dirname } from "pathe";
 import escapeStringRegexp from "escape-string-regexp";
 import { normalizeAliases } from "pathe/utils";
+import { getTsconfig, createPathsMatcher } from "get-tsconfig";
 import pkg from "../package.json";
 import { debug, isDir } from "./utils";
 import { resolveJitiOptions } from "./options";
@@ -43,6 +44,19 @@ export default function createJiti(
     opts.alias && Object.keys(opts.alias).length > 0
       ? normalizeAliases(opts.alias || {})
       : undefined;
+
+  // Initialize tsconfig paths matcher
+  let pathsMatcher: ((specifier: string) => string[]) | undefined;
+  if (opts.tsconfigPaths) {
+    const searchPath =
+      typeof opts.tsconfigPaths === "string"
+        ? opts.tsconfigPaths
+        : dirname(filename);
+    const tsconfig = getTsconfig(searchPath);
+    if (tsconfig) {
+      pathsMatcher = createPathsMatcher(tsconfig) || undefined;
+    }
+  }
 
   // List of modules to force transform or native
   const nativeModules = ["typescript", "jiti", ...(opts.nativeModules || [])];
@@ -85,6 +99,7 @@ export default function createJiti(
     url,
     opts,
     alias,
+    pathsMatcher,
     nativeModules,
     transformModules,
     isNativeRe,

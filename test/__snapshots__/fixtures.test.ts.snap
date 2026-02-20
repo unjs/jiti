@@ -124,6 +124,15 @@ Logical nullish assignment: 50 20"
 
 exports[`fixtures > top-level-await > stdout 1`] = `"async value works from sub module"`;
 
+exports[`fixtures > tsconfig-paths > stdout 1`] = `
+"Hello, world!
+jiti-tsconfig-paths-test
+1.0.0
+test-logger
+Generated hello, fallback!
+jiti-tsconfig-paths-test"
+`;
+
 exports[`fixtures > typescript > stdout 1`] = `
 "Decorator metadata keys: design:type
 Decorator called with 3 arguments.

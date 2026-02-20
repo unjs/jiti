@@ -22,6 +22,7 @@ export interface Context {
   isNativeRe: RegExp;
   isTransformRe: RegExp;
   alias?: Record<string, string>;
+  pathsMatcher?: (specifier: string) => string[];
   additionalExts: string[];
   nativeRequire: NodeRequire;
   createRequire: (typeof import("node:module"))["createRequire"];
