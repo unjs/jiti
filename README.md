@@ -181,6 +181,18 @@ You can also pass an object to the environment variable for inline config. Examp
 
 Custom alias map used to resolve IDs.
 
+### `tsconfigPaths`
+
+- Type: Boolean | String
+- Default: `false`
+- Environment variable: `JITI_TSCONFIG_PATHS`
+
+Enable TypeScript [`paths`](https://www.typescriptlang.org/tsconfig/#paths) resolution using [`get-tsconfig`](https://github.com/privatenumber/get-tsconfig).
+
+- `true`: Auto-discover `tsconfig.json` by walking up from the jiti instance's parent path.
+- `string`: Explicit path to a `tsconfig.json` file.
+- `false` (default): Disabled.
+
 ### `nativeModules`
 
 - Type: Array
