@@ -73,14 +73,10 @@ describe("fixtures", async () => {
         },
       });
 
-      if (
-        name.includes("error") ||
-        (nodeMajorVersion >= 22 && name === "require-esm")
-      ) {
+      if (name.includes("error")) {
         expect(extractErrors(cleanUpSnap(stderr))).toMatchSnapshot("stderr");
       } else {
-        // Expect no error by default
-        expect(stderr).toBe("");
+        expect(stderr).toBe(""); // Expect no errors by default
       }
 
       expect(cleanUpSnap(stdout)).toMatchSnapshot("stdout");
