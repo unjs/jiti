@@ -7,11 +7,11 @@ import { debug, isWritable, hash } from "./utils";
 
 const CACHE_VERSION = "9";
 
-export function getCache(
+export async function getCache(
   ctx: Context,
   topts: TransformOptions,
-  get: () => string,
-): string {
+  get: () => Promise<string> | string,
+): Promise<string> {
   if (!ctx.opts.fsCache || !topts.filename) {
     return get();
   }
@@ -41,7 +41,7 @@ export function getCache(
   }
 
   debug(ctx, "[cache]", "[miss]", topts.filename);
-  const result = get();
+  const result = await Promise.resolve(get());
 
   if (!result.includes("__JITI_ERROR__")) {
     writeFileSync(cacheFilePath, result + sourceHash, "utf8");

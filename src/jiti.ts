@@ -5,6 +5,7 @@ import type {
   Context,
   EvalModuleOptions,
   JitiResolveOptions,
+  SourceTransformer,
 } from "./types";
 import { platform } from "node:os";
 import { pathToFileURL } from "mlly";
@@ -32,6 +33,7 @@ export default function createJiti(
     | "nativeImport"
     | "onError"
     | "createRequire"
+    | "callbackStore"
   >,
   isNested = false,
 ): Jiti {
@@ -96,6 +98,7 @@ export default function createJiti(
     parentCache: parentContext.parentCache,
     nativeImport: parentContext.nativeImport,
     createRequire: parentContext.createRequire,
+    callbackStore: parentContext.callbackStore,
   };
 
   // Debug
@@ -136,11 +139,15 @@ export default function createJiti(
           paths: nativeRequire.resolve.paths,
         },
       ),
-      transform(opts: TransformOptions) {
-        return transform(ctx, opts);
+      transform(opts: TransformOptions, sourceTransformer?: SourceTransformer) {
+        return transform(ctx, opts, sourceTransformer);
       },
-      evalModule(source: string, options?: EvalModuleOptions) {
-        return evalModule(ctx, source, options);
+      evalModule(
+        source: string,
+        options?: EvalModuleOptions,
+        sourceTransformer?: SourceTransformer,
+      ) {
+        return evalModule(ctx, source, options, sourceTransformer);
       },
       async import<T = unknown>(
         id: string,
