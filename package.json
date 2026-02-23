@@ -100,7 +100,7 @@
     "defu": "^6.1.4",
     "destr": "^2.0.5",
     "escape-string-regexp": "^5.0.0",
-    "eslint": "^9.36.0",
+    "eslint": "^10.0.1",
     "eslint-config-unjs": "^0.5.0",
     "estree-walker": "^3.0.3",
     "etag": "^1.8.1",
