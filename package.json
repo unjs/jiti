@@ -115,6 +115,7 @@
     "pkg-types": "^2.3.0",
     "preact": "^10.28.4",
     "preact-render-to-string": "^6.6.6",
+    "prettier": "^3.8.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "reflect-metadata": "^0.2.2",
