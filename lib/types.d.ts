@@ -237,6 +237,18 @@ export interface JitiOptions {
   tryNative?: boolean;
 
   /**
+   * Use a temp file for ESM fallback instead of a data URL.
+   *
+   * This avoids `NameTooLong` errors when transpiled ESM source is large.
+   * The temp file is written to `{TMP_DIR}/jiti-esm/` and cleaned up after import.
+   *
+   * Can also be enabled using `JITI_ESM_RESOLVE_TEMP_FILE=true` environment variable.
+   *
+   * @default false
+   */
+  esmResolveTempFile?: boolean;
+
+  /**
    * Enable JSX support Enable JSX support using
    * {@link https://babeljs.io/docs/babel-plugin-transform-react-jsx | `@babel/plugin-transform-react-jsx`}.
    *
