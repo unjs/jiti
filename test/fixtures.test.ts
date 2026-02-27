@@ -3,11 +3,6 @@ import { x } from "tinyexec";
 import { describe, it, expect } from "vitest";
 import fg from "fast-glob";
 
-const nodeMajorVersion = Number.parseInt(
-  process.versions.node.split(".")[0],
-  10,
-);
-
 describe("fixtures", async () => {
   const jitiPath = resolve(__dirname, "../lib/jiti-cli.mjs");
 
@@ -73,14 +68,10 @@ describe("fixtures", async () => {
         },
       });
 
-      if (
-        name.includes("error") ||
-        (nodeMajorVersion >= 22 && name === "require-esm")
-      ) {
+      if (name.includes("error")) {
         expect(extractErrors(cleanUpSnap(stderr))).toMatchSnapshot("stderr");
       } else {
-        // Expect no error by default
-        expect(stderr).toBe("");
+        expect(stderr).toBe(""); // Expect no errors by default
       }
 
       expect(cleanUpSnap(stdout)).toMatchSnapshot("stdout");
