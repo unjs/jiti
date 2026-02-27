@@ -115,7 +115,10 @@ exports[`fixtures > jsx > stdout 1`] = `
 
 exports[`fixtures > mixed > stdout 1`] = `"Mixed works for: <cwd>"`;
 
-exports[`fixtures > native > stdout 1`] = `"[Module: null prototype] { default: { hasRequire: false } }"`;
+exports[`fixtures > native > stdout 1`] = `
+"[Module: null prototype] { default: { hasRequire: false } }
+in foo.ts"
+`;
 
 exports[`fixtures > node > stdout 1`] = `"node:test true"`;
 
