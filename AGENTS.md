@@ -3,6 +3,7 @@
 **jiti** (`unjs/jiti`) — Runtime TypeScript and ESM support for Node.js.
 
 Zero-dependency, slim runtime that provides seamless TypeScript/ESM/CJS interop.
+All dependencies (including Babel) are bundled into the dist output — the published package has zero runtime dependencies.
 Used by Nuxt, Tailwind, ESLint, Docusaurus, and 300M+ monthly npm downloads.
 
 > [!IMPORTANT]

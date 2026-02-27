@@ -42,6 +42,7 @@ const jitiPropMod = await jiti.import(propModulePath);
 const jitiPropModNoInterop = await jitiNoInterop.import(propModulePath);
 
 // Sink to prevent dead code elimination
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 let sink;
 
 // Benchmarks
