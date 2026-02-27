@@ -10,12 +10,31 @@ const TS_EXT_RE = /\.(c|m)?t(sx?)$/;
 export function jitiResolve(
   ctx: Context,
   id: string,
-  options: JitiResolveOptions & { async?: boolean; paths?: string[] },
-) {
+  options: JitiResolveOptions & {
+    async?: boolean;
+    paths?: string[];
+    skipTsConfigPaths?: boolean;
+  },
+): string {
   let resolved, lastError;
 
   if (ctx.isNativeRe.test(id)) {
     return id;
+  }
+
+  // Resolve tsconfig paths
+  if (ctx.resolveTsConfigPaths && !options.skipTsConfigPaths) {
+    const candidates = ctx.resolveTsConfigPaths(id);
+    for (const candidate of candidates) {
+      const resolved = jitiResolve(ctx, candidate, {
+        ...options,
+        try: true,
+        skipTsConfigPaths: true,
+      });
+      if (resolved) {
+        return resolved;
+      }
+    }
   }
 
   // Resolve alias

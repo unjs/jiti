@@ -245,6 +245,22 @@ export interface JitiOptions {
    * @default false
    */
   jsx?: boolean | JSXOptions;
+
+  /**
+   * Enable tsconfig paths resolution.
+   *
+   * - `true`: auto-discover `tsconfig.json` by walking up from the
+   *   jiti instance's parent path
+   * - `string`: explicit path to a `tsconfig.json` file
+   * - `false` (default): disabled
+   *
+   * When enabled, jiti uses
+   * {@link https://github.com/privatenumber/get-tsconfig | get-tsconfig}
+   * to resolve TypeScript path aliases defined in `compilerOptions.paths`.
+   *
+   * @default false
+   */
+  tsconfigPaths?: boolean | string;
 }
 
 interface NodeRequire {

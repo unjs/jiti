@@ -27,6 +27,7 @@ export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
     transformModules: _jsonEnv<string[]>("JITI_TRANSFORM_MODULES", []),
     tryNative: _jsonEnv<boolean>("JITI_TRY_NATIVE", "Bun" in globalThis),
     jsx: _booleanEnv("JITI_JSX", false),
+    tsconfigPaths: _jsonEnv<boolean | string>("JITI_TSCONFIG_PATHS", false, true),
   };
 
   if (jitiDefaults.jsx) {
@@ -55,7 +56,11 @@ function _booleanEnv(name: string, defaultValue: boolean): boolean {
   return Boolean(val);
 }
 
-function _jsonEnv<T>(name: string, defaultValue?: T): T | undefined {
+function _jsonEnv<T>(
+  name: string,
+  defaultValue?: T,
+  rawFallback?: boolean,
+): T | undefined {
   const envValue = process.env[name];
   if (!(name in process.env)) {
     return defaultValue;
@@ -63,6 +68,6 @@ function _jsonEnv<T>(name: string, defaultValue?: T): T | undefined {
   try {
     return JSON.parse(envValue!) as T;
   } catch {
-    return defaultValue;
+    return rawFallback ? (envValue as T) : defaultValue;
   }
 }
