@@ -24,6 +24,10 @@
       "types": "./lib/jiti.d.mts",
       "import": "./lib/jiti-native.mjs"
     },
+    "./static": {
+      "types": "./lib/jiti.d.mts",
+      "import": "./lib/jiti-static.mjs"
+    },
     "./package.json": "./package.json"
   },
   "main": "./lib/jiti.cjs",
@@ -35,6 +39,9 @@
         "./lib/jiti-register.d.mts"
       ],
       "native": [
+        "./lib/jiti.d.mts"
+      ],
+      "static": [
         "./lib/jiti.d.mts"
       ]
     }
