@@ -13,7 +13,7 @@ export function jitiResolve(
   options: JitiResolveOptions & {
     async?: boolean;
     paths?: string[];
-    _skipPaths?: boolean;
+    skipTsConfigPaths?: boolean;
   },
 ): string {
   let resolved, lastError;
@@ -23,13 +23,13 @@ export function jitiResolve(
   }
 
   // Resolve tsconfig paths
-  if (ctx.resolveTsConfigPaths && !options._skipPaths) {
+  if (ctx.resolveTsConfigPaths && !options.skipTsConfigPaths) {
     const candidates = ctx.resolveTsConfigPaths(id);
     for (const candidate of candidates) {
       const resolved = jitiResolve(ctx, candidate, {
         ...options,
         try: true,
-        _skipPaths: true,
+        skipTsConfigPaths: true,
       });
       if (resolved) {
         return resolved;
