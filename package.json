@@ -108,6 +108,7 @@
     "fast-glob": "^3.3.3",
     "is-installed-globally": "^1.0.0",
     "mime": "^4.1.0",
+    "mitata": "^1.0.34",
     "mlly": "^1.8.0",
     "moment-timezone": "^0.6.0",
     "nano-jsx": "^0.2.1",
