@@ -247,6 +247,26 @@ export interface JitiOptions {
   jsx?: boolean | JSXOptions;
 
   /**
+   * Virtual modules - pre-loaded module objects that bypass filesystem resolution.
+   * Useful for bundled modules in compiled binaries (e.g., Bun).
+   *
+   * When a module ID matches a key in this map, the corresponding value is
+   * returned directly without any filesystem resolution or transformation.
+   *
+   * @example
+   * ```ts
+   * import * as typebox from "@sinclair/typebox";
+   *
+   * const jiti = createJiti(import.meta.url, {
+   *   virtualModules: {
+   *     "@sinclair/typebox": typebox,
+   *   },
+   * });
+   * ```
+   */
+  virtualModules?: Record<string, unknown>;
+
+  /**
    * Enable tsconfig paths resolution.
    *
    * - `true`: auto-discover `tsconfig.json` by walking up from the
