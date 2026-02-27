@@ -26,6 +26,7 @@ export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
     nativeModules: _jsonEnv<string[]>("JITI_NATIVE_MODULES", []),
     transformModules: _jsonEnv<string[]>("JITI_TRANSFORM_MODULES", []),
     tryNative: _jsonEnv<boolean>("JITI_TRY_NATIVE", "Bun" in globalThis),
+    esmResolveTempFile: _booleanEnv("JITI_ESM_RESOLVE_TEMP_FILE", false),
     jsx: _booleanEnv("JITI_JSX", false),
     tsconfigPaths: _jsonEnv<boolean | string>(
       "JITI_TSCONFIG_PATHS",

@@ -1,7 +1,9 @@
 import { Module } from "node:module";
+import { writeFileSync, unlinkSync, mkdirSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { performance } from "node:perf_hooks";
 import vm from "node:vm";
-import { dirname, basename, extname } from "pathe";
+import { dirname, basename, extname, join } from "pathe";
 import { hasESMSyntax } from "mlly";
 import {
   debug,
@@ -148,7 +150,11 @@ export function evalModule(
     if (error.name === "SyntaxError" && evalOptions.async && ctx.nativeImport) {
       // Support cases such as import.meta.[custom]
       debug(ctx, "[esm]", "[import]", "[fallback]", filename);
-      compiled = esmEval(wrapped, ctx.nativeImport!);
+      if (ctx.opts.esmResolveTempFile) {
+        compiled = esmEvalTempFile(wrapped, filename, ctx.nativeImport!);
+      } else {
+        compiled = esmEval(wrapped, ctx.nativeImport!);
+      }
     } else {
       if (ctx.opts.moduleCache) {
         delete ctx.nativeRequire.cache[filename];
@@ -204,4 +210,34 @@ function esmEval(code: string, nativeImport: (id: string) => Promise<any>) {
   const uri = `data:text/javascript;base64,${Buffer.from(`export default ${code}`).toString("base64")}`;
   return (...args: any[]) =>
     nativeImport(uri).then((mod) => mod.default(...args));
+}
+
+/**
+ * Like esmEval but uses a temp file instead of a data URL.
+ * Avoids ENAMETOOLONG errors on some OS/filesystem combinations
+ * (e.g., encrypted home dirs, macOS) when the base64-encoded data URL
+ * exceeds the OS filename component limit.
+ */
+function esmEvalTempFile(
+  code: string,
+  filename: string,
+  nativeImport: (id: string) => Promise<any>,
+) {
+  const tempDir = join(tmpdir(), "jiti-esm");
+  try {
+    mkdirSync(tempDir, { recursive: true });
+  } catch {}
+  const tempFile = join(
+    tempDir,
+    `${basename(filename, extname(filename))}-${Date.now()}-${Math.random().toString(36).slice(2)}.mjs`,
+  );
+  writeFileSync(tempFile, `export default ${code}`);
+  return (...args: any[]) =>
+    nativeImport(tempFile)
+      .then((mod) => mod.default(...args))
+      .finally(() => {
+        try {
+          unlinkSync(tempFile);
+        } catch {}
+      });
 }
