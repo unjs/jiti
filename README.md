@@ -171,6 +171,9 @@ Add inline source map to transformed source for better debugging.
 
 Jiti combines module exports with the `default` export using an internal Proxy to improve compatibility with mixed CJS/ESM usage. You can check the current implementation [here](https://github.com/unjs/jiti/blob/main/src/utils.ts#L105).
 
+> [!WARNING]
+> This option wraps **all imported modules** in a Proxy, which adds ~25-50ns overhead per property access. For performance-critical hot paths where you access module exports very frequently, consider setting `interopDefault: false` or `JITI_INTEROP_DEFAULT=false`.
+
 ### `alias`
 
 - Type: Object
@@ -180,6 +183,18 @@ Jiti combines module exports with the `default` export using an internal Proxy t
 You can also pass an object to the environment variable for inline config. Example: `JITI_ALIAS='{"~/*": "./src/*"}' jiti ...`.
 
 Custom alias map used to resolve IDs.
+
+### `tsconfigPaths`
+
+- Type: Boolean | String
+- Default: `false`
+- Environment variable: `JITI_TSCONFIG_PATHS`
+
+Enable TypeScript [`paths`](https://www.typescriptlang.org/tsconfig/#paths) resolution using [`get-tsconfig`](https://github.com/privatenumber/get-tsconfig).
+
+- `true`: Auto-discover `tsconfig.json` by walking up from the jiti instance's parent path.
+- `string`: Explicit path to a `tsconfig.json` file.
+- `false` (default): Disabled.
 
 ### `nativeModules`
 

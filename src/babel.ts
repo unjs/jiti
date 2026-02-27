@@ -7,6 +7,7 @@ import proposalDecoratorsPlugin from "@babel/plugin-proposal-decorators";
 import syntaxClassPropertiesPlugin from "@babel/plugin-syntax-class-properties";
 import syntaxImportAssertionsPlugin from "@babel/plugin-syntax-import-assertions";
 import syntaxJSXPlugin from "@babel/plugin-syntax-jsx";
+import transformExplicitResourceManagementPlugin from "@babel/plugin-transform-explicit-resource-management";
 import transformExportNamespaceFromPlugin from "@babel/plugin-transform-export-namespace-from";
 import transformReactJSX from "@babel/plugin-transform-react-jsx";
 import transformTypeScriptPlugin from "@babel/plugin-transform-typescript";
@@ -42,6 +43,7 @@ export default function transform(opts: TransformOptions): TransformResult {
       [importMetaResolvePlugin],
       [syntaxClassPropertiesPlugin],
       [transformExportNamespaceFromPlugin],
+      [transformExplicitResourceManagementPlugin],
     ],
   };
 
