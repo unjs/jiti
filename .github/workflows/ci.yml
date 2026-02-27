@@ -42,7 +42,7 @@ jobs:
       - run: pnpm lint
         if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 22 }}
       - run: pnpm build
-      - run: pnpm vitest run --coverage
+      - run: pnpm vitest run ${{ matrix.node != 18 && '--coverage' || '' }}
       - run: pnpm test:node-register
         if: ${{ matrix.os == 'ubuntu-latest' && matrix.node == 22 }}
       - run: pnpm test:bun --coverage
