@@ -7,11 +7,10 @@ import type {
   JitiResolveOptions,
 } from "./types";
 import { platform } from "node:os";
-import { pathToFileURL } from "mlly";
+import { fileURLToPath, pathToFileURL } from "mlly";
 import { join, dirname } from "pathe";
 import escapeStringRegexp from "escape-string-regexp";
 import { normalizeAliases } from "pathe/utils";
-import { getTsconfig, createPathsMatcher } from "get-tsconfig";
 import pkg from "../package.json";
 import { debug, isDir } from "./utils";
 import { resolveJitiOptions } from "./options";
@@ -39,22 +38,29 @@ export default function createJiti(
   // Resolve options
   const opts = isNested ? userOptions : resolveJitiOptions(userOptions);
 
+  // Normalize filename (if url)
+  if (typeof filename === "string" && filename.startsWith("file://")) {
+    filename = fileURLToPath(filename);
+  }
+
   // Normalize aliases (and disable if non given)
   const alias =
     opts.alias && Object.keys(opts.alias).length > 0
       ? normalizeAliases(opts.alias || {})
       : undefined;
 
-  // Initialize tsconfig paths matcher
-  let pathsMatcher: ((specifier: string) => string[]) | undefined;
+  // Initialize tsconfig paths matcher (lazy-loaded to avoid cost when disabled)
+  let resolveTsConfigPaths: ((specifier: string) => string[]) | undefined;
   if (opts.tsconfigPaths) {
+    const { getTsconfig, createPathsMatcher } =
+      require("get-tsconfig") as typeof import("get-tsconfig");
     const searchPath =
       typeof opts.tsconfigPaths === "string"
         ? opts.tsconfigPaths
         : dirname(filename);
     const tsconfig = getTsconfig(searchPath);
     if (tsconfig) {
-      pathsMatcher = createPathsMatcher(tsconfig) || undefined;
+      resolveTsConfigPaths = createPathsMatcher(tsconfig)!;
     }
   }
 
@@ -99,7 +105,7 @@ export default function createJiti(
     url,
     opts,
     alias,
-    pathsMatcher,
+    resolveTsConfigPaths,
     nativeModules,
     transformModules,
     isNativeRe,

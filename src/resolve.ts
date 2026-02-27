@@ -23,8 +23,8 @@ export function jitiResolve(
   }
 
   // Resolve tsconfig paths
-  if (ctx.pathsMatcher && !options._skipPaths) {
-    const candidates = ctx.pathsMatcher(id);
+  if (ctx.resolveTsConfigPaths && !options._skipPaths) {
+    const candidates = ctx.resolveTsConfigPaths(id);
     for (const candidate of candidates) {
       const resolved = jitiResolve(ctx, candidate, {
         ...options,
