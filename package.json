@@ -74,6 +74,7 @@
     "@babel/helper-simple-access": "^7.27.1",
     "@babel/plugin-proposal-decorators": "^7.29.0",
     "@babel/plugin-syntax-class-properties": "^7.12.13",
+    "@babel/plugin-transform-explicit-resource-management": "^7.28.6",
     "@babel/plugin-syntax-import-assertions": "^7.28.6",
     "@babel/plugin-syntax-jsx": "^7.28.6",
     "@babel/plugin-transform-export-namespace-from": "^7.27.1",
