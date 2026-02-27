@@ -7,5 +7,7 @@ export default unjs({
     "unicorn/prefer-top-level-await": 0,
     "unicorn/prefer-export-from": 0,
     "@typescript-eslint/no-require-imports": 0,
+    "unicorn/require-module-specifiers": 0,
+    "unicorn/prefer-class-fields": 0,
   },
 });

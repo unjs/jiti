@@ -29,7 +29,8 @@ for (const fixture of fixtures) {
   if (
     fixture !== "esm" &&
     fixture !== "top-level-await" &&
-    fixture !== "json"
+    fixture !== "json" &&
+    fixture !== "jsx" // require(<async module>) is not allowed
   ) {
     test("fixtures/" + fixture + " (CJS)", () => {
       _jiti("./" + fixture);
