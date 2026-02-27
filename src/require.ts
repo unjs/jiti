@@ -35,6 +35,15 @@ export function jitiRequire(
     return nativeImportOrRequire(ctx, id, opts.async);
   }
 
+  // Check for virtual modules (e.g., bundled modules in compiled Bun binaries)
+  if (ctx.opts.virtualModules && id in ctx.opts.virtualModules) {
+    debug(ctx, "[virtual]", id);
+    const mod = ctx.opts.virtualModules[id];
+    return opts.async
+      ? Promise.resolve(jitiInteropDefault(ctx, mod))
+      : jitiInteropDefault(ctx, mod);
+  }
+
   // Experimental Bun support
   if (ctx.opts.tryNative && !ctx.opts.transformOptions) {
     try {
