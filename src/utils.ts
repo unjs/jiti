@@ -164,11 +164,11 @@ function interopDefault(mod: any): any {
   });
 }
 
-export function normalizeWindowsImportId(id: string) {
+export function normalizeWindowsImportId(id: string): string {
   if (!isWindows || !isAbsolute(id)) {
     return id;
   }
-  return pathToFileURL(id);
+  return pathToFileURL(id).toString();
 }
 
 let _fipsMode: boolean | undefined;

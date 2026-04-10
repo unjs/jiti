@@ -59,7 +59,7 @@ export function jitiRequire(
       );
       if (opts.async && ctx.nativeImport) {
         return ctx
-          .nativeImport(id)
+          .nativeImport(normalizeWindowsImportId(id))
           .then((m: any) => {
             if (ctx.opts.moduleCache === false) {
               delete ctx.nativeRequire.cache[id];
