@@ -134,7 +134,7 @@
     "terser-webpack-plugin": "^5.3.16",
     "tinyexec": "^1.0.2",
     "ts-loader": "^9.5.4",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "vitest": "^4.0.18",
     "vue": "^3.5.29",
     "yoctocolors": "^2.1.2",
