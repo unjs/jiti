@@ -237,12 +237,21 @@ export interface JitiOptions {
   tryNative?: boolean;
 
   /**
-   * Use a temp file for ESM fallback instead of a data URL.
+   * Always use a temp file (instead of a `data:` URL) for the ESM
+   * evaluation fallback path.
    *
-   * This avoids `NameTooLong` errors when transpiled ESM source is large.
-   * The temp file is written to `{TMP_DIR}/jiti-esm/` and cleaned up after import.
+   * jiti automatically falls back to a temp file when the `data:` URL
+   * import fails with `ENAMETOOLONG` — which happens on filesystems with
+   * a strict `NAME_MAX` limit (e.g. ecryptfs-encrypted home directories
+   * on Linux, some macOS configurations) once the base64-encoded source
+   * exceeds the limit. Setting this to `true` forces the temp-file path
+   * up front, skipping the `data:` URL attempt.
    *
-   * Can also be enabled using `JITI_ESM_RESOLVE_TEMP_FILE=true` environment variable.
+   * The temp file is written to `{TMP_DIR}/jiti-esm/` and cleaned up
+   * after import.
+   *
+   * Can also be enabled using the `JITI_ESM_RESOLVE_TEMP_FILE=true`
+   * environment variable.
    *
    * @default false
    */

@@ -1,5 +1,5 @@
 import { Module } from "node:module";
-import { writeFileSync, unlinkSync, mkdirSync } from "node:fs";
+import { writeFileSync, unlinkSync, mkdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { performance } from "node:perf_hooks";
 import vm from "node:vm";
@@ -150,11 +150,12 @@ export function evalModule(
     if (error.name === "SyntaxError" && evalOptions.async && ctx.nativeImport) {
       // Support cases such as import.meta.[custom]
       debug(ctx, "[esm]", "[import]", "[fallback]", filename);
-      if (ctx.opts.esmResolveTempFile) {
-        compiled = esmEvalTempFile(wrapped, filename, ctx.nativeImport!);
-      } else {
-        compiled = esmEval(wrapped, ctx.nativeImport!);
-      }
+      compiled = esmEval(
+        wrapped,
+        filename,
+        ctx.nativeImport!,
+        ctx.opts.esmResolveTempFile,
+      );
     } else {
       if (ctx.opts.moduleCache) {
         delete ctx.nativeRequire.cache[filename];
@@ -206,38 +207,63 @@ export function evalModule(
   return evalOptions.async ? Promise.resolve(evalResult).then(next) : next();
 }
 
-function esmEval(code: string, nativeImport: (id: string) => Promise<any>) {
-  const uri = `data:text/javascript;base64,${Buffer.from(`export default ${code}`).toString("base64")}`;
-  return (...args: any[]) =>
-    nativeImport(uri).then((mod) => mod.default(...args));
-}
-
-/**
- * Like esmEval but uses a temp file instead of a data URL.
- * Avoids ENAMETOOLONG errors on some OS/filesystem combinations
- * (e.g., encrypted home dirs, macOS) when the base64-encoded data URL
- * exceeds the OS filename component limit.
- */
-function esmEvalTempFile(
+function esmEval(
   code: string,
   filename: string,
   nativeImport: (id: string) => Promise<any>,
+  forceTempFile?: boolean,
+) {
+  const wrapped = `export default ${code}`;
+  const uri = forceTempFile
+    ? undefined
+    : `data:text/javascript;base64,${Buffer.from(wrapped).toString("base64")}`;
+  return (...args: any[]) => {
+    const importViaDataUrl = uri
+      ? nativeImport(uri).then((mod) => mod.default(...args))
+      : Promise.reject(new Error("force-temp-file"));
+    return importViaDataUrl.catch((error: any) => {
+      // Fallback to temp file on ENAMETOOLONG (encrypted home dirs / strict
+      // NAME_MAX filesystems) or when explicitly forced via option.
+      if (!forceTempFile && error?.code !== "ENAMETOOLONG") {
+        throw error;
+      }
+      return esmEvalViaTempFile(wrapped, filename, nativeImport, args);
+    });
+  };
+}
+
+let _tempDirReady = false;
+function esmEvalViaTempFile(
+  source: string,
+  filename: string,
+  nativeImport: (id: string) => Promise<any>,
+  args: any[],
 ) {
   const tempDir = join(tmpdir(), "jiti-esm");
-  try {
-    mkdirSync(tempDir, { recursive: true });
-  } catch {}
+  if (!_tempDirReady) {
+    try {
+      // Best-effort cleanup of stale files from crashed processes.
+      rmSync(tempDir, { recursive: true, force: true });
+    } catch {}
+    try {
+      mkdirSync(tempDir, { recursive: true });
+    } catch {}
+    _tempDirReady = true;
+  }
   const tempFile = join(
     tempDir,
     `${basename(filename, extname(filename))}-${Date.now()}-${Math.random().toString(36).slice(2)}.mjs`,
   );
-  writeFileSync(tempFile, `export default ${code}`);
-  return (...args: any[]) =>
-    nativeImport(tempFile)
-      .then((mod) => mod.default(...args))
-      .finally(() => {
-        try {
-          unlinkSync(tempFile);
-        } catch {}
-      });
+  writeFileSync(tempFile, source);
+  // Note: import.meta.url inside the temp module points at the temp path,
+  // not the original file. jiti's babel plugins replace import.meta.url /
+  // dirname / filename with wrapped function params, so user code sees the
+  // original location.
+  return nativeImport(tempFile)
+    .then((mod) => mod.default(...args))
+    .finally(() => {
+      try {
+        unlinkSync(tempFile);
+      } catch {}
+    });
 }
