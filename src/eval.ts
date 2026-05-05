@@ -1,5 +1,6 @@
 import { Module } from "node:module";
-import { writeFileSync, unlinkSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync } from "node:fs";
+import { unlink } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { performance } from "node:perf_hooks";
 import vm from "node:vm";
@@ -240,9 +241,7 @@ function esmEval(
       .then((mod) => mod.default(...args))
       .finally(() => {
         if (tempFile) {
-          try {
-            unlinkSync(tempFile);
-          } catch {}
+          unlink(tempFile).catch(() => {});
         }
       });
   };
