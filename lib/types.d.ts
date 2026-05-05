@@ -250,12 +250,12 @@ export interface JitiOptions {
    * The temp file is written to `{TMP_DIR}/jiti-esm/` and cleaned up
    * after import.
    *
-   * Can also be enabled using the `JITI_ESM_RESOLVE_TEMP_FILE=true`
+   * Can also be enabled using the `JITI_ESM_EVAL_TEMP_FILE=true`
    * environment variable.
    *
    * @default false
    */
-  esmResolveTempFile?: boolean;
+  esmEvalTempFile?: boolean;
 
   /**
    * Enable JSX support Enable JSX support using

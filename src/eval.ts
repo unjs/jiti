@@ -151,10 +151,11 @@ export function evalModule(
       // Support cases such as import.meta.[custom]
       debug(ctx, "[esm]", "[import]", "[fallback]", filename);
       compiled = esmEval(
+        ctx,
         wrapped,
         filename,
         ctx.nativeImport!,
-        ctx.opts.esmResolveTempFile,
+        ctx.opts.esmEvalTempFile,
       );
     } else {
       if (ctx.opts.moduleCache) {
@@ -208,6 +209,7 @@ export function evalModule(
 }
 
 function esmEval(
+  ctx: Context,
   code: string,
   filename: string,
   nativeImport: (id: string) => Promise<any>,
@@ -221,6 +223,7 @@ function esmEval(
     let tempFile: string | undefined;
     const importViaTempFile = () => {
       tempFile = writeEsmTempFile(wrapped, filename);
+      debug(ctx, "[esm]", "[tempfile]", tempFile);
       return nativeImport(tempFile);
     };
     const modPromise = uri
@@ -245,23 +248,16 @@ function esmEval(
   };
 }
 
-let _tempDirReady = false;
 function writeEsmTempFile(source: string, filename: string): string {
   const tempDir = join(tmpdir(), "jiti-esm");
-  if (!_tempDirReady) {
-    try {
-      mkdirSync(tempDir, { recursive: true });
-    } catch {}
-    _tempDirReady = true;
-  }
+  try {
+    mkdirSync(tempDir, { recursive: true });
+  } catch {}
   const tempFile = join(
     tempDir,
     `${basename(filename, extname(filename))}-${Date.now()}-${Math.random().toString(36).slice(2)}.mjs`,
   );
+  // Babel plugins rewrite import.meta.url/dirname/filename, so the temp path doesn't leak to user code.
   writeFileSync(tempFile, source);
-  // Note: import.meta.url inside the temp module points at the temp path,
-  // not the original file. jiti's babel plugins replace import.meta.url /
-  // dirname / filename with wrapped function params, so user code sees the
-  // original location.
   return tempFile;
 }

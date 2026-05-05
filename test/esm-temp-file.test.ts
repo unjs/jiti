@@ -1,20 +1,20 @@
-import { resolve, join, dirname } from "node:path";
+import { resolve, join } from "node:path";
 import { writeFileSync, unlinkSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { describe, it, expect } from "vitest";
 import { x } from "tinyexec";
 
-describe("esmResolveTempFile", () => {
+describe("esmEvalTempFile", () => {
   const jitiPath = resolve(__dirname, "../lib/jiti-cli.mjs");
   const fixture = resolve(__dirname, "fixtures/import-meta/index.ts");
 
-  it("works with esmResolveTempFile enabled", async () => {
+  it("works with esmEvalTempFile enabled", async () => {
     const { stdout, stderr } = await x("node", [jitiPath, fixture], {
       nodeOptions: {
         stdio: "pipe",
         env: {
           JITI_CACHE: "false",
-          JITI_ESM_RESOLVE_TEMP_FILE: "true",
+          JITI_ESM_EVAL_TEMP_FILE: "true",
         },
       },
     });
@@ -33,16 +33,15 @@ describe("esmResolveTempFile", () => {
         stdio: "pipe",
         env: {
           JITI_CACHE: "false",
-          JITI_ESM_RESOLVE_TEMP_FILE: "true",
+          JITI_ESM_EVAL_TEMP_FILE: "true",
           JITI_DEBUG: "1",
         },
       },
     });
 
-    // Debug output goes to stdout; the ESM fallback path should be triggered
     const output = stdout + stderr;
-    expect(output).toContain("[esm]");
-    expect(output).toContain("[fallback]");
+    expect(output).toContain("[tempfile]");
+    expect(output).toMatch(/jiti-esm[/\\][^/\\]+\.mjs/);
   });
 
   it("does not re-execute user code when it throws ENAMETOOLONG", async () => {
@@ -115,7 +114,7 @@ describe("esmResolveTempFile", () => {
           stdio: "pipe",
           env: {
             JITI_CACHE: "false",
-            JITI_ESM_RESOLVE_TEMP_FILE: "true",
+            JITI_ESM_EVAL_TEMP_FILE: "true",
           },
         },
       });
