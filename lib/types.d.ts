@@ -237,6 +237,27 @@ export interface JitiOptions {
   tryNative?: boolean;
 
   /**
+   * Always use a temp file (instead of a `data:` URL) for the ESM
+   * evaluation fallback path.
+   *
+   * jiti automatically falls back to a temp file when the `data:` URL
+   * import fails with `ENAMETOOLONG` — which happens on filesystems with
+   * a strict `NAME_MAX` limit (e.g. ecryptfs-encrypted home directories
+   * on Linux, some macOS configurations) once the base64-encoded source
+   * exceeds the limit. Setting this to `true` forces the temp-file path
+   * up front, skipping the `data:` URL attempt.
+   *
+   * The temp file is written to `{TMP_DIR}/jiti-esm/` and cleaned up
+   * after import.
+   *
+   * Can also be enabled using the `JITI_ESM_EVAL_TEMP_FILE=true`
+   * environment variable.
+   *
+   * @default false
+   */
+  esmEvalTempFile?: boolean;
+
+  /**
    * Enable JSX support Enable JSX support using
    * {@link https://babeljs.io/docs/babel-plugin-transform-react-jsx | `@babel/plugin-transform-react-jsx`}.
    *
@@ -245,6 +266,26 @@ export interface JitiOptions {
    * @default false
    */
   jsx?: boolean | JSXOptions;
+
+  /**
+   * Virtual modules - pre-loaded module objects that bypass filesystem resolution.
+   * Useful for bundled modules in compiled binaries (e.g., Bun).
+   *
+   * When a module ID matches a key in this map, the corresponding value is
+   * returned directly without any filesystem resolution or transformation.
+   *
+   * @example
+   * ```ts
+   * import * as typebox from "@sinclair/typebox";
+   *
+   * const jiti = createJiti(import.meta.url, {
+   *   virtualModules: {
+   *     "@sinclair/typebox": typebox,
+   *   },
+   * });
+   * ```
+   */
+  virtualModules?: Record<string, unknown>;
 
   /**
    * Enable tsconfig paths resolution.

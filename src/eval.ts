@@ -1,8 +1,11 @@
 import { Module } from "node:module";
+import { writeFileSync, mkdirSync } from "node:fs";
+import { unlink } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { performance } from "node:perf_hooks";
 import vm from "node:vm";
-import { dirname, basename, extname } from "pathe";
-import { hasESMSyntax } from "mlly";
+import { dirname, basename, extname, join } from "pathe";
+import { hasESMSyntax, pathToFileURL } from "mlly";
 import {
   debug,
   jitiInteropDefault,
@@ -159,7 +162,13 @@ export function evalModule(
     if (error.name === "SyntaxError" && evalOptions.async && ctx.nativeImport) {
       // Support cases such as import.meta.[custom]
       debug(ctx, "[esm]", "[import]", "[fallback]", filename);
-      compiled = esmEval(wrapped, ctx.nativeImport!);
+      compiled = esmEval(
+        ctx,
+        wrapped,
+        filename,
+        ctx.nativeImport!,
+        ctx.opts.esmEvalTempFile,
+      );
     } else {
       if (ctx.opts.moduleCache) {
         delete ctx.nativeRequire.cache[filename];
@@ -211,8 +220,54 @@ export function evalModule(
   return evalOptions.async ? Promise.resolve(evalResult).then(next) : next();
 }
 
-function esmEval(code: string, nativeImport: (id: string) => Promise<any>) {
-  const uri = `data:text/javascript;base64,${Buffer.from(`export default ${code}`).toString("base64")}`;
-  return (...args: any[]) =>
-    nativeImport(uri).then((mod) => mod.default(...args));
+function esmEval(
+  ctx: Context,
+  code: string,
+  filename: string,
+  nativeImport: (id: string) => Promise<any>,
+  forceTempFile?: boolean,
+) {
+  const wrapped = `export default ${code}`;
+  const uri = forceTempFile
+    ? undefined
+    : `data:text/javascript;base64,${Buffer.from(wrapped).toString("base64")}`;
+  return (...args: any[]) => {
+    let tempFile: string | undefined;
+    const importViaTempFile = () => {
+      tempFile = writeEsmTempFile(wrapped, filename);
+      debug(ctx, "[esm]", "[tempfile]", tempFile);
+      return nativeImport(pathToFileURL(tempFile));
+    };
+    const modPromise = uri
+      ? nativeImport(uri).catch((error: any) => {
+          // Fallback to temp file on ENAMETOOLONG (encrypted home dirs /
+          // strict NAME_MAX filesystems).
+          if (error?.code !== "ENAMETOOLONG") {
+            throw error;
+          }
+          return importViaTempFile();
+        })
+      : importViaTempFile();
+    return modPromise
+      .then((mod) => mod.default(...args))
+      .finally(() => {
+        if (tempFile) {
+          unlink(tempFile).catch(() => {});
+        }
+      });
+  };
+}
+
+function writeEsmTempFile(source: string, filename: string): string {
+  const tempDir = join(tmpdir(), "jiti-esm");
+  try {
+    mkdirSync(tempDir, { recursive: true });
+  } catch {}
+  const tempFile = join(
+    tempDir,
+    `${basename(filename, extname(filename))}-${Date.now()}-${Math.random().toString(36).slice(2)}.mjs`,
+  );
+  // Babel plugins rewrite import.meta.url/dirname/filename, so the temp path doesn't leak to user code.
+  writeFileSync(tempFile, source);
+  return tempFile;
 }
