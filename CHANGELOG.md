@@ -2,6 +2,63 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## v2.7.0
+
+[compare changes](https://github.com/unjs/jiti/compare/v2.6.1...v2.7.0)
+
+### 🚀 Enhancements
+
+- Add explicit resource management (using/await using) support ([#422](https://github.com/unjs/jiti/pull/422))
+- Support opt-in `tsconfigPaths` ([#427](https://github.com/unjs/jiti/pull/427))
+- Support virtual modules option ([#428](https://github.com/unjs/jiti/pull/428))
+- Add `jiti/static` export ([#430](https://github.com/unjs/jiti/pull/430))
+
+### 🔥 Performance
+
+- **interopDefault:** Add caching to reduce proxy overhead by ~2x ([#421](https://github.com/unjs/jiti/pull/421))
+
+### 🩹 Fixes
+
+- **require:** Passthrough resolve options ([#412](https://github.com/unjs/jiti/pull/412))
+- **ci:** Skip `--coverage` flag for node 18 ([fe264b4](https://github.com/unjs/jiti/commit/fe264b4))
+- **require:** Fallback to transpilation when `tryNative` fails ([#413](https://github.com/unjs/jiti/pull/413))
+- Fallback for `ENAMETOOLONG` when evaluating esm ([#429](https://github.com/unjs/jiti/pull/429))
+
+### 📦 Build
+
+- Upgrade rspack ([55194fb](https://github.com/unjs/jiti/commit/55194fb))
+- Experimental rolldown config ([8c0243f](https://github.com/unjs/jiti/commit/8c0243f))
+
+### 🏡 Chore
+
+- Fix lint issues ([4045c7a](https://github.com/unjs/jiti/commit/4045c7a))
+- Update deps ([e88ac44](https://github.com/unjs/jiti/commit/e88ac44))
+- Update deps ([498e8d7](https://github.com/unjs/jiti/commit/498e8d7))
+- Add missing prettier dep ([650bc48](https://github.com/unjs/jiti/commit/650bc48))
+- Lint ([058d91a](https://github.com/unjs/jiti/commit/058d91a))
+- Init agents.md ([c49c54e](https://github.com/unjs/jiti/commit/c49c54e))
+- Update agents.md ([4deba16](https://github.com/unjs/jiti/commit/4deba16))
+- Update deps ([08fc868](https://github.com/unjs/jiti/commit/08fc868))
+- Update tsconfig ([8c7822e](https://github.com/unjs/jiti/commit/8c7822e))
+- Update release script ([27fe3f2](https://github.com/unjs/jiti/commit/27fe3f2))
+
+### ✅ Tests
+
+- Ignore jsx test for bun/cjs ([3a744ca](https://github.com/unjs/jiti/commit/3a744ca))
+- Update ([9ee314f](https://github.com/unjs/jiti/commit/9ee314f))
+
+### 🤖 CI
+
+- Update node test matrix ([0abda72](https://github.com/unjs/jiti/commit/0abda72))
+
+### ❤️ Contributors
+
+- Pooya Parsa ([@pi0](https://github.com/pi0))
+- Kricsleo ([@kricsleo](https://github.com/kricsleo))
+- Espen Hovlandsdal ([@rexxars](https://github.com/rexxars))
+- Rintaro Itokawa ([@re-taro](https://github.com/re-taro))
+- Matteo Collina ([@mcollina](https://github.com/mcollina))
+
 ## v2.6.1
 
 [compare changes](https://github.com/unjs/jiti/compare/v2.6.0...v2.6.1)
