@@ -3,7 +3,6 @@
     "target": "ESNext",
     "module": "Preserve",
     "resolveJsonModule": true,
-    "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "allowJs": true,

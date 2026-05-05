@@ -1,6 +1,6 @@
 import imported from "./file.json";
 
-import importedWithAssertion from "./file.json" assert { type: "json" };
+import importedWithAssertion from "./file.json" with { type: "json" };
 
 const required = require("./file.json");
 
