@@ -1,5 +1,5 @@
 import { Module } from "node:module";
-import { writeFileSync, unlinkSync, mkdirSync, rmSync } from "node:fs";
+import { writeFileSync, unlinkSync, mkdirSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { performance } from "node:perf_hooks";
 import vm from "node:vm";
@@ -218,33 +218,37 @@ function esmEval(
     ? undefined
     : `data:text/javascript;base64,${Buffer.from(wrapped).toString("base64")}`;
   return (...args: any[]) => {
-    const importViaDataUrl = uri
-      ? nativeImport(uri).then((mod) => mod.default(...args))
-      : Promise.reject(new Error("force-temp-file"));
-    return importViaDataUrl.catch((error: any) => {
-      // Fallback to temp file on ENAMETOOLONG (encrypted home dirs / strict
-      // NAME_MAX filesystems) or when explicitly forced via option.
-      if (!forceTempFile && error?.code !== "ENAMETOOLONG") {
-        throw error;
-      }
-      return esmEvalViaTempFile(wrapped, filename, nativeImport, args);
-    });
+    let tempFile: string | undefined;
+    const importViaTempFile = () => {
+      tempFile = writeEsmTempFile(wrapped, filename);
+      return nativeImport(tempFile);
+    };
+    const modPromise = uri
+      ? nativeImport(uri).catch((error: any) => {
+          // Fallback to temp file on ENAMETOOLONG (encrypted home dirs /
+          // strict NAME_MAX filesystems).
+          if (error?.code !== "ENAMETOOLONG") {
+            throw error;
+          }
+          return importViaTempFile();
+        })
+      : importViaTempFile();
+    return modPromise
+      .then((mod) => mod.default(...args))
+      .finally(() => {
+        if (tempFile) {
+          try {
+            unlinkSync(tempFile);
+          } catch {}
+        }
+      });
   };
 }
 
 let _tempDirReady = false;
-function esmEvalViaTempFile(
-  source: string,
-  filename: string,
-  nativeImport: (id: string) => Promise<any>,
-  args: any[],
-) {
+function writeEsmTempFile(source: string, filename: string): string {
   const tempDir = join(tmpdir(), "jiti-esm");
   if (!_tempDirReady) {
-    try {
-      // Best-effort cleanup of stale files from crashed processes.
-      rmSync(tempDir, { recursive: true, force: true });
-    } catch {}
     try {
       mkdirSync(tempDir, { recursive: true });
     } catch {}
@@ -259,11 +263,5 @@ function esmEvalViaTempFile(
   // not the original file. jiti's babel plugins replace import.meta.url /
   // dirname / filename with wrapped function params, so user code sees the
   // original location.
-  return nativeImport(tempFile)
-    .then((mod) => mod.default(...args))
-    .finally(() => {
-      try {
-        unlinkSync(tempFile);
-      } catch {}
-    });
+  return tempFile;
 }

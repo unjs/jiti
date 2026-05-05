@@ -1,5 +1,5 @@
 import { resolve, join, dirname } from "node:path";
-import { writeFileSync, unlinkSync } from "node:fs";
+import { writeFileSync, unlinkSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { describe, it, expect } from "vitest";
 import { x } from "tinyexec";
@@ -43,6 +43,44 @@ describe("esmResolveTempFile", () => {
     const output = stdout + stderr;
     expect(output).toContain("[esm]");
     expect(output).toContain("[fallback]");
+  });
+
+  it("does not re-execute user code when it throws ENAMETOOLONG", async () => {
+    // Regression: previously the data-URL `.then(mod => mod.default(...args))`
+    // and the temp-file fallback shared one `.catch`, so a user error with
+    // `code: "ENAMETOOLONG"` re-ran user code via the temp-file path.
+    const counter = join(tmpdir(), `jiti-enametoolong-counter-${Date.now()}.txt`);
+    const fixture = join(tmpdir(), `jiti-enametoolong-${Date.now()}.ts`);
+    writeFileSync(
+      fixture,
+      [
+        `declare global { interface ImportMeta { custom: any; } }`,
+        `import.meta.custom = {};`,
+        `import { appendFileSync } from "node:fs";`,
+        `appendFileSync(${JSON.stringify(counter)}, "x");`,
+        `const err: any = new Error("simulated long path");`,
+        `err.code = "ENAMETOOLONG";`,
+        `throw err;`,
+        `export {};`,
+      ].join("\n"),
+    );
+
+    try {
+      await x("node", [jitiPath, fixture], {
+        nodeOptions: {
+          stdio: "pipe",
+          env: { JITI_CACHE: "false" },
+        },
+      });
+      let runs = "";
+      try {
+        runs = readFileSync(counter, "utf8");
+      } catch {}
+      expect(runs).toBe("x");
+    } finally {
+      try { unlinkSync(fixture); } catch {}
+      try { unlinkSync(counter); } catch {}
+    }
   });
 
   it("handles large ESM files with import.meta.custom", async () => {
