@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { performance } from "node:perf_hooks";
 import vm from "node:vm";
 import { dirname, basename, extname, join } from "pathe";
-import { hasESMSyntax } from "mlly";
+import { hasESMSyntax, pathToFileURL } from "mlly";
 import {
   debug,
   jitiInteropDefault,
@@ -225,7 +225,7 @@ function esmEval(
     const importViaTempFile = () => {
       tempFile = writeEsmTempFile(wrapped, filename);
       debug(ctx, "[esm]", "[tempfile]", tempFile);
-      return nativeImport(tempFile);
+      return nativeImport(pathToFileURL(tempFile));
     };
     const modPromise = uri
       ? nativeImport(uri).catch((error: any) => {
