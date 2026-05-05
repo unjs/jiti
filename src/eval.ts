@@ -17,8 +17,7 @@ import { jitiResolve } from "./resolve";
 import { jitiRequire, nativeImportOrRequire } from "./require";
 import createJiti from "./jiti";
 import { transform } from "./transform";
-import path from "node:path";
-import { pathToFileURL } from "node:url";
+import { resolve as resolvePath } from "node:path";
 
 export function evalModule(
   ctx: Context,
@@ -147,10 +146,8 @@ export function evalModule(
   let compiled;
   const wrapped = wrapModule(source, { async: evalOptions.async });
 
-  const formattedFileName = (() => {
-    const resolved = path.resolve(filename);
-    return isESM ? pathToFileURL(resolved).href : resolved;
-  })();
+  const resolved = resolvePath(filename);
+  const formattedFileName = isESM ? pathToFileURL(resolved) : resolved;
 
   try {
     compiled = vm.runInThisContext(wrapped, {
