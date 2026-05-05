@@ -49,7 +49,10 @@ describe("esmResolveTempFile", () => {
     // Regression: previously the data-URL `.then(mod => mod.default(...args))`
     // and the temp-file fallback shared one `.catch`, so a user error with
     // `code: "ENAMETOOLONG"` re-ran user code via the temp-file path.
-    const counter = join(tmpdir(), `jiti-enametoolong-counter-${Date.now()}.txt`);
+    const counter = join(
+      tmpdir(),
+      `jiti-enametoolong-counter-${Date.now()}.txt`,
+    );
     const fixture = join(tmpdir(), `jiti-enametoolong-${Date.now()}.ts`);
     writeFileSync(
       fixture,
@@ -78,8 +81,12 @@ describe("esmResolveTempFile", () => {
       } catch {}
       expect(runs).toBe("x");
     } finally {
-      try { unlinkSync(fixture); } catch {}
-      try { unlinkSync(counter); } catch {}
+      try {
+        unlinkSync(fixture);
+      } catch {}
+      try {
+        unlinkSync(counter);
+      } catch {}
     }
   });
 
