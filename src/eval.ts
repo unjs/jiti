@@ -17,6 +17,7 @@ import { jitiResolve } from "./resolve";
 import { jitiRequire, nativeImportOrRequire } from "./require";
 import createJiti from "./jiti";
 import { transform } from "./transform";
+import { resolve as resolvePath, dirname as nodeDirname } from "node:path";
 
 export function evalModule(
   ctx: Context,
@@ -38,14 +39,17 @@ export function evalModule(
   const isTypescript = /\.[cm]?tsx?$/.test(ext);
   const isESM =
     ext === ".mjs" ||
-    (ext === ".js" && readNearestPackageJSON(filename)?.type === "module");
-  const isCommonJS = ext === ".cjs";
+    ext === ".mts" ||
+    ((ext === ".js" || ext === ".ts") &&
+      readNearestPackageJSON(filename)?.type === "module");
+  const isCommonJS = ext === ".cjs" || ext === ".cts";
   const needsTranspile =
     evalOptions.forceTranspile ??
-    (!isCommonJS && // CommonJS skips transpile
-      !(isESM && evalOptions.async) && // In async mode, we can skip native ESM as well
-      // prettier-ignore
-      (isTypescript || isESM || ctx.isTransformRe.test(filename) || hasESMSyntax(source)));
+    (isTypescript || // TS always needs transpile
+      (!isCommonJS && // CommonJS skips transpile
+        !(isESM && evalOptions.async) && // In async mode, we can skip native ESM as well
+        // prettier-ignore
+        (isESM || ctx.isTransformRe.test(filename) || hasESMSyntax(source))));
   const start = performance.now();
   if (needsTranspile) {
     source = transform(ctx, {
@@ -99,9 +103,15 @@ export function evalModule(
     }
   }
 
+  // Resolve filename to a platform-native absolute path so __filename,
+  // module.filename and stack frames all agree (matters on Windows where
+  // pathe normalizes to "/" but Node uses "\").
+  const resolved = resolvePath(filename);
+  const formattedFileName = isESM ? pathToFileURL(resolved) : resolved;
+
   // Compile module
   const mod = new Module(filename);
-  mod.filename = filename;
+  mod.filename = resolved;
   if (ctx.parentModule) {
     mod.parent = ctx.parentModule;
     if (
@@ -141,9 +151,10 @@ export function evalModule(
   // Compile wrapped script
   let compiled;
   const wrapped = wrapModule(source, { async: evalOptions.async });
+
   try {
     compiled = vm.runInThisContext(wrapped, {
-      filename,
+      filename: formattedFileName,
       lineOffset: 0,
       displayErrors: false,
     });
@@ -174,7 +185,7 @@ export function evalModule(
       mod.require,
       mod,
       mod.filename,
-      dirname(mod.filename),
+      nodeDirname(mod.filename),
       _jiti.import,
       _jiti.esmResolve,
     );
