@@ -17,7 +17,7 @@ import { jitiResolve } from "./resolve";
 import { jitiRequire, nativeImportOrRequire } from "./require";
 import createJiti from "./jiti";
 import { transform } from "./transform";
-import { resolve as resolvePath } from "node:path";
+import { resolve as resolvePath, dirname as nodeDirname } from "node:path";
 
 export function evalModule(
   ctx: Context,
@@ -103,9 +103,15 @@ export function evalModule(
     }
   }
 
+  // Resolve filename to a platform-native absolute path so __filename,
+  // module.filename and stack frames all agree (matters on Windows where
+  // pathe normalizes to "/" but Node uses "\").
+  const resolved = resolvePath(filename);
+  const formattedFileName = isESM ? pathToFileURL(resolved) : resolved;
+
   // Compile module
   const mod = new Module(filename);
-  mod.filename = filename;
+  mod.filename = resolved;
   if (ctx.parentModule) {
     mod.parent = ctx.parentModule;
     if (
@@ -146,9 +152,6 @@ export function evalModule(
   let compiled;
   const wrapped = wrapModule(source, { async: evalOptions.async });
 
-  const resolved = resolvePath(filename);
-  const formattedFileName = isESM ? pathToFileURL(resolved) : resolved;
-
   try {
     compiled = vm.runInThisContext(wrapped, {
       filename: formattedFileName,
@@ -182,7 +185,7 @@ export function evalModule(
       mod.require,
       mod,
       mod.filename,
-      dirname(mod.filename),
+      nodeDirname(mod.filename),
       _jiti.import,
       _jiti.esmResolve,
     );

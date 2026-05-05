@@ -1,13 +1,19 @@
 function getTopOfStackTrace() {
   const dummyObj = {};
   const oldStackTraceLimit = Error.stackTraceLimit;
-  Error.stackTraceLimit = 1;
   const oldPrepareStackTrace = Error.prepareStackTrace;
-  Error.prepareStackTrace = (_, stack) => stack;
-  Error.captureStackTrace(dummyObj, getTopOfStackTrace);
-  const stack = dummyObj.stack;
-  Error.prepareStackTrace = oldPrepareStackTrace;
-  Error.stackTraceLimit = oldStackTraceLimit;
+  let stack;
+  try {
+    Error.stackTraceLimit = 1;
+    Error.prepareStackTrace = (_, callsites) => callsites;
+    Error.captureStackTrace(dummyObj, getTopOfStackTrace);
+    // Access .stack inside the try block so V8 invokes our prepareStackTrace
+    // before we restore the originals in finally.
+    stack = dummyObj.stack;
+  } finally {
+    Error.prepareStackTrace = oldPrepareStackTrace;
+    Error.stackTraceLimit = oldStackTraceLimit;
+  }
   return stack.at(-1);
 }
 
