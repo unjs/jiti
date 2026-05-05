@@ -13,8 +13,10 @@ export default defineConfig({
   output: {
     filename: "[name].cjs",
     path: fileURLToPath(import.meta.resolve("./dist")),
-    libraryTarget: "commonjs2",
-    libraryExport: "default",
+    library: {
+      type: "commonjs2",
+      export: "default",
+    },
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".cjs", ".mjs", ".json"],

@@ -30,6 +30,7 @@ Used by Nuxt, Tailwind, ESLint, Docusaurus, and 300M+ monthly npm downloads.
 ### Build
 
 - **Bundler**: rspack (`rspack.config.mjs`) — bundles `src/` → `dist/jiti.cjs` + `dist/babel.cjs`
+- **Experimental alt bundler**: rolldown (`rolldown.config.mjs`, run via `pnpm build:rolldown`) — produces the same two CJS bundles. Not used for releases yet.
 - Babel is lazy-loaded from `dist/babel.cjs` only when transformation is needed
 - `lib/` contains thin ESM/CJS wrappers, CLI, register hook, and type declarations (not bundled, shipped as-is)
 
