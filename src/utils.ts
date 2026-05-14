@@ -150,7 +150,13 @@ function interopDefault(mod: any): any {
         value = target[prop];
       } else if (needsDefaultFallback) {
         value = def[prop];
-        if (typeof value === "function" && typeof prop !== "symbol") {
+        if (
+          typeof value === "function" &&
+          // Skip bind for disposal symbols — V8 rejects bound functions
+          // with native `await using` / `using` (Node 24+)
+          prop !== Symbol.asyncDispose &&
+          prop !== Symbol.dispose
+        ) {
           value = value.bind(def);
         }
       }
