@@ -150,7 +150,7 @@ function interopDefault(mod: any): any {
         value = target[prop];
       } else if (needsDefaultFallback) {
         value = def[prop];
-        if (typeof value === "function") {
+        if (typeof value === "function" && typeof prop !== "symbol") {
           value = value.bind(def);
         }
       }
