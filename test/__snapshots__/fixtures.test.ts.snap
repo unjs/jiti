@@ -31,7 +31,7 @@ import.meta.env?.TEST true"
 
 exports[`fixtures > error-parse > stderr 1`] = `
 [
-  "Error: ParseError: Unexpected token  ",
+  "Error: ParseError: <cwd>/index.ts: Unexpected token  ",
 ]
 `;
 
