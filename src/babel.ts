@@ -26,7 +26,7 @@ export default function transform(opts: TransformOptions): TransformResult {
     compact: false,
     retainLines:
       typeof opts.retainLines === "boolean" ? opts.retainLines : true,
-    filename: "",
+    filename: opts.filename ?? "",
     cwd: "/",
     ...opts.babel,
     plugins: [
