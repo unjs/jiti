@@ -151,7 +151,14 @@ function interopDefault(mod: any): any {
       } else if (needsDefaultFallback) {
         value = def[prop];
         if (typeof value === "function") {
-          value = value.bind(def);
+          if (prop === Symbol.dispose || prop === Symbol.asyncDispose) {
+            // Native using rejects bound disposal methods, but they still need
+            // the default export as receiver.
+            const fn = value;
+            value = (...args: any[]) => Reflect.apply(fn, def, args);
+          } else {
+            value = value.bind(def);
+          }
         }
       }
 
