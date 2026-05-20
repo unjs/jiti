@@ -150,7 +150,13 @@ function interopDefault(mod: any): any {
         value = target[prop];
       } else if (needsDefaultFallback) {
         value = def[prop];
-        if (typeof value === "function") {
+        // Skip bind for Symbol.dispose/asyncDispose — V8 rejects binding these
+        // well-known symbols used by the Explicit Resource Management proposal
+        if (
+          typeof value === "function" &&
+          prop !== Symbol.dispose &&
+          prop !== Symbol.asyncDispose
+        ) {
           value = value.bind(def);
         }
       }
