@@ -150,14 +150,15 @@ function interopDefault(mod: any): any {
         value = target[prop];
       } else if (needsDefaultFallback) {
         value = def[prop];
-        // Skip bind for Symbol.dispose/asyncDispose — V8 rejects binding these
-        // well-known symbols used by the Explicit Resource Management proposal
-        if (
-          typeof value === "function" &&
-          prop !== Symbol.dispose &&
-          prop !== Symbol.asyncDispose
-        ) {
-          value = value.bind(def);
+        if (typeof value === "function") {
+          if (prop === Symbol.dispose || prop === Symbol.asyncDispose) {
+            // Native using rejects bound disposal methods, but they still need
+            // the default export as receiver.
+            const fn = value;
+            value = (...args: any[]) => Reflect.apply(fn, def, args);
+          } else {
+            value = value.bind(def);
+          }
         }
       }
 
