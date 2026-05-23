@@ -9,202 +9,202 @@ importers:
   .:
     devDependencies:
       '@babel/core':
-        specifier: ^7.29.0
+        specifier: 7.29.0
         version: 7.29.0
       '@babel/helper-module-imports':
-        specifier: ^7.28.6
+        specifier: 7.28.6
         version: 7.28.6
       '@babel/helper-module-transforms':
-        specifier: ^7.28.6
+        specifier: 7.28.6
         version: 7.28.6(@babel/core@7.29.0)
       '@babel/helper-plugin-utils':
-        specifier: ^7.28.6
+        specifier: 7.28.6
         version: 7.28.6
       '@babel/helper-simple-access':
-        specifier: ^7.27.1
+        specifier: 7.27.1
         version: 7.27.1
       '@babel/plugin-proposal-decorators':
-        specifier: ^7.29.0
+        specifier: 7.29.0
         version: 7.29.0(@babel/core@7.29.0)
       '@babel/plugin-syntax-class-properties':
-        specifier: ^7.12.13
+        specifier: 7.12.13
         version: 7.12.13(@babel/core@7.29.0)
       '@babel/plugin-syntax-import-assertions':
-        specifier: ^7.28.6
+        specifier: 7.28.6
         version: 7.28.6(@babel/core@7.29.0)
       '@babel/plugin-syntax-jsx':
-        specifier: ^7.28.6
+        specifier: 7.28.6
         version: 7.28.6(@babel/core@7.29.0)
       '@babel/plugin-transform-explicit-resource-management':
-        specifier: ^7.28.6
+        specifier: 7.28.6
         version: 7.28.6(@babel/core@7.29.0)
       '@babel/plugin-transform-export-namespace-from':
-        specifier: ^7.27.1
+        specifier: 7.27.1
         version: 7.27.1(@babel/core@7.29.0)
       '@babel/plugin-transform-react-jsx':
-        specifier: ^7.28.6
+        specifier: 7.28.6
         version: 7.28.6(@babel/core@7.29.0)
       '@babel/plugin-transform-typescript':
-        specifier: ^7.28.6
+        specifier: 7.28.6
         version: 7.28.6(@babel/core@7.29.0)
       '@babel/preset-typescript':
-        specifier: ^7.28.5
+        specifier: 7.28.5
         version: 7.28.5(@babel/core@7.29.0)
       '@babel/template':
-        specifier: ^7.28.6
+        specifier: 7.28.6
         version: 7.28.6
       '@babel/traverse':
-        specifier: ^7.29.0
+        specifier: 7.29.0
         version: 7.29.0
       '@babel/types':
-        specifier: ^7.29.0
+        specifier: 7.29.0
         version: 7.29.0
       '@rspack/cli':
-        specifier: ^2.0.1
+        specifier: 2.0.1
         version: 2.0.1(@rspack/core@2.0.1)
       '@rspack/core':
-        specifier: ^2.0.1
+        specifier: 2.0.1
         version: 2.0.1
       '@types/babel__core':
-        specifier: ^7.20.5
+        specifier: 7.20.5
         version: 7.20.5
       '@types/babel__helper-module-imports':
-        specifier: ^7.18.3
+        specifier: 7.18.3
         version: 7.18.3
       '@types/babel__helper-plugin-utils':
-        specifier: ^7.10.3
+        specifier: 7.10.3
         version: 7.10.3
       '@types/babel__template':
-        specifier: ^7.4.4
+        specifier: 7.4.4
         version: 7.4.4
       '@types/babel__traverse':
-        specifier: ^7.28.0
+        specifier: 7.28.0
         version: 7.28.0
       '@types/node':
-        specifier: ^25.6.0
+        specifier: 25.6.0
         version: 25.6.0
       '@typescript/native-preview':
         specifier: 7.0.0-dev.20260505.1
         version: 7.0.0-dev.20260505.1
       '@vitest/coverage-v8':
-        specifier: ^4.1.5
+        specifier: 4.1.5
         version: 4.1.5(vitest@4.1.5)
       acorn:
-        specifier: ^8.16.0
+        specifier: 8.16.0
         version: 8.16.0
       babel-plugin-parameter-decorator:
-        specifier: ^1.0.16
+        specifier: 1.0.16
         version: 1.0.16
       changelogen:
-        specifier: ^0.6.2
+        specifier: 0.6.2
         version: 0.6.2(magicast@0.5.2)
       config:
-        specifier: ^4.4.1
+        specifier: 4.4.1
         version: 4.4.1
       consola:
-        specifier: ^3.4.2
+        specifier: 3.4.2
         version: 3.4.2
       defu:
-        specifier: ^6.1.7
+        specifier: 6.1.7
         version: 6.1.7
       destr:
-        specifier: ^2.0.5
+        specifier: 2.0.5
         version: 2.0.5
       escape-string-regexp:
-        specifier: ^5.0.0
+        specifier: 5.0.0
         version: 5.0.0
       eslint:
-        specifier: ^10.3.0
+        specifier: 10.3.0
         version: 10.3.0(jiti@2.6.1)
       eslint-config-unjs:
-        specifier: ^0.6.2
+        specifier: 0.6.2
         version: 0.6.2(eslint@10.3.0(jiti@2.6.1))(typescript@5.9.3)
       estree-walker:
-        specifier: ^3.0.3
+        specifier: 3.0.3
         version: 3.0.3
       etag:
-        specifier: ^1.8.1
+        specifier: 1.8.1
         version: 1.8.1
       fast-glob:
-        specifier: ^3.3.3
+        specifier: 3.3.3
         version: 3.3.3
       get-tsconfig:
-        specifier: ^4.14.0
+        specifier: 4.14.0
         version: 4.14.0
       is-installed-globally:
-        specifier: ^1.0.0
+        specifier: 1.0.0
         version: 1.0.0
       mime:
-        specifier: ^4.1.0
+        specifier: 4.1.0
         version: 4.1.0
       mitata:
-        specifier: ^1.0.34
+        specifier: 1.0.34
         version: 1.0.34
       mlly:
-        specifier: ^1.8.2
+        specifier: 1.8.2
         version: 1.8.2
       moment-timezone:
-        specifier: ^0.6.2
+        specifier: 0.6.2
         version: 0.6.2
       nano-jsx:
-        specifier: ^0.2.1
+        specifier: 0.2.1
         version: 0.2.1
       pathe:
-        specifier: ^2.0.3
+        specifier: 2.0.3
         version: 2.0.3
       pkg-types:
-        specifier: ^2.3.1
+        specifier: 2.3.1
         version: 2.3.1
       preact:
-        specifier: ^10.29.1
+        specifier: 10.29.1
         version: 10.29.1
       preact-render-to-string:
-        specifier: ^6.6.7
+        specifier: 6.6.7
         version: 6.6.7(preact@10.29.1)
       prettier:
-        specifier: ^3.8.3
+        specifier: 3.8.3
         version: 3.8.3
       react:
-        specifier: ^19.2.5
+        specifier: 19.2.5
         version: 19.2.5
       react-dom:
-        specifier: ^19.2.5
+        specifier: 19.2.5
         version: 19.2.5(react@19.2.5)
       reflect-metadata:
-        specifier: ^0.2.2
+        specifier: 0.2.2
         version: 0.2.2
       rolldown:
         specifier: 1.0.0-rc.18
         version: 1.0.0-rc.18
       solid-js:
-        specifier: ^1.9.12
+        specifier: 1.9.12
         version: 1.9.12
       std-env:
-        specifier: ^4.1.0
+        specifier: 4.1.0
         version: 4.1.0
       terser-webpack-plugin:
-        specifier: ^5.5.0
+        specifier: 5.5.0
         version: 5.5.0(webpack@5.106.2)
       tinyexec:
-        specifier: ^1.1.2
+        specifier: 1.1.2
         version: 1.1.2
       ts-loader:
-        specifier: ^9.5.7
+        specifier: 9.5.7
         version: 9.5.7(typescript@5.9.3)(webpack@5.106.2)
       typescript:
-        specifier: ^5.9.3
+        specifier: 5.9.3
         version: 5.9.3
       vitest:
-        specifier: ^4.1.5
+        specifier: 4.1.5
         version: 4.1.5(@types/node@25.6.0)(@vitest/coverage-v8@4.1.5)(vite@8.0.10(@types/node@25.6.0)(jiti@2.6.1)(terser@5.46.2))
       vue:
-        specifier: ^3.5.33
+        specifier: 3.5.33
         version: 3.5.33(typescript@5.9.3)
       yoctocolors:
-        specifier: ^2.1.2
+        specifier: 2.1.2
         version: 2.1.2
       zod:
-        specifier: ^4.4.3
+        specifier: 4.4.3
         version: 4.4.3
 
 packages:
