@@ -1,6 +1,7 @@
 import { afterEach, describe, beforeEach, it, expect, vi } from "vitest";
 import { isWindows } from "std-env";
 import { getCacheDir } from "../src/cache";
+import { hasDefaultExport } from "../src/utils";
 
 describe("utils", () => {
   describe.skipIf(isWindows)("getCacheDir", () => {
@@ -38,6 +39,24 @@ describe("utils", () => {
       vi.stubEnv("JITI_RESPECT_TMPDIR_ENV", "true");
 
       expect(getCacheDir({} as any)).toBe("/cwd/jiti");
+    });
+  });
+
+  describe("hasDefaultExport", () => {
+    it("detects explicit default exports", () => {
+      expect(hasDefaultExport({ __esModule: true, default: () => {} })).toBe(
+        true,
+      );
+      expect(hasDefaultExport({ __esModule: true, default: undefined })).toBe(
+        true,
+      );
+      expect(hasDefaultExport(() => {})).toBe(true);
+      expect(hasDefaultExport({ foo: "bar" })).toBe(true);
+    });
+
+    it("detects missing default exports", () => {
+      expect(hasDefaultExport({ __esModule: true, foo: "bar" })).toBe(false);
+      expect(hasDefaultExport(undefined)).toBe(false);
     });
   });
 });

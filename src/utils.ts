@@ -102,6 +102,35 @@ export function jitiInteropDefault(ctx: Context, mod: any) {
   return ctx.opts.interopDefault ? interopDefault(mod) : mod;
 }
 
+export function applyJitiInterop(ctx: Context, mod: any, interop = true) {
+  return interop ? jitiInteropDefault(ctx, mod) : mod;
+}
+
+export function hasDefaultExport(exports: unknown): boolean {
+  if (exports === null || exports === undefined) {
+    return false;
+  }
+
+  const type = typeof exports;
+  if (type !== "object" && type !== "function") {
+    return false;
+  }
+
+  if (type === "function") {
+    return true;
+  }
+
+  if ((exports as Record<string, unknown>).__esModule === true) {
+    return Object.prototype.hasOwnProperty.call(exports, "default");
+  }
+
+  return true;
+}
+
+export function createMissingDefaultExportError(id: string): Error {
+  return new Error(`Module "${id}" does not provide a default export`);
+}
+
 function interopDefault(mod: any): any {
   const modType = typeof mod;
   if (mod === null || (modType !== "object" && modType !== "function")) {

@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { builtinModules } from "node:module";
 import { fileURLToPath } from "node:url";
 import { extname } from "pathe";
-import { jitiInteropDefault, normalizeWindowsImportId } from "./utils";
+import { applyJitiInterop, normalizeWindowsImportId } from "./utils";
 import { debug } from "./utils";
 import { jitiResolve } from "./resolve";
 import { evalModule } from "./eval";
@@ -11,13 +11,13 @@ import { evalModule } from "./eval";
 export function jitiRequire(
   ctx: Context,
   id: string,
-  opts: JitiResolveOptions & { async: boolean },
+  opts: JitiResolveOptions & { async: boolean; interop?: boolean },
 ) {
   const cache = ctx.parentCache || {};
 
   // Check for node:, file:, and data: protocols
   if (id.startsWith("node:")) {
-    return nativeImportOrRequire(ctx, id, opts.async);
+    return nativeImportOrRequire(ctx, id, opts.async, opts.interop);
   } else if (id.startsWith("file:")) {
     id = fileURLToPath(id);
   } else if (id.startsWith("data:")) {
@@ -27,12 +27,12 @@ export function jitiRequire(
       );
     }
     debug(ctx, "[native]", "[data]", "[import]", id);
-    return nativeImportOrRequire(ctx, id, true);
+    return nativeImportOrRequire(ctx, id, true, opts.interop);
   }
 
   // Check for builtin node module like fs
   if (builtinModules.includes(id) || id === ".pnp.js" /* #24 */) {
-    return nativeImportOrRequire(ctx, id, opts.async);
+    return nativeImportOrRequire(ctx, id, opts.async, opts.interop);
   }
 
   // Check for virtual modules (e.g., bundled modules in compiled Bun binaries)
@@ -40,8 +40,8 @@ export function jitiRequire(
     debug(ctx, "[virtual]", id);
     const mod = ctx.opts.virtualModules[id];
     return opts.async
-      ? Promise.resolve(jitiInteropDefault(ctx, mod))
-      : jitiInteropDefault(ctx, mod);
+      ? Promise.resolve(applyJitiInterop(ctx, mod, opts.interop ?? true))
+      : applyJitiInterop(ctx, mod, opts.interop ?? true);
   }
 
   // Experimental Bun support
@@ -64,7 +64,7 @@ export function jitiRequire(
             if (ctx.opts.moduleCache === false) {
               delete ctx.nativeRequire.cache[id];
             }
-            return jitiInteropDefault(ctx, m);
+            return applyJitiInterop(ctx, m, opts.interop ?? true);
           })
           .catch((error) => {
             debug(
@@ -84,7 +84,7 @@ export function jitiRequire(
         if (ctx.opts.moduleCache === false) {
           delete ctx.nativeRequire.cache[id];
         }
-        return jitiInteropDefault(ctx, _mod);
+        return applyJitiInterop(ctx, _mod, opts.interop ?? true);
       }
     } catch (error: any) {
       debug(
@@ -124,23 +124,27 @@ export function jitiRequire(
       opts.async ? "[import]" : "[require]",
       filename,
     );
-    return nativeImportOrRequire(ctx, filename, opts.async);
+    return nativeImportOrRequire(ctx, filename, opts.async, opts.interop);
   }
 
   // Force native modules
   if (ctx.isNativeRe.test(filename)) {
     debug(ctx, "[native]", opts.async ? "[import]" : "[require]", filename);
-    return nativeImportOrRequire(ctx, filename, opts.async);
+    return nativeImportOrRequire(ctx, filename, opts.async, opts.interop);
   }
 
   // Check for runtime cache
   if (cache[filename]) {
-    return jitiInteropDefault(ctx, cache[filename]?.exports);
+    return applyJitiInterop(
+      ctx,
+      cache[filename]?.exports,
+      opts.interop ?? true,
+    );
   }
   if (ctx.opts.moduleCache) {
     const cacheEntry = ctx.nativeRequire.cache[filename];
     if (cacheEntry?.loaded) {
-      return jitiInteropDefault(ctx, cacheEntry.exports);
+      return applyJitiInterop(ctx, cacheEntry.exports, opts.interop ?? true);
     }
   }
 
@@ -154,6 +158,7 @@ export function jitiRequire(
     ext,
     cache,
     async: opts.async,
+    interop: opts.interop,
   });
 }
 
@@ -161,10 +166,11 @@ export function nativeImportOrRequire(
   ctx: Context,
   id: string,
   async?: boolean,
+  interop?: boolean,
 ) {
   return async && ctx.nativeImport
     ? ctx
         .nativeImport(normalizeWindowsImportId(id))
-        .then((m: any) => jitiInteropDefault(ctx, m))
-    : jitiInteropDefault(ctx, ctx.nativeRequire(id));
+        .then((m: any) => applyJitiInterop(ctx, m, interop ?? true))
+    : applyJitiInterop(ctx, ctx.nativeRequire(id), interop ?? true);
 }

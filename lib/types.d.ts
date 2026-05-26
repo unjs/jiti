@@ -47,6 +47,9 @@ export interface Jiti extends NodeRequire {
    *
    * If you need the default export of module, you can use
    * `jiti.import(id, { default: true })` as shortcut to `mod?.default ?? mod`.
+   *
+   * When using `{ default: true }`, jiti throws if the module does not
+   * provide a default export.
    */
   import<T = unknown>(
     id: string,
@@ -376,6 +379,10 @@ export type EvalModuleOptions = Partial<{
    */
   async: boolean;
   forceTranspile: boolean;
+  /**
+   * @default true
+   */
+  interop?: boolean;
 }>;
 
 export interface TransformOptions {

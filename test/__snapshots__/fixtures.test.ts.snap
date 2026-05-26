@@ -8,6 +8,8 @@ exports[`fixtures > cjs-interop > stdout 1`] = `"CJS function default interop te
 
 exports[`fixtures > data-uri > stdout 1`] = `""`;
 
+exports[`fixtures > default-export-missing > stdout 1`] = `"Module "./named-only.ts" does not provide a default export"`;
+
 exports[`fixtures > deps > stdout 1`] = `
 "npm:config: true
 npm:defu {}

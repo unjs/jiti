@@ -12,7 +12,13 @@ import { join, dirname } from "pathe";
 import escapeStringRegexp from "escape-string-regexp";
 import { normalizeAliases } from "pathe/utils";
 import pkg from "../package.json";
-import { debug, isDir } from "./utils";
+import {
+  debug,
+  isDir,
+  hasDefaultExport,
+  createMissingDefaultExportError,
+  jitiInteropDefault,
+} from "./utils";
 import { resolveJitiOptions } from "./options";
 import { jitiResolve } from "./resolve";
 import { evalModule } from "./eval";
@@ -167,8 +173,20 @@ export default function createJiti(
         id: string,
         opts?: JitiResolveOptions & { default?: true },
       ): Promise<T> {
+        if (opts?.default) {
+          const mod = await jitiRequire(ctx, id, {
+            ...opts,
+            async: true,
+            interop: false,
+          });
+          if (!hasDefaultExport(mod)) {
+            throw createMissingDefaultExportError(id);
+          }
+          const interoped = jitiInteropDefault(ctx, mod);
+          return (interoped?.default ?? interoped) as T;
+        }
         const mod = await jitiRequire(ctx, id, { ...opts, async: true });
-        return opts?.default ? (mod?.default ?? mod) : mod;
+        return mod as T;
       },
       esmResolve(id: string, opts?: string | JitiResolveOptions): string {
         if (typeof opts === "string") {

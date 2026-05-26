@@ -200,7 +200,10 @@ export function evalModule(
     mod.loaded = true;
 
     // interopDefault
-    const _exports = jitiInteropDefault(ctx, mod.exports);
+    const _exports =
+      evalOptions.interop === false
+        ? mod.exports
+        : jitiInteropDefault(ctx, mod.exports);
 
     // Return exports
     return _exports;
