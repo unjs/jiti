@@ -135,9 +135,7 @@ function serializeReference(
 }
 
 type SerializedType =
-  | t.Identifier
-  | t.UnaryExpression
-  | t.ConditionalExpression;
+  t.Identifier | t.UnaryExpression | t.ConditionalExpression;
 
 /**
  * Actual serialization given the TS Type annotation.
