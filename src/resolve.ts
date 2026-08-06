@@ -101,10 +101,9 @@ function tryNativeFallback(
   parentURL: URL | string,
   options: { paths?: string[] },
 ) {
-  try {
-    return ctx.nativeRequire.resolve(id, { paths: options.paths });
-  } catch {
-    // Try additional extensions below.
+  const nativeResolved = tryNativeRequireResolve(ctx, id, parentURL, options);
+  if (nativeResolved) {
+    return nativeResolved;
   }
 
   let resolved;
