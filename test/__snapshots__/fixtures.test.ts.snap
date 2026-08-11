@@ -148,6 +148,9 @@ Logical nullish assignment: 50 20"
 exports[`fixtures > top-level-await > stdout 1`] = `"async value works from sub module"`;
 
 exports[`fixtures > tsconfig-paths > stdout 1`] = `"jiti-tsconfig-paths-test"`;
+exports[`fixtures > tsconfig-references > stdout 1`] = `"meaning of life: 42"`;
+exports[`fixtures > tsconfig-references-cycle > stdout 1`] = `"cycle: 42"`;
+exports[`fixtures > tsconfig-references-nested > stdout 1`] = `"nested: 42"`;
 
 exports[`fixtures > typescript > stdout 1`] = `
 "Decorator metadata keys: design:type

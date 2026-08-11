@@ -6,9 +6,10 @@ import type {
   EvalModuleOptions,
   JitiResolveOptions,
 } from "./types";
+import { existsSync, statSync } from "node:fs";
 import { platform } from "node:os";
 import { fileURLToPath, pathToFileURL } from "mlly";
-import { join, dirname } from "pathe";
+import { join, dirname, basename, resolve } from "pathe";
 import escapeStringRegexp from "escape-string-regexp";
 import { normalizeAliases } from "pathe/utils";
 import pkg from "../package.json";
@@ -21,6 +22,62 @@ import { jitiRequire } from "./require";
 import { prepareCacheDir } from "./cache";
 
 const isWindows = platform() === "win32";
+
+/**
+ * Create a paths matcher from the referenced projects of a solution-style
+ * tsconfig (issue #440). The root config only contains `references` while
+ * `paths` live in the referenced projects (e.g. `tsconfig.node.json`).
+ *
+ * Each referenced project gets its own matcher (paths are relative to the
+ * config that declares them) and the candidates are concatenated.
+ */
+type GetTsconfig = (typeof import("get-tsconfig"))["getTsconfig"];
+type TsConfigResult = NonNullable<ReturnType<GetTsconfig>>;
+
+function createReferencedPathsMatcher(
+  rootTsconfig: TsConfigResult,
+  getTsconfig: GetTsconfig,
+  createPathsMatcher: (typeof import("get-tsconfig"))["createPathsMatcher"],
+): ((specifier: string) => string[]) | undefined {
+  const matchers: Array<(specifier: string) => string[]> = [];
+  const visited = new Set<string>([resolve(rootTsconfig.path)]);
+  const pending: Array<{ ref: string; baseDir: string }> = (
+    rootTsconfig.config.references || []
+  ).map((ref) => ({ ref: ref.path!, baseDir: dirname(rootTsconfig.path) }));
+
+  while (pending.length > 0) {
+    const { ref, baseDir } = pending.shift()!;
+    const resolved = resolve(baseDir, ref);
+    const stat = existsSync(resolved) ? statSync(resolved) : undefined;
+    const configFile = stat?.isDirectory()
+      ? join(resolved, "tsconfig.json")
+      : resolved;
+    if (visited.has(configFile)) {
+      continue;
+    }
+    visited.add(configFile);
+    const tsconfig = getTsconfig(dirname(configFile), basename(configFile));
+    if (!tsconfig) {
+      continue;
+    }
+    if (tsconfig.config.compilerOptions?.paths) {
+      const matcher = createPathsMatcher(tsconfig);
+      if (matcher) {
+        matchers.push(matcher);
+      }
+    }
+    for (const nested of tsconfig.config.references || []) {
+      if (nested.path) {
+        pending.push({ ref: nested.path, baseDir: dirname(tsconfig.path) });
+      }
+    }
+  }
+
+  if (matchers.length === 0) {
+    return undefined;
+  }
+  return (specifier) => matchers.flatMap((matcher) => matcher(specifier));
+}
 
 export default function createJiti(
   filename: string,
@@ -61,6 +118,15 @@ export default function createJiti(
     const tsconfig = getTsconfig(searchPath);
     if (tsconfig) {
       resolveTsConfigPaths = createPathsMatcher(tsconfig)!;
+      // Solution-style tsconfigs can keep `paths` in referenced projects
+      // instead of the root config (#440)
+      if (!resolveTsConfigPaths) {
+        resolveTsConfigPaths = createReferencedPathsMatcher(
+          tsconfig,
+          getTsconfig,
+          createPathsMatcher,
+        );
+      }
     }
   }
 
