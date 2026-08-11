@@ -17,5 +17,5 @@
     "declaration": false
   },
   "include": ["src", "lib", "test"],
-  "exclude": ["test/fixtures/error-parse/index.ts", "test/fixtures/tsconfig-references/main.ts"]
+  "exclude": ["test/fixtures/error-parse/index.ts", "test/fixtures/tsconfig-references/main.ts", "test/fixtures/tsconfig-references-nested/main.ts", "test/fixtures/tsconfig-references-cycle/main.ts"]
 }

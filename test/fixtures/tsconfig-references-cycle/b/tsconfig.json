@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "paths": {
+      "@b/*": ["./src/*"]
+    }
+  },
+  "include": ["src"],
+  "references": [{ "path": "../a" }]
+}

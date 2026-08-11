@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "paths": {
+      "@lib/*": ["./src/*"]
+    }
+  },
+  "include": ["src"]
+}
