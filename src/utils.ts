@@ -147,6 +147,13 @@ function interopDefault(mod: any): any {
           value = def;
         }
       } else if (prop in target) {
+        const desc = Object.getOwnPropertyDescriptor(target, prop);
+        if (desc && (desc.get || desc.set)) {
+          // Live bindings (e.g. mutable ESM exports downleveled to getters
+          // by Babel's CJS transform) must be re-read on every access, not
+          // memoized, or mutations after the first read go unobserved.
+          return Reflect.get(target, prop);
+        }
         value = target[prop];
       } else if (needsDefaultFallback) {
         value = def[prop];
