@@ -7,7 +7,7 @@ describe("utils", () => {
   describe("jitiInteropDefault", () => {
     const ctx = { opts: { interopDefault: true } } as any;
 
-    it("re-reads live-binding (mutable) named exports instead of returning a cached stale value (regression for #421)", () => {
+    it("re-reads live-binding (mutable) named exports instead of returning a cached stale value (regression for #457)", () => {
       // Mirrors what jiti's own ESM->CJS transform (src/plugins/transform-module,
       // based on @babel/plugin-transform-modules-commonjs) emits for:
       //   export let counter = 1;
