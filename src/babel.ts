@@ -42,6 +42,12 @@ export default function transform(opts: TransformOptions): TransformResult {
         normalizeProposalDecoratorsPlugin(plugin),
       )
     : [];
+  const customDecoratorsPlugins = customPlugins.filter((plugin) =>
+    isProposalDecoratorsPlugin(plugin),
+  );
+  const otherCustomPlugins = customPlugins.filter(
+    (plugin) => !isProposalDecoratorsPlugin(plugin),
+  );
   const _opts: BabelTransformOptions & { plugins: PluginItem[] } = {
     babelrc: false,
     configFile: false,
@@ -85,17 +91,22 @@ export default function transform(opts: TransformOptions): TransformResult {
       },
     ]);
     // `unshift` because these plugin must come before `@babel/plugin-syntax-class-properties`
+    // A decorator transform must also come before `@babel/plugin-transform-typescript`,
+    // so a caller-provided one takes the same slot as the legacy default instead of
+    // being appended after it.
     _opts.plugins.unshift(
       [transformTypeScriptMetaPlugin],
-      ...(customPlugins.some((plugin) => isProposalDecoratorsPlugin(plugin))
-        ? []
+      ...(customDecoratorsPlugins.length > 0
+        ? customDecoratorsPlugins
         : ([[proposalDecoratorsPlugin, { legacy: true }]] as PluginItem[])),
     );
     _opts.plugins.push(parameterDecoratorPlugin, syntaxImportAssertionsPlugin);
   }
 
-  if (customPlugins.length > 0) {
-    _opts.plugins.push(...customPlugins);
+  // When `opts.ts` is set, decorator plugins have already been unshifted above.
+  const remainingCustomPlugins = opts.ts ? otherCustomPlugins : customPlugins;
+  if (remainingCustomPlugins.length > 0) {
+    _opts.plugins.push(...remainingCustomPlugins);
   }
 
   try {
