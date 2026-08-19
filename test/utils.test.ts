@@ -1,3 +1,6 @@
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "pathe";
 import { afterEach, describe, beforeEach, it, expect, vi } from "vitest";
 import { isWindows } from "std-env";
 import { getCacheDir } from "../src/cache";
@@ -39,5 +42,20 @@ describe("utils", () => {
 
       expect(getCacheDir({} as any)).toBe("/cwd/jiti");
     });
+  });
+
+  it("walks up from a nested file to the nearest node_modules (#459)", () => {
+    const root = mkdtempSync(join(tmpdir(), "jiti-fscache-"));
+    mkdirSync(join(root, "node_modules"));
+    mkdirSync(join(root, "src"), { recursive: true });
+    const filename = join(root, "src", "loader.ts");
+    writeFileSync(filename, "");
+    try {
+      expect(getCacheDir({ filename } as any)).toBe(
+        join(root, "node_modules/.cache/jiti"),
+      );
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 });
