@@ -162,6 +162,13 @@ export function nativeImportOrRequire(
   id: string,
   async?: boolean,
 ) {
+  if (ctx.opts.moduleCache === false) {
+    try {
+      delete ctx.nativeRequire.cache[ctx.nativeRequire.resolve(id)];
+    } catch {
+      delete ctx.nativeRequire.cache[id];
+    }
+  }
   return async && ctx.nativeImport
     ? ctx
         .nativeImport(normalizeWindowsImportId(id))
