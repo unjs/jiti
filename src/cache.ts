@@ -1,7 +1,7 @@
 import type { Context, TransformOptions } from "./types";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join, basename, resolve } from "pathe";
+import { dirname, join, basename } from "pathe";
 import { filename } from "pathe/utils";
 import { debug, isWritable, hash } from "./utils";
 
@@ -69,9 +69,19 @@ export function prepareCacheDir(ctx: Context) {
 }
 
 export function getCacheDir(ctx: Context) {
-  const nmDir = ctx.filename && resolve(ctx.filename, "../node_modules");
-  if (nmDir && existsSync(nmDir)) {
-    return join(nmDir, ".cache/jiti");
+  // Walk up from the instance file so `createJiti(import.meta.url)` resolves
+  // `<pkg>/node_modules/.cache/jiti` rather than `<fileDir>/node_modules`.
+  let dir = ctx.filename ? dirname(ctx.filename) : "";
+  while (dir) {
+    const nmDir = join(dir, "node_modules");
+    if (existsSync(nmDir)) {
+      return join(nmDir, ".cache/jiti");
+    }
+    const parent = dirname(dir);
+    if (parent === dir) {
+      break;
+    }
+    dir = parent;
   }
 
   let _tmpDir = tmpdir();
