@@ -1,3 +1,4 @@
+import { realpathSync } from "node:fs";
 import { resolveAlias } from "pathe/utils";
 import { fileURLToPath, resolvePathSync } from "mlly";
 import { join, dirname } from "pathe";
@@ -6,6 +7,11 @@ import { isDir } from "./utils";
 
 const JS_EXT_RE = /\.(c|m)?j(sx?)$/;
 const TS_EXT_RE = /\.(c|m)?t(sx?)$/;
+const PRESERVE_SYMLINKS =
+  process.execArgv.includes("--preserve-symlinks") ||
+  /(?:^|\s|["'])--preserve-symlinks(?:$|\s|["'])/.test(
+    process.env.NODE_OPTIONS || "",
+  );
 
 export function jitiResolve(
   ctx: Context,
@@ -65,16 +71,42 @@ export function jitiResolve(
       lastError = error;
     }
     if (resolved) {
-      return resolved;
+      return preserveSymlinkPath(ctx, id, resolved, parentURL, options);
     }
   }
 
   // Try native require resolve with additional extensions and /index as fallback
+  resolved = tryNativeFallback(ctx, id, parentURL, options);
+  if (resolved) {
+    return resolved;
+  }
+
   try {
     return ctx.nativeRequire.resolve(id, { paths: options.paths });
   } catch (error) {
     lastError = error;
   }
+
+  if (options?.try) {
+    // Well-typed in types.d.ts
+    return undefined as unknown as string;
+  }
+
+  throw lastError;
+}
+
+function tryNativeFallback(
+  ctx: Context,
+  id: string,
+  parentURL: URL | string,
+  options: { paths?: string[] },
+) {
+  const nativeResolved = tryNativeRequireResolve(ctx, id, parentURL, options);
+  if (nativeResolved) {
+    return nativeResolved;
+  }
+
+  let resolved;
   for (const ext of ctx.additionalExts) {
     resolved =
       tryNativeRequireResolve(ctx, id + ext, parentURL, options) ||
@@ -99,13 +131,31 @@ export function jitiResolve(
       }
     }
   }
+}
 
-  if (options?.try) {
-    // Well-typed in types.d.ts
-    return undefined as unknown as string;
+function preserveSymlinkPath(
+  ctx: Context,
+  id: string,
+  resolved: string,
+  parentURL: URL | string,
+  options: { paths?: string[] },
+) {
+  if (!PRESERVE_SYMLINKS) {
+    return resolved;
   }
 
-  throw lastError;
+  const nativeResolved = tryNativeFallback(ctx, id, parentURL, options);
+  if (!nativeResolved || nativeResolved === resolved) {
+    return resolved;
+  }
+
+  try {
+    return realpathSync(nativeResolved) === realpathSync(resolved)
+      ? nativeResolved
+      : resolved;
+  } catch {
+    return resolved;
+  }
 }
 
 function tryNativeRequireResolve(
