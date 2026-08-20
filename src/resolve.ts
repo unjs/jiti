@@ -82,7 +82,7 @@ export function jitiResolve(
   }
 
   try {
-    ctx.nativeRequire.resolve(id, { paths: options.paths });
+    return ctx.nativeRequire.resolve(id, { paths: options.paths });
   } catch (error) {
     lastError = error;
   }
