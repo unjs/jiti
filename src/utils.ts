@@ -150,7 +150,12 @@ function interopDefault(mod: any): any {
         value = target[prop];
       } else if (needsDefaultFallback) {
         value = def[prop];
-        if (typeof value === "function") {
+        // Well-known symbol protocols (Symbol.asyncDispose, Symbol.dispose,
+        // Symbol.iterator, ...) are invoked by the engine with the proxy as
+        // receiver, and V8 currently rejects bound functions for the using
+        // declaration protocols (#437). Property access on `this` still
+        // resolves through this trap, so symbol methods stay unbound.
+        if (typeof value === "function" && typeof prop !== "symbol") {
           value = value.bind(def);
         }
       }
