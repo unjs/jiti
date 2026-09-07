@@ -40,4 +40,36 @@ describe("utils", () => {
       expect(getCacheDir({} as any)).toBe("/cwd/jiti");
     });
   });
+
+  describe("resolveJitiOptions", () => {
+    it("enables tryNative when Deno is in globalThis", async () => {
+      const { resolveJitiOptions } = await import("../src/options");
+      (globalThis as any).Deno = {};
+      try {
+        const opts = resolveJitiOptions({});
+        expect(opts.tryNative).toBe(true);
+      } finally {
+        delete (globalThis as any).Deno;
+      }
+    });
+
+    it("enables tryNative when Bun is in globalThis", async () => {
+      const { resolveJitiOptions } = await import("../src/options");
+      (globalThis as any).Bun = {};
+      try {
+        const opts = resolveJitiOptions({});
+        expect(opts.tryNative).toBe(true);
+      } finally {
+        delete (globalThis as any).Bun;
+      }
+    });
+
+    it("disables tryNative by default in standard environment", async () => {
+      const { resolveJitiOptions } = await import("../src/options");
+      delete (globalThis as any).Deno;
+      delete (globalThis as any).Bun;
+      const opts = resolveJitiOptions({});
+      expect(opts.tryNative).toBe(false);
+    });
+  });
 });

@@ -25,7 +25,10 @@ export function resolveJitiOptions(userOptions: JitiOptions): JitiOptions {
     alias: _jsonEnv<Record<string, string>>("JITI_ALIAS", {}),
     nativeModules: _jsonEnv<string[]>("JITI_NATIVE_MODULES", []),
     transformModules: _jsonEnv<string[]>("JITI_TRANSFORM_MODULES", []),
-    tryNative: _jsonEnv<boolean>("JITI_TRY_NATIVE", "Bun" in globalThis),
+    tryNative: _jsonEnv<boolean>(
+      "JITI_TRY_NATIVE",
+      "Bun" in globalThis || "Deno" in globalThis,
+    ),
     esmEvalTempFile: _booleanEnv("JITI_ESM_EVAL_TEMP_FILE", false),
     jsx: _booleanEnv("JITI_JSX", false),
     tsconfigPaths: _jsonEnv<boolean | string>(
