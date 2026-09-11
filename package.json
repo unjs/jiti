@@ -142,5 +142,5 @@
     "yoctocolors": "^2.1.2",
     "zod": "^4.4.3"
   },
-  "packageManager": "pnpm@10.30.3"
+  "packageManager": "pnpm@12.4.0"
 }
