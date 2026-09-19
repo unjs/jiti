@@ -141,8 +141,11 @@ function interopDefault(mod: any): any {
       } else if (prop === "default") {
         if (defIsNil) {
           value = mod;
-        } else if (typeof def?.default === "function" && mod.__esModule) {
-          value = def.default; // #396
+        } else if (mod.__esModule && def.__esModule) {
+          // `mod` is a CJS module that marked itself as transpiled ESM, so Node
+          // set the namespace `default` to the whole `module.exports` object,
+          // which carries its own `default`. Unwrap the extra layer. #396, #468
+          value = def.default;
         } else {
           value = def;
         }
