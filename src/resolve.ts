@@ -7,6 +7,25 @@ import { isDir } from "./utils";
 const JS_EXT_RE = /\.(c|m)?j(sx?)$/;
 const TS_EXT_RE = /\.(c|m)?t(sx?)$/;
 
+// pathe's resolveAlias only matches a literal prefix, so a documented glob
+// alias like `{ "#/*": "./src/*" }` never matches anything (the `*` is never
+// substituted). A single trailing `*` is equivalent to a plain prefix alias
+// once stripped, so normalize it to the form pathe already understands.
+export function normalizeAliasWildcards(
+  alias: Record<string, string>,
+): Record<string, string> {
+  const normalized: Record<string, string> = {};
+  for (const [from, to] of Object.entries(alias)) {
+    const key = from.endsWith("*") ? from.slice(0, -1) : from;
+    // A wildcard and a plain alias for the same prefix (e.g. "#/*" and "#/")
+    // collapse to the same key once stripped. Keep whichever was declared
+    // first instead of letting object key order silently pick a winner.
+    if (key in normalized) continue;
+    normalized[key] = to.endsWith("*") ? to.slice(0, -1) : to;
+  }
+  return normalized;
+}
+
 export function jitiResolve(
   ctx: Context,
   id: string,

@@ -14,7 +14,7 @@ import { normalizeAliases } from "pathe/utils";
 import pkg from "../package.json";
 import { debug, isDir } from "./utils";
 import { resolveJitiOptions } from "./options";
-import { jitiResolve } from "./resolve";
+import { jitiResolve, normalizeAliasWildcards } from "./resolve";
 import { evalModule } from "./eval";
 import { transform } from "./transform";
 import { jitiRequire } from "./require";
@@ -46,7 +46,7 @@ export default function createJiti(
   // Normalize aliases (and disable if non given)
   const alias =
     opts.alias && Object.keys(opts.alias).length > 0
-      ? normalizeAliases(opts.alias || {})
+      ? normalizeAliases(normalizeAliasWildcards(opts.alias))
       : undefined;
 
   // Initialize tsconfig paths matcher (lazy-loaded to avoid cost when disabled)
