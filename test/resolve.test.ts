@@ -23,6 +23,16 @@ describe("normalizeAliasWildcards", () => {
       "~": "./other",
     });
   });
+
+  it("keeps the first-declared alias when a wildcard and a plain key collide after stripping", () => {
+    expect(
+      normalizeAliasWildcards({ "#/*": "./src/*", "#/": "./other/" }),
+    ).toEqual({ "#/": "./src/" });
+
+    expect(
+      normalizeAliasWildcards({ "#/": "./other/", "#/*": "./src/*" }),
+    ).toEqual({ "#/": "./other/" });
+  });
 });
 
 describe("resolveAlias with wildcard aliases (README example: #/* -> ./src/*)", () => {

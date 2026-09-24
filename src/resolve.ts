@@ -16,9 +16,12 @@ export function normalizeAliasWildcards(
 ): Record<string, string> {
   const normalized: Record<string, string> = {};
   for (const [from, to] of Object.entries(alias)) {
-    normalized[from.endsWith("*") ? from.slice(0, -1) : from] = to.endsWith("*")
-      ? to.slice(0, -1)
-      : to;
+    const key = from.endsWith("*") ? from.slice(0, -1) : from;
+    // A wildcard and a plain alias for the same prefix (e.g. "#/*" and "#/")
+    // collapse to the same key once stripped. Keep whichever was declared
+    // first instead of letting object key order silently pick a winner.
+    if (key in normalized) continue;
+    normalized[key] = to.endsWith("*") ? to.slice(0, -1) : to;
   }
   return normalized;
 }
