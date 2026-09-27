@@ -20,7 +20,7 @@ export function normalizeAliasWildcards(
     // A wildcard and a plain alias for the same prefix (e.g. "#/*" and "#/")
     // collapse to the same key once stripped. Keep whichever was declared
     // first instead of letting object key order silently pick a winner.
-    if (key in normalized) continue;
+    if (Object.hasOwn(normalized, key)) continue;
     normalized[key] = to.endsWith("*") ? to.slice(0, -1) : to;
   }
   return normalized;

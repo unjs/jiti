@@ -33,6 +33,12 @@ describe("normalizeAliasWildcards", () => {
       normalizeAliasWildcards({ "#/": "./other/", "#/*": "./src/*" }),
     ).toEqual({ "#/": "./other/" });
   });
+
+  it("keeps an alias named after an Object.prototype member", () => {
+    expect(normalizeAliasWildcards({ toString: "./src/to-string" })).toEqual({
+      toString: "./src/to-string",
+    });
+  });
 });
 
 describe("resolveAlias with wildcard aliases (README example: #/* -> ./src/*)", () => {
