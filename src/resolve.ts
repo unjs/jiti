@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { resolveAlias } from "pathe/utils";
 import { fileURLToPath, resolvePathSync } from "mlly";
 import { join, dirname } from "pathe";
@@ -46,6 +47,25 @@ export function jitiResolve(
   let parentURL = options?.parentURL || ctx.url;
   if (isDir(parentURL)) {
     parentURL = join(parentURL as string, "_index.js");
+  }
+
+  // Fast path for TypeScript-style `./foo.js` imports of `./foo.ts`, which
+  // would otherwise reach the `.ts` fallback below only after every
+  // extension probe fails. An existing `./foo.js` keeps precedence.
+  if (
+    id.startsWith(".") &&
+    JS_EXT_RE.test(id) &&
+    !existsSync(join(dirname(fileURLToPath(parentURL)), id))
+  ) {
+    resolved = tryNativeRequireResolve(
+      ctx,
+      id.replace(JS_EXT_RE, ".$1t$2"),
+      parentURL,
+      options,
+    );
+    if (resolved) {
+      return resolved;
+    }
   }
 
   // Try resolving with ESM compatible Node.js resolution in async context

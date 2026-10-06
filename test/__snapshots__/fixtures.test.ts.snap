@@ -147,6 +147,8 @@ Logical nullish assignment: 50 20"
 
 exports[`fixtures > top-level-await > stdout 1`] = `"async value works from sub module"`;
 
+exports[`fixtures > ts-js-ext > stdout 1`] = `"{ a: 'a.ts', b: 'b.js', c: 'c.mts', d: 'dir.js/index.ts' }"`;
+
 exports[`fixtures > tsconfig-paths > stdout 1`] = `"jiti-tsconfig-paths-test"`;
 
 exports[`fixtures > typescript > stdout 1`] = `
