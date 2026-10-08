@@ -41,3 +41,16 @@ describe("utils", () => {
     });
   });
 });
+
+describe("esmResolve", () => {
+  it("does not throw for non-file parent URLs in try mode", async () => {
+    const { createJiti } = await import("../lib/jiti.mjs");
+    const jiti = createJiti(import.meta.url);
+    for (const href of ["data:text/javascript,", "http://example.com/a.js"]) {
+      const parentURL = new URL(href) as any;
+      expect(jiti.esmResolve("./missing.js", { parentURL, try: true })).toBe(
+        undefined,
+      );
+    }
+  });
+});
