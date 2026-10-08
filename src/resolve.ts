@@ -55,7 +55,7 @@ export function jitiResolve(
   if (
     id.startsWith(".") &&
     JS_EXT_RE.test(id) &&
-    !existsSync(join(dirname(fileURLToPath(parentURL)), id))
+    !jsFileExists(parentURL, id)
   ) {
     resolved = tryNativeRequireResolve(
       ctx,
@@ -141,5 +141,15 @@ function tryNativeRequireResolve(
     });
   } catch {
     // Ignore errors
+  }
+}
+
+// Non-file parent URLs (e.g. `data:`, `http:`) make the conversion throw;
+// treat them as "exists" so the fast path is skipped.
+function jsFileExists(parentURL: URL | string, id: string): boolean {
+  try {
+    return existsSync(join(dirname(fileURLToPath(parentURL)), id));
+  } catch {
+    return true;
   }
 }
