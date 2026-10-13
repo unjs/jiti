@@ -158,6 +158,23 @@ function interopDefault(mod: any): any {
       cache.set(prop, value);
       return value;
     },
+    // Invalidate cached entries when the wrapped module mutates its exports.
+    // Otherwise a stale entry can violate Proxy invariants: after a read caches
+    // `undefined`, `Object.defineProperty` can add a non-configurable,
+    // non-writable property, and the next read would return the cached value
+    // instead of the target's value and throw a TypeError.
+    defineProperty(target, prop, descriptor) {
+      cache.delete(prop);
+      return Reflect.defineProperty(target, prop, descriptor);
+    },
+    set(target, prop, value, receiver) {
+      cache.delete(prop);
+      return Reflect.set(target, prop, value, receiver);
+    },
+    deleteProperty(target, prop) {
+      cache.delete(prop);
+      return Reflect.deleteProperty(target, prop);
+    },
     apply: needsApplyTrap
       ? (_target, thisArg, args) => Reflect.apply(def, thisArg, args)
       : undefined,
