@@ -1,14 +1,14 @@
-import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import { join } from "pathe";
 import { describe, expect, it } from "vitest";
 import createJiti from "../src/jiti";
 
-function makeJiti(filename: string) {
+function makeJiti(filename: string, opts?: Record<string, unknown>) {
   return createJiti(
     filename,
-    { fsCache: false, moduleCache: false },
+    { fsCache: false, moduleCache: false, ...opts },
     {
       onError: (error) => {
         throw error;
@@ -29,6 +29,23 @@ describe("moduleCache: false", () => {
       expect(jiti(file)).toMatchObject({ n: 1 });
       writeFileSync(file, "module.exports = { n: 2 }\n");
       expect(jiti(file)).toMatchObject({ n: 2 });
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("reloads a changed native CJS file via jiti.import (#418)", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "jiti-module-cache-"));
+    const file = join(dir, "node_modules/mypkg/config.js");
+    mkdirSync(join(dir, "node_modules/mypkg"), { recursive: true });
+    writeFileSync(file, "module.exports = { n: 1 }\n");
+    const jiti = makeJiti(join(dir, "_index.js"), {
+      nativeModules: ["mypkg"],
+    });
+    try {
+      await expect(jiti.import(file)).resolves.toMatchObject({ n: 1 });
+      writeFileSync(file, "module.exports = { n: 2 }\n");
+      await expect(jiti.import(file)).resolves.toMatchObject({ n: 2 });
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }

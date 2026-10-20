@@ -163,11 +163,29 @@ export function nativeImportOrRequire(
   async?: boolean,
 ) {
   if (ctx.opts.moduleCache === false) {
+    let filename = id;
     try {
-      delete ctx.nativeRequire.cache[ctx.nativeRequire.resolve(id)];
+      filename = ctx.nativeRequire.resolve(id);
     } catch {
-      delete ctx.nativeRequire.cache[id];
+      // Unresolvable ids keep the raw id for cache eviction.
     }
+    delete ctx.nativeRequire.cache[filename];
+    // import() keeps a separate cache that cannot be invalidated from
+    // userland, so CJS is reloaded through require() to honor
+    // moduleCache: false. Native ESM falls back to import() where
+    // require() cannot load it; staleness there is a platform limit.
+    if (async && ctx.nativeImport) {
+      try {
+        return Promise.resolve(
+          jitiInteropDefault(ctx, ctx.nativeRequire(filename)),
+        );
+      } catch {
+        return ctx
+          .nativeImport(normalizeWindowsImportId(id))
+          .then((m: any) => jitiInteropDefault(ctx, m));
+      }
+    }
+    return jitiInteropDefault(ctx, ctx.nativeRequire(filename));
   }
   return async && ctx.nativeImport
     ? ctx
