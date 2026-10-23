@@ -68,7 +68,11 @@ function writeCacheFile(ctx: Context, cacheFilePath: string, content: string) {
     writeFileSync(tmpFilePath, content, "utf8");
     renameSync(tmpFilePath, cacheFilePath);
   } catch (error) {
-    rmSync(tmpFilePath, { force: true });
+    try {
+      rmSync(tmpFilePath, { force: true });
+    } catch (cleanupError) {
+      debug(ctx, "[cache]", "[cleanup failed]", tmpFilePath, cleanupError);
+    }
     // Renaming over a file that another process has open can fail on Windows,
     // and that process has just stored an entry for the same source anyway
     debug(ctx, "[cache]", "[store failed]", cacheFilePath, error);

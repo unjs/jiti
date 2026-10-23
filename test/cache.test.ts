@@ -11,7 +11,11 @@ import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { getCache } from "../src/cache";
 
-const fs = vi.hoisted(() => ({ writes: [] as string[] }));
+const fs = vi.hoisted(() => ({
+  writes: [] as string[],
+  failRename: false,
+  failRm: false,
+}));
 
 vi.mock("node:fs", async (importOriginal) => {
   const original = await importOriginal<typeof import("node:fs")>();
@@ -21,6 +25,14 @@ vi.mock("node:fs", async (importOriginal) => {
       fs.writes.push(String(path));
       return (original.writeFileSync as any)(path, ...args);
     }) as typeof original.writeFileSync,
+    renameSync: ((...args: Parameters<typeof original.renameSync>) => {
+      if (fs.failRename) throw new Error("rename failed");
+      return original.renameSync(...args);
+    }) as typeof original.renameSync,
+    rmSync: ((...args: Parameters<typeof original.rmSync>) => {
+      if (fs.failRm) throw new Error("rm failed");
+      return original.rmSync(...args);
+    }) as typeof original.rmSync,
   };
 });
 
@@ -37,9 +49,15 @@ describe("getCache", () => {
   beforeEach(() => {
     cacheDir = mkdtempSync(join(tmpdir(), "jiti-cache-test-"));
     fs.writes.length = 0;
+    fs.failRename = false;
+    fs.failRm = false;
   });
 
-  afterEach(() => rmSync(cacheDir, { recursive: true, force: true }));
+  afterEach(() => {
+    fs.failRename = false;
+    fs.failRm = false;
+    rmSync(cacheDir, { recursive: true, force: true });
+  });
 
   it("stores the transformed code and serves it on the next call", () => {
     const get = vi.fn(() => "transformed();");
@@ -98,5 +116,12 @@ describe("getCache", () => {
 
     expect(result).toBe("second();");
     expect(cachedFiles()).toEqual([entry]);
+  });
+
+  it("still returns the code when the entry can not be replaced and the cleanup fails too", () => {
+    fs.failRename = true;
+    fs.failRm = true;
+
+    expect(getCache(ctx(), topts, () => "first();")).toBe("first();");
   });
 });
