@@ -1,5 +1,12 @@
 import type { Context, TransformOptions } from "./types";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  renameSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, basename, resolve } from "pathe";
 import { filename } from "pathe/utils";
@@ -44,11 +51,32 @@ export function getCache(
   const result = get();
 
   if (!result.includes("__JITI_ERROR__")) {
-    writeFileSync(cacheFilePath, result + sourceHash, "utf8");
+    writeCacheFile(ctx, cacheFilePath, result + sourceHash);
     debug(ctx, "[cache]", "[store]", topts.filename, "~>", cacheFilePath);
   }
 
   return result;
+}
+
+// Several processes can store the same entry at once while others read it. A
+// plain `writeFileSync` truncates the file first, so a reader could see a half
+// written entry that still ends with the right hash. Writing to a temporary
+// file and renaming it over the target replaces the entry in one step.
+function writeCacheFile(ctx: Context, cacheFilePath: string, content: string) {
+  const tmpFilePath = `${cacheFilePath}.${process.pid}.${Math.random().toString(36).slice(2)}.tmp`;
+  try {
+    writeFileSync(tmpFilePath, content, "utf8");
+    renameSync(tmpFilePath, cacheFilePath);
+  } catch (error) {
+    try {
+      rmSync(tmpFilePath, { force: true });
+    } catch (cleanupError) {
+      debug(ctx, "[cache]", "[cleanup failed]", tmpFilePath, cleanupError);
+    }
+    // Renaming over a file that another process has open can fail on Windows,
+    // and that process has just stored an entry for the same source anyway
+    debug(ctx, "[cache]", "[store failed]", cacheFilePath, error);
+  }
 }
 
 export function prepareCacheDir(ctx: Context) {
