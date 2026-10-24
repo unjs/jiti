@@ -113,6 +113,63 @@ describe("evaluated module cache", () => {
       })),
     ),
   )(
+    "removes a failed $failure child before retrying with moduleCache=$moduleCache",
+    async ({ moduleCache, failure }) => {
+      const root = await mkdtemp(path.join(tmpdir(), "jiti-child-retry-"));
+      const filename = path.join(root, "entry.cjs");
+      const helper = path.join(root, "helper.ts");
+      const nativeCache = createRequire(filename).cache;
+      try {
+        const async = failure === "reject";
+        const load = async
+          ? "await import('./helper.ts')"
+          : "require('./helper.ts')";
+        const source = `
+          try { ${load}; } catch {}
+          require('node:fs').writeFileSync(${JSON.stringify(helper)}, 'module.exports = { value: 42 }');
+          const value = ${load};
+          module.exports = { value, children: module.children.map(child => ({ filename: child.filename, loaded: child.loaded })) };
+        `;
+        await writeFile(filename, source);
+        await writeFile(
+          helper,
+          failure === "syntax"
+            ? "module.exports = ;"
+            : `${async ? "await Promise.resolve();" : ""} throw new Error('child failed')`,
+        );
+        const jiti = createJiti(filename, {
+          moduleCache,
+          tryNative: false,
+          interopDefault: false,
+        });
+        const result = await jiti.evalModule(source, {
+          filename,
+          async,
+          forceTranspile: true,
+        });
+        expect(result).toEqual({
+          value: { value: 42 },
+          children: [{ filename: helper.replaceAll("\\", "/"), loaded: true }],
+        });
+      } finally {
+        for (const name of Object.keys(nativeCache)) {
+          if (path.resolve(name).startsWith(root + path.sep)) {
+            delete nativeCache[name];
+          }
+        }
+        await rm(root, { recursive: true, force: true });
+      }
+    },
+  );
+
+  it.each(
+    [false, true].flatMap((moduleCache) =>
+      ["throw", "reject", "syntax"].map((failure) => ({
+        moduleCache,
+        failure,
+      })),
+    ),
+  )(
     "retries $failure dependencies with moduleCache=$moduleCache",
     async ({ moduleCache, failure }) => {
       const root = await mkdtemp(path.join(tmpdir(), "jiti-cache-retry-"));

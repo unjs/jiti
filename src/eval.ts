@@ -146,6 +146,12 @@ export function evalModule(
     if (ctx.opts.moduleCache && ctx.nativeRequire.cache[filename] === mod) {
       delete ctx.nativeRequire.cache[filename];
     }
+    if (mod.parent && Array.isArray(mod.parent.children)) {
+      const index = mod.parent.children.indexOf(mod);
+      if (index !== -1) {
+        mod.parent.children.splice(index, 1);
+      }
+    }
     ctx.onError!(error);
   }
 
