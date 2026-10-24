@@ -2,7 +2,7 @@ import type { Context, JitiResolveOptions, ModuleCache } from "./types";
 import { readFileSync } from "node:fs";
 import { builtinModules, Module } from "node:module";
 import { fileURLToPath } from "node:url";
-import { extname } from "pathe";
+import { dirname, extname } from "pathe";
 import { jitiInteropDefault, normalizeWindowsImportId } from "./utils";
 import { debug } from "./utils";
 import { jitiResolve } from "./resolve";
@@ -121,6 +121,9 @@ export function jitiRequire(
     if (ctx.opts.moduleCache === false) {
       const mod = new Module(filename);
       mod.filename = filename;
+      mod.path = dirname(filename);
+      // @ts-ignore
+      mod.paths = Module._nodeModulePaths(mod.path);
       if (ctx.parentModule) {
         mod.parent = ctx.parentModule;
         if (

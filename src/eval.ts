@@ -139,6 +139,16 @@ export function evalModule(
     ctx.nativeRequire.cache[filename] = mod;
   }
 
+  function onError(error: Error) {
+    if (cache[filename] === mod) {
+      delete cache[filename];
+    }
+    if (ctx.opts.moduleCache && ctx.nativeRequire.cache[filename] === mod) {
+      delete ctx.nativeRequire.cache[filename];
+    }
+    ctx.onError!(error);
+  }
+
   // Compile wrapped script
   let compiled;
   const wrapped = wrapModule(source, { async: evalOptions.async });
@@ -160,10 +170,7 @@ export function evalModule(
         ctx.opts.esmEvalTempFile,
       );
     } else {
-      if (ctx.opts.moduleCache) {
-        delete ctx.nativeRequire.cache[filename];
-      }
-      ctx.onError!(error);
+      onError(error);
     }
   }
 
@@ -180,10 +187,7 @@ export function evalModule(
       _jiti.esmResolve,
     );
   } catch (error: any) {
-    if (ctx.opts.moduleCache) {
-      delete ctx.nativeRequire.cache[filename];
-    }
-    ctx.onError!(error);
+    onError(error);
   }
 
   function next() {
@@ -194,7 +198,7 @@ export function evalModule(
       const loc = `${filename}:${line}:${column}`;
       const err = new Error(`${code}: ${message} \n ${loc}`);
       Error.captureStackTrace(err, jitiRequire);
-      ctx.onError!(err);
+      onError(err);
     }
 
     // Set as loaded
@@ -207,7 +211,9 @@ export function evalModule(
     return _exports;
   }
 
-  return evalOptions.async ? Promise.resolve(evalResult).then(next) : next();
+  return evalOptions.async
+    ? Promise.resolve(evalResult).then(next, onError)
+    : next();
 }
 
 function esmEval(

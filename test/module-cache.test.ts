@@ -1,4 +1,4 @@
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { createRequire } from "node:module";
@@ -99,6 +99,149 @@ describe("moduleCache: false", () => {
         ),
       ).toEqual([]);
     } finally {
+      await rm(root, { recursive: true, force: true });
+    }
+  });
+});
+
+describe("evaluated module cache", () => {
+  it.each(
+    [false, true].flatMap((moduleCache) =>
+      ["throw", "reject", "syntax"].map((failure) => ({
+        moduleCache,
+        failure,
+      })),
+    ),
+  )(
+    "retries $failure dependencies with moduleCache=$moduleCache",
+    async ({ moduleCache, failure }) => {
+      const root = await mkdtemp(path.join(tmpdir(), "jiti-cache-retry-"));
+      const filename = path.join(root, "entry.cjs");
+      const nativeCache = createRequire(filename).cache;
+      try {
+        const helper = path.join(root, "helper.cjs");
+        const async = failure === "reject";
+        const source = async
+          ? "module.exports = await import('./helper.cjs')"
+          : "module.exports = require('./helper.cjs')";
+        await writeFile(filename, source);
+        await writeFile(
+          helper,
+          failure === "syntax"
+            ? "module.exports = ;"
+            : `${async ? "await Promise.resolve();" : ""} throw new Error('dependency failed')`,
+        );
+        const jiti = createJiti(filename, {
+          moduleCache,
+          tryNative: false,
+          interopDefault: false,
+        });
+        const cache: ModuleCache = Object.create(null);
+        const evaluate = () =>
+          jiti.evalModule(source, {
+            filename,
+            async,
+            cache,
+            forceTranspile: true,
+          });
+        const error =
+          failure === "syntax" ? /Unexpected token/ : "dependency failed";
+        if (async) {
+          await expect(evaluate()).rejects.toThrow(error);
+        } else {
+          expect(evaluate).toThrow(error);
+        }
+        await writeFile(helper, "module.exports = { value: 42 }");
+        expect(await evaluate()).toEqual({ value: 42 });
+      } finally {
+        for (const name of Object.keys(nativeCache)) {
+          if (path.resolve(name).startsWith(root + path.sep)) {
+            delete nativeCache[name];
+          }
+        }
+        await rm(root, { recursive: true, force: true });
+      }
+    },
+  );
+
+  it.each([false, true])(
+    "preserves a replacement module after an earlier rejection with moduleCache=%s",
+    async (moduleCache) => {
+      const root = await mkdtemp(
+        path.join(tmpdir(), "jiti-cache-replacement-"),
+      );
+      const filename = path.join(root, "entry.cjs").replaceAll("\\", "/");
+      const nativeCache = createRequire(filename).cache;
+      try {
+        await writeFile(filename, "module.exports = { value: 0 }");
+        const jiti = createJiti(filename, {
+          moduleCache,
+          tryNative: false,
+          interopDefault: false,
+        });
+        const cache: ModuleCache = Object.create(null);
+        const options = { filename, async: true, cache, forceTranspile: true };
+        const failed = jiti.evalModule(
+          "await Promise.resolve(); throw new Error('earlier evaluation failed')",
+          options,
+        );
+        const rejected = expect(failed).rejects.toThrow(
+          "earlier evaluation failed",
+        );
+        expect(
+          await jiti.evalModule("module.exports = { value: 42 }", options),
+        ).toEqual({ value: 42 });
+        await rejected;
+        expect(
+          await jiti.evalModule("module.exports = require('./entry.cjs')", {
+            ...options,
+            filename: path.join(root, "consumer.cjs").replaceAll("\\", "/"),
+          }),
+        ).toEqual({ value: 42 });
+      } finally {
+        for (const name of Object.keys(nativeCache)) {
+          if (path.resolve(name).startsWith(root + path.sep)) {
+            delete nativeCache[name];
+          }
+        }
+        await rm(root, { recursive: true, force: true });
+      }
+    },
+  );
+
+  it("resolves packages relative to a cached JSON module", async () => {
+    const root = await mkdtemp(path.join(tmpdir(), "jiti-json-module-paths-"));
+    const filename = path.join(root, "entry.ts");
+    const packageEntry = path.join(
+      root,
+      "nested/node_modules/jiti-json-local/index.js",
+    );
+    const nativeRequire = createRequire(filename);
+    try {
+      await mkdir(path.dirname(packageEntry), { recursive: true });
+      await writeFile(packageEntry, "module.exports = 42");
+      const json = path.join(root, "nested/data.json");
+      await writeFile(json, '{"value":42}');
+      const jiti = createJiti(filename, {
+        moduleCache: false,
+        tryNative: false,
+      });
+      const cache: ModuleCache = Object.create(null);
+      await jiti.evalModule("module.exports = require('./nested/data.json')", {
+        filename,
+        cache,
+      });
+      const mod = Object.values(cache).find(
+        (entry) => path.resolve(entry.filename) === json,
+      );
+      expect(mod).toBeDefined();
+      const resolved = nativeRequire.resolve("jiti-json-local", {
+        paths: mod!.paths,
+      });
+      expect(path.normalize(resolved)).toBe(packageEntry);
+      expect(nativeRequire(resolved)).toBe(42);
+    } finally {
+      delete nativeRequire.cache[packageEntry];
       await rm(root, { recursive: true, force: true });
     }
   });
