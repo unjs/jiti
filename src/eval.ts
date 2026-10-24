@@ -42,10 +42,11 @@ export function evalModule(
   const isCommonJS = ext === ".cjs";
   const needsTranspile =
     evalOptions.forceTranspile ??
-    (!isCommonJS && // CommonJS skips transpile
-      !(isESM && evalOptions.async) && // In async mode, we can skip native ESM as well
-      // prettier-ignore
-      (isTypescript || isESM || ctx.isTransformRe.test(filename) || hasESMSyntax(source)));
+    (ctx.opts.moduleCache === false ||
+      (!isCommonJS && // CommonJS skips transpile
+        !(isESM && evalOptions.async) && // In async mode, we can skip native ESM as well
+        // prettier-ignore
+        (isTypescript || isESM || ctx.isTransformRe.test(filename) || hasESMSyntax(source))));
   const start = performance.now();
   if (needsTranspile) {
     source = transform(ctx, {
@@ -138,6 +139,22 @@ export function evalModule(
     ctx.nativeRequire.cache[filename] = mod;
   }
 
+  function onError(error: Error) {
+    if (cache[filename] === mod) {
+      delete cache[filename];
+    }
+    if (ctx.opts.moduleCache && ctx.nativeRequire.cache[filename] === mod) {
+      delete ctx.nativeRequire.cache[filename];
+    }
+    if (mod.parent && Array.isArray(mod.parent.children)) {
+      const index = mod.parent.children.indexOf(mod);
+      if (index !== -1) {
+        mod.parent.children.splice(index, 1);
+      }
+    }
+    ctx.onError!(error);
+  }
+
   // Compile wrapped script
   let compiled;
   const wrapped = wrapModule(source, { async: evalOptions.async });
@@ -159,10 +176,7 @@ export function evalModule(
         ctx.opts.esmEvalTempFile,
       );
     } else {
-      if (ctx.opts.moduleCache) {
-        delete ctx.nativeRequire.cache[filename];
-      }
-      ctx.onError!(error);
+      onError(error);
     }
   }
 
@@ -179,10 +193,7 @@ export function evalModule(
       _jiti.esmResolve,
     );
   } catch (error: any) {
-    if (ctx.opts.moduleCache) {
-      delete ctx.nativeRequire.cache[filename];
-    }
-    ctx.onError!(error);
+    onError(error);
   }
 
   function next() {
@@ -193,7 +204,7 @@ export function evalModule(
       const loc = `${filename}:${line}:${column}`;
       const err = new Error(`${code}: ${message} \n ${loc}`);
       Error.captureStackTrace(err, jitiRequire);
-      ctx.onError!(err);
+      onError(err);
     }
 
     // Set as loaded
@@ -206,7 +217,9 @@ export function evalModule(
     return _exports;
   }
 
-  return evalOptions.async ? Promise.resolve(evalResult).then(next) : next();
+  return evalOptions.async
+    ? Promise.resolve(evalResult).then(next, onError)
+    : next();
 }
 
 function esmEval(

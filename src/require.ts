@@ -1,8 +1,8 @@
-import type { Context, JitiResolveOptions } from "./types";
+import type { Context, JitiResolveOptions, ModuleCache } from "./types";
 import { readFileSync } from "node:fs";
-import { builtinModules } from "node:module";
+import { builtinModules, Module } from "node:module";
 import { fileURLToPath } from "node:url";
-import { extname } from "pathe";
+import { dirname, extname } from "pathe";
 import { jitiInteropDefault, normalizeWindowsImportId } from "./utils";
 import { debug } from "./utils";
 import { jitiResolve } from "./resolve";
@@ -105,12 +105,37 @@ export function jitiRequire(
   // Check for .json modules
   if (ext === ".json") {
     debug(ctx, "[json]", filename);
-    const jsonModule = ctx.nativeRequire(filename);
+    if (ctx.opts.moduleCache === false && cache[filename]) {
+      return cache[filename].exports;
+    }
+    const jsonModule =
+      ctx.opts.moduleCache === false
+        ? JSON.parse(readFileSync(filename, "utf8").replace(/^\uFEFF/, ""))
+        : ctx.nativeRequire(filename);
     if (jsonModule && !("default" in jsonModule)) {
       Object.defineProperty(jsonModule, "default", {
         value: jsonModule,
         enumerable: false,
       });
+    }
+    if (ctx.opts.moduleCache === false) {
+      const mod = new Module(filename);
+      mod.filename = filename;
+      mod.path = dirname(filename);
+      // @ts-ignore
+      mod.paths = Module._nodeModulePaths(mod.path);
+      if (ctx.parentModule) {
+        mod.parent = ctx.parentModule;
+        if (
+          Array.isArray(ctx.parentModule.children) &&
+          !ctx.parentModule.children.includes(mod)
+        ) {
+          ctx.parentModule.children.push(mod);
+        }
+      }
+      mod.exports = jsonModule;
+      mod.loaded = true;
+      cache[filename] = mod as ModuleCache[string];
     }
     return jsonModule;
   }
