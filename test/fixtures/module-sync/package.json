@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "type": "module",
+  "imports": {
+    "#dep": {
+      "module-sync": "./lib/dep.mjs",
+      "node": "./lib/dep.cjs",
+      "default": "./lib/dep.mjs"
+    }
+  }
+}

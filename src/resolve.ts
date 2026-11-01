@@ -7,6 +7,12 @@ import { isDir } from "./utils";
 const JS_EXT_RE = /\.(c|m)?j(sx?)$/;
 const TS_EXT_RE = /\.(c|m)?t(sx?)$/;
 
+// Node.js enables the "module-sync" condition when require(esm) is supported
+// https://nodejs.org/api/packages.html#conditional-exports
+const IMPORT_CONDITIONS = process.features?.require_module
+  ? ["node", "import", "module-sync"]
+  : ["node", "import"];
+
 export function jitiResolve(
   ctx: Context,
   id: string,
@@ -51,8 +57,8 @@ export function jitiResolve(
   // Try resolving with ESM compatible Node.js resolution in async context
   const conditionSets = (
     options?.async
-      ? [options?.conditions, ["node", "import"], ["node", "require"]]
-      : [options?.conditions, ["node", "require"], ["node", "import"]]
+      ? [options?.conditions, IMPORT_CONDITIONS, ["node", "require"]]
+      : [options?.conditions, ["node", "require"], IMPORT_CONDITIONS]
   ).filter(Boolean);
   for (const conditions of conditionSets) {
     try {
