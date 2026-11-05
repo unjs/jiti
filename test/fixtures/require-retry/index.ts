@@ -12,8 +12,15 @@ for (let i = 0; i < 2; i++) {
   try {
     require("../error-parse");
     console.log("parse: loaded");
-  } catch {
-    console.log("parse: error");
+  } catch (error) {
+    // Other errors, such as MODULE_NOT_FOUND, must not pass as parse errors
+    const message = (error as Error).message;
+    console.log(
+      "parse:",
+      message.startsWith("ParseError:")
+        ? "error"
+        : `unexpected ${message.split("\n")[0]}`,
+    );
   }
 }
 
