@@ -112,15 +112,21 @@ export function evalModule(
     }
   }
 
-  // Undo the registration of a module that fails to load, as Node does
+  // Undo the registration of a module that fails to load, as Node does.
+  // A concurrent async evaluation of the same file may own the cache entries.
   function unregister() {
-    delete cache[filename];
-    if (ctx.opts.moduleCache) {
+    if (cache[filename] === mod) {
+      delete cache[filename];
+    }
+    if (ctx.opts.moduleCache && ctx.nativeRequire.cache[filename] === mod) {
       delete ctx.nativeRequire.cache[filename];
     }
     const children = ctx.parentModule?.children;
-    if (Array.isArray(children) && children.includes(mod)) {
-      children.splice(children.indexOf(mod), 1);
+    if (Array.isArray(children)) {
+      const index = children.indexOf(mod);
+      if (index !== -1) {
+        children.splice(index, 1);
+      }
     }
   }
 
