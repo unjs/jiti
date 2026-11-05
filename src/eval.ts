@@ -18,6 +18,14 @@ import { jitiRequire, nativeImportOrRequire } from "./require";
 import createJiti from "./jiti";
 import { transform } from "./transform";
 
+type AsyncEvaluation = {
+  promise?: Promise<unknown>;
+  waitingOn: Set<NodeModule>;
+};
+
+// Modules still evaluating in async mode, with the modules each one waits on
+const asyncEvaluations = new WeakMap<NodeModule, AsyncEvaluation>();
+
 export function evalModule(
   ctx: Context,
   source: string,
@@ -112,6 +120,24 @@ export function evalModule(
     }
   }
 
+  // Undo the registration of a module that fails to load, as Node does.
+  // A concurrent async evaluation of the same file may own the cache entries.
+  function unregister() {
+    if (cache[filename] === mod) {
+      delete cache[filename];
+    }
+    if (ctx.opts.moduleCache && ctx.nativeRequire.cache[filename] === mod) {
+      delete ctx.nativeRequire.cache[filename];
+    }
+    const children = ctx.parentModule?.children;
+    if (Array.isArray(children)) {
+      const index = children.indexOf(mod);
+      if (index !== -1) {
+        children.splice(index, 1);
+      }
+    }
+  }
+
   const _jiti = createJiti(
     filename,
     ctx.opts,
@@ -138,6 +164,15 @@ export function evalModule(
     ctx.nativeRequire.cache[filename] = mod;
   }
 
+  // Let concurrent imports wait for this evaluation
+  const evaluation: AsyncEvaluation = { waitingOn: new Set() };
+  if (evalOptions.async) {
+    asyncEvaluations.set(mod, evaluation);
+    if (ctx.parentModule) {
+      asyncEvaluations.get(ctx.parentModule)?.waitingOn.add(mod);
+    }
+  }
+
   // Compile wrapped script
   let compiled;
   const wrapped = wrapModule(source, { async: evalOptions.async });
@@ -159,9 +194,7 @@ export function evalModule(
         ctx.opts.esmEvalTempFile,
       );
     } else {
-      if (ctx.opts.moduleCache) {
-        delete ctx.nativeRequire.cache[filename];
-      }
+      unregister();
       ctx.onError!(error);
     }
   }
@@ -179,9 +212,7 @@ export function evalModule(
       _jiti.esmResolve,
     );
   } catch (error: any) {
-    if (ctx.opts.moduleCache) {
-      delete ctx.nativeRequire.cache[filename];
-    }
+    unregister();
     ctx.onError!(error);
   }
 
@@ -193,6 +224,7 @@ export function evalModule(
       const loc = `${filename}:${line}:${column}`;
       const err = new Error(`${code}: ${message} \n ${loc}`);
       Error.captureStackTrace(err, jitiRequire);
+      unregister();
       ctx.onError!(err);
     }
 
@@ -206,7 +238,55 @@ export function evalModule(
     return _exports;
   }
 
-  return evalOptions.async ? Promise.resolve(evalResult).then(next) : next();
+  if (!evalOptions.async) {
+    return next();
+  }
+
+  evaluation.promise = Promise.resolve(evalResult)
+    .then(next)
+    .catch((error) => {
+      // Evaluate again on the next import instead of serving partial exports
+      unregister();
+      throw error;
+    })
+    .finally(() => asyncEvaluations.delete(mod));
+  return evaluation.promise;
+}
+
+export function waitForEvaluation(
+  mod: NodeModule,
+  importer?: NodeModule,
+): Promise<unknown> | undefined {
+  const evaluation = asyncEvaluations.get(mod);
+  // Without a promise, the module body is still running synchronously (cycle)
+  if (!evaluation?.promise) {
+    return;
+  }
+  if (importer) {
+    // Import cycle: waiting would never settle, keep partial exports
+    if (isWaitingOn(mod, importer)) {
+      return;
+    }
+    asyncEvaluations.get(importer)?.waitingOn.add(mod);
+  }
+  return evaluation.promise;
+}
+
+function isWaitingOn(mod: NodeModule, target: NodeModule): boolean {
+  const queue = [mod];
+  const seen = new Set(queue);
+  for (const current of queue) {
+    if (current === target) {
+      return true;
+    }
+    for (const dep of asyncEvaluations.get(current)?.waitingOn || []) {
+      if (!seen.has(dep)) {
+        seen.add(dep);
+        queue.push(dep);
+      }
+    }
+  }
+  return false;
 }
 
 function esmEval(
