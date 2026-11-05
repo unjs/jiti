@@ -141,7 +141,14 @@ export function jitiRequire(
       ? waitForEvaluation(mod, ctx.parentModule)
       : undefined;
     if (evaluation) {
-      return evaluation.then(() => jitiInteropDefault(ctx, mod.exports));
+      return evaluation.then(
+        () => jitiInteropDefault(ctx, mod.exports),
+        (error) => {
+          // The import failed for this importer too
+          removeChild(ctx, mod);
+          throw error;
+        },
+      );
     }
     return jitiInteropDefault(ctx, mod.exports);
   }
@@ -183,5 +190,15 @@ function addChild(ctx: Context, mod: NodeModule) {
   const children = ctx.parentModule?.children;
   if (Array.isArray(children) && !children.includes(mod)) {
     children.push(mod);
+  }
+}
+
+function removeChild(ctx: Context, mod: NodeModule) {
+  const children = ctx.parentModule?.children;
+  if (Array.isArray(children)) {
+    const index = children.indexOf(mod);
+    if (index !== -1) {
+      children.splice(index, 1);
+    }
   }
 }

@@ -15,7 +15,7 @@ exports[`fixtures > concurrent-import > stdout 1`] = `
 "concurrent: ready, ready, ready
 failed: Error: first evaluation fails, Error: first evaluation fails
 retry: recovered
-fail children: 1"
+fail children: 1 0"
 `;
 
 exports[`fixtures > data-uri > stdout 1`] = `""`;

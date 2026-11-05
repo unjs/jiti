@@ -1,4 +1,4 @@
-import { start } from "./entry";
+import { loadFail, start } from "./entry";
 
 function format(result: PromiseSettledResult<unknown>) {
   return result.status === "fulfilled"
@@ -9,7 +9,7 @@ function format(result: PromiseSettledResult<unknown>) {
 const calls = await Promise.allSettled([start(), start(), start()]);
 console.log("concurrent:", calls.map((r) => format(r)).join(", "));
 
-const failed = await Promise.allSettled([import("./fail"), import("./fail")]);
+const failed = await Promise.allSettled([import("./fail"), loadFail()]);
 console.log("failed:", failed.map((r) => format(r)).join(", "));
 // Native ESM keeps a failed module errored, jiti evaluates it again
 const retry = await Promise.allSettled([import("./fail")]);
@@ -20,10 +20,16 @@ console.log(
 
 // Native ESM has no module.children
 if (typeof module !== "undefined" && module.children) {
-  const failedChildren = module.children.filter((child) =>
-    child.filename.endsWith("fail.ts"),
+  const countFail = (children: NodeModule[]) =>
+    children.filter((child) => child.filename.endsWith("fail.ts")).length;
+  const entry = module.children.find((child) =>
+    child.filename.endsWith("entry.ts"),
   );
-  console.log("fail children:", failedChildren.length);
+  console.log(
+    "fail children:",
+    countFail(module.children),
+    countFail(entry?.children || []),
+  );
 }
 
 // Mark file as module for typescript
