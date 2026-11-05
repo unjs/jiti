@@ -19,10 +19,13 @@ const ignore = new Set(
     "env",
     "typescript",
     "top-level-await",
+    "concurrent-import",
+    "concurrent-circular",
     "deps",
     "circular",
     "data-uri",
     "jsx",
+    "require-retry",
     // TODO: Once supported, we should both enable test and avoid transform in supported Node.js versions
     "explicit-resource-management",
   ].filter(Boolean),

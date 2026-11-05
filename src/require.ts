@@ -6,7 +6,7 @@ import { extname } from "pathe";
 import { jitiInteropDefault, normalizeWindowsImportId } from "./utils";
 import { debug } from "./utils";
 import { jitiResolve } from "./resolve";
-import { evalModule } from "./eval";
+import { evalModule, isEvaluating, waitForEvaluation } from "./eval";
 
 export function jitiRequire(
   ctx: Context,
@@ -81,6 +81,7 @@ export function jitiRequire(
           });
       } else {
         const _mod = ctx.nativeRequire(id);
+        addNativeChild(ctx, id);
         if (ctx.opts.moduleCache === false) {
           delete ctx.nativeRequire.cache[id];
         }
@@ -106,6 +107,7 @@ export function jitiRequire(
   if (ext === ".json") {
     debug(ctx, "[json]", filename);
     const jsonModule = ctx.nativeRequire(filename);
+    addNativeChild(ctx, filename);
     if (jsonModule && !("default" in jsonModule)) {
       Object.defineProperty(jsonModule, "default", {
         value: jsonModule,
@@ -135,12 +137,32 @@ export function jitiRequire(
 
   // Check for runtime cache
   if (cache[filename]) {
-    return jitiInteropDefault(ctx, cache[filename]?.exports);
+    const mod = cache[filename];
+    addChild(ctx, mod);
+    const evaluation = opts.async
+      ? waitForEvaluation(mod, ctx.parentModule)
+      : undefined;
+    if (evaluation) {
+      return afterEvaluation(ctx, mod, evaluation);
+    }
+    return jitiInteropDefault(ctx, mod.exports);
   }
   if (ctx.opts.moduleCache) {
     const cacheEntry = ctx.nativeRequire.cache[filename];
     if (cacheEntry?.loaded) {
+      addChild(ctx, cacheEntry);
       return jitiInteropDefault(ctx, cacheEntry.exports);
+    }
+    // Still evaluating in another jiti tree: wait, or keep partial exports
+    // in a cycle and in sync require(), as within one tree
+    if (cacheEntry && isEvaluating(cacheEntry)) {
+      addChild(ctx, cacheEntry);
+      const evaluation = opts.async
+        ? waitForEvaluation(cacheEntry, ctx.parentModule)
+        : undefined;
+      return evaluation
+        ? afterEvaluation(ctx, cacheEntry, evaluation)
+        : jitiInteropDefault(ctx, cacheEntry.exports);
     }
   }
 
@@ -162,9 +184,58 @@ export function nativeImportOrRequire(
   id: string,
   async?: boolean,
 ) {
-  return async && ctx.nativeImport
-    ? ctx
-        .nativeImport(normalizeWindowsImportId(id))
-        .then((m: any) => jitiInteropDefault(ctx, m))
-    : jitiInteropDefault(ctx, ctx.nativeRequire(id));
+  if (async && ctx.nativeImport) {
+    return ctx
+      .nativeImport(normalizeWindowsImportId(id))
+      .then((m: any) => jitiInteropDefault(ctx, m));
+  }
+  const exports = ctx.nativeRequire(id);
+  addNativeChild(ctx, id);
+  return jitiInteropDefault(ctx, exports);
+}
+
+function afterEvaluation(
+  ctx: Context,
+  mod: NodeModule,
+  evaluation: Promise<unknown>,
+) {
+  return evaluation.then(
+    () => jitiInteropDefault(ctx, mod.exports),
+    (error) => {
+      // The import failed for this importer too
+      removeChild(ctx, mod);
+      throw error;
+    },
+  );
+}
+
+// A cached module is still a child of each module that requires it, as in Node
+function addChild(ctx: Context, mod: NodeModule) {
+  const children = ctx.parentModule?.children;
+  if (Array.isArray(children) && !children.includes(mod)) {
+    children.push(mod);
+  }
+}
+
+// Node loads native modules under the createRequire parent, not the importer
+function addNativeChild(ctx: Context, id: string) {
+  // Builtins are never children in Node
+  if (id.startsWith("node:") || builtinModules.includes(id)) {
+    return;
+  }
+  // Node keys require.cache by its own resolution (for example `\\` on Windows)
+  const mod = ctx.nativeRequire.cache[ctx.nativeRequire.resolve(id)];
+  if (mod) {
+    addChild(ctx, mod);
+  }
+}
+
+function removeChild(ctx: Context, mod: NodeModule) {
+  const children = ctx.parentModule?.children;
+  if (Array.isArray(children)) {
+    const index = children.indexOf(mod);
+    if (index !== -1) {
+      children.splice(index, 1);
+    }
+  }
 }

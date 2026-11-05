@@ -29,6 +29,8 @@ for (const fixture of fixtures) {
   if (
     fixture !== "esm" &&
     fixture !== "top-level-await" &&
+    fixture !== "concurrent-import" &&
+    fixture !== "concurrent-circular" &&
     fixture !== "json" &&
     fixture !== "jsx" // require(<async module>) is not allowed
   ) {

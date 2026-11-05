@@ -6,6 +6,20 @@ exports[`fixtures > circular > stdout 1`] = `"a b c"`;
 
 exports[`fixtures > cjs-interop > stdout 1`] = `"CJS function default interop test passed"`;
 
+exports[`fixtures > concurrent-circular > stdout 1`] = `
+"a b b a
+c d"
+`;
+
+exports[`fixtures > concurrent-import > stdout 1`] = `
+"concurrent: ready, ready, ready
+failed: Error: first evaluation fails, Error: first evaluation fails
+retry: recovered
+fail children: 1 0"
+`;
+
+exports[`fixtures > concurrent-roots > stdout 1`] = `"evaluations: 1 same: true"`;
+
 exports[`fixtures > data-uri > stdout 1`] = `""`;
 
 exports[`fixtures > deps > stdout 1`] = `
@@ -115,6 +129,11 @@ exports[`fixtures > jsx > stdout 1`] = `
 
 exports[`fixtures > mixed > stdout 1`] = `"Mixed works for: <cwd>"`;
 
+exports[`fixtures > module-children > stdout 1`] = `
+"b: x, dep, data
+b children: x.ts, dep.cjs, data.json"
+`;
+
 exports[`fixtures > native > stdout 1`] = `
 "[Module: null prototype] { default: { hasRequire: false } }
 in foo.ts"
@@ -135,6 +154,15 @@ Enter Literal"
 exports[`fixtures > require-esm > stdout 1`] = `"Works!"`;
 
 exports[`fixtures > require-json > stdout 1`] = `"{ type: 'commonjs' }"`;
+
+exports[`fixtures > require-retry > stdout 1`] = `
+"error: first evaluation fails
+value: recovered
+parse: error
+parse: error
+children: 1
+parent children: 1"
+`;
 
 exports[`fixtures > resolve > stdout 1`] = `"resolved path <cwd>/_dist/foo.mjs"`;
 
