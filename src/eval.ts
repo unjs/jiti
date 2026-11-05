@@ -24,6 +24,9 @@ const asyncEvaluations = new WeakMap<NodeModule, Promise<unknown>>();
 // Modules each module imported or required through jiti
 const moduleImports = new WeakMap<NodeModule, Set<NodeModule>>();
 
+// Modules that imported each async evaluation still pending
+const pendingImporters = new WeakMap<NodeModule, Set<NodeModule>>();
+
 export function trackImport(parent: NodeModule | undefined, mod: NodeModule) {
   if (!parent) {
     return;
@@ -34,6 +37,7 @@ export function trackImport(parent: NodeModule | undefined, mod: NodeModule) {
     moduleImports.set(parent, imports);
   }
   imports.add(mod);
+  pendingImporters.get(mod)?.add(parent);
 }
 
 export function evalModule(
@@ -120,6 +124,9 @@ export function evalModule(
   // Compile module
   const mod = new Module(filename);
   mod.filename = filename;
+  if (evalOptions.async) {
+    pendingImporters.set(mod, new Set());
+  }
   if (ctx.parentModule) {
     mod.parent = ctx.parentModule;
     if (
@@ -247,12 +254,16 @@ export function evalModule(
           children.splice(index, 1);
         }
       }
-      if (ctx.parentModule) {
-        moduleImports.get(ctx.parentModule)?.delete(mod);
+      // Unlink it from every importer, cache hits included
+      for (const importer of pendingImporters.get(mod) || []) {
+        moduleImports.get(importer)?.delete(mod);
       }
       throw error;
     })
-    .finally(() => asyncEvaluations.delete(mod));
+    .finally(() => {
+      asyncEvaluations.delete(mod);
+      pendingImporters.delete(mod);
+    });
   asyncEvaluations.set(mod, evaluation);
   return evaluation;
 }

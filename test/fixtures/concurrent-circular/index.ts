@@ -17,5 +17,14 @@ const e = await Promise.race([
 ]).finally(() => clearTimeout(timer));
 console.log(e.e, e.loaded);
 
+// Module joining a failed import through the runtime cache, then imported by
+// a module only the failed one imported: no cycle is left, the import waits
+const broken = import("./broken");
+const joiner = import("./joiner");
+await Promise.allSettled([broken]);
+const { loadJoiner } = await import("./loader");
+console.log(await loadJoiner());
+await joiner;
+
 // Mark file as module for typescript
 export default {};

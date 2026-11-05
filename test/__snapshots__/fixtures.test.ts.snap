@@ -9,7 +9,8 @@ exports[`fixtures > cjs-interop > stdout 1`] = `"CJS function default interop te
 exports[`fixtures > concurrent-circular > stdout 1`] = `
 "a b b a
 c d
-e e"
+e e
+joined"
 `;
 
 exports[`fixtures > concurrent-import > stdout 1`] = `
