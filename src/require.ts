@@ -81,6 +81,7 @@ export function jitiRequire(
           });
       } else {
         const _mod = ctx.nativeRequire(id);
+        addNativeChild(ctx, id);
         if (ctx.opts.moduleCache === false) {
           delete ctx.nativeRequire.cache[id];
         }
@@ -198,8 +199,13 @@ function addChild(ctx: Context, mod: NodeModule) {
 }
 
 // Node loads native modules under the createRequire parent, not the importer
-function addNativeChild(ctx: Context, filename: string) {
-  const mod = ctx.nativeRequire.cache[filename];
+function addNativeChild(ctx: Context, id: string) {
+  // Builtins are never children in Node
+  if (id.startsWith("node:") || builtinModules.includes(id)) {
+    return;
+  }
+  // Node keys require.cache by its own resolution (for example `\\` on Windows)
+  const mod = ctx.nativeRequire.cache[ctx.nativeRequire.resolve(id)];
   if (mod) {
     addChild(ctx, mod);
   }
