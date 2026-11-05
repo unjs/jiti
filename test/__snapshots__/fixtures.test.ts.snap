@@ -18,6 +18,8 @@ retry: recovered
 fail children: 1 0"
 `;
 
+exports[`fixtures > concurrent-roots > stdout 1`] = `"evaluations: 1 same: true"`;
+
 exports[`fixtures > data-uri > stdout 1`] = `""`;
 
 exports[`fixtures > deps > stdout 1`] = `

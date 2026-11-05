@@ -143,14 +143,7 @@ export function jitiRequire(
       ? waitForEvaluation(mod, ctx.parentModule)
       : undefined;
     if (evaluation) {
-      return evaluation.then(
-        () => jitiInteropDefault(ctx, mod.exports),
-        (error) => {
-          // The import failed for this importer too
-          removeChild(ctx, mod);
-          throw error;
-        },
-      );
+      return afterEvaluation(ctx, mod, evaluation);
     }
     return jitiInteropDefault(ctx, mod.exports);
   }
@@ -159,6 +152,14 @@ export function jitiRequire(
     if (cacheEntry?.loaded) {
       addChild(ctx, cacheEntry);
       return jitiInteropDefault(ctx, cacheEntry.exports);
+    }
+    // Still evaluating in another jiti tree
+    if (cacheEntry && opts.async) {
+      const evaluation = waitForEvaluation(cacheEntry, ctx.parentModule);
+      if (evaluation) {
+        addChild(ctx, cacheEntry);
+        return afterEvaluation(ctx, cacheEntry, evaluation);
+      }
     }
   }
 
@@ -188,6 +189,21 @@ export function nativeImportOrRequire(
   const exports = ctx.nativeRequire(id);
   addNativeChild(ctx, id);
   return jitiInteropDefault(ctx, exports);
+}
+
+function afterEvaluation(
+  ctx: Context,
+  mod: NodeModule,
+  evaluation: Promise<unknown>,
+) {
+  return evaluation.then(
+    () => jitiInteropDefault(ctx, mod.exports),
+    (error) => {
+      // The import failed for this importer too
+      removeChild(ctx, mod);
+      throw error;
+    },
+  );
 }
 
 // A cached module is still a child of each module that requires it, as in Node
