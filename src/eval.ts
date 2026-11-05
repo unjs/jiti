@@ -246,12 +246,7 @@ export function evalModule(
     .then(next)
     .catch((error) => {
       // Evaluate again on the next import instead of serving partial exports
-      if (cache[filename] === mod) {
-        delete cache[filename];
-      }
-      if (ctx.opts.moduleCache && ctx.nativeRequire.cache[filename] === mod) {
-        delete ctx.nativeRequire.cache[filename];
-      }
+      unregister();
       throw error;
     })
     .finally(() => asyncEvaluations.delete(mod));

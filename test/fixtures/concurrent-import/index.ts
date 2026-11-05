@@ -18,5 +18,13 @@ console.log(
   retry[0].status === "fulfilled" ? retry[0].value.value : format(retry[0]),
 );
 
+// Native ESM has no module.children
+if (typeof module !== "undefined" && module.children) {
+  const failedChildren = module.children.filter((child) =>
+    child.filename.endsWith("fail.ts"),
+  );
+  console.log("fail children:", failedChildren.length);
+}
+
 // Mark file as module for typescript
 export default {};
