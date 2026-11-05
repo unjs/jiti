@@ -18,6 +18,10 @@ import { jitiRequire, nativeImportOrRequire } from "./require";
 import createJiti from "./jiti";
 import { transform } from "./transform";
 
+/**
+ * Transpile and evaluate a module source in the given context, registering
+ * it in the runtime cache and in its parent's children while it loads.
+ */
 export function evalModule(
   ctx: Context,
   source: string,
@@ -112,8 +116,10 @@ export function evalModule(
     }
   }
 
-  // Undo the registration of a module that fails to load, as Node does.
-  // A concurrent async evaluation of the same file may own the cache entries.
+  /**
+   * Undo the registration of a module that fails to load, as Node does.
+   * A concurrent async evaluation of the same file may own the cache entries.
+   */
   function unregister() {
     if (cache[filename] === mod) {
       delete cache[filename];
@@ -199,6 +205,10 @@ export function evalModule(
     ctx.onError!(error);
   }
 
+  /**
+   * Finish loading after evaluation: report a deferred parse error, or mark
+   * the module as loaded and return its exports through interopDefault.
+   */
   function next() {
     // Check for parse errors
     if (mod.exports && mod.exports.__JITI_ERROR__) {
