@@ -6,15 +6,46 @@
 // https://github.com/airbnb/babel-plugin-dynamic-import-node/blob/master/src/utils.js
 
 import type { BabelFile, NodePath } from "@babel/core";
-import { types as t, template } from "@babel/core";
+import { types as t } from "@babel/core";
 import { buildDynamicImport } from "@babel/helper-module-transforms";
+
+/**
+ * Convert an import-attributes (`with { ... }`) object expression into the
+ * plain object literal that `jitiImport(id, options)` expects.
+ */
+function attributesFromOptionsNode(
+  node: t.Node | undefined | null,
+): t.ObjectExpression | undefined {
+  if (!node || !t.isObjectExpression(node)) {
+    return undefined;
+  }
+  for (const prop of node.properties) {
+    if (
+      t.isObjectProperty(prop) &&
+      t.isIdentifier(prop.key, { name: "with" }) &&
+      t.isObjectExpression(prop.value)
+    ) {
+      return prop.value;
+    }
+  }
+  return undefined;
+}
 
 const requireInterop = (
   source: t.Expression,
   file: BabelFile,
   noInterop: boolean | undefined,
+  attributes?: t.ObjectExpression,
 ) => {
-  const exp = template.expression.ast`jitiImport(${source})`;
+  // `jitiImport(specifier)` or `jitiImport(specifier, { attributes })`
+  const exp = attributes
+    ? t.callExpression(t.identifier("jitiImport"), [
+        source,
+        t.objectExpression([
+          t.objectProperty(t.identifier("attributes"), attributes),
+        ]),
+      ])
+    : t.callExpression(t.identifier("jitiImport"), [source]);
   if (noInterop) {
     return exp;
   }
@@ -33,9 +64,15 @@ export function transformDynamicImport(
   noInterop: boolean | undefined,
   file: BabelFile,
 ) {
+  // `import(specifier, { with: {...} })` -> options node (2nd argument)
+  const optionsNode = (path.node as t.CallExpression).arguments?.[1] as
+    | t.Node
+    | undefined;
+  const attributes = attributesFromOptionsNode(optionsNode);
+
   path.replaceWith(
-    buildDynamicImport(path.node, true, false, (specifier) =>
-      requireInterop(specifier, file, noInterop),
+    buildDynamicImport(path.node, true, false, (specifier: t.Node) =>
+      requireInterop(specifier as t.Expression, file, noInterop, attributes),
     ),
   );
 }

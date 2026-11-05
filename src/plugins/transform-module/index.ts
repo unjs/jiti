@@ -203,6 +203,10 @@ export default declare((api: PluginAPI, options: Options) => {
         exit(path, state) {
           if (!isModule(path)) return;
 
+          // Collect `with { ... }` / `assert { ... }` import attributes keyed by
+          // specifier, before the module statements get rewritten away (#483).
+          const importAttributes = collectImportAttributes(path.node);
+
           // Rename the bindings auto-injected into the scope so there is no
           // risk of conflict between the bindings.
           path.scope.rename("exports");
@@ -255,11 +259,36 @@ export default declare((api: PluginAPI, options: Options) => {
           );
 
           for (const [source, metadata] of meta.source) {
+            const attributes = importAttributes.get(source);
+            // The synchronous path lowers to plain `require(source)`, which
+            // has no way to carry import attributes. Node validates a `with`
+            // clause before executing the module, so mirror that here at
+            // compile time instead of silently dropping the attribute (#483).
+            if (!async && attributes) {
+              const attributeError = staticImportAttributeError(
+                source,
+                attributes,
+              );
+              if (attributeError) {
+                throw attributeError;
+              }
+            }
             const loadExpr = async
               ? t.awaitExpression(
-                  t.callExpression(t.identifier("jitiImport"), [
-                    t.stringLiteral(source),
-                  ]),
+                  t.callExpression(
+                    t.identifier("jitiImport"),
+                    attributes
+                      ? [
+                          t.stringLiteral(source),
+                          t.objectExpression([
+                            t.objectProperty(
+                              t.identifier("attributes"),
+                              attributes,
+                            ),
+                          ]),
+                        ]
+                      : [t.stringLiteral(source)],
+                  ),
                 )
               : t.callExpression(t.identifier("require"), [
                   t.stringLiteral(source),
@@ -320,3 +349,83 @@ export default declare((api: PluginAPI, options: Options) => {
 });
 
 export { defineCommonJSHook } from "./hooks";
+
+/**
+ * `ImportDeclaration` / `ExportNamedDeclaration` / `ExportAllDeclaration` can
+ * carry import attributes (`with { type: "json" }`, or the legacy `assert`
+ * form). Babel normalises both into `node.attributes` (older versions used
+ * `node.assertions`). They are keyed by specifier so the rewritten import
+ * expression can pass them through to `jitiImport`.
+ */
+function collectImportAttributes(
+  program: t.Program,
+): Map<string, t.ObjectExpression> {
+  const attributes = new Map<string, t.ObjectExpression>();
+  for (const node of program.body) {
+    if (
+      !(
+        node.type === "ImportDeclaration" ||
+        node.type === "ExportNamedDeclaration" ||
+        node.type === "ExportAllDeclaration"
+      ) ||
+      !node.source
+    ) {
+      continue;
+    }
+    const list =
+      (node as { attributes?: t.ImportAttribute[] }).attributes ||
+      (node as { assertions?: t.ImportAttribute[] }).assertions;
+    if (!list || list.length === 0) {
+      continue;
+    }
+    attributes.set(
+      node.source.value,
+      t.objectExpression(
+        list.map((attr) =>
+          t.objectProperty(
+            t.isIdentifier(attr.key)
+              ? t.identifier(attr.key.name)
+              : t.stringLiteral(attr.key.value),
+            t.stringLiteral(attr.value.value),
+          ),
+        ),
+      ),
+    );
+  }
+  return attributes;
+}
+
+/**
+ * The synchronous lowering emits `require(source)`, which cannot carry import
+ * attributes. Reject a `with { type: ... }` clause that is statically known to
+ * contradict the specifier, so the attribute is not silently ignored.
+ *
+ * Only a literal `.json` specifier is checked: other specifiers are resolved at
+ * runtime, where the attribute is meaningless to `require` anyway.
+ */
+function staticImportAttributeError(
+  source: string,
+  attributes: t.ObjectExpression,
+): Error | undefined {
+  let type: string | undefined;
+  for (const property of attributes.properties) {
+    if (
+      property.type === "ObjectProperty" &&
+      !property.computed &&
+      ((t.isIdentifier(property.key) && property.key.name === "type") ||
+        (t.isStringLiteral(property.key) && property.key.value === "type")) &&
+      t.isStringLiteral(property.value)
+    ) {
+      type = property.value.value;
+    }
+  }
+  if (type === undefined || type === "json" || !source.endsWith(".json")) {
+    return undefined;
+  }
+  return Object.assign(
+    new TypeError(
+      `Import attribute "type" with value "${type}" is not supported in ${source}`,
+    ),
+    { code: "ERR_IMPORT_ATTRIBUTE_UNSUPPORTED" },
+  );
+}

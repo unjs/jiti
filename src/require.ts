@@ -51,6 +51,14 @@ export function jitiRequire(
       if (!id && opts.try) {
         return undefined;
       }
+      // `tryNative` bypasses the loader below, so a `with { type: ... }` clause
+      // has to be validated here too — otherwise a native loader that accepts
+      // JSON without attributes (Bun does) resolves the module before the
+      // mismatch check in the `.json` branch ever runs (#483).
+      assertImportAttributes(
+        id,
+        (opts as { attributes?: Record<string, string> }).attributes,
+      );
       debug(
         ctx,
         "[try-native]",
@@ -105,6 +113,13 @@ export function jitiRequire(
   // Check for .json modules
   if (ext === ".json") {
     debug(ctx, "[json]", filename);
+    // Import attributes (`with { type: "json" }`) are lossless metadata: the
+    // transformer keeps them and hands them over so they can be validated
+    // instead of being silently dropped (#483).
+    assertImportAttributes(
+      filename,
+      (opts as { attributes?: Record<string, string> }).attributes,
+    );
     const jsonModule = ctx.nativeRequire(filename);
     if (jsonModule && !("default" in jsonModule)) {
       Object.defineProperty(jsonModule, "default", {
@@ -167,4 +182,29 @@ export function nativeImportOrRequire(
         .nativeImport(normalizeWindowsImportId(id))
         .then((m: any) => jitiInteropDefault(ctx, m))
     : jitiInteropDefault(ctx, ctx.nativeRequire(id));
+}
+
+/**
+ * Reject a `with { type: ... }` clause that contradicts the resolved module
+ * format. Native `import()`/`require()` would do this for us, but jiti loads
+ * both JSON and transformed modules through its own paths, so the check has to
+ * be explicit on every loader path that can resolve a JSON file.
+ */
+export function assertImportAttributes(
+  filename: string,
+  attributes: Record<string, string> | undefined,
+) {
+  const type = attributes?.type;
+  if (type === undefined || type === "json") {
+    return;
+  }
+  if (extname(filename) !== ".json") {
+    return;
+  }
+  throw Object.assign(
+    new TypeError(
+      `Import attribute "type" with value "${type}" is not supported in ${filename}`,
+    ),
+    { code: "ERR_IMPORT_ATTRIBUTE_UNSUPPORTED" },
+  );
 }
