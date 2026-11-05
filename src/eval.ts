@@ -112,6 +112,18 @@ export function evalModule(
     }
   }
 
+  // Undo the registration of a module that fails to load, as Node does
+  function unregister() {
+    delete cache[filename];
+    if (ctx.opts.moduleCache) {
+      delete ctx.nativeRequire.cache[filename];
+    }
+    const children = ctx.parentModule?.children;
+    if (Array.isArray(children) && children.includes(mod)) {
+      children.splice(children.indexOf(mod), 1);
+    }
+  }
+
   const _jiti = createJiti(
     filename,
     ctx.opts,
@@ -159,10 +171,7 @@ export function evalModule(
         ctx.opts.esmEvalTempFile,
       );
     } else {
-      delete cache[filename];
-      if (ctx.opts.moduleCache) {
-        delete ctx.nativeRequire.cache[filename];
-      }
+      unregister();
       ctx.onError!(error);
     }
   }
@@ -180,10 +189,7 @@ export function evalModule(
       _jiti.esmResolve,
     );
   } catch (error: any) {
-    delete cache[filename];
-    if (ctx.opts.moduleCache) {
-      delete ctx.nativeRequire.cache[filename];
-    }
+    unregister();
     ctx.onError!(error);
   }
 
@@ -195,10 +201,7 @@ export function evalModule(
       const loc = `${filename}:${line}:${column}`;
       const err = new Error(`${code}: ${message} \n ${loc}`);
       Error.captureStackTrace(err, jitiRequire);
-      delete cache[mod.filename];
-      if (ctx.opts.moduleCache) {
-        delete ctx.nativeRequire.cache[mod.filename];
-      }
+      unregister();
       ctx.onError!(err);
     }
 
