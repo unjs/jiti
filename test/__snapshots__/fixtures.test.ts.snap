@@ -6,6 +6,20 @@ exports[`fixtures > circular > stdout 1`] = `"a b c"`;
 
 exports[`fixtures > cjs-interop > stdout 1`] = `"CJS function default interop test passed"`;
 
+exports[`fixtures > concurrent-circular > stdout 1`] = `
+"a b b a
+c d
+e e
+joined"
+`;
+
+exports[`fixtures > concurrent-import > stdout 1`] = `
+"concurrent: ready, ready, ready
+failed: Error: first evaluation fails, Error: first evaluation fails
+retry: recovered
+children: 1"
+`;
+
 exports[`fixtures > data-uri > stdout 1`] = `""`;
 
 exports[`fixtures > deps > stdout 1`] = `

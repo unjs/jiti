@@ -18,6 +18,36 @@ import { jitiRequire, nativeImportOrRequire } from "./require";
 import createJiti from "./jiti";
 import { transform } from "./transform";
 
+// Async evaluations still pending, set once the module body returns a promise
+const asyncEvaluations = new WeakMap<NodeModule, Promise<unknown>>();
+
+// Modules each module imported or required through jiti
+const moduleImports = new WeakMap<NodeModule, Set<NodeModule>>();
+
+// Modules that imported each async evaluation still pending
+const pendingImporters = new WeakMap<NodeModule, Set<NodeModule>>();
+
+/**
+ * Record that `parent` imported or required `mod` through jiti, and that it
+ * waits on `mod` while that evaluation is still pending.
+ */
+export function trackImport(parent: NodeModule | undefined, mod: NodeModule) {
+  if (!parent) {
+    return;
+  }
+  let imports = moduleImports.get(parent);
+  if (!imports) {
+    imports = new Set();
+    moduleImports.set(parent, imports);
+  }
+  imports.add(mod);
+  pendingImporters.get(mod)?.add(parent);
+}
+
+/**
+ * Transpile and evaluate a module source in the given context, registering
+ * it in the runtime cache and in its parent's children while it loads.
+ */
 export function evalModule(
   ctx: Context,
   source: string,
@@ -102,6 +132,9 @@ export function evalModule(
   // Compile module
   const mod = new Module(filename);
   mod.filename = filename;
+  if (evalOptions.async) {
+    pendingImporters.set(mod, new Set());
+  }
   if (ctx.parentModule) {
     mod.parent = ctx.parentModule;
     if (
@@ -110,6 +143,7 @@ export function evalModule(
     ) {
       ctx.parentModule.children.push(mod);
     }
+    trackImport(ctx.parentModule, mod);
   }
 
   const _jiti = createJiti(
@@ -206,7 +240,81 @@ export function evalModule(
     return _exports;
   }
 
-  return evalOptions.async ? Promise.resolve(evalResult).then(next) : next();
+  if (!evalOptions.async) {
+    return next();
+  }
+
+  const evaluation = Promise.resolve(evalResult)
+    .then(next)
+    .catch((error) => {
+      // Evaluate again on the next import instead of serving partial exports
+      if (cache[filename] === mod) {
+        delete cache[filename];
+      }
+      if (ctx.opts.moduleCache && ctx.nativeRequire.cache[filename] === mod) {
+        delete ctx.nativeRequire.cache[filename];
+      }
+      // Failed attempts should not pile up in the parent module
+      const children = ctx.parentModule?.children;
+      if (Array.isArray(children)) {
+        const index = children.indexOf(mod);
+        if (index !== -1) {
+          children.splice(index, 1);
+        }
+      }
+      // Unlink it from every importer, cache hits included
+      for (const importer of pendingImporters.get(mod) || []) {
+        moduleImports.get(importer)?.delete(mod);
+      }
+      throw error;
+    })
+    .finally(() => {
+      asyncEvaluations.delete(mod);
+      pendingImporters.delete(mod);
+    });
+  asyncEvaluations.set(mod, evaluation);
+  return evaluation;
+}
+
+/**
+ * Return the pending async evaluation of `mod` for a cache hit to await, or
+ * nothing when it has finished or when waiting could close a cycle back to
+ * `importer`.
+ */
+export function waitForEvaluation(
+  mod: NodeModule,
+  importer?: NodeModule,
+): Promise<unknown> | undefined {
+  const evaluation = asyncEvaluations.get(mod);
+  // Without a promise, the module has finished or its body is still running
+  // synchronously (cycle)
+  if (!evaluation) {
+    return;
+  }
+  // The pending module reaches the importer through its imports and may be
+  // the one running this code: waiting could never settle, keep partial exports
+  if (importer && importsModule(mod, importer)) {
+    return;
+  }
+  return evaluation;
+}
+
+/** Whether `target` is reachable from `mod` through the recorded imports. */
+function importsModule(mod: NodeModule, target: NodeModule): boolean {
+  const queue = [mod];
+  const seen = new Set(queue);
+  for (const current of queue) {
+    if (current === target) {
+      return true;
+    }
+    for (const dep of moduleImports.get(current) || []) {
+      if (!seen.has(dep)) {
+        seen.add(dep);
+        queue.push(dep);
+      }
+    }
+  }
+  return false;
 }
 
 function esmEval(

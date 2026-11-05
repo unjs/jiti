@@ -13,6 +13,8 @@ const ignore = new Set([
   "error-parse",
   "typescript",
   "data-uri",
+  // Native ESM never settles a module importing itself back while evaluating
+  "concurrent-circular",
 ]);
 
 for (const fixture of fixtures) {

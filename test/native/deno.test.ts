@@ -17,6 +17,8 @@ const ignore = new Set(
     "esm",
     "proto",
     "json",
+    // Native ESM never settles a module importing itself back while evaluating
+    "concurrent-circular",
   ].filter(Boolean),
 );
 
