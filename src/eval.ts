@@ -27,6 +27,10 @@ const moduleImports = new WeakMap<NodeModule, Set<NodeModule>>();
 // Modules that imported each async evaluation still pending
 const pendingImporters = new WeakMap<NodeModule, Set<NodeModule>>();
 
+/**
+ * Record that `parent` imported or required `mod` through jiti, and that it
+ * waits on `mod` while that evaluation is still pending.
+ */
 export function trackImport(parent: NodeModule | undefined, mod: NodeModule) {
   if (!parent) {
     return;
@@ -40,6 +44,10 @@ export function trackImport(parent: NodeModule | undefined, mod: NodeModule) {
   pendingImporters.get(mod)?.add(parent);
 }
 
+/**
+ * Transpile and evaluate a module source in the given context, registering
+ * it in the runtime cache and in its parent's children while it loads.
+ */
 export function evalModule(
   ctx: Context,
   source: string,
@@ -268,6 +276,11 @@ export function evalModule(
   return evaluation;
 }
 
+/**
+ * Return the pending async evaluation of `mod` for a cache hit to await, or
+ * nothing when it has finished or when waiting could close a cycle back to
+ * `importer`.
+ */
 export function waitForEvaluation(
   mod: NodeModule,
   importer?: NodeModule,
@@ -286,6 +299,7 @@ export function waitForEvaluation(
   return evaluation;
 }
 
+/** Whether `target` is reachable from `mod` through the recorded imports. */
 function importsModule(mod: NodeModule, target: NodeModule): boolean {
   const queue = [mod];
   const seen = new Set(queue);

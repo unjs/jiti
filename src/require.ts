@@ -8,6 +8,10 @@ import { debug } from "./utils";
 import { jitiResolve } from "./resolve";
 import { evalModule, trackImport, waitForEvaluation } from "./eval";
 
+/**
+ * Resolve and load a module for `require()` or `import()`, serving cached
+ * modules and, in async mode, waiting for a pending evaluation of them.
+ */
 export function jitiRequire(
   ctx: Context,
   id: string,
