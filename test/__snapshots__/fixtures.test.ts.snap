@@ -127,6 +127,11 @@ exports[`fixtures > jsx > stdout 1`] = `
 
 exports[`fixtures > mixed > stdout 1`] = `"Mixed works for: <cwd>"`;
 
+exports[`fixtures > module-children > stdout 1`] = `
+"b: x, dep, data
+b children: x.ts, dep.cjs, data.json"
+`;
+
 exports[`fixtures > native > stdout 1`] = `
 "[Module: null prototype] { default: { hasRequire: false } }
 in foo.ts"

@@ -106,6 +106,7 @@ export function jitiRequire(
   if (ext === ".json") {
     debug(ctx, "[json]", filename);
     const jsonModule = ctx.nativeRequire(filename);
+    addNativeChild(ctx, filename);
     if (jsonModule && !("default" in jsonModule)) {
       Object.defineProperty(jsonModule, "default", {
         value: jsonModule,
@@ -178,11 +179,14 @@ export function nativeImportOrRequire(
   id: string,
   async?: boolean,
 ) {
-  return async && ctx.nativeImport
-    ? ctx
-        .nativeImport(normalizeWindowsImportId(id))
-        .then((m: any) => jitiInteropDefault(ctx, m))
-    : jitiInteropDefault(ctx, ctx.nativeRequire(id));
+  if (async && ctx.nativeImport) {
+    return ctx
+      .nativeImport(normalizeWindowsImportId(id))
+      .then((m: any) => jitiInteropDefault(ctx, m));
+  }
+  const exports = ctx.nativeRequire(id);
+  addNativeChild(ctx, id);
+  return jitiInteropDefault(ctx, exports);
 }
 
 // A cached module is still a child of each module that requires it, as in Node
@@ -190,6 +194,14 @@ function addChild(ctx: Context, mod: NodeModule) {
   const children = ctx.parentModule?.children;
   if (Array.isArray(children) && !children.includes(mod)) {
     children.push(mod);
+  }
+}
+
+// Node loads native modules under the createRequire parent, not the importer
+function addNativeChild(ctx: Context, filename: string) {
+  const mod = ctx.nativeRequire.cache[filename];
+  if (mod) {
+    addChild(ctx, mod);
   }
 }
 
