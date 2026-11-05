@@ -23,6 +23,7 @@ const ignore = new Set(
     "circular",
     "data-uri",
     "jsx",
+    "require-retry",
     // TODO: Once supported, we should both enable test and avoid transform in supported Node.js versions
     "explicit-resource-management",
   ].filter(Boolean),

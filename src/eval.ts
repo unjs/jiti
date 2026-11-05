@@ -159,6 +159,7 @@ export function evalModule(
         ctx.opts.esmEvalTempFile,
       );
     } else {
+      delete cache[filename];
       if (ctx.opts.moduleCache) {
         delete ctx.nativeRequire.cache[filename];
       }
@@ -179,6 +180,7 @@ export function evalModule(
       _jiti.esmResolve,
     );
   } catch (error: any) {
+    delete cache[filename];
     if (ctx.opts.moduleCache) {
       delete ctx.nativeRequire.cache[filename];
     }
@@ -193,6 +195,10 @@ export function evalModule(
       const loc = `${filename}:${line}:${column}`;
       const err = new Error(`${code}: ${message} \n ${loc}`);
       Error.captureStackTrace(err, jitiRequire);
+      delete cache[mod.filename];
+      if (ctx.opts.moduleCache) {
+        delete ctx.nativeRequire.cache[mod.filename];
+      }
       ctx.onError!(err);
     }
 
