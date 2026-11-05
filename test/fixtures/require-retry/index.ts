@@ -1,4 +1,4 @@
-(globalThis as { evaluations?: number }).evaluations = 0;
+(globalThis as { retryEvaluations?: number }).retryEvaluations = 0;
 
 for (let i = 0; i < 2; i++) {
   try {
