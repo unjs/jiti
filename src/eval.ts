@@ -253,6 +253,10 @@ export function evalModule(
   return evaluation.promise;
 }
 
+export function isEvaluating(mod: NodeModule): boolean {
+  return asyncEvaluations.has(mod);
+}
+
 export function waitForEvaluation(
   mod: NodeModule,
   importer?: NodeModule,

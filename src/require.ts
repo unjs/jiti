@@ -6,7 +6,7 @@ import { extname } from "pathe";
 import { jitiInteropDefault, normalizeWindowsImportId } from "./utils";
 import { debug } from "./utils";
 import { jitiResolve } from "./resolve";
-import { evalModule, waitForEvaluation } from "./eval";
+import { evalModule, isEvaluating, waitForEvaluation } from "./eval";
 
 export function jitiRequire(
   ctx: Context,
@@ -153,13 +153,13 @@ export function jitiRequire(
       addChild(ctx, cacheEntry);
       return jitiInteropDefault(ctx, cacheEntry.exports);
     }
-    // Still evaluating in another jiti tree
-    if (cacheEntry && opts.async) {
+    // Still evaluating in another jiti tree: wait, or keep partial exports in a cycle
+    if (cacheEntry && opts.async && isEvaluating(cacheEntry)) {
+      addChild(ctx, cacheEntry);
       const evaluation = waitForEvaluation(cacheEntry, ctx.parentModule);
-      if (evaluation) {
-        addChild(ctx, cacheEntry);
-        return afterEvaluation(ctx, cacheEntry, evaluation);
-      }
+      return evaluation
+        ? afterEvaluation(ctx, cacheEntry, evaluation)
+        : jitiInteropDefault(ctx, cacheEntry.exports);
     }
   }
 
