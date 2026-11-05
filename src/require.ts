@@ -136,6 +136,7 @@ export function jitiRequire(
   // Check for runtime cache
   if (cache[filename]) {
     const mod = cache[filename];
+    addChild(ctx, mod);
     const evaluation = opts.async
       ? waitForEvaluation(mod, ctx.parentModule)
       : undefined;
@@ -147,6 +148,7 @@ export function jitiRequire(
   if (ctx.opts.moduleCache) {
     const cacheEntry = ctx.nativeRequire.cache[filename];
     if (cacheEntry?.loaded) {
+      addChild(ctx, cacheEntry);
       return jitiInteropDefault(ctx, cacheEntry.exports);
     }
   }
@@ -174,4 +176,12 @@ export function nativeImportOrRequire(
         .nativeImport(normalizeWindowsImportId(id))
         .then((m: any) => jitiInteropDefault(ctx, m))
     : jitiInteropDefault(ctx, ctx.nativeRequire(id));
+}
+
+// A cached module is still a child of each module that requires it, as in Node
+function addChild(ctx: Context, mod: NodeModule) {
+  const children = ctx.parentModule?.children;
+  if (Array.isArray(children) && !children.includes(mod)) {
+    children.push(mod);
+  }
 }
