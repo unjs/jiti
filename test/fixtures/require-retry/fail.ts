@@ -1,6 +1,6 @@
-const g = globalThis as { evaluations?: number };
-g.evaluations = (g.evaluations || 0) + 1;
-if (g.evaluations === 1) {
+const g = globalThis as { retryEvaluations?: number };
+g.retryEvaluations = (g.retryEvaluations || 0) + 1;
+if (g.retryEvaluations === 1) {
   throw new Error("first evaluation fails");
 }
 
