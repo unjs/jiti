@@ -18,13 +18,23 @@ import { jitiRequire, nativeImportOrRequire } from "./require";
 import createJiti from "./jiti";
 import { transform } from "./transform";
 
-type AsyncEvaluation = {
-  promise?: Promise<unknown>;
-  waitingOn: Set<NodeModule>;
-};
+// Async evaluations still pending, set once the module body returns a promise
+const asyncEvaluations = new WeakMap<NodeModule, Promise<unknown>>();
 
-// Modules still evaluating in async mode, with the modules each one waits on
-const asyncEvaluations = new WeakMap<NodeModule, AsyncEvaluation>();
+// Modules each module imported or required through jiti
+const moduleImports = new WeakMap<NodeModule, Set<NodeModule>>();
+
+export function trackImport(parent: NodeModule | undefined, mod: NodeModule) {
+  if (!parent) {
+    return;
+  }
+  let imports = moduleImports.get(parent);
+  if (!imports) {
+    imports = new Set();
+    moduleImports.set(parent, imports);
+  }
+  imports.add(mod);
+}
 
 export function evalModule(
   ctx: Context,
@@ -118,6 +128,7 @@ export function evalModule(
     ) {
       ctx.parentModule.children.push(mod);
     }
+    trackImport(ctx.parentModule, mod);
   }
 
   const _jiti = createJiti(
@@ -144,15 +155,6 @@ export function evalModule(
   cache[filename] = mod as ModuleCache[string];
   if (ctx.opts.moduleCache) {
     ctx.nativeRequire.cache[filename] = mod;
-  }
-
-  // Let concurrent imports wait for this evaluation
-  const evaluation: AsyncEvaluation = { waitingOn: new Set() };
-  if (evalOptions.async) {
-    asyncEvaluations.set(mod, evaluation);
-    if (ctx.parentModule) {
-      asyncEvaluations.get(ctx.parentModule)?.waitingOn.add(mod);
-    }
   }
 
   // Compile wrapped script
@@ -227,7 +229,7 @@ export function evalModule(
     return next();
   }
 
-  evaluation.promise = Promise.resolve(evalResult)
+  const evaluation = Promise.resolve(evalResult)
     .then(next)
     .catch((error) => {
       // Evaluate again on the next import instead of serving partial exports
@@ -237,10 +239,22 @@ export function evalModule(
       if (ctx.opts.moduleCache && ctx.nativeRequire.cache[filename] === mod) {
         delete ctx.nativeRequire.cache[filename];
       }
+      // Failed attempts should not pile up in the parent module
+      const children = ctx.parentModule?.children;
+      if (Array.isArray(children)) {
+        const index = children.indexOf(mod);
+        if (index !== -1) {
+          children.splice(index, 1);
+        }
+      }
+      if (ctx.parentModule) {
+        moduleImports.get(ctx.parentModule)?.delete(mod);
+      }
       throw error;
     })
     .finally(() => asyncEvaluations.delete(mod));
-  return evaluation.promise;
+  asyncEvaluations.set(mod, evaluation);
+  return evaluation;
 }
 
 export function waitForEvaluation(
@@ -248,28 +262,27 @@ export function waitForEvaluation(
   importer?: NodeModule,
 ): Promise<unknown> | undefined {
   const evaluation = asyncEvaluations.get(mod);
-  // Without a promise, the module body is still running synchronously (cycle)
-  if (!evaluation?.promise) {
+  // Without a promise, the module has finished or its body is still running
+  // synchronously (cycle)
+  if (!evaluation) {
     return;
   }
-  if (importer) {
-    // Import cycle: waiting would never settle, keep partial exports
-    if (isWaitingOn(mod, importer)) {
-      return;
-    }
-    asyncEvaluations.get(importer)?.waitingOn.add(mod);
+  // The pending module reaches the importer through its imports and may be
+  // the one running this code: waiting could never settle, keep partial exports
+  if (importer && importsModule(mod, importer)) {
+    return;
   }
-  return evaluation.promise;
+  return evaluation;
 }
 
-function isWaitingOn(mod: NodeModule, target: NodeModule): boolean {
+function importsModule(mod: NodeModule, target: NodeModule): boolean {
   const queue = [mod];
   const seen = new Set(queue);
   for (const current of queue) {
     if (current === target) {
       return true;
     }
-    for (const dep of asyncEvaluations.get(current)?.waitingOn || []) {
+    for (const dep of moduleImports.get(current) || []) {
       if (!seen.has(dep)) {
         seen.add(dep);
         queue.push(dep);

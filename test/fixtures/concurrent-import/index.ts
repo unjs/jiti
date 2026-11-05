@@ -18,5 +18,11 @@ console.log(
   retry[0].status === "fulfilled" ? retry[0].value.value : format(retry[0]),
 );
 
+// Native ESM and the register hook have no module.children
+if (typeof module !== "undefined" && module.children) {
+  const children = module.children.filter((c) => c.id.endsWith("fail.ts"));
+  console.log("children:", children.length);
+}
+
 // Mark file as module for typescript
 export default {};
