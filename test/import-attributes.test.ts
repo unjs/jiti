@@ -51,4 +51,23 @@ describe("import attributes", () => {
       dataJson.replace(/\\/g, "/"),
     );
   });
+
+  it("accepts a caller-supplied `attributes` option", async () => {
+    // Type-level: `jiti.import`'s declaration must expose `attributes`, or the
+    // call below fails to type-check under `tsgo --noEmit`.
+    // Runtime: passing the mismatch explicitly must still throw.
+    await expect(
+      jiti().import(wrongType, { attributes: { type: "css" } }),
+    ).rejects.toThrow(
+      /Import attribute "type" with value "css" is not supported/,
+    );
+  });
+
+  it("rejects a mismatched `type` on the synchronous path", () => {
+    // The synchronous lowering produces `require(source)`, which cannot carry
+    // import attributes, so the mismatch is rejected at transform time.
+    expect(() => jiti()(wrongType)).toThrow(
+      /Import attribute "type" with value "css" is not supported/,
+    );
+  });
 });

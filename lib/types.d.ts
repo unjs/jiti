@@ -50,7 +50,16 @@ export interface Jiti extends NodeRequire {
    */
   import<T = unknown>(
     id: string,
-    opts?: JitiResolveOptions & { default?: true },
+    opts?: JitiResolveOptions & {
+      default?: true;
+      /**
+       * Import attributes passed through to the module loader, e.g.
+       * `{ type: "json" }` or `{ type: "css" }`. They are preserved instead
+       * of being silently dropped, so a `with` clause that mismatches the
+       * resolved module type still throws.
+       */
+      attributes?: Record<string, string>;
+    },
   ): Promise<T>;
 
   /**

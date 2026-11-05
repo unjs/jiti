@@ -260,6 +260,19 @@ export default declare((api: PluginAPI, options: Options) => {
 
           for (const [source, metadata] of meta.source) {
             const attributes = importAttributes.get(source);
+            // The synchronous path lowers to plain `require(source)`, which
+            // has no way to carry import attributes. Node validates a `with`
+            // clause before executing the module, so mirror that here at
+            // compile time instead of silently dropping the attribute (#483).
+            if (!async && attributes) {
+              const attributeError = staticImportAttributeError(
+                source,
+                attributes,
+              );
+              if (attributeError) {
+                throw attributeError;
+              }
+            }
             const loadExpr = async
               ? t.awaitExpression(
                   t.callExpression(
@@ -380,4 +393,39 @@ function collectImportAttributes(
     );
   }
   return attributes;
+}
+
+/**
+ * The synchronous lowering emits `require(source)`, which cannot carry import
+ * attributes. Reject a `with { type: ... }` clause that is statically known to
+ * contradict the specifier, so the attribute is not silently ignored.
+ *
+ * Only a literal `.json` specifier is checked: other specifiers are resolved at
+ * runtime, where the attribute is meaningless to `require` anyway.
+ */
+function staticImportAttributeError(
+  source: string,
+  attributes: t.ObjectExpression,
+): Error | undefined {
+  let type: string | undefined;
+  for (const property of attributes.properties) {
+    if (
+      property.type === "ObjectProperty" &&
+      !property.computed &&
+      ((t.isIdentifier(property.key) && property.key.name === "type") ||
+        (t.isStringLiteral(property.key) && property.key.value === "type")) &&
+      t.isStringLiteral(property.value)
+    ) {
+      type = property.value.value;
+    }
+  }
+  if (type === undefined || type === "json" || !source.endsWith(".json")) {
+    return undefined;
+  }
+  return Object.assign(
+    new TypeError(
+      `Import attribute "type" with value "${type}" is not supported in ${source}`,
+    ),
+    { code: "ERR_IMPORT_ATTRIBUTE_UNSUPPORTED" },
+  );
 }
