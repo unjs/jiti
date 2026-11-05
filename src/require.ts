@@ -153,10 +153,13 @@ export function jitiRequire(
       addChild(ctx, cacheEntry);
       return jitiInteropDefault(ctx, cacheEntry.exports);
     }
-    // Still evaluating in another jiti tree: wait, or keep partial exports in a cycle
-    if (cacheEntry && opts.async && isEvaluating(cacheEntry)) {
+    // Still evaluating in another jiti tree: wait, or keep partial exports
+    // in a cycle and in sync require(), as within one tree
+    if (cacheEntry && isEvaluating(cacheEntry)) {
       addChild(ctx, cacheEntry);
-      const evaluation = waitForEvaluation(cacheEntry, ctx.parentModule);
+      const evaluation = opts.async
+        ? waitForEvaluation(cacheEntry, ctx.parentModule)
+        : undefined;
       return evaluation
         ? afterEvaluation(ctx, cacheEntry, evaluation)
         : jitiInteropDefault(ctx, cacheEntry.exports);
