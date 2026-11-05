@@ -19,6 +19,8 @@ const ignore = new Set(
     "env",
     "typescript",
     "top-level-await",
+    "concurrent-import",
+    "concurrent-circular",
     "deps",
     "circular",
     "data-uri",
