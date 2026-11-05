@@ -6,7 +6,7 @@ import { extname } from "pathe";
 import { jitiInteropDefault, normalizeWindowsImportId } from "./utils";
 import { debug } from "./utils";
 import { jitiResolve } from "./resolve";
-import { evalModule } from "./eval";
+import { evalModule, waitForEvaluation } from "./eval";
 
 export function jitiRequire(
   ctx: Context,
@@ -135,7 +135,14 @@ export function jitiRequire(
 
   // Check for runtime cache
   if (cache[filename]) {
-    return jitiInteropDefault(ctx, cache[filename]?.exports);
+    const mod = cache[filename];
+    const evaluation = opts.async
+      ? waitForEvaluation(mod, ctx.parentModule)
+      : undefined;
+    if (evaluation) {
+      return evaluation.then(() => jitiInteropDefault(ctx, mod.exports));
+    }
+    return jitiInteropDefault(ctx, mod.exports);
   }
   if (ctx.opts.moduleCache) {
     const cacheEntry = ctx.nativeRequire.cache[filename];
