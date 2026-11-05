@@ -136,6 +136,14 @@ exports[`fixtures > require-esm > stdout 1`] = `"Works!"`;
 
 exports[`fixtures > require-json > stdout 1`] = `"{ type: 'commonjs' }"`;
 
+exports[`fixtures > require-retry > stdout 1`] = `
+"error: first evaluation fails
+value: recovered
+parse: error
+parse: error
+children: 1"
+`;
+
 exports[`fixtures > resolve > stdout 1`] = `"resolved path <cwd>/_dist/foo.mjs"`;
 
 exports[`fixtures > syntax > stdout 1`] = `

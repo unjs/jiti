@@ -18,6 +18,10 @@ import { jitiRequire, nativeImportOrRequire } from "./require";
 import createJiti from "./jiti";
 import { transform } from "./transform";
 
+/**
+ * Transpile and evaluate a module source in the given context, registering
+ * it in the runtime cache and in its parent's children while it loads.
+ */
 export function evalModule(
   ctx: Context,
   source: string,
@@ -112,6 +116,26 @@ export function evalModule(
     }
   }
 
+  /**
+   * Undo the registration of a module that fails to load, as Node does.
+   * A concurrent async evaluation of the same file may own the cache entries.
+   */
+  function unregister() {
+    if (cache[filename] === mod) {
+      delete cache[filename];
+    }
+    if (ctx.opts.moduleCache && ctx.nativeRequire.cache[filename] === mod) {
+      delete ctx.nativeRequire.cache[filename];
+    }
+    const children = ctx.parentModule?.children;
+    if (Array.isArray(children)) {
+      const index = children.indexOf(mod);
+      if (index !== -1) {
+        children.splice(index, 1);
+      }
+    }
+  }
+
   const _jiti = createJiti(
     filename,
     ctx.opts,
@@ -159,9 +183,7 @@ export function evalModule(
         ctx.opts.esmEvalTempFile,
       );
     } else {
-      if (ctx.opts.moduleCache) {
-        delete ctx.nativeRequire.cache[filename];
-      }
+      unregister();
       ctx.onError!(error);
     }
   }
@@ -179,12 +201,14 @@ export function evalModule(
       _jiti.esmResolve,
     );
   } catch (error: any) {
-    if (ctx.opts.moduleCache) {
-      delete ctx.nativeRequire.cache[filename];
-    }
+    unregister();
     ctx.onError!(error);
   }
 
+  /**
+   * Finish loading after evaluation: report a deferred parse error, or mark
+   * the module as loaded and return its exports through interopDefault.
+   */
   function next() {
     // Check for parse errors
     if (mod.exports && mod.exports.__JITI_ERROR__) {
@@ -193,6 +217,7 @@ export function evalModule(
       const loc = `${filename}:${line}:${column}`;
       const err = new Error(`${code}: ${message} \n ${loc}`);
       Error.captureStackTrace(err, jitiRequire);
+      unregister();
       ctx.onError!(err);
     }
 
