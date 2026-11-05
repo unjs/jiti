@@ -165,7 +165,10 @@ export default function createJiti(
       },
       async import<T = unknown>(
         id: string,
-        opts?: JitiResolveOptions & { default?: true },
+        opts?: JitiResolveOptions & {
+          default?: true;
+          attributes?: Record<string, string>;
+        },
       ): Promise<T> {
         const mod = await jitiRequire(ctx, id, { ...opts, async: true });
         return opts?.default ? (mod?.default ?? mod) : mod;

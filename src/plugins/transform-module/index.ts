@@ -203,6 +203,10 @@ export default declare((api: PluginAPI, options: Options) => {
         exit(path, state) {
           if (!isModule(path)) return;
 
+          // Collect `with { ... }` / `assert { ... }` import attributes keyed by
+          // specifier, before the module statements get rewritten away (#483).
+          const importAttributes = collectImportAttributes(path.node);
+
           // Rename the bindings auto-injected into the scope so there is no
           // risk of conflict between the bindings.
           path.scope.rename("exports");
@@ -255,11 +259,23 @@ export default declare((api: PluginAPI, options: Options) => {
           );
 
           for (const [source, metadata] of meta.source) {
+            const attributes = importAttributes.get(source);
             const loadExpr = async
               ? t.awaitExpression(
-                  t.callExpression(t.identifier("jitiImport"), [
-                    t.stringLiteral(source),
-                  ]),
+                  t.callExpression(
+                    t.identifier("jitiImport"),
+                    attributes
+                      ? [
+                          t.stringLiteral(source),
+                          t.objectExpression([
+                            t.objectProperty(
+                              t.identifier("attributes"),
+                              attributes,
+                            ),
+                          ]),
+                        ]
+                      : [t.stringLiteral(source)],
+                  ),
                 )
               : t.callExpression(t.identifier("require"), [
                   t.stringLiteral(source),
@@ -320,3 +336,48 @@ export default declare((api: PluginAPI, options: Options) => {
 });
 
 export { defineCommonJSHook } from "./hooks";
+
+/**
+ * `ImportDeclaration` / `ExportNamedDeclaration` / `ExportAllDeclaration` can
+ * carry import attributes (`with { type: "json" }`, or the legacy `assert`
+ * form). Babel normalises both into `node.attributes` (older versions used
+ * `node.assertions`). They are keyed by specifier so the rewritten import
+ * expression can pass them through to `jitiImport`.
+ */
+function collectImportAttributes(
+  program: t.Program,
+): Map<string, t.ObjectExpression> {
+  const attributes = new Map<string, t.ObjectExpression>();
+  for (const node of program.body) {
+    if (
+      !(
+        node.type === "ImportDeclaration" ||
+        node.type === "ExportNamedDeclaration" ||
+        node.type === "ExportAllDeclaration"
+      ) ||
+      !node.source
+    ) {
+      continue;
+    }
+    const list =
+      (node as { attributes?: t.ImportAttribute[] }).attributes ||
+      (node as { assertions?: t.ImportAttribute[] }).assertions;
+    if (!list || list.length === 0) {
+      continue;
+    }
+    attributes.set(
+      node.source.value,
+      t.objectExpression(
+        list.map((attr) =>
+          t.objectProperty(
+            t.isIdentifier(attr.key)
+              ? t.identifier(attr.key.name)
+              : t.stringLiteral(attr.key.value),
+            t.stringLiteral(attr.value.value),
+          ),
+        ),
+      ),
+    );
+  }
+  return attributes;
+}

@@ -105,6 +105,19 @@ export function jitiRequire(
   // Check for .json modules
   if (ext === ".json") {
     debug(ctx, "[json]", filename);
+    // Import attributes (`with { type: "json" }`) are lossless metadata: the
+    // transformer keeps them and hands them over so they can be validated
+    // instead of being silently dropped (#483).
+    const jsonTypeAttribute = (opts as { attributes?: Record<string, string> })
+      .attributes?.type;
+    if (jsonTypeAttribute !== undefined && jsonTypeAttribute !== "json") {
+      throw Object.assign(
+        new TypeError(
+          `Import attribute "type" with value "${jsonTypeAttribute}" is not supported in ${filename}`,
+        ),
+        { code: "ERR_IMPORT_ATTRIBUTE_UNSUPPORTED" },
+      );
+    }
     const jsonModule = ctx.nativeRequire(filename);
     if (jsonModule && !("default" in jsonModule)) {
       Object.defineProperty(jsonModule, "default", {
