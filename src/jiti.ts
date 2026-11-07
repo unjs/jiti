@@ -174,11 +174,45 @@ export default function createJiti(
         if (typeof opts === "string") {
           opts = { parentURL: opts };
         }
-        const resolved = jitiResolve(ctx, id, {
-          parentURL: url as any,
-          ...opts,
-          async: true,
-        });
+        let resolved: string | undefined;
+        try {
+          resolved = jitiResolve(ctx, id, {
+            parentURL: url as any,
+            ...opts,
+            async: true,
+          });
+        } catch (error) {
+          if (opts?.try) {
+            return undefined as unknown as string;
+          }
+          if (
+            id.startsWith("./") ||
+            id.startsWith("../") ||
+            id.startsWith("/") ||
+            id.startsWith("file:") ||
+            id === "." ||
+            id === ".."
+          ) {
+            let parent = opts?.parentURL || url;
+            if (
+              typeof parent === "string" &&
+              !parent.startsWith("file://") &&
+              isDir(parent)
+            ) {
+              parent = join(parent, "_index.js");
+            }
+            let parentURL: string;
+            if (typeof parent === "string") {
+              parentURL = parent.startsWith("file://")
+                ? parent
+                : pathToFileURL(parent);
+            } else {
+              parentURL = (parent as any).href || String(parent);
+            }
+            return new URL(id, parentURL).href;
+          }
+          throw error;
+        }
         if (
           !resolved ||
           typeof resolved !== "string" ||
