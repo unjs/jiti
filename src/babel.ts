@@ -15,6 +15,7 @@ import parameterDecoratorPlugin from "babel-plugin-parameter-decorator";
 import transformTypeScriptMetaPlugin from "./plugins/babel-plugin-transform-typescript-metadata";
 import importMetaEnvPlugin from "./plugins/import-meta-env";
 import importMetaResolvePlugin from "./plugins/import-meta-resolve";
+import importMetaPlugin from "./plugins/import-meta";
 import importMetaPathsPlugin from "./plugins/import-meta-paths";
 import transformModulesPlugin from "./plugins/transform-module";
 import type { TransformOptions, TransformResult } from "./types";
@@ -41,6 +42,7 @@ export default function transform(opts: TransformOptions): TransformResult {
       [importMetaPathsPlugin, { filename: opts.filename }],
       [importMetaEnvPlugin],
       [importMetaResolvePlugin],
+      [importMetaPlugin],
       [syntaxClassPropertiesPlugin],
       [transformExportNamespaceFromPlugin],
       [transformExplicitResourceManagementPlugin],

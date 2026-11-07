@@ -54,7 +54,7 @@ export function readNearestPackageJSON(path: string): PackageJson | undefined {
 }
 
 export function wrapModule(source: string, opts?: { async?: boolean }) {
-  return `(${opts?.async ? "async " : ""}function (exports, require, module, __filename, __dirname, jitiImport, jitiESMResolve) { ${source}\n});`;
+  return `(${opts?.async ? "async " : ""}function (exports, require, module, __filename, __dirname, jitiImport, jitiESMResolve, jitiImportMeta) { ${source}\n});`;
 }
 
 const debugMap = {

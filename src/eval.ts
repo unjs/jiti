@@ -168,6 +168,13 @@ export function evalModule(
 
   // Evaluate module
   let evalResult;
+  const jitiImportMeta = Object.assign(Object.create(null), {
+    url: pathToFileURL(filename),
+    filename,
+    dirname: dirname(filename),
+    resolve: _jiti.esmResolve.bind(_jiti),
+    env: process.env,
+  });
   try {
     evalResult = compiled(
       mod.exports,
@@ -177,6 +184,7 @@ export function evalModule(
       dirname(mod.filename),
       _jiti.import,
       _jiti.esmResolve,
+      jitiImportMeta,
     );
   } catch (error: any) {
     if (ctx.opts.moduleCache) {
