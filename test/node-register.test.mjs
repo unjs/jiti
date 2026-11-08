@@ -20,3 +20,8 @@ for (const fixture of fixtures) {
     }
   });
 }
+
+test("named imports from .ts files in ESM (#502)", async () => {
+  const { add } = await import("./fixtures/node-register-exports/index.ts");
+  assert.strictEqual(add(1, 2), 3);
+});
