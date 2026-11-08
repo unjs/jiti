@@ -7,7 +7,7 @@ import { fileURLToPath, pathToFileURL } from "mlly";
 // Based on https://github.com/javiertury/babel-plugin-transform-import-meta/blob/master/src/index.ts v2.1.1 (MIT License)
 // Modifications
 // 1. Inlines resolved filename into the code when possible instead of injecting a require
-// 2. Add support for import.meta.dirname and import.meta.filename
+// 2. Add support for import.meta.dirname, import.meta.filename and import.meta.main
 
 export default function importMetaPathsPlugin(
   _ctx: any,
@@ -20,6 +20,7 @@ export default function importMetaPathsPlugin(
         const metaUrls: Array<NodePath<MemberExpression>> = [];
         const metaDirnames: Array<NodePath<MemberExpression>> = [];
         const metaFilenames: Array<NodePath<MemberExpression>> = [];
+        const metaMains: Array<NodePath<MemberExpression>> = [];
 
         path.traverse({
           MemberExpression(memberExpPath) {
@@ -42,6 +43,10 @@ export default function importMetaPathsPlugin(
                 }
                 case "filename": {
                   metaFilenames.push(memberExpPath);
+                  break;
+                }
+                case "main": {
+                  metaMains.push(memberExpPath);
                   break;
                 }
               }
@@ -81,6 +86,13 @@ export default function importMetaPathsPlugin(
                 ? JSON.stringify(fileURLToPath(pathToFileURL(opts.filename)))
                 : "__filename"
             }` as Statement,
+          );
+        }
+
+        // Update import.meta.main
+        for (const metaMain of metaMains) {
+          metaMain.replaceWith(
+            smart.ast`Boolean(require.main && require.main === module)` as Statement,
           );
         }
       },

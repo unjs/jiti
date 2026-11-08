@@ -4,7 +4,7 @@ import { unlink } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { performance } from "node:perf_hooks";
 import vm from "node:vm";
-import { dirname, basename, extname, join } from "pathe";
+import { dirname, basename, extname, join, resolve } from "pathe";
 import { hasESMSyntax, pathToFileURL } from "mlly";
 import {
   debug,
@@ -35,6 +35,10 @@ export function evalModule(
   const cache = (evalOptions.cache || ctx.parentCache || {}) as ModuleCache;
 
   // Transpile
+  const isMain =
+    !ctx.parentModule &&
+    Boolean(process.argv?.[1]) &&
+    resolve(filename) === resolve(process.argv[1]);
   const isTypescript = /\.[cm]?tsx?$/.test(ext);
   const isESM =
     ext === ".mjs" ||
@@ -42,10 +46,10 @@ export function evalModule(
   const isCommonJS = ext === ".cjs";
   const needsTranspile =
     evalOptions.forceTranspile ??
-    (!isCommonJS && // CommonJS skips transpile
+    ((!isCommonJS || isMain) && // CommonJS skips transpile unless entry script
       !(isESM && evalOptions.async) && // In async mode, we can skip native ESM as well
       // prettier-ignore
-      (isTypescript || isESM || ctx.isTransformRe.test(filename) || hasESMSyntax(source)));
+      (isMain || isTypescript || isESM || ctx.isTransformRe.test(filename) || hasESMSyntax(source)));
   const start = performance.now();
   if (needsTranspile) {
     source = transform(ctx, {
@@ -126,6 +130,17 @@ export function evalModule(
   );
 
   mod.require = _jiti as typeof mod.require;
+
+  if (isMain) {
+    ctx.nativeRequire.main = mod as any;
+    _jiti.main = mod as any;
+    if (
+      process.mainModule === undefined ||
+      (process.mainModule && process.mainModule.filename !== filename)
+    ) {
+      (process as any).mainModule = mod;
+    }
+  }
 
   mod.path = dirname(filename);
 
