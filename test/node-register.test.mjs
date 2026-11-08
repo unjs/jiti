@@ -20,3 +20,7 @@ for (const fixture of fixtures) {
     }
   });
 }
+
+test("import.meta.resolve works under jiti/register (#501)", async () => {
+  await assert.doesNotReject(import("./fixtures/import-meta/resolve.ts"));
+});
