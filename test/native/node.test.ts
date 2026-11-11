@@ -1,4 +1,7 @@
+import assert from "node:assert/strict";
 import { readdir } from "node:fs/promises";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
 import { test } from "node:test";
 
 import { createJiti } from "../../lib/jiti-native.mjs";
@@ -37,3 +40,19 @@ for (const fixture of fixtures) {
     await jiti.import("../fixtures/" + fixture);
   });
 }
+
+test("plain path parent is normalized to a file URL", () => {
+  const caller = join(process.cwd(), "caller.mjs");
+  let parent = "";
+  const jiti = createJiti(caller, {
+    importMeta: {
+      ...import.meta,
+      resolve: (_id: string, p?: string | URL) => {
+        parent = p ? String(p) : "";
+        return "";
+      },
+    },
+  });
+  jiti.esmResolve("./exists.js");
+  assert.equal(new URL(parent).href, pathToFileURL(caller).href);
+});
