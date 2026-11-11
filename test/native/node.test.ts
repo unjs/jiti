@@ -46,8 +46,9 @@ test("plain path parent is normalized to a file URL", () => {
   let parent = "";
   const jiti = createJiti(caller, {
     importMeta: {
-      resolve: (_id, p) => {
-        parent = p;
+      ...import.meta,
+      resolve: (_id: string, p?: string | URL) => {
+        parent = p ? String(p) : "";
         return "";
       },
     },
