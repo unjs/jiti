@@ -18,6 +18,8 @@ import { jitiRequire, nativeImportOrRequire } from "./require";
 import createJiti from "./jiti";
 import { transform } from "./transform";
 
+export const jitiModules = new WeakSet<Module>();
+
 export function evalModule(
   ctx: Context,
   source: string,
@@ -101,6 +103,7 @@ export function evalModule(
 
   // Compile module
   const mod = new Module(filename);
+  jitiModules.add(mod);
   mod.filename = filename;
   if (ctx.parentModule) {
     mod.parent = ctx.parentModule;

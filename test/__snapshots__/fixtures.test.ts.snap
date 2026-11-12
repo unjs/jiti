@@ -120,6 +120,8 @@ exports[`fixtures > native > stdout 1`] = `
 in foo.ts"
 `;
 
+exports[`fixtures > native-failed-import > stdout 1`] = `"cjs esm:cjs:other:cjs native-failed-import"`;
+
 exports[`fixtures > node > stdout 1`] = `"node:test true"`;
 
 exports[`fixtures > proto > stdout 1`] = `"exists: true"`;

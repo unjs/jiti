@@ -6,7 +6,7 @@ import { extname } from "pathe";
 import { jitiInteropDefault, normalizeWindowsImportId } from "./utils";
 import { debug } from "./utils";
 import { jitiResolve } from "./resolve";
-import { evalModule } from "./eval";
+import { evalModule, jitiModules } from "./eval";
 
 export function jitiRequire(
   ctx: Context,
@@ -141,6 +141,10 @@ export function jitiRequire(
     const cacheEntry = ctx.nativeRequire.cache[filename];
     if (cacheEntry?.loaded) {
       return jitiInteropDefault(ctx, cacheEntry.exports);
+    }
+    // Unloaded entries created outside jiti (e.g. by Node's ESM loader) must be loaded in place
+    if (cacheEntry && !jitiModules.has(cacheEntry)) {
+      return nativeImportOrRequire(ctx, filename, false);
     }
   }
 
