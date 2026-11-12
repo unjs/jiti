@@ -1,5 +1,5 @@
 import cjs from "./cjs/index.js";
 import { esm } from "./esm.mjs";
-import pkg from "./package.json";
+import { legacy } from "./cjs/esm-syntax.js";
 
-export const value: string = [cjs, esm, pkg.name].join(" ");
+export const value: string = [cjs, esm, legacy].join(" ");
