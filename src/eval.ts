@@ -18,6 +18,8 @@ import { jitiRequire, nativeImportOrRequire } from "./require";
 import createJiti from "./jiti";
 import { transform } from "./transform";
 
+const jitiModules = new WeakSet<Module>();
+
 export function evalModule(
   ctx: Context,
   source: string,
@@ -100,7 +102,15 @@ export function evalModule(
   }
 
   // Compile module
-  const mod = new Module(filename);
+  // Unloaded entries created outside jiti (e.g. by Node's ESM loader) are still referenced, so evaluate into them
+  const nativeEntry = ctx.opts.moduleCache
+    ? ctx.nativeRequire.cache[filename]
+    : undefined;
+  const mod =
+    nativeEntry && !nativeEntry.loaded && !jitiModules.has(nativeEntry)
+      ? nativeEntry
+      : new Module(filename);
+  jitiModules.add(mod);
   mod.filename = filename;
   if (ctx.parentModule) {
     mod.parent = ctx.parentModule;
