@@ -90,10 +90,26 @@ export default function importMetaPathsPlugin(
         }
 
         // Update import.meta.main
+        // If `require` or `module` is shadowed where import.meta.main is used
+        // (e.g. a function parameter named `require`), evaluate the check once at
+        // the top of the module, where they still refer to the module wrapper's.
+        const isMainCheck = "Boolean(require.main && require.main === module)";
+        const isShadowed = (scope: NodePath["scope"]) =>
+          scope.hasBinding("require", true) || scope.hasBinding("module", true);
+        let hoistedMain: string | undefined;
         for (const metaMain of metaMains) {
-          metaMain.replaceWith(
-            smart.ast`Boolean(require.main && require.main === module)` as Statement,
-          );
+          if (isShadowed(metaMain.scope) && !isShadowed(path.scope)) {
+            if (!hoistedMain) {
+              hoistedMain = path.scope.generateUidIdentifier("isMain").name;
+              path.unshiftContainer(
+                "body",
+                smart.ast`var ${hoistedMain} = ${isMainCheck};` as Statement,
+              );
+            }
+            metaMain.replaceWith(smart.ast`${hoistedMain}` as Statement);
+            continue;
+          }
+          metaMain.replaceWith(smart.ast`${isMainCheck}` as Statement);
         }
       },
     },

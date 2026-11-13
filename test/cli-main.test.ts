@@ -1,4 +1,5 @@
 import { resolve } from "node:path";
+import { normalize } from "pathe";
 import { fileURLToPath } from "node:url";
 import { x } from "tinyexec";
 import { describe, it, expect } from "vitest";
@@ -17,9 +18,10 @@ describe("cli and register main module", () => {
 
     expect(result.parentRequireMain).toBe(true);
     expect(result.parentImportMetaMain).toBe(true);
+    expect(result.parentShadowedImportMetaMain).toBe(true);
     expect(result.childRequireMain).toBe(false);
     expect(result.childImportMetaMain).toBe(false);
-    expect(result.childMainFilename).toBe(script);
+    expect(normalize(result.childMainFilename)).toBe(normalize(script));
   });
 
   it("sets require.main === module and import.meta.main under jiti/register", async () => {
@@ -35,8 +37,9 @@ describe("cli and register main module", () => {
 
     expect(result.parentRequireMain).toBe(true);
     expect(result.parentImportMetaMain).toBe(true);
+    expect(result.parentShadowedImportMetaMain).toBe(true);
     expect(result.childRequireMain).toBe(false);
     expect(result.childImportMetaMain).toBe(false);
-    expect(result.childMainFilename).toBe(script);
+    expect(normalize(result.childMainFilename)).toBe(normalize(script));
   });
 });
