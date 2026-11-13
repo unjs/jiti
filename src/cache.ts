@@ -5,7 +5,7 @@ import { dirname, join, basename, resolve } from "pathe";
 import { filename } from "pathe/utils";
 import { debug, isWritable, hash } from "./utils";
 
-const CACHE_VERSION = "9";
+const CACHE_VERSION = "10";
 
 export function getCache(
   ctx: Context,
