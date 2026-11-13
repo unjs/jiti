@@ -1,6 +1,7 @@
 import { afterEach, describe, beforeEach, it, expect, vi } from "vitest";
 import { isWindows } from "std-env";
 import { getCacheDir } from "../src/cache";
+import { createJiti } from "../lib/jiti.mjs";
 
 describe("utils", () => {
   describe.skipIf(isWindows)("getCacheDir", () => {
@@ -39,5 +40,22 @@ describe("utils", () => {
 
       expect(getCacheDir({} as any)).toBe("/cwd/jiti");
     });
+  });
+});
+
+describe("jiti.esmResolve", () => {
+  const jiti = createJiti(import.meta.url);
+
+  it("keeps builtin and data URLs unchanged", () => {
+    expect(jiti.esmResolve("node:fs")).toBe("node:fs");
+    expect(jiti.esmResolve("fs")).toBe("node:fs");
+    const dataURL = "data:text/javascript,export default 1";
+    expect(jiti.esmResolve(dataURL)).toBe(dataURL);
+  });
+
+  it("returns file URLs for files", () => {
+    expect(jiti.esmResolve("./utils.test.ts")).toBe(
+      new URL("utils.test.ts", import.meta.url).href,
+    );
   });
 });

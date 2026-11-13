@@ -182,7 +182,8 @@ export default function createJiti(
         if (
           !resolved ||
           typeof resolved !== "string" ||
-          resolved.startsWith("file://")
+          // Already a URL (file:, node:, data:, ...); a single letter is a Windows drive
+          /^[a-z][\w+.-]+:/i.test(resolved)
         ) {
           return resolved;
         }
