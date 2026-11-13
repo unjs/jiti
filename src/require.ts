@@ -139,7 +139,11 @@ export function jitiRequire(
   }
   if (ctx.opts.moduleCache) {
     const cacheEntry = ctx.nativeRequire.cache[filename];
-    if (cacheEntry?.loaded) {
+    // Modules still loading through jiti/register are returned for import cycles
+    if (
+      cacheEntry &&
+      (cacheEntry.loaded || (cacheEntry as any)[Symbol.for("jiti:loading")])
+    ) {
       return jitiInteropDefault(ctx, cacheEntry.exports);
     }
   }

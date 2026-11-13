@@ -122,6 +122,8 @@ in foo.ts"
 
 exports[`fixtures > node > stdout 1`] = `"node:test true"`;
 
+exports[`fixtures > node-register-exports > stdout 1`] = `""`;
+
 exports[`fixtures > proto > stdout 1`] = `"exists: true"`;
 
 exports[`fixtures > pure-esm-dep > stdout 1`] = `
