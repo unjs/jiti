@@ -99,6 +99,8 @@ import.meta.dirname: <cwd>
 import.meta.filename: <cwd>/dirname.ts"
 `;
 
+exports[`fixtures > import-meta-resolve > stdout 1`] = `"file://<cwd>/dep.ts"`;
+
 exports[`fixtures > json > stdout 1`] = `
 "Imported : { test: 123 } .default: { test: 123 }
 Imported with assertion : { test: 123 } .default: { test: 123 }
