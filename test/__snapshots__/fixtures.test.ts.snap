@@ -8,6 +8,11 @@ exports[`fixtures > cjs-interop > stdout 1`] = `"CJS function default interop te
 
 exports[`fixtures > data-uri > stdout 1`] = `""`;
 
+exports[`fixtures > decorators-metadata-fallback > stdout 1`] = `
+"HELLO JITI
+false"
+`;
+
 exports[`fixtures > deps > stdout 1`] = `
 "npm:config: true
 npm:defu {}

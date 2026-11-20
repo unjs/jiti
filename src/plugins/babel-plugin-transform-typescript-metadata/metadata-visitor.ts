@@ -22,7 +22,13 @@ function createMetadataDesignDecorator(
         [t.stringLiteral(design), typeArg as unknown as t.Expression],
         true,
       ),
-      t.arrowFunctionExpression([t.identifier("t")], t.identifier("t")),
+      // Without reflect-metadata, a no-op decorator (like TypeScript's
+      // `__metadata` helper). Returning the target would make legacy
+      // decorators take it as the member's new descriptor.
+      t.arrowFunctionExpression(
+        [],
+        t.unaryExpression("void", t.numericLiteral(0)),
+      ),
     ),
   );
 }
