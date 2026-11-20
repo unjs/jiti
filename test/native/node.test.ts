@@ -18,6 +18,8 @@ const ignore = new Set(
     "esm",
     "env",
     "typescript",
+    // legacy decorators, which native type stripping can not run
+    "decorators-metadata-fallback",
     "top-level-await",
     "deps",
     "circular",

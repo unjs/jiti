@@ -13,6 +13,8 @@ const ignore = new Set(
     "error-parse",
     "error-runtime",
     "typescript",
+    // legacy decorators, which native type stripping can not run
+    "decorators-metadata-fallback",
     "env",
     "esm",
     "proto",
