@@ -124,7 +124,15 @@ Enable verbose logging. You can use `JITI_DEBUG=1 <your command>` to enable it.
 
 Filesystem source cache (enabled by default)
 
-By default (when is `true`), jiti uses `node_modules/.cache/jiti` (if exists) or `{TMP_DIR}/jiti`.
+When set to `true`, jiti uses `node_modules/.cache/jiti` if `node_modules` exists next to the file passed to `createJiti`. It does not search parent directories. Otherwise, it uses `jiti` under the system temporary directory. If the selected cache directory cannot be created or written to, jiti disables the filesystem cache.
+
+Use `JITI_FS_CACHE=false` to disable the cache through the environment. The environment variable does not accept a directory path. To set a custom directory, pass a string to `createJiti`:
+
+```js
+import { createJiti } from "jiti";
+
+const jiti = createJiti(import.meta.url, { fsCache: "./.cache/jiti" });
+```
 
 **Note:** It is recommended that this option be enabled for better performance.
 
