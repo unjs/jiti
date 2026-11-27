@@ -7,6 +7,8 @@ export type {
   TransformOptions,
   TransformResult,
   JitiResolveOptions,
+  JitiImportOptions,
+  ImportAttributes,
 } from "../lib/types";
 
 export interface Context {

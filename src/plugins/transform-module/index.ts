@@ -259,40 +259,36 @@ export default declare((api: PluginAPI, options: Options) => {
           );
 
           for (const [source, metadata] of meta.source) {
-            const attributes = importAttributes.get(source);
-            // The synchronous path lowers to plain `require(source)`, which
-            // has no way to carry import attributes. Node validates a `with`
-            // clause before executing the module, so mirror that here at
-            // compile time instead of silently dropping the attribute (#483).
-            if (!async && attributes) {
-              const attributeError = staticImportAttributeError(
-                source,
-                attributes,
-              );
-              if (attributeError) {
-                throw attributeError;
+            const attributeGroups = importAttributes.get(source);
+            const attributes = attributeGroups?.[0];
+            // The synchronous path lowers to `require(source)`, which carries
+            // no attributes natively. Node validates a `with` clause before
+            // executing the module, so mirror that here at compile time for
+            // specifiers we can judge statically, and forward the attributes
+            // to jiti's own `require` so the runtime check still runs for
+            // aliased or extension-less specifiers (#483, #485).
+            if (!async && attributeGroups) {
+              for (const group of attributeGroups) {
+                const attributeError = staticImportAttributeError(
+                  source,
+                  group,
+                );
+                if (attributeError) {
+                  throw attributeError;
+                }
               }
             }
             const loadExpr = async
               ? t.awaitExpression(
                   t.callExpression(
                     t.identifier("jitiImport"),
-                    attributes
-                      ? [
-                          t.stringLiteral(source),
-                          t.objectExpression([
-                            t.objectProperty(
-                              t.identifier("attributes"),
-                              attributes,
-                            ),
-                          ]),
-                        ]
-                      : [t.stringLiteral(source)],
+                    buildImportArgs(source, attributes),
                   ),
                 )
-              : t.callExpression(t.identifier("require"), [
-                  t.stringLiteral(source),
-                ]);
+              : t.callExpression(
+                  t.identifier("require"),
+                  buildImportArgs(source, attributes),
+                );
 
             let header: t.Statement | undefined | null;
             if (isSideEffectImport(metadata)) {
@@ -354,13 +350,14 @@ export { defineCommonJSHook } from "./hooks";
  * `ImportDeclaration` / `ExportNamedDeclaration` / `ExportAllDeclaration` can
  * carry import attributes (`with { type: "json" }`, or the legacy `assert`
  * form). Babel normalises both into `node.attributes` (older versions used
- * `node.assertions`). They are keyed by specifier so the rewritten import
- * expression can pass them through to `jitiImport`.
+ * `node.assertions`). They are keyed by specifier and kept as a list, because
+ * the same specifier may legally appear several times with different
+ * attributes — each declaration has to be validated separately.
  */
 function collectImportAttributes(
   program: t.Program,
-): Map<string, t.ObjectExpression> {
-  const attributes = new Map<string, t.ObjectExpression>();
+): Map<string, t.ObjectExpression[]> {
+  const attributes = new Map<string, t.ObjectExpression[]>();
   for (const node of program.body) {
     if (
       !(
@@ -378,8 +375,9 @@ function collectImportAttributes(
     if (!list || list.length === 0) {
       continue;
     }
-    attributes.set(
-      node.source.value,
+    const specifier = node.source.value;
+    const groups = attributes.get(specifier) || [];
+    groups.push(
       t.objectExpression(
         list.map((attr) =>
           t.objectProperty(
@@ -391,22 +389,36 @@ function collectImportAttributes(
         ),
       ),
     );
+    attributes.set(specifier, groups);
   }
   return attributes;
 }
 
-/**
- * The synchronous lowering emits `require(source)`, which cannot carry import
- * attributes. Reject a `with { type: ... }` clause that is statically known to
- * contradict the specifier, so the attribute is not silently ignored.
- *
- * Only a literal `.json` specifier is checked: other specifiers are resolved at
- * runtime, where the attribute is meaningless to `require` anyway.
- */
-function staticImportAttributeError(
-  source: string,
+/** Build the `{ attributes }` options object shared by the sync and async paths. */
+function buildImportOptions(
   attributes: t.ObjectExpression,
-): Error | undefined {
+): t.ObjectExpression {
+  return t.objectExpression([
+    t.objectProperty(t.identifier("attributes"), attributes),
+  ]);
+}
+
+/** `require(id)` / `require(id, { attributes })` — same shape for both loaders. */
+function buildImportArgs(
+  source: string,
+  attributes: t.ObjectExpression | undefined,
+): t.Expression[] {
+  const id = t.stringLiteral(source);
+  return attributes ? [id, buildImportOptions(attributes)] : [id];
+}
+
+/**
+ * Read the literal `type` value out of an attributes object expression.
+ * Returns `undefined` when no statically known `type` is present.
+ */
+function importAttributeType(
+  attributes: t.ObjectExpression,
+): string | undefined {
   let type: string | undefined;
   for (const property of attributes.properties) {
     if (
@@ -419,6 +431,23 @@ function staticImportAttributeError(
       type = property.value.value;
     }
   }
+  return type;
+}
+
+/**
+ * The synchronous lowering emits `require(source)`, which cannot carry import
+ * attributes natively. Reject a `with { type: ... }` clause that is statically
+ * known to contradict the specifier, so the attribute is not silently ignored.
+ *
+ * Only a literal `.json` specifier is checked here: aliased and extension-less
+ * specifiers are resolved at runtime, where `jitiRequire` re-runs the same
+ * check on the resolved filename.
+ */
+function staticImportAttributeError(
+  source: string,
+  attributes: t.ObjectExpression,
+): Error | undefined {
+  const type = importAttributeType(attributes);
   if (type === undefined || type === "json" || !source.endsWith(".json")) {
     return undefined;
   }

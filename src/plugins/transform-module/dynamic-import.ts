@@ -12,6 +12,9 @@ import { buildDynamicImport } from "@babel/helper-module-transforms";
 /**
  * Convert an import-attributes (`with { ... }`) object expression into the
  * plain object literal that `jitiImport(id, options)` expects.
+ *
+ * Both the standard `with` key and the legacy `assert` key are accepted, and a
+ * key may be written as an identifier or as a string literal.
  */
 function attributesFromOptionsNode(
   node: t.Node | undefined | null,
@@ -20,11 +23,16 @@ function attributesFromOptionsNode(
     return undefined;
   }
   for (const prop of node.properties) {
-    if (
-      t.isObjectProperty(prop) &&
-      t.isIdentifier(prop.key, { name: "with" }) &&
-      t.isObjectExpression(prop.value)
-    ) {
+    if (!t.isObjectProperty(prop) || !t.isObjectExpression(prop.value)) {
+      continue;
+    }
+    let keyName: string | undefined;
+    if (t.isIdentifier(prop.key)) {
+      keyName = prop.key.name;
+    } else if (t.isStringLiteral(prop.key)) {
+      keyName = prop.key.value;
+    }
+    if (keyName === "with" || keyName === "assert") {
       return prop.value;
     }
   }
@@ -64,10 +72,14 @@ export function transformDynamicImport(
   noInterop: boolean | undefined,
   file: BabelFile,
 ) {
-  // `import(specifier, { with: {...} })` -> options node (2nd argument)
-  const optionsNode = (path.node as t.CallExpression).arguments?.[1] as
-    | t.Node
-    | undefined;
+  // `import(specifier, { with: {...} })` -> options node (2nd argument).
+  // With `parserOpts.createImportExpressions` (Babel 8 / explicit opt-in) the
+  // node is an `ImportExpression` and the options live on `node.options`.
+  const optionsNode = (
+    path.isCallExpression()
+      ? path.node.arguments[1]
+      : (path.node as t.ImportExpression).options
+  ) as t.Node | undefined | null;
   const attributes = attributesFromOptionsNode(optionsNode);
 
   path.replaceWith(

@@ -1,4 +1,4 @@
-import type { Context, JitiResolveOptions } from "./types";
+import type { Context, JitiResolveOptions, ImportAttributes } from "./types";
 import { readFileSync } from "node:fs";
 import { builtinModules } from "node:module";
 import { fileURLToPath } from "node:url";
@@ -11,7 +11,7 @@ import { evalModule } from "./eval";
 export function jitiRequire(
   ctx: Context,
   id: string,
-  opts: JitiResolveOptions & { async: boolean },
+  opts: JitiResolveOptions & { async: boolean; attributes?: ImportAttributes },
 ) {
   const cache = ctx.parentCache || {};
 
@@ -55,10 +55,7 @@ export function jitiRequire(
       // has to be validated here too — otherwise a native loader that accepts
       // JSON without attributes (Bun does) resolves the module before the
       // mismatch check in the `.json` branch ever runs (#483).
-      assertImportAttributes(
-        id,
-        (opts as { attributes?: Record<string, string> }).attributes,
-      );
+      assertImportAttributes(id, opts.attributes);
       debug(
         ctx,
         "[try-native]",
@@ -95,6 +92,11 @@ export function jitiRequire(
         return jitiInteropDefault(ctx, _mod);
       }
     } catch (error: any) {
+      // An attribute mismatch is a user error, not a loader limitation — never
+      // downgrade it into the "native failed, retry" fallback path (#485).
+      if (error?.code === "ERR_IMPORT_ATTRIBUTE_UNSUPPORTED") {
+        throw error;
+      }
       debug(
         ctx,
         `[try-native] Using fallback for ${id} because of an error:`,
@@ -116,10 +118,7 @@ export function jitiRequire(
     // Import attributes (`with { type: "json" }`) are lossless metadata: the
     // transformer keeps them and hands them over so they can be validated
     // instead of being silently dropped (#483).
-    assertImportAttributes(
-      filename,
-      (opts as { attributes?: Record<string, string> }).attributes,
-    );
+    assertImportAttributes(filename, opts.attributes);
     const jsonModule = ctx.nativeRequire(filename);
     if (jsonModule && !("default" in jsonModule)) {
       Object.defineProperty(jsonModule, "default", {
@@ -192,7 +191,7 @@ export function nativeImportOrRequire(
  */
 export function assertImportAttributes(
   filename: string,
-  attributes: Record<string, string> | undefined,
+  attributes: ImportAttributes | undefined,
 ) {
   const type = attributes?.type;
   if (type === undefined || type === "json") {

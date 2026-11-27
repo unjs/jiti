@@ -84,6 +84,7 @@ export default function transform(opts: TransformOptions): TransformResult {
       code:
         "exports.__JITI_ERROR__ = " +
         JSON.stringify({
+          name: error.name,
           filename: opts.filename,
           line: error.loc?.line || 0,
           column: error.loc?.column || 0,

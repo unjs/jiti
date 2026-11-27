@@ -48,19 +48,7 @@ export interface Jiti extends NodeRequire {
    * If you need the default export of module, you can use
    * `jiti.import(id, { default: true })` as shortcut to `mod?.default ?? mod`.
    */
-  import<T = unknown>(
-    id: string,
-    opts?: JitiResolveOptions & {
-      default?: true;
-      /**
-       * Import attributes passed through to the module loader, e.g.
-       * `{ type: "json" }` or `{ type: "css" }`. They are preserved instead
-       * of being silently dropped, so a `with` clause that mismatches the
-       * resolved module type still throws.
-       */
-      attributes?: Record<string, string>;
-    },
-  ): Promise<T>;
+  import<T = unknown>(id: string, opts?: JitiImportOptions): Promise<T>;
 
   /**
    * Resolve with ESM import conditions.
@@ -413,6 +401,29 @@ export interface JitiResolveOptions {
   conditions?: string[];
   parentURL?: string | URL;
   try?: boolean;
+}
+
+/**
+ * Import attributes (`with { ... }` / legacy `assert { ... }`) as plain values.
+ */
+export type ImportAttributes = Record<string, string>;
+
+/**
+ * Options accepted by {@linkcode Jiti.import} and by the internal synchronous
+ * loader. They are shared so the public declaration, the implementation and the
+ * runtime checks cannot drift apart.
+ */
+export interface JitiImportOptions extends JitiResolveOptions {
+  /**
+   * Return `mod.default` when present instead of the namespace object.
+   */
+  default?: true;
+  /**
+   * Import attributes passed through to the module loader, e.g.
+   * `{ type: "json" }`. Only a `type` that contradicts the resolved module
+   * format is an error; other attributes are ignored.
+   */
+  attributes?: ImportAttributes;
 }
 
 /**
