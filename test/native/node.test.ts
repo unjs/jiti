@@ -1,3 +1,4 @@
+import assert from "node:assert/strict";
 import { readdir } from "node:fs/promises";
 import { test } from "node:test";
 
@@ -37,3 +38,40 @@ for (const fixture of fixtures) {
     await jiti.import("../fixtures/" + fixture);
   });
 }
+
+test("normalizeParentURL converts plain filesystem paths to file:// URLs", () => {
+  const captureParent = (parentURL?: string | URL) => {
+    let seenParent: string | URL | undefined;
+    const instance = createJiti(parentURL, {
+      importMeta: {
+        ...import.meta,
+        resolve(_id: string, parent?: string | URL) {
+          seenParent = parent;
+          return String(parent);
+        },
+      },
+    });
+    instance.esmResolve("./entry.js");
+    return seenParent;
+  };
+
+  assert.equal(
+    captureParent("/path/to/caller.mjs"),
+    "file:///path/to/caller.mjs",
+  );
+  assert.equal(captureParent("/path/to/dir/"), "file:///path/to/dir/_");
+  assert.equal(
+    captureParent("C:/path/to/caller.mjs"),
+    "file:///C:/path/to/caller.mjs",
+  );
+  assert.equal(
+    captureParent(String.raw`C:\path\to\caller.mjs`),
+    "file:///C:/path/to/caller.mjs",
+  );
+  assert.equal(
+    captureParent("file:///path/to/caller.mjs"),
+    "file:///path/to/caller.mjs",
+  );
+  const url = new URL("file:///path/to/caller.mjs");
+  assert.equal(captureParent(url), url);
+});
