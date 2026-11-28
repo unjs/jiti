@@ -1,4 +1,6 @@
 import { join } from "node:path";
+import { pathToFileURL } from "node:url";
+import { execFileSync } from "node:child_process";
 import { mkdtempSync, readFileSync, readdirSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { describe, it, expect } from "vitest";
@@ -215,5 +217,35 @@ describe("import attributes", () => {
     expect(aliased()(join(fixturesDir, "alias-json-to-ts.ts"))).toEqual({
       default: { name: "i-am-a-ts-module" },
     });
+  });
+
+  it("honours caller-supplied attributes in jiti/native", () => {
+    // `jiti/native` used to force `{ type: "json" }` for every `.json`
+    // resolution, so a caller asking for `type: "css"` got a fake default
+    // instead of the native loader's rejection (#485).
+    //
+    // Run in a child process: vitest rewrites `import()` inside the loader, so
+    // the native attribute handling can only be observed by real Node.
+    const loader = pathToFileURL(
+      join(__dirname, "../lib/jiti-native.mjs"),
+    ).href;
+    const script = [
+      `import { createJiti } from ${JSON.stringify(loader)};`,
+      `const j = createJiti(import.meta.filename);`,
+      `const url = ${JSON.stringify(pathToFileURL(dataJson).href)};`,
+      `try { await j.import(url, { attributes: { type: "css" } });`,
+      `  console.log("mismatch:NO_THROW"); }`,
+      `catch (e) { console.log("mismatch:" + e.code); }`,
+      `const m = await j.import(url);`,
+      `console.log("default:" + JSON.stringify(m.default));`,
+    ].join("\n");
+    const out = execFileSync(
+      process.execPath,
+      ["--input-type=module", "--eval", script],
+      { encoding: "utf8" },
+    );
+    expect(out).toContain("mismatch:ERR_IMPORT_ATTRIBUTE_UNSUPPORTED");
+    // The default still applies when the caller asks for nothing.
+    expect(out).toContain('default:{"ok":true}');
   });
 });
