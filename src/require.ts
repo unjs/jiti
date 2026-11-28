@@ -1,4 +1,4 @@
-import type { Context, JitiResolveOptions } from "./types";
+import type { Context, JitiResolveOptions, ImportAttributes } from "./types";
 import { readFileSync } from "node:fs";
 import { builtinModules } from "node:module";
 import { fileURLToPath } from "node:url";
@@ -11,7 +11,10 @@ import { evalModule } from "./eval";
 export function jitiRequire(
   ctx: Context,
   id: string,
-  opts: JitiResolveOptions & { async: boolean },
+  opts: JitiResolveOptions & {
+    async: boolean;
+    attributes?: ImportAttributes | ImportAttributes[];
+  },
 ) {
   const cache = ctx.parentCache || {};
 
@@ -51,6 +54,11 @@ export function jitiRequire(
       if (!id && opts.try) {
         return undefined;
       }
+      // `tryNative` bypasses the loader below, so a `with { type: ... }` clause
+      // has to be validated here too — otherwise a native loader that accepts
+      // JSON without attributes (Bun does) resolves the module before the
+      // mismatch check in the `.json` branch ever runs (#483).
+      assertImportAttributes(id, opts.attributes);
       debug(
         ctx,
         "[try-native]",
@@ -87,6 +95,11 @@ export function jitiRequire(
         return jitiInteropDefault(ctx, _mod);
       }
     } catch (error: any) {
+      // An attribute mismatch is a user error, not a loader limitation — never
+      // downgrade it into the "native failed, retry" fallback path (#485).
+      if (error?.code === "ERR_IMPORT_ATTRIBUTE_UNSUPPORTED") {
+        throw error;
+      }
       debug(
         ctx,
         `[try-native] Using fallback for ${id} because of an error:`,
@@ -105,6 +118,10 @@ export function jitiRequire(
   // Check for .json modules
   if (ext === ".json") {
     debug(ctx, "[json]", filename);
+    // Import attributes (`with { type: "json" }`) are lossless metadata: the
+    // transformer keeps them and hands them over so they can be validated
+    // instead of being silently dropped (#483).
+    assertImportAttributes(filename, opts.attributes);
     const jsonModule = ctx.nativeRequire(filename);
     if (jsonModule && !("default" in jsonModule)) {
       Object.defineProperty(jsonModule, "default", {
@@ -167,4 +184,43 @@ export function nativeImportOrRequire(
         .nativeImport(normalizeWindowsImportId(id))
         .then((m: any) => jitiInteropDefault(ctx, m))
     : jitiInteropDefault(ctx, ctx.nativeRequire(id));
+}
+
+/**
+ * Reject a `with { type: ... }` clause that contradicts the resolved module
+ * format. Native `import()`/`require()` would do this for us, but jiti loads
+ * both JSON and transformed modules through its own paths, so the check has to
+ * be explicit on every loader path that can resolve a JSON file.
+ *
+ * A specifier may carry several declaration groups (the same source imported
+ * twice with different attributes), so both a single group and a list are
+ * accepted and every group is validated.
+ */
+export function assertImportAttributes(
+  filename: string,
+  attributes: ImportAttributes | ImportAttributes[] | undefined,
+) {
+  let groups: ImportAttributes[];
+  if (Array.isArray(attributes)) {
+    groups = attributes;
+  } else if (attributes) {
+    groups = [attributes];
+  } else {
+    groups = [];
+  }
+  for (const group of groups) {
+    const type = group?.type;
+    if (type === undefined || type === "json") {
+      continue;
+    }
+    if (extname(filename) !== ".json") {
+      continue;
+    }
+    throw Object.assign(
+      new TypeError(
+        `Import attribute "type" with value "${type}" is not supported in ${filename}`,
+      ),
+      { code: "ERR_IMPORT_ATTRIBUTE_UNSUPPORTED" },
+    );
+  }
 }

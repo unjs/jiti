@@ -18,6 +18,14 @@ import { jitiRequire, nativeImportOrRequire } from "./require";
 import createJiti from "./jiti";
 import { transform } from "./transform";
 
+/** Error classes restored from `__JITI_ERROR__` (see `src/babel.ts`). */
+const ERROR_CTORS: Record<string, new (message?: string) => Error> = {
+  TypeError,
+  RangeError,
+  SyntaxError,
+  Error,
+};
+
 export function evalModule(
   ctx: Context,
   source: string,
@@ -188,10 +196,27 @@ export function evalModule(
   function next() {
     // Check for parse errors
     if (mod.exports && mod.exports.__JITI_ERROR__) {
-      const { filename, line, column, code, message } =
-        mod.exports.__JITI_ERROR__;
+      const { name, filename, line, column, code, message } = mod.exports
+        .__JITI_ERROR__ as {
+        name?: string;
+        filename: string;
+        line: number;
+        column: number;
+        code?: string;
+        message: string;
+      };
       const loc = `${filename}:${line}:${column}`;
-      const err = new Error(`${code}: ${message} \n ${loc}`);
+      // Rebuild with the original error class and re-attach `code`, so code
+      // matching on `err.code` / `err.name` keeps working after the error has
+      // been serialized through the generated module (#485). The `${code}: `
+      // prefix stays in the message for backwards compatibility.
+      const ErrorCtor = (name && ERROR_CTORS[name]) || Error;
+      const err = new ErrorCtor(`${code}: ${message} \n ${loc}`) as Error & {
+        code?: string;
+      };
+      if (code) {
+        err.code = code;
+      }
       Error.captureStackTrace(err, jitiRequire);
       ctx.onError!(err);
     }

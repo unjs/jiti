@@ -5,6 +5,8 @@ import type {
   Context,
   EvalModuleOptions,
   JitiResolveOptions,
+  JitiImportOptions,
+  ImportAttributes,
 } from "./types";
 import { platform } from "node:os";
 import { fileURLToPath, pathToFileURL } from "mlly";
@@ -141,8 +143,8 @@ export default function createJiti(
 
   // Create jiti instance
   const jiti: Jiti = Object.assign(
-    function jiti(id: string) {
-      return jitiRequire(ctx, id, { async: false });
+    function jiti(id: string, opts?: { attributes?: ImportAttributes }) {
+      return jitiRequire(ctx, id, { async: false, ...opts });
     },
     {
       cache: opts.moduleCache ? nativeRequire.cache : Object.create(null),
@@ -165,7 +167,7 @@ export default function createJiti(
       },
       async import<T = unknown>(
         id: string,
-        opts?: JitiResolveOptions & { default?: true },
+        opts?: JitiImportOptions,
       ): Promise<T> {
         const mod = await jitiRequire(ctx, id, { ...opts, async: true });
         return opts?.default ? (mod?.default ?? mod) : mod;

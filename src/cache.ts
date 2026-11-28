@@ -5,7 +5,9 @@ import { dirname, join, basename, resolve } from "pathe";
 import { filename } from "pathe/utils";
 import { debug, isWritable, hash } from "./utils";
 
-const CACHE_VERSION = "9";
+// Bump whenever the transformer output changes for unchanged source, otherwise
+// a stale `node_modules/.cache/jiti` entry keeps being reused (#485).
+const CACHE_VERSION = "10";
 
 export function getCache(
   ctx: Context,

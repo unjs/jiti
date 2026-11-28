@@ -203,6 +203,10 @@ export default declare((api: PluginAPI, options: Options) => {
         exit(path, state) {
           if (!isModule(path)) return;
 
+          // Collect `with { ... }` / `assert { ... }` import attributes keyed by
+          // specifier, before the module statements get rewritten away (#483).
+          const importAttributes = collectImportAttributes(path.node);
+
           // Rename the bindings auto-injected into the scope so there is no
           // risk of conflict between the bindings.
           path.scope.rename("exports");
@@ -255,15 +259,22 @@ export default declare((api: PluginAPI, options: Options) => {
           );
 
           for (const [source, metadata] of meta.source) {
+            // Every declaration group for this specifier is forwarded, so the
+            // runtime check sees each `with { ... }` clause separately. Node
+            // keys declarations by source too, but it still evaluates the
+            // attributes of every one of them (#485).
+            const attributes = importAttributes.get(source);
             const loadExpr = async
               ? t.awaitExpression(
-                  t.callExpression(t.identifier("jitiImport"), [
-                    t.stringLiteral(source),
-                  ]),
+                  t.callExpression(
+                    t.identifier("jitiImport"),
+                    buildImportArgs(source, attributes),
+                  ),
                 )
-              : t.callExpression(t.identifier("require"), [
-                  t.stringLiteral(source),
-                ]);
+              : t.callExpression(
+                  t.identifier("require"),
+                  buildImportArgs(source, attributes),
+                );
 
             let header: t.Statement | undefined | null;
             if (isSideEffectImport(metadata)) {
@@ -320,3 +331,80 @@ export default declare((api: PluginAPI, options: Options) => {
 });
 
 export { defineCommonJSHook } from "./hooks";
+
+/**
+ * `ImportDeclaration` / `ExportNamedDeclaration` / `ExportAllDeclaration` can
+ * carry import attributes (`with { type: "json" }`, or the legacy `assert`
+ * form). Babel normalises both into `node.attributes` (older versions used
+ * `node.assertions`). They are keyed by specifier and kept as a list, because
+ * the same specifier may legally appear several times with different
+ * attributes — each declaration has to be validated separately.
+ */
+function collectImportAttributes(
+  program: t.Program,
+): Map<string, t.ObjectExpression[]> {
+  const attributes = new Map<string, t.ObjectExpression[]>();
+  for (const node of program.body) {
+    if (
+      !(
+        node.type === "ImportDeclaration" ||
+        node.type === "ExportNamedDeclaration" ||
+        node.type === "ExportAllDeclaration"
+      ) ||
+      !node.source
+    ) {
+      continue;
+    }
+    const list =
+      (node as { attributes?: t.ImportAttribute[] }).attributes ||
+      (node as { assertions?: t.ImportAttribute[] }).assertions;
+    if (!list || list.length === 0) {
+      continue;
+    }
+    const specifier = node.source.value;
+    const groups = attributes.get(specifier) || [];
+    groups.push(
+      t.objectExpression(
+        list.map((attr) =>
+          t.objectProperty(
+            t.isIdentifier(attr.key)
+              ? t.identifier(attr.key.name)
+              : t.stringLiteral(attr.key.value),
+            t.stringLiteral(attr.value.value),
+          ),
+        ),
+      ),
+    );
+    attributes.set(specifier, groups);
+  }
+  return attributes;
+}
+
+/** Build the `{ attributes }` options object shared by the sync and async paths. */
+function buildImportOptions(attributes: t.Expression[]): t.ObjectExpression {
+  return t.objectExpression([
+    t.objectProperty(t.identifier("attributes"), t.arrayExpression(attributes)),
+  ]);
+}
+
+/** `require(id)` / `require(id, { attributes })` — same shape for both loaders. */
+function buildImportArgs(
+  source: string,
+  attributes: t.Expression[] | undefined,
+): t.Expression[] {
+  const id = t.stringLiteral(source);
+  return attributes && attributes.length > 0
+    ? [id, buildImportOptions(attributes)]
+    : [id];
+}
+
+/**
+ * The synchronous lowering emits `require(source)` and the async one
+ * `jitiImport(source, ...)`; both now forward every declaration's attributes to
+ * jiti's own loader, which validates them against the *resolved* filename.
+ *
+ * The check deliberately does not look at the specifier suffix any more: an
+ * aliased `#config.json` may resolve to a TypeScript module, and a `type` that
+ * contradicts a name is not the same thing as a `type` that contradicts the
+ * resolved format.
+ */
