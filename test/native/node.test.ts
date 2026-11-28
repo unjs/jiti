@@ -69,6 +69,18 @@ test("normalizeParentURL converts plain filesystem paths to file:// URLs", () =>
     "file:///C:/path/to/caller.mjs",
   );
   assert.equal(
+    captureParent(String.raw`\\server\share\caller.mjs`),
+    "file://server/share/caller.mjs",
+  );
+  assert.equal(
+    captureParent("/path/to/a#b%20c/caller.mjs"),
+    "file:///path/to/a%23b%2520c/caller.mjs",
+  );
+  assert.equal(
+    captureParent("/work/a\\b/caller.mjs"),
+    "file:///work/a%5Cb/caller.mjs",
+  );
+  assert.equal(
     captureParent("file:///path/to/caller.mjs"),
     "file:///path/to/caller.mjs",
   );
