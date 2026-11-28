@@ -11,7 +11,10 @@ import { evalModule } from "./eval";
 export function jitiRequire(
   ctx: Context,
   id: string,
-  opts: JitiResolveOptions & { async: boolean; attributes?: ImportAttributes },
+  opts: JitiResolveOptions & {
+    async: boolean;
+    attributes?: ImportAttributes | ImportAttributes[];
+  },
 ) {
   const cache = ctx.parentCache || {};
 
@@ -188,22 +191,36 @@ export function nativeImportOrRequire(
  * format. Native `import()`/`require()` would do this for us, but jiti loads
  * both JSON and transformed modules through its own paths, so the check has to
  * be explicit on every loader path that can resolve a JSON file.
+ *
+ * A specifier may carry several declaration groups (the same source imported
+ * twice with different attributes), so both a single group and a list are
+ * accepted and every group is validated.
  */
 export function assertImportAttributes(
   filename: string,
-  attributes: ImportAttributes | undefined,
+  attributes: ImportAttributes | ImportAttributes[] | undefined,
 ) {
-  const type = attributes?.type;
-  if (type === undefined || type === "json") {
-    return;
+  let groups: ImportAttributes[];
+  if (Array.isArray(attributes)) {
+    groups = attributes;
+  } else if (attributes) {
+    groups = [attributes];
+  } else {
+    groups = [];
   }
-  if (extname(filename) !== ".json") {
-    return;
+  for (const group of groups) {
+    const type = group?.type;
+    if (type === undefined || type === "json") {
+      continue;
+    }
+    if (extname(filename) !== ".json") {
+      continue;
+    }
+    throw Object.assign(
+      new TypeError(
+        `Import attribute "type" with value "${type}" is not supported in ${filename}`,
+      ),
+      { code: "ERR_IMPORT_ATTRIBUTE_UNSUPPORTED" },
+    );
   }
-  throw Object.assign(
-    new TypeError(
-      `Import attribute "type" with value "${type}" is not supported in ${filename}`,
-    ),
-    { code: "ERR_IMPORT_ATTRIBUTE_UNSUPPORTED" },
-  );
 }

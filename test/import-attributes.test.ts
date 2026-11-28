@@ -11,6 +11,9 @@ const correctType = join(fixturesDir, "correct-type.ts");
 const noAttributes = join(fixturesDir, "no-attributes.ts");
 const dynamicWrong = join(fixturesDir, "dynamic-wrong.ts");
 const duplicateSpecifier = join(fixturesDir, "duplicate-specifier.ts");
+const duplicateConflicting = join(fixturesDir, "duplicate-conflicting.ts");
+const dynamicVarAttributes = join(fixturesDir, "dynamic-var-attributes.ts");
+const dynamicEvalTiming = join(fixturesDir, "dynamic-eval-timing.ts");
 const evalEntry = join(fixturesDir, "_eval-entry.ts");
 
 function jiti() {
@@ -163,5 +166,54 @@ describe("import attributes", () => {
     } finally {
       rmSync(cacheDir, { recursive: true, force: true });
     }
+  });
+
+  it("resolves attributes held in an options variable", async () => {
+    // `import("./data.json", { with: attrs })` — the `with` value is an
+    // identifier, so it can only be read at runtime (#485).
+    await expect(
+      jiti().import(dynamicVarAttributes, { default: true }),
+    ).rejects.toThrow(
+      /Import attribute "type" with value "css" is not supported/,
+    );
+  });
+
+  it("evaluates the options at the import call, not when the load settles", async () => {
+    // `let kind = "css"; const p = import(..., { with: { type: kind } });
+    //  kind = "json"; await p;` — Node reads the options synchronously, so the
+    // original "css" is what has to be validated (#485).
+    await expect(
+      jiti().import(dynamicEvalTiming, { default: true }),
+    ).rejects.toThrow(
+      /Import attribute "type" with value "css" is not supported/,
+    );
+  });
+
+  it("validates every group even when the matching one comes first", async () => {
+    // `duplicate-conflicting.ts` declares `json` first and `css` second, so
+    // keeping only the first group would hide the mismatch (#485).
+    await expect(
+      jiti().import(duplicateConflicting, { default: true }),
+    ).rejects.toThrow(
+      /Import attribute "type" with value "css" is not supported/,
+    );
+    expect(() => jiti()(duplicateConflicting)).toThrow(
+      /Import attribute "type" with value "css" is not supported/,
+    );
+  });
+
+  it("ignores the attribute when an aliased specifier resolves to a non-JSON module", () => {
+    // `#config.json` resolves to a TypeScript module, so the attribute is
+    // irrelevant and must not be rejected because of the specifier suffix.
+    // The sync and async loaders have to agree on that (#485).
+    const aliased = () =>
+      createJiti(join(fixturesDir, "_index.js"), {
+        fsCache: false,
+        moduleCache: false,
+        alias: { "#config.json": join(fixturesDir, "ts-module.ts") },
+      });
+    expect(aliased()(join(fixturesDir, "alias-json-to-ts.ts"))).toEqual({
+      default: { name: "i-am-a-ts-module" },
+    });
   });
 });

@@ -259,25 +259,11 @@ export default declare((api: PluginAPI, options: Options) => {
           );
 
           for (const [source, metadata] of meta.source) {
-            const attributeGroups = importAttributes.get(source);
-            const attributes = attributeGroups?.[0];
-            // The synchronous path lowers to `require(source)`, which carries
-            // no attributes natively. Node validates a `with` clause before
-            // executing the module, so mirror that here at compile time for
-            // specifiers we can judge statically, and forward the attributes
-            // to jiti's own `require` so the runtime check still runs for
-            // aliased or extension-less specifiers (#483, #485).
-            if (!async && attributeGroups) {
-              for (const group of attributeGroups) {
-                const attributeError = staticImportAttributeError(
-                  source,
-                  group,
-                );
-                if (attributeError) {
-                  throw attributeError;
-                }
-              }
-            }
+            // Every declaration group for this specifier is forwarded, so the
+            // runtime check sees each `with { ... }` clause separately. Node
+            // keys declarations by source too, but it still evaluates the
+            // attributes of every one of them (#485).
+            const attributes = importAttributes.get(source);
             const loadExpr = async
               ? t.awaitExpression(
                   t.callExpression(
@@ -395,66 +381,30 @@ function collectImportAttributes(
 }
 
 /** Build the `{ attributes }` options object shared by the sync and async paths. */
-function buildImportOptions(
-  attributes: t.ObjectExpression,
-): t.ObjectExpression {
+function buildImportOptions(attributes: t.Expression[]): t.ObjectExpression {
   return t.objectExpression([
-    t.objectProperty(t.identifier("attributes"), attributes),
+    t.objectProperty(t.identifier("attributes"), t.arrayExpression(attributes)),
   ]);
 }
 
 /** `require(id)` / `require(id, { attributes })` — same shape for both loaders. */
 function buildImportArgs(
   source: string,
-  attributes: t.ObjectExpression | undefined,
+  attributes: t.Expression[] | undefined,
 ): t.Expression[] {
   const id = t.stringLiteral(source);
-  return attributes ? [id, buildImportOptions(attributes)] : [id];
+  return attributes && attributes.length > 0
+    ? [id, buildImportOptions(attributes)]
+    : [id];
 }
 
 /**
- * Read the literal `type` value out of an attributes object expression.
- * Returns `undefined` when no statically known `type` is present.
- */
-function importAttributeType(
-  attributes: t.ObjectExpression,
-): string | undefined {
-  let type: string | undefined;
-  for (const property of attributes.properties) {
-    if (
-      property.type === "ObjectProperty" &&
-      !property.computed &&
-      ((t.isIdentifier(property.key) && property.key.name === "type") ||
-        (t.isStringLiteral(property.key) && property.key.value === "type")) &&
-      t.isStringLiteral(property.value)
-    ) {
-      type = property.value.value;
-    }
-  }
-  return type;
-}
-
-/**
- * The synchronous lowering emits `require(source)`, which cannot carry import
- * attributes natively. Reject a `with { type: ... }` clause that is statically
- * known to contradict the specifier, so the attribute is not silently ignored.
+ * The synchronous lowering emits `require(source)` and the async one
+ * `jitiImport(source, ...)`; both now forward every declaration's attributes to
+ * jiti's own loader, which validates them against the *resolved* filename.
  *
- * Only a literal `.json` specifier is checked here: aliased and extension-less
- * specifiers are resolved at runtime, where `jitiRequire` re-runs the same
- * check on the resolved filename.
+ * The check deliberately does not look at the specifier suffix any more: an
+ * aliased `#config.json` may resolve to a TypeScript module, and a `type` that
+ * contradicts a name is not the same thing as a `type` that contradicts the
+ * resolved format.
  */
-function staticImportAttributeError(
-  source: string,
-  attributes: t.ObjectExpression,
-): Error | undefined {
-  const type = importAttributeType(attributes);
-  if (type === undefined || type === "json" || !source.endsWith(".json")) {
-    return undefined;
-  }
-  return Object.assign(
-    new TypeError(
-      `Import attribute "type" with value "${type}" is not supported in ${source}`,
-    ),
-    { code: "ERR_IMPORT_ATTRIBUTE_UNSUPPORTED" },
-  );
-}
